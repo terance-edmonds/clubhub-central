@@ -22,6 +22,8 @@ git clone https://github.com/terance-edmonds/clubhub-central.git
 
 ## Development
 
+**Do Not Push to the `master` branch at once.**
+
 1. Create a new branch for development
 
 ```bash
