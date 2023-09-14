@@ -1,13 +1,17 @@
 <head>
+    <!-- app -->
     <title>ClubHub Central</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="ClubHub Central">
+    <link rel="shortcut icon" href="<?= ROOT ?>/assets/images/favicon.ico" type="image/x-icon">
 
     <!-- main styles -->
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/index.css">
 
-    <!-- poppins font -->
+    <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Peta:wght@100;200;300;400;500;600;700;800;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 </head>
 
 <?php
@@ -29,7 +33,7 @@ class App
         $file = $this->getFilePath($filename);
         if (file_exists($file)) {
             require $file;
-            $this->controller = kebabToPascal($filename);
+            $this->controller = $filename;
         } else {
             require $this->getFilePath($this->controller);
         }
@@ -56,8 +60,8 @@ class App
         return $arr;
     }
 
-    private function getFilePath($file)
+    private function getFilePath($fileName)
     {
-        return "../app/controllers/" . $file . ".controller.php";
+        return "../app/controllers/" . $fileName . ".php";
     }
 }

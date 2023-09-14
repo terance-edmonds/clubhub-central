@@ -1,3 +1,6 @@
+@import './colors.scss';
+@import './fonts.scss';
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -7,4 +10,67 @@
 html,
 body {
     font-family: 'Poppins', sans-serif;
+    color: #fff;
+    background: $dark;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.full-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.input-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    text-align: left;
+
+    label {
+        color: #fff;
+    }
+
+    input {
+        width: 100%;
+        border: 1px solid $border;
+        padding: 12px 15px;
+        border-radius: 8px;
+        background-color: $secondary_dark;
+        outline: none;
+        border: 1px solid $border;
+        color: #fff;
+    }
+}
+
+.button {
+    text-transform: uppercase;
+    color: $secondary_dark;
+    background-color: $theme;
+    outline: none;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 11px 30px;
+    width: 100%;
+    cursor: pointer;
+
+    &.w-content {
+        max-width: max-content;
+    }
+}
+
+.multi-wrap {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    width: 100%;
+
+    @media screen and (max-width: 800px) {
+        flex-direction: column;
+    }
 }
