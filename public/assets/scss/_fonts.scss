@@ -1,10 +1,17 @@
 $px14: 0.875em;
+$px20: 1.25em;
 $px74: 4.625em;
 
 .f-14 {
     font-size: $px14;
 }
-
+.f-20 {
+    font-size: $px20;
+}
 .f-74 {
     font-size: $px74;
+}
+
+.lexend {
+    font-family: 'Lexend Peta', sans-serif;
 }

@@ -34,8 +34,16 @@
   font-size: 0.875em;
 }
 
+.f-20 {
+  font-size: 1.25em;
+}
+
 .f-74 {
   font-size: 4.625em;
+}
+
+.lexend {
+  font-family: "Lexend Peta", sans-serif;
 }
 
 * {
@@ -50,11 +58,49 @@ body {
   font-family: "Poppins", sans-serif;
   color: #fff;
   background: #09090b;
+  cursor: default;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
 }
 
 a {
   text-decoration: none;
   color: inherit;
+  cursor: pointer;
+}
+
+.container-sections {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  gap: 20px;
+  max-width: 1350px;
+  width: 100%;
+  padding: 0 50px;
+}
+.container-sections section {
+  width: 100%;
+  max-width: 325px;
+}
+.container-sections section.center-section {
+  width: 100%;
+  max-width: 560px;
+}
+
+.container {
+  width: 100%;
 }
 
 .full-container {
@@ -75,6 +121,25 @@ a {
   gap: 6px;
   width: 100%;
   text-align: left;
+}
+.input-wrap .input {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 6px;
+  width: 100%;
+  border: 1px solid #2d2d2d;
+  padding: 0px 15px 0px 10px;
+  border-radius: 8px;
+  background-color: #161616;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.input-wrap .input input {
+  border: none;
+  border-radius: 0;
+  padding-left: 5px;
 }
 .input-wrap label {
   color: #fff;
@@ -125,4 +190,18 @@ a {
         -ms-flex-direction: column;
             flex-direction: column;
   }
+}
+
+.truncate-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+.truncate-text.lines-2 {
+  -webkit-line-clamp: 2;
+}
+.truncate-text.lines-3 {
+  -webkit-line-clamp: 3;
 }

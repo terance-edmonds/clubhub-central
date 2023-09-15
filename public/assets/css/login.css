@@ -34,8 +34,16 @@
   font-size: 0.875em;
 }
 
+.f-20 {
+  font-size: 1.25em;
+}
+
 .f-74 {
   font-size: 4.625em;
+}
+
+.lexend {
+  font-family: "Lexend Peta", sans-serif;
 }
 
 .full-container {
