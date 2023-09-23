@@ -1,0 +1,46 @@
+<head>
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/header.css">
+</head>
+
+<header class="nav-header">
+    <div class="container-sections">
+        <section class="logo-section">
+            <a href="<?= ROOT ?>"><img src="<?= ROOT ?>/assets/images/logo/logo-text.png" alt="Logo" class="logo"></a>
+        </section>
+
+        <section class="center-section">
+            <a id="nav-home" href="<?= ROOT ?>/" class="nav-item" data-active="true">
+                <span class="icon material-icons">
+                    local_fire_department
+                </span>
+                <span class="text">Feed</span>
+            </a>
+            <a id="nav-events" href="<?= ROOT ?>/events" class="nav-item">
+                <span class="icon material-icons">
+                    calendar_month
+                </span>
+                <span class="text">Events</span>
+            </a>
+            <a id="nav-profile" href="<?= ROOT ?>/profile" class="nav-item">
+                <span class="icon material-icons-outlined">
+                    account_circle
+                </span>
+                <span class="text">Profile</span>
+            </a>
+        </section>
+
+        <section class="notification-section">
+            <div class="nav-item notification-item">
+                <div class="icon-wrap">
+                    <div class="active"></div>
+                    <span class="icon material-icons-outlined">
+                        notifications
+                    </span>
+                </div>
+                <span class="text">Notifications</span>
+            </div>
+        </section>
+    </div>
+</header>
+
+<script src="<?= ROOT ?>/assets/js/header.js"></script>

@@ -1,0 +1,33 @@
+$theme: #69e4be;
+$secondary_theme: #94d1be;
+$dark: #09090b;
+$secondary_dark: #161616;
+$border: #2d2d2d;
+$gray: #a5a5a5;
+$secondary_white: #e7e7e7;
+
+.cl-theme {
+    color: $theme;
+}
+.cl-secondary-theme {
+    color: $secondary_theme;
+}
+.cl-dark {
+    color: $dark;
+}
+.cl-secondary-dark {
+    color: $secondary_dark;
+}
+
+.bg-theme {
+    background-color: $theme;
+}
+.bg-secondary-theme {
+    background-color: $secondary_theme;
+}
+.bg-dark {
+    background-color: $dark;
+}
+.bg-secondary-dark {
+    background-color: $secondary_dark;
+}

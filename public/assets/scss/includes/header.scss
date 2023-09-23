@@ -1,0 +1,78 @@
+@import '../colors';
+
+$notification-size: 10px;
+$nav-item-padding: 15px 0;
+
+.nav-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid $border;
+    width: 100%;
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: $dark;
+
+    .container-sections {
+        justify-content: space-between;
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            padding: $nav-item-padding;
+        }
+
+        .center-section {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .notification-section {
+            display: flex;
+            justify-content: flex-end;
+        }
+    }
+
+    .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        max-width: 160px;
+        width: 100%;
+        padding: $nav-item-padding;
+
+        &[data-active='true'] {
+            color: $theme;
+            border-bottom: 2px solid $theme;
+        }
+
+        @media screen and (max-width: 960px) {
+            .text {
+                display: none;
+            }
+        }
+    }
+
+    .notification-item {
+        .icon-wrap {
+            position: relative;
+            .active {
+                position: absolute;
+                width: $notification-size;
+                height: $notification-size;
+                background-color: $theme;
+                border-radius: 50%;
+                top: 0;
+                right: 0;
+            }
+        }
+    }
+}
