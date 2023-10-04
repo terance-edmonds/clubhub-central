@@ -12,6 +12,9 @@
 
     <!-- main styles -->
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/index.css">
+    <!-- swal alert -->
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/libs/sweetalert2.min.css">
+    <script src="<?= ROOT ?>/assets/js/libs/sweetalert2.all.min.js"></script>
 
     <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,6 +23,7 @@
 
     <!-- font-icons -->
     <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
+
 </head>
 
 <body>
@@ -76,6 +80,8 @@
     }
 
     ?>
+
+    <div id="overlay"></div>
 
     <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>

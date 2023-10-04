@@ -8,6 +8,7 @@ ClubHub Central web application. Build with `PHP` with `MVC` architecture model.
 |----------	|-------------	|-------------	|
 | File     	| Kebab Case  	| my-file.php 	|
 | Class    	| Pascal Case 	| MyFile      	|
+| Functions | Camal Case 	| myFunction    |
 | Variable 	| Snake Case  	| my_variable 	|
 
 ## Usage

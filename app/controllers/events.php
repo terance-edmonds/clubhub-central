@@ -6,4 +6,9 @@ class Events extends Controller
     {
         $this->view("events");
     }
+
+    public function event()
+    {
+        $this->view("events/event");
+    }
 }

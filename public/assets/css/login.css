@@ -38,6 +38,10 @@
   font-size: 1.25em;
 }
 
+.f-24 {
+  font-size: 1.5em;
+}
+
 .f-74 {
   font-size: 4.625em;
 }
@@ -108,16 +112,7 @@
           align-items: center;
 }
 .full-container .section.right .form {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  gap: 20px;
   max-width: 500px;
-  width: 100%;
 }
 @media screen and (max-width: 770px) {
   .full-container {

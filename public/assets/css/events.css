@@ -38,6 +38,10 @@
   font-size: 1.25em;
 }
 
+.f-24 {
+  font-size: 1.5em;
+}
+
 .f-74 {
   font-size: 4.625em;
 }
@@ -100,6 +104,9 @@
 }
 #events .center-section .card .top .details .club-title {
   font-size: 1.25em;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
 }
 #events .center-section .card .top .details .other-details {
   display: -webkit-box;
@@ -160,7 +167,7 @@
           align-items: center;
   padding: 10px;
   color: #94d1be;
-  background-color: #09090b;
+  background-color: #161616;
   border: 1px solid #2d2d2d;
   border-radius: 6px;
 }

@@ -38,6 +38,10 @@
   font-size: 1.25em;
 }
 
+.f-24 {
+  font-size: 1.5em;
+}
+
 .f-74 {
   font-size: 4.625em;
 }
@@ -100,6 +104,9 @@
 }
 #home .center-section .card .top .details .club-title {
   font-size: 1.25em;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
 }
 #home .center-section .card .top .details .other-details {
   display: -webkit-box;

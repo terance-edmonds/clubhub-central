@@ -1,5 +1,6 @@
 $px14: 0.875em;
 $px20: 1.25em;
+$px24: 1.5em;
 $px74: 4.625em;
 
 .f-14 {
@@ -7,6 +8,9 @@ $px74: 4.625em;
 }
 .f-20 {
     font-size: $px20;
+}
+.f-24 {
+    font-size: $px24;
 }
 .f-74 {
     font-size: $px74;

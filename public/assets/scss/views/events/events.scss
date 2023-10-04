@@ -1,5 +1,5 @@
-@import '../colors';
-@import '../fonts';
+@import '../../colors';
+@import '../../fonts';
 
 #events {
     .center-section {
@@ -38,6 +38,7 @@
 
                     .club-title {
                         font-size: $px20;
+                        width: fit-content;
                     }
 
                     .other-details {
@@ -91,7 +92,7 @@
                         align-items: center;
                         padding: 10px;
                         color: $secondary_theme;
-                        background-color: $dark;
+                        background-color: $secondary_dark;
                         border: 1px solid $border;
                         border-radius: 6px;
 
