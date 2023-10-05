@@ -5,6 +5,8 @@ $secondary_dark: #161616;
 $border: #2d2d2d;
 $gray: #a5a5a5;
 $secondary_white: #e7e7e7;
+$error: #e13434;
+$red: #ff0000;
 
 .cl-theme {
     color: $theme;
@@ -18,6 +20,9 @@ $secondary_white: #e7e7e7;
 .cl-secondary-dark {
     color: $secondary_dark;
 }
+.cl-red {
+    color: $red;
+}
 
 .bg-theme {
     background-color: $theme;
@@ -30,4 +35,7 @@ $secondary_white: #e7e7e7;
 }
 .bg-secondary-dark {
     background-color: $secondary_dark;
+}
+.bg-red {
+    background-color: $red;
 }

@@ -1,13 +1,30 @@
 <?php
 
-function kebabToPascal($kebabString)
+/* route to path */
+function redirect($link)
 {
-    $words = explode('-', $kebabString);
-    $pascalString = '';
+    header("Location: " . ROOT . "/" . $link);
+    die;
+}
 
-    foreach ($words as $word) {
-        $pascalString .= ucfirst($word);
+/* set values on inputs */
+function setValue($key, $default = '')
+{
+    if (!empty($_POST[$key])) {
+        return $_POST[$key];
+    } else
+	if (!empty($default)) {
+        return $default;
     }
 
-    return $pascalString;
+    return '';
+}
+
+/* random key string */
+function randomString()
+{
+    $str = rand();
+    $result = md5($str);
+
+    return $result;
 }

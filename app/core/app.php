@@ -52,7 +52,7 @@
             }
 
             /* convert kebab case to pascal case */
-            $this->controller = kebabToPascal($this->controller);
+            $this->controller = _::startCase($this->controller);
 
             /* initiate the controller */
             $curr_controller = new $this->controller();

@@ -14,6 +14,10 @@
   color: #161616;
 }
 
+.cl-red {
+  color: #ff0000;
+}
+
 .bg-theme {
   background-color: #69e4be;
 }
@@ -28,6 +32,10 @@
 
 .bg-secondary-dark {
   background-color: #161616;
+}
+
+.bg-red {
+  background-color: #ff0000;
 }
 
 .f-14 {
@@ -149,6 +157,20 @@ a {
 .input-wrap label {
   color: #fff;
 }
+.input-wrap .label-wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 2px;
+}
+.input-wrap .label-wrap small {
+  font-size: 0.8em;
+  color: #a5a5a5;
+}
 .input-wrap input {
   width: 100%;
   border: 1px solid #2d2d2d;
@@ -158,6 +180,10 @@ a {
   outline: none;
   border: 1px solid #2d2d2d;
   color: #fff;
+}
+.input-wrap small {
+  color: #ff0000;
+  font-size: x-small;
 }
 
 .button {
@@ -241,6 +267,12 @@ a {
     -webkit-box-direction: normal;
         -ms-flex-direction: column;
             flex-direction: column;
+  }
+  .multi-wrap .nowrap {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
   }
 }
 
@@ -340,5 +372,13 @@ a {
   font-size: 1.2rem;
 }
 .popup-modal .popup-body {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 20px;
   padding: 20px;
 }

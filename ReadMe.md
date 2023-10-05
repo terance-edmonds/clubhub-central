@@ -17,9 +17,16 @@ ClubHub Central web application. Build with `PHP` with `MVC` architecture model.
 ```bash
 git clone https://github.com/terance-edmonds/clubhub-central.git
 ```
-2. Open `XAMPP` and run `Apache` and `MySql`.
+2. Install dependencies.
+```bash 
+composer install
+```
 
-3. Visit `http://localhost/chc/public/home`.
+3. Setup `.env` file (check `.env.sample`)
+   
+4. Open `XAMPP` and run `Apache` and `MySql`.
+
+5. Visit `http://localhost/chc/public/home`.
 
 ## Development
 

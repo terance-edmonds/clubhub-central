@@ -12,14 +12,20 @@
         </div>
     </section>
     <section class="section right">
-        <form class="form">
+        <form class="form" method="post">
             <div class="input-wrap">
                 <label for="email">Email Address</label>
-                <input id="email" type="email" placeholder="Email Address" required>
+                <input value="<?= setValue('email') ?>" id="email" type="email" name="email" placeholder="Email Address" required>
+                <?php if (!empty($errors['email'])) : ?>
+                    <small><?= $errors['email'] ?></small>
+                <?php endif; ?>
             </div>
             <div class="input-wrap">
                 <label for="password">Password</label>
-                <input id="password" type="password" placeholder="Password" required>
+                <input value="<?= setValue('password') ?>" id="password" type="password" name="password" placeholder="Password" required>
+                <?php if (!empty($errors['password'])) : ?>
+                    <small><?= $errors['password'] ?></small>
+                <?php endif; ?>
             </div>
             <a href="/forgot-password" class="cl-theme f-14">Forgot Password?</a>
 
@@ -31,3 +37,5 @@
         </form>
     </section>
 </div>
+
+<script src="<?= ROOT ?>/assets/js/common.js"></script>

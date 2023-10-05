@@ -14,6 +14,10 @@
   color: #161616;
 }
 
+.cl-red {
+  color: #ff0000;
+}
+
 .bg-theme {
   background-color: #69e4be;
 }
@@ -28,6 +32,10 @@
 
 .bg-secondary-dark {
   background-color: #161616;
+}
+
+.bg-red {
+  background-color: #ff0000;
 }
 
 .f-14 {

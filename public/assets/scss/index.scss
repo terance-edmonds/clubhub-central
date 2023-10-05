@@ -82,6 +82,17 @@ a {
         color: #fff;
     }
 
+    .label-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+
+        small {
+            font-size: 0.8em;
+            color: $gray;
+        }
+    }
+
     input {
         width: 100%;
         border: 1px solid $border;
@@ -91,6 +102,11 @@ a {
         outline: none;
         border: 1px solid $border;
         color: #fff;
+    }
+
+    small {
+        color: $red;
+        font-size: x-small;
     }
 }
 
@@ -156,6 +172,10 @@ a {
 
     @media screen and (max-width: 800px) {
         flex-direction: column;
+
+        .nowrap {
+            flex-direction: row;
+        }
     }
 }
 
