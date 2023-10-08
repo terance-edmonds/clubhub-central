@@ -13,67 +13,85 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
-        }
 
-        .card {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            width: 100%;
-            background-color: $secondary_dark;
-            border: 1px solid $border;
-            padding: 20px;
-            border-radius: 12px;
-
-            .top {
+            .card {
                 display: flex;
+                flex-direction: column;
                 gap: 15px;
+                width: 100%;
+                background-color: $secondary_dark;
+                border: 1px solid $border;
+                padding: 20px;
+                border-radius: 12px;
 
-                .club-logo {
-                    width: 70px;
-                    height: 70px;
-                    object-fit: cover;
-                    object-position: center;
-                    border-radius: 8px;
-                }
-
-                .details {
+                .top {
                     display: flex;
-                    flex-direction: column;
-                    gap: 5px;
+                    gap: 15px;
 
-                    .club-title {
-                        font-size: $px20;
-                        width: fit-content;
+                    .club-logo {
+                        width: 70px;
+                        height: 70px;
+                        object-fit: cover;
+                        object-position: center;
+                        border-radius: 8px;
                     }
 
-                    .other-details {
+                    .details {
                         display: flex;
-                        align-items: center;
-                        gap: 10px;
-                        color: $secondary_theme;
+                        flex-direction: column;
+                        gap: 5px;
 
-                        .dot {
-                            width: 6px;
-                            height: 6px;
-                            background-color: $secondary_theme;
-                            border-radius: 50%;
+                        .club-title {
+                            font-size: $px20;
+                            width: fit-content;
+                        }
+
+                        .other-details {
+                            display: flex;
+                            align-items: center;
+                            gap: 10px;
+                            color: $secondary_theme;
+
+                            .dot {
+                                width: 6px;
+                                height: 6px;
+                                background-color: $secondary_theme;
+                                border-radius: 50%;
+                            }
                         }
                     }
                 }
+
+                .post-image {
+                    max-width: 560px;
+                    height: 560px;
+                    object-fit: cover;
+                    width: 100%;
+                    border-radius: 6px;
+                }
+
+                .description {
+                    font-size: $px14;
+                    color: $secondary_white;
+                }
+            }
+        }
+
+        .gallery {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: auto auto auto;
+
+            @media screen and (max-width: 600px) {
+                grid-template-columns: auto auto;
             }
 
-            .post-image {
-                max-width: 560px;
-                height: 560px;
-                object-fit: cover;
+            gap: 15px;
+
+            .gallery-image {
+                border-radius: 5px;
                 width: 100%;
-                border-radius: 6px;
-            }
-
-            .description {
-                font-size: $px14;
-                color: $secondary_white;
+                max-width: 190px;
             }
         }
     }

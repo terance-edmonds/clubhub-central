@@ -76,7 +76,7 @@
           flex-direction: column;
   gap: 20px;
 }
-#profile .center-section .card {
+#profile .center-section .cards .card {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -91,13 +91,13 @@
   padding: 20px;
   border-radius: 12px;
 }
-#profile .center-section .card .top {
+#profile .center-section .cards .card .top {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   gap: 15px;
 }
-#profile .center-section .card .top .club-logo {
+#profile .center-section .cards .card .top .club-logo {
   width: 70px;
   height: 70px;
   -o-object-fit: cover;
@@ -106,7 +106,7 @@
      object-position: center;
   border-radius: 8px;
 }
-#profile .center-section .card .top .details {
+#profile .center-section .cards .card .top .details {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -116,13 +116,13 @@
           flex-direction: column;
   gap: 5px;
 }
-#profile .center-section .card .top .details .club-title {
+#profile .center-section .cards .card .top .details .club-title {
   font-size: 1.25em;
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
 }
-#profile .center-section .card .top .details .other-details {
+#profile .center-section .cards .card .top .details .other-details {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -132,13 +132,13 @@
   gap: 10px;
   color: #94d1be;
 }
-#profile .center-section .card .top .details .other-details .dot {
+#profile .center-section .cards .card .top .details .other-details .dot {
   width: 6px;
   height: 6px;
   background-color: #94d1be;
   border-radius: 50%;
 }
-#profile .center-section .card .post-image {
+#profile .center-section .cards .card .post-image {
   max-width: 560px;
   height: 560px;
   -o-object-fit: cover;
@@ -146,7 +146,23 @@
   width: 100%;
   border-radius: 6px;
 }
-#profile .center-section .card .description {
+#profile .center-section .cards .card .description {
   font-size: 0.875em;
   color: #e7e7e7;
+}
+#profile .center-section .gallery {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: 15px;
+}
+@media screen and (max-width: 600px) {
+  #profile .center-section .gallery {
+    grid-template-columns: auto auto;
+  }
+}
+#profile .center-section .gallery .gallery-image {
+  border-radius: 5px;
+  width: 100%;
+  max-width: 190px;
 }
