@@ -228,6 +228,10 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
   gap: 20px;
 }
 .profile-side-bar .profile-section .image {
@@ -235,6 +239,8 @@
   height: 100px;
   -o-object-fit: cover;
      object-fit: cover;
+  border: 1px solid #2d2d2d;
+  border-radius: 10px;
 }
 .profile-side-bar .profile-section .details {
   display: -webkit-box;
@@ -246,6 +252,75 @@
           flex-direction: column;
   gap: 5px;
 }
+.profile-side-bar .profile-section .details .name {
+  font-weight: 600;
+}
+.profile-side-bar .profile-section .details .desc {
+  display: -webkit-box;
+  max-width: 200px;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.875em;
+  color: #e7e7e7;
+}
+.profile-side-bar.right .clubs-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  padding: 15px 0;
+}
+.profile-side-bar.right .clubs-section .title-wrap {
+  border-top: 1px solid #2d2d2d;
+  padding: 15px;
+  padding-bottom: 0;
+}
+.profile-side-bar.right .clubs-section .card {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 16px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 10px 15px;
+  border: 1px solid #2d2d2d;
+  border-left: 0;
+  border-right: 0;
+}
+.profile-side-bar.right .clubs-section .card .club-logo {
+  width: 70px;
+  height: 70px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border: 2px solid #2d2d2d;
+  border-radius: 8px;
+}
+.profile-side-bar.right .clubs-section .card .details {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 16px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: 100%;
+}
+.profile-side-bar.right .clubs-section .card .details .title {
+  display: -webkit-box;
+  max-width: 100px;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 @media screen and (max-width: 1350px) {
   .side-bar.right {
     display: none;

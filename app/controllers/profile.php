@@ -4,6 +4,13 @@ class Profile extends Controller
 {
     public function index()
     {
-        $this->view("profile");
+        $data = [
+            "tab" => "gallery"
+        ];
+        $params = $_GET;
+
+        if (isset($params["tab"])) $data["tab"] = $params["tab"];
+
+        $this->view("profile", $data);
     }
 }

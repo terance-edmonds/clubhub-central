@@ -212,4 +212,30 @@ a {
     background-color: rgba(0, 0, 0, 0.7);
 }
 
+.tabs {
+    display: flex;
+    width: 100%;
+
+    .tab {
+        text-align: center;
+        width: 100%;
+        padding: 16px 20px;
+        transition: all 0.4s ease;
+        cursor: pointer;
+        border: 1px solid $border;
+        border-top: 0;
+
+        &:first-child {
+            border-left: 0;
+        }
+        &:last-child {
+            border-right: 0;
+        }
+
+        &[data-active='true'] {
+            border-bottom: 2px solid $theme;
+        }
+    }
+}
+
 @import './popup';

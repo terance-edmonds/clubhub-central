@@ -20,44 +20,28 @@
         </div>
     </div>
 
-    <div class="inner-section events-section no-border">
+    <div class="inner-section clubs-section no-border">
         <p class="title-wrap">
-            Today's Events
+            Assigned Clubs
         </p>
 
         <div class="cards">
             <div class="card">
-                <img loading="lazy" src="https://picsum.photos/110/110" alt="Post Image" class="post-image">
+                <img loading="lazy" src="https://picsum.photos/110/110" alt="Club Logo" class="club-logo">
                 <div class="details">
-                    <a href="#" class="title">Event Name</a>
-                    <p class="date-time">
-                        <span>Time</span>
-                        <span>:</span>
-                        <span>4.30 PM - 6.30 PM</span>
-                    </p>
-                    <p class="date-time">
-                        <span>Venue</span>
-                        <span>:</span>
-                        <span class="truncate-text">UCSC Grounds</span>
-                    </p>
-                    <p class="club truncate-text">IEEE</p>
+                    <a href="#" class="title">IEEE</a>
+                    <span class="material-icons-outlined">
+                        chevron_right
+                    </span>
                 </div>
             </div>
             <div class="card">
-                <img loading="lazy" src="https://picsum.photos/110/110" alt="Post Image" class="post-image">
+                <img loading="lazy" src="https://picsum.photos/110/110" alt="Club Logo" class="club-logo">
                 <div class="details">
-                    <a href="#" class="title">Event Name</a>
-                    <p class="date-time">
-                        <span>Time</span>
-                        <span>:</span>
-                        <span>4.30 PM - 6.30 PM</span>
-                    </p>
-                    <p class="date-time">
-                        <span>Venue</span>
-                        <span>:</span>
-                        <span class="truncate-text">UCSC Grounds</span>
-                    </p>
-                    <p class="club truncate-text">IEEE</p>
+                    <a href="#" class="title">IEEE</a>
+                    <span class="material-icons-outlined">
+                        chevron_right
+                    </span>
                 </div>
             </div>
         </div>
