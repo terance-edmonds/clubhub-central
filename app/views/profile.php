@@ -5,8 +5,8 @@
 
 <?php $this->view('includes/header') ?>
 
-<div id="home" class="container container-sections side-padding">
-    <?php $this->view('includes/side-bars/events/left')  ?>
+<div id="profile" class="container container-sections side-padding">
+    <?php $this->view('includes/side-bars/profile/left')  ?>
     <section class="center-section">
         <div class="card">
             <div class="top">
@@ -28,5 +28,5 @@
         </div>
 
     </section>
-    <?php $this->view('includes/side-bars/events/right')  ?>
+    <?php $this->view('includes/side-bars/profile/right')  ?>
 </div>

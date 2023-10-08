@@ -79,4 +79,38 @@ class Modal
 
         return false;
     }
+
+    public function update($where, $data)
+    {
+        /* remove unwanted columns */
+        if (!empty($this->allowed_columns)) {
+            foreach ($data as $key => $value) {
+                if (!in_array($key, $this->allowed_columns)) {
+                    unset($data[$key]);
+                }
+            }
+        }
+
+        $keys = array_keys($data);
+        $where_keys = array_keys($where);
+        $query = "update " . $this->table . " set ";
+
+        /* update columns */
+        foreach ($keys as $key) {
+            $query .= $key . "=:" . $key . ",";
+        }
+        $query = trim($query, ",");
+
+        /* where columns */
+        $query .= " where ";
+        foreach ($where_keys as $where_key) {
+            $query .= $where_key . "=:" . $where_key . ",";
+        }
+        $query = trim($query, ",");
+
+        /* merge array and where data */
+        $data = array_merge($data, $where);
+
+        $this->db->query($query, $data);
+    }
 }

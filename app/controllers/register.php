@@ -27,18 +27,17 @@ class Register extends Controller
                         $user_invitation->create([
                             "user_id" => $result->id,
                             "invitation_code" => randomString(),
-                            "is_valid" => true
+                            "is_valid" => 1
                         ]);
-                        var_dump("1");
+
                         $db->commit();
-                        var_dump("2");
 
                         redirect('login');
                     } else {
                         $data["errors"]["email"] = "Something went wrong!";
                     }
                 } catch (Throwable $th) {
-                    var_dump($th);
+                    $data['errors'] = "Failed to register user, please try again later.";
                     $db->rollback();
                 }
             }
@@ -51,6 +50,34 @@ class Register extends Controller
 
     public function verify()
     {
-        $this->view("register/verify");
+        $data = [
+            "is_verified" => False
+        ];
+
+        $db = new Database();
+        $user = new User($db);
+        $user_invitation = new UserInvitation($db);
+        $token = $_GET["token"];
+
+        try {
+            $result = $user_invitation->one(["invitation_code" => $token, "is_valid" => 1]);
+
+            if (!empty($result)) {
+                $db->transaction();
+
+                $user->update(["id" => $result->user_id], ["is_verified" => 1]);
+                $user_invitation->update(["id" => $result->id], ["is_valid" => 0]);
+
+                $db->commit();
+
+                $data["is_verified"] = True;
+            }
+        } catch (Throwable $th) {
+            var_dump($th);
+            $data['errors'] = "Failed to register user, please try again later.";
+            $db->rollback();
+        }
+
+        $this->view("register/verify", $data);
     }
 }

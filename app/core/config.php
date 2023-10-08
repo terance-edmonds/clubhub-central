@@ -27,4 +27,3 @@ define('MAIL_HOST', $_ENV["MAIL_HOST"]);
 define('MAIL_USERNAME', $_ENV["MAIL_USERNAME"]);
 define('MAIL_USER', $_ENV["MAIL_USER"]);
 define('MAIL_PASS', $_ENV["MAIL_PASS"]);
-define('MAIL_FROM', $_ENV["MAIL_FROM"]);

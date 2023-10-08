@@ -10,7 +10,7 @@ class User extends Modal
         "password",
         "role",
         "is_blacklisted",
-        "is_valid"
+        "is_verified"
     ];
 
     public function validate($data)

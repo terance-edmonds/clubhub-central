@@ -144,6 +144,28 @@
     }
 }
 
+.profile-side-bar {
+    .profile-section {
+        display: flex;
+        gap: 20px;
+
+        .image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        .details {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+
+            .name {
+            }
+        }
+    }
+}
+
 @media screen and (max-width: 1350px) {
     .side-bar {
         &.right {

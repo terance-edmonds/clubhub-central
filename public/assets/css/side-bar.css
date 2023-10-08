@@ -224,6 +224,28 @@
   color: #a5a5a5;
 }
 
+.profile-side-bar .profile-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 20px;
+}
+.profile-side-bar .profile-section .image {
+  width: 100px;
+  height: 100px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.profile-side-bar .profile-section .details {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 5px;
+}
 @media screen and (max-width: 1350px) {
   .side-bar.right {
     display: none;

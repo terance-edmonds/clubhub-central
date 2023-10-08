@@ -1,0 +1,31 @@
+@import '../../colors';
+@import '../../fonts';
+
+#register-verify {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+
+    .icon {
+        &.error {
+            span {
+                color: $orange;
+            }
+        }
+
+        span {
+            font-size: 8em;
+            color: $theme;
+        }
+    }
+
+    .section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        width: 100%;
+        max-width: 600px;
+        text-align: center;
+    }
+}
