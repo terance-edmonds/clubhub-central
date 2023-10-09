@@ -58,28 +58,28 @@
   font-family: "Lexend Peta", sans-serif;
 }
 
-#profile {
+#club {
   gap: 0;
 }
-#profile .center-section {
+#club .center-section {
   padding: 0;
   width: 100%;
 }
-#profile .center-section .cards {
+#club .center-section .cards {
   padding: 20px;
 }
-#profile .center-section .gallery {
+#club .center-section .gallery {
   padding: 20px;
   display: grid;
   grid-template-columns: auto auto auto;
   gap: 15px;
 }
 @media screen and (max-width: 600px) {
-  #profile .center-section .gallery {
+  #club .center-section .gallery {
     grid-template-columns: auto auto;
   }
 }
-#profile .center-section .gallery .gallery-image {
+#club .center-section .gallery .gallery-image {
   border-radius: 5px;
   width: 100%;
   max-width: 190px;
