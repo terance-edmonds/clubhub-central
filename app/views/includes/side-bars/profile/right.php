@@ -29,7 +29,7 @@
             <div class="card">
                 <img loading="lazy" src="https://picsum.photos/110/110" alt="Club Logo" class="club-logo">
                 <div class="details">
-                    <a href="#" class="title">IEEE</a>
+                    <a href="<?= ROOT ?>/club?id=" class="title">IEEE</a>
                     <span class="material-icons-outlined">
                         chevron_right
                     </span>

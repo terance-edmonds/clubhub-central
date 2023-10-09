@@ -1,0 +1,172 @@
+@import './colors';
+@import './fonts';
+
+.cards {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .club-post {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+        background-color: $secondary_dark;
+        border: 1px solid $border;
+        padding: 20px;
+        border-radius: 12px;
+
+        .top {
+            display: flex;
+            gap: 15px;
+
+            .club-logo {
+                width: 70px;
+                height: 70px;
+                object-fit: cover;
+                object-position: center;
+                border-radius: 8px;
+            }
+
+            .details {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+
+                .club-title {
+                    font-size: $px20;
+                    width: fit-content;
+                }
+
+                .other-details {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    color: $secondary_theme;
+
+                    .dot {
+                        width: 6px;
+                        height: 6px;
+                        background-color: $secondary_theme;
+                        border-radius: 50%;
+                    }
+                }
+            }
+        }
+
+        .post-image {
+            max-width: 560px;
+            height: 560px;
+            object-fit: cover;
+            width: 100%;
+            border-radius: 6px;
+        }
+
+        .description {
+            font-size: $px14;
+            color: $secondary_white;
+        }
+    }
+
+    .event-post {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+        background-color: $secondary_dark;
+        border: 1px solid $border;
+        padding: 20px;
+        border-radius: 12px;
+
+        .top {
+            display: flex;
+            gap: 15px;
+
+            .club-logo {
+                width: 70px;
+                height: 70px;
+                object-fit: cover;
+                object-position: center;
+                border-radius: 8px;
+            }
+
+            .details {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+
+                .club-title {
+                    font-size: $px20;
+                    width: fit-content;
+                }
+
+                .other-details {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    color: $secondary_theme;
+
+                    .dot {
+                        width: 6px;
+                        height: 6px;
+                        background-color: $secondary_theme;
+                        border-radius: 50%;
+                    }
+                }
+            }
+        }
+
+        .post-image {
+            max-width: 560px;
+            height: 315px;
+            object-fit: cover;
+            width: 100%;
+            border-radius: 6px;
+        }
+
+        .title {
+            font-size: $px20;
+            font-weight: 600;
+        }
+
+        .description {
+            font-size: $px14;
+            color: $secondary_white;
+        }
+
+        .details-wrap {
+            display: grid;
+            grid-template-columns: 45% 45%;
+            gap: 20px;
+
+            .detail-wrap {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                width: 100%;
+
+                .icon {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 10px;
+                    color: $secondary_theme;
+                    background-color: $secondary_dark;
+                    border: 1px solid $border;
+                    border-radius: 6px;
+
+                    span {
+                        font-size: 1.5em;
+                    }
+                }
+
+                .texts {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2px;
+                    color: $secondary_white;
+                }
+            }
+        }
+    }
+}
