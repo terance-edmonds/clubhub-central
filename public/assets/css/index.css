@@ -97,7 +97,6 @@ a {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  gap: 20px;
   max-width: 1350px;
   width: 100%;
   padding: 0 50px;
@@ -109,6 +108,13 @@ a {
 .container-sections section.center-section {
   width: 100%;
   max-width: 560px;
+  border-left: 1px;
+  border-right: 1px;
+  border-top: 0;
+  border-bottom: 0;
+  border-style: solid;
+  border-color: #2d2d2d;
+  padding: 20px;
 }
 
 .container {
@@ -200,6 +206,7 @@ a {
   cursor: pointer;
   -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
+  border: 1px solid transparent;
 }
 .button.w-content {
   max-width: -webkit-max-content;
@@ -228,6 +235,23 @@ a {
   border-radius: 50%;
   -webkit-animation: button-loading-spinner 1s ease infinite;
           animation: button-loading-spinner 1s ease infinite;
+}
+.button[data-variant=outlined] {
+  background-color: #09090b;
+  border-color: #69e4be;
+  color: #fff;
+}
+.button[data-type=icon] {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 10px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.button[data-size=small] {
+  padding: 6px 16px;
 }
 
 @-webkit-keyframes button-loading-spinner {

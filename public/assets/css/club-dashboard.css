@@ -1,0 +1,104 @@
+.cl-theme {
+  color: #69e4be;
+}
+
+.cl-secondary-theme {
+  color: #94d1be;
+}
+
+.cl-dark {
+  color: #09090b;
+}
+
+.cl-secondary-dark {
+  color: #161616;
+}
+
+.cl-red {
+  color: #ff0000;
+}
+
+.bg-theme {
+  background-color: #69e4be;
+}
+
+.bg-secondary-theme {
+  background-color: #94d1be;
+}
+
+.bg-dark {
+  background-color: #09090b;
+}
+
+.bg-secondary-dark {
+  background-color: #161616;
+}
+
+.bg-red {
+  background-color: #ff0000;
+}
+
+.f-14 {
+  font-size: 0.875em;
+}
+
+.f-20 {
+  font-size: 1.25em;
+}
+
+.f-24 {
+  font-size: 1.5em;
+}
+
+.f-74 {
+  font-size: 4.625em;
+}
+
+.lexend {
+  font-family: "Lexend Peta", sans-serif;
+}
+
+#club-dashboard .center-section {
+  width: 100%;
+  border-top: 0;
+  border-bottom: 0;
+  border: 1px solid #2d2d2d;
+  min-height: 100vh;
+  max-width: 1020px;
+}
+#club-dashboard .center-section .title-bar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  gap: 20px;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+#club-dashboard .center-section .title-bar .title-wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  gap: 15px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+#club-dashboard .center-section .title-bar .title-wrap .title {
+  font-size: 1.5em;
+}
+#club-dashboard .center-section .title-bar .title-wrap .button {
+  max-width: -webkit-fit-content;
+  max-width: -moz-fit-content;
+  max-width: fit-content;
+}
+#club-dashboard .center-section .title-bar .search-input {
+  max-width: 350px;
+}

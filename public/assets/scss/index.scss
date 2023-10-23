@@ -28,7 +28,6 @@ a {
 .container-sections {
     display: flex;
     justify-content: center;
-    gap: 20px;
     max-width: 1350px;
     width: 100%;
     padding: 0 50px;
@@ -40,6 +39,13 @@ a {
         &.center-section {
             width: 100%;
             max-width: 560px;
+            border-left: 1px;
+            border-right: 1px;
+            border-top: 0;
+            border-bottom: 0;
+            border-style: solid;
+            border-color: $border;
+            padding: 20px;
         }
     }
 }
@@ -123,6 +129,7 @@ a {
     width: 100%;
     cursor: pointer;
     transition: all 0.3s ease;
+    border: 1px solid transparent;
 
     &.w-content {
         max-width: max-content;
@@ -151,6 +158,22 @@ a {
             border-radius: 50%;
             animation: button-loading-spinner 1s ease infinite;
         }
+    }
+
+    &[data-variant='outlined'] {
+        background-color: $dark;
+        border-color: $theme;
+        color: #fff;
+    }
+
+    &[data-type='icon'] {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    &[data-size='small'] {
+        padding: 6px 16px;
     }
 }
 
