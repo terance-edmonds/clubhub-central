@@ -55,11 +55,13 @@
   left: 0;
   right: 0;
   background-color: #09090b;
+  z-index: 10;
 }
 .nav-header .container-sections {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  gap: 20px;
 }
 .nav-header .container-sections .logo-section {
   display: -webkit-box;
@@ -79,6 +81,7 @@
           justify-content: space-between;
   gap: 10px;
   width: 100%;
+  border: 0;
 }
 .nav-header .container-sections .notification-section {
   display: -webkit-box;

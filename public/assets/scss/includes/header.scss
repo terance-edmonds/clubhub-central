@@ -14,9 +14,11 @@ $nav-item-padding: 15px 0;
     left: 0;
     right: 0;
     background-color: $dark;
+    z-index: 10;
 
     .container-sections {
         justify-content: space-between;
+        gap: 20px;
 
         .logo-section {
             display: flex;
@@ -29,6 +31,7 @@ $nav-item-padding: 15px 0;
             justify-content: space-between;
             gap: 10px;
             width: 100%;
+            border: 0;
         }
 
         .notification-section {
