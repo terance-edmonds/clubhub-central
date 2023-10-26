@@ -45,5 +45,13 @@
                 </div>
             </div>
         </div>
+
+        <div class="empty-content">
+            <img loading="lazy" src="<?= ROOT ?>/assets/images/other/empty.png" alt="Not Found" class="empty-image">
+            <div class="titles">
+                <span class="title">No Clubs Yet</span>
+                <span class="sub-title">You are not assigned under any club yet</span>
+            </div>
+        </div>
     </div>
 </section>

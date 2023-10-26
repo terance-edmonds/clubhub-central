@@ -28,7 +28,6 @@ a {
 .container-sections {
     display: flex;
     justify-content: center;
-    gap: 20px;
     max-width: 1350px;
     width: 100%;
     padding: 0 50px;
@@ -40,6 +39,21 @@ a {
         &.center-section {
             width: 100%;
             max-width: 560px;
+            border-left: 1px;
+            border-right: 1px;
+            border-top: 0;
+            border-bottom: 0;
+            border-style: solid;
+            border-color: $border;
+            padding: 20px;
+        }
+    }
+
+    &.dashboard-container {
+        section {
+            &.center-section {
+                max-width: 1020px;
+            }
         }
     }
 }
@@ -52,131 +66,6 @@ a {
     display: flex;
     min-height: 100vh;
     width: 100%;
-}
-
-.input-wrap {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    width: 100%;
-    text-align: left;
-
-    .input {
-        display: flex;
-        gap: 6px;
-        width: 100%;
-        border: 1px solid $border;
-        padding: 0px 15px 0px 10px;
-        border-radius: 8px;
-        background-color: $secondary_dark;
-        align-items: center;
-
-        input {
-            border: none;
-            border-radius: 0;
-            padding-left: 5px;
-        }
-    }
-
-    label {
-        color: #fff;
-    }
-
-    .label-wrap {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-
-        small {
-            font-size: 0.8em;
-            color: $gray;
-        }
-    }
-
-    input {
-        width: 100%;
-        border: 1px solid $border;
-        padding: 12px 15px;
-        border-radius: 8px;
-        background-color: $secondary_dark;
-        outline: none;
-        border: 1px solid $border;
-        color: #fff;
-    }
-
-    small {
-        color: $red;
-        font-size: x-small;
-    }
-}
-
-.button {
-    position: relative;
-    text-transform: uppercase;
-    color: $secondary_dark;
-    background-color: $theme;
-    outline: none;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    padding: 11px 30px;
-    width: 100%;
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    &.w-content {
-        max-width: max-content;
-    }
-
-    &:disabled {
-        background-color: $gray;
-        color: #ccc;
-    }
-
-    &[data-loading='true'] {
-        cursor: wait;
-
-        &::after {
-            content: '';
-            position: absolute;
-            width: 16px;
-            height: 16px;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            margin: auto;
-            border: 4px solid transparent;
-            border-top-color: #ffffff;
-            border-radius: 50%;
-            animation: button-loading-spinner 1s ease infinite;
-        }
-    }
-}
-
-@keyframes button-loading-spinner {
-    from {
-        transform: rotate(0turn);
-    }
-
-    to {
-        transform: rotate(1turn);
-    }
-}
-
-.multi-wrap {
-    display: flex;
-    gap: 14px;
-    align-items: center;
-    width: 100%;
-
-    @media screen and (max-width: 800px) {
-        flex-direction: column;
-
-        .nowrap {
-            flex-direction: row;
-        }
-    }
 }
 
 .truncate-text {
@@ -238,4 +127,7 @@ a {
     }
 }
 
-@import './popup';
+@import './components/input';
+@import './components/button';
+@import './components/table';
+@import './components/popup';

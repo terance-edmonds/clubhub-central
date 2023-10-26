@@ -1,0 +1,90 @@
+.button {
+    position: relative;
+    text-transform: uppercase;
+    color: $secondary_dark;
+    background-color: $theme;
+    outline: none;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 11px 30px;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+
+    &.w-content {
+        max-width: max-content;
+    }
+
+    &:disabled {
+        background-color: $gray;
+        color: #ccc;
+    }
+
+    &[data-loading='true'] {
+        cursor: wait;
+
+        &::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            border: 4px solid transparent;
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: button-loading-spinner 1s ease infinite;
+        }
+    }
+
+    /* variants */
+    &[data-variant='outlined'] {
+        background-color: $dark;
+        border-color: $theme;
+        color: #fff;
+    }
+
+    /* types */
+    &[data-type='icon'] {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    /* sizes */
+    &[data-size='small'] {
+        padding: 6px 16px;
+    }
+}
+
+.icon-button {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    color: #fff;
+
+    span {
+        border-radius: 50%;
+    }
+}
+
+@keyframes button-loading-spinner {
+    from {
+        transform: rotate(0turn);
+    }
+
+    to {
+        transform: rotate(1turn);
+    }
+}

@@ -55,7 +55,7 @@
         </div>
     </section>
 
-    <?php $this->view('includes/side-bars/right')  ?>
+    <?php $this->view('includes/side-bars/events/right')  ?>
 </div>
 
 <?php $this->view('includes/modals/event/register')  ?>
