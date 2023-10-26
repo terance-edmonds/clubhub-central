@@ -1,14 +1,16 @@
 @import '../../colors';
 @import '../../fonts';
 
-#club-dashboard {
+.club-dashboard {
     .center-section {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
         width: 100%;
         border-top: 0;
         border-bottom: 0;
         border: 1px solid $border;
         min-height: 100vh;
-        max-width: 1020px;
 
         .title-bar {
             display: flex;
@@ -38,3 +40,5 @@
         }
     }
 }
+
+@import './dashboard/events';

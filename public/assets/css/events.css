@@ -1,3 +1,4 @@
+/* font colors */
 .cl-theme {
   color: #69e4be;
 }
@@ -18,6 +19,11 @@
   color: #ff0000;
 }
 
+.cl-orange {
+  color: #ff8800;
+}
+
+/* background colors */
 .bg-theme {
   background-color: #69e4be;
 }

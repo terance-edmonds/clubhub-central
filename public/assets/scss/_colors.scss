@@ -8,7 +8,15 @@ $secondary_white: #e7e7e7;
 $error: #e13434;
 $red: #ff0000;
 $orange: #ff8800;
+$yellow: #edff7d;
+$yellow-light: #303021;
+$green: #7dff7a;
+$green-light: #213021;
+$green: #7dff7a;
+$red-2: #ff4646;
+$red-2-light: #392a2d;
 
+/* font colors */
 .cl-theme {
     color: $theme;
 }
@@ -24,7 +32,11 @@ $orange: #ff8800;
 .cl-red {
     color: $red;
 }
+.cl-orange {
+    color: $orange;
+}
 
+/* background colors */
 .bg-theme {
     background-color: $theme;
 }

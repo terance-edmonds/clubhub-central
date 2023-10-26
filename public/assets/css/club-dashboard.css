@@ -1,3 +1,4 @@
+/* font colors */
 .cl-theme {
   color: #69e4be;
 }
@@ -18,6 +19,11 @@
   color: #ff0000;
 }
 
+.cl-orange {
+  color: #ff8800;
+}
+
+/* background colors */
 .bg-theme {
   background-color: #69e4be;
 }
@@ -58,15 +64,22 @@
   font-family: "Lexend Peta", sans-serif;
 }
 
-#club-dashboard .center-section {
+.club-dashboard .center-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 20px;
   width: 100%;
   border-top: 0;
   border-bottom: 0;
   border: 1px solid #2d2d2d;
   min-height: 100vh;
-  max-width: 1020px;
 }
-#club-dashboard .center-section .title-bar {
+.club-dashboard .center-section .title-bar {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -80,7 +93,7 @@
       -ms-flex-align: center;
           align-items: center;
 }
-#club-dashboard .center-section .title-bar .title-wrap {
+.club-dashboard .center-section .title-bar .title-wrap {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -91,14 +104,36 @@
       -ms-flex-align: center;
           align-items: center;
 }
-#club-dashboard .center-section .title-bar .title-wrap .title {
+.club-dashboard .center-section .title-bar .title-wrap .title {
   font-size: 1.5em;
 }
-#club-dashboard .center-section .title-bar .title-wrap .button {
+.club-dashboard .center-section .title-bar .title-wrap .button {
   max-width: -webkit-fit-content;
   max-width: -moz-fit-content;
   max-width: fit-content;
 }
-#club-dashboard .center-section .title-bar .search-input {
+.club-dashboard .center-section .title-bar .search-input {
   max-width: 350px;
+}
+
+#club-dashboard-event .table-wrap .buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 10px;
+}
+#club-dashboard-event .table-wrap .status-button {
+  cursor: default;
+}
+#club-dashboard-event .table-wrap .status-button[data-status=PENDING] {
+  color: #edff7d;
+  background-color: #303021;
+}
+#club-dashboard-event .table-wrap .status-button[data-status=APPROVED] {
+  color: #7dff7a;
+  background-color: #213021;
+}
+#club-dashboard-event .table-wrap .status-button[data-status=REJECTED] {
+  color: #ff4646;
+  background-color: #392a2d;
 }

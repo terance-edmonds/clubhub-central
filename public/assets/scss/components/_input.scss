@@ -1,0 +1,70 @@
+.input-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    text-align: left;
+
+    .input {
+        display: flex;
+        gap: 6px;
+        width: 100%;
+        border: 1px solid $border;
+        padding: 0px 15px 0px 10px;
+        border-radius: 8px;
+        background-color: $secondary_dark;
+        align-items: center;
+
+        input {
+            border: none;
+            border-radius: 0;
+            padding-left: 5px;
+        }
+    }
+
+    label {
+        color: #fff;
+    }
+
+    .label-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+
+        small {
+            font-size: 0.8em;
+            color: $gray;
+        }
+    }
+
+    input {
+        width: 100%;
+        border: 1px solid $border;
+        padding: 12px 15px;
+        border-radius: 8px;
+        background-color: $secondary_dark;
+        outline: none;
+        border: 1px solid $border;
+        color: #fff;
+    }
+
+    small {
+        color: $red;
+        font-size: x-small;
+    }
+}
+
+.multi-wrap {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    width: 100%;
+
+    @media screen and (max-width: 800px) {
+        flex-direction: column;
+
+        .nowrap {
+            flex-direction: row;
+        }
+    }
+}
