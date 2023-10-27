@@ -64,7 +64,7 @@
   font-family: "Lexend Peta", sans-serif;
 }
 
-.club-dashboard .center-section {
+.event-dashboard .center-section {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -79,7 +79,7 @@
   border: 1px solid #2d2d2d;
   min-height: 100vh;
 }
-.club-dashboard .center-section .title-bar {
+.event-dashboard .center-section .title-bar {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -93,7 +93,7 @@
       -ms-flex-align: center;
           align-items: center;
 }
-.club-dashboard .center-section .title-bar .title-wrap {
+.event-dashboard .center-section .title-bar .title-wrap {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -104,15 +104,15 @@
       -ms-flex-align: center;
           align-items: center;
 }
-.club-dashboard .center-section .title-bar .title-wrap .title {
+.event-dashboard .center-section .title-bar .title-wrap .title {
   font-size: 1.5em;
 }
-.club-dashboard .center-section .title-bar .title-wrap .button {
+.event-dashboard .center-section .title-bar .title-wrap .button {
   max-width: -webkit-fit-content;
   max-width: -moz-fit-content;
   max-width: fit-content;
 }
-.club-dashboard .center-section .title-bar .search-input {
+.event-dashboard .center-section .title-bar .search-input {
   max-width: 350px;
 }
 
@@ -134,6 +134,28 @@
   background-color: #213021;
 }
 #club-dashboard-event .table-wrap .status-button[data-status=REJECTED] {
+  color: #ff4646;
+  background-color: #392a2d;
+}
+
+#event-dashboard-sponsors .table-wrap .buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 10px;
+}
+#event-dashboard-sponsors .table-wrap .status-button {
+  cursor: default;
+}
+#event-dashboard-sponsors .table-wrap .status-button[data-status=PENDING] {
+  color: #edff7d;
+  background-color: #303021;
+}
+#event-dashboard-sponsors .table-wrap .status-button[data-status=APPROVED] {
+  color: #7dff7a;
+  background-color: #213021;
+}
+#event-dashboard-sponsors .table-wrap .status-button[data-status=REJECTED] {
   color: #ff4646;
   background-color: #392a2d;
 }

@@ -1,4 +1,4 @@
-<section class="side-bar club-dashboard-side-bar left">
+<section class="side-bar event-dashboard-side-bar left">
     <div class="inner-section no-border profile-section">
         <img src="https://picsum.photos/100/100" alt="Profile Image" class="image">
 
@@ -41,4 +41,4 @@
     </div>
 </section>
 
-<script src="<?= ROOT ?>/assets/js/club/dashboard.js"></script>
+<script src="<?= ROOT ?>/assets/js/events/dashboard.js"></script>

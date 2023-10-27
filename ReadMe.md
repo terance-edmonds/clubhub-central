@@ -55,3 +55,11 @@ git commit -m "{{message}}"
 ```bash
 git push origin dev/{{yourname}}
 ```
+
+# Resources
+
+### Icons
+
+```http
+https://fonts.google.com/icons?selected=Material+Icons
+```

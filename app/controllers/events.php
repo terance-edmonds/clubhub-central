@@ -15,11 +15,17 @@ class Events extends Controller
     public function dashboard()
     {
         $path = $_GET["url"];
+        /* use outlined icons */
         $menu_data = [
             "menu" => [
-                ["id" => "eventDetails", "name" => "Event Details", "icon" => "emoji_events", "path" => "/events/event/dashboard"],
-                ["id" => "sponsers", "name" => "Sponsers", "icon" => "diversity_2", "path" => "/events/event/sponsers"]
-                
+                ["id" => "events", "name" => "Event Details", "icon" => "info", "path" => "/events/dashboard"],
+                ["id" => "registrations", "name" => "registrations", "icon" => "app_registration", "path" => "/events/dashboard/registrations"],
+                ["id" => "sponsors", "name" => "Sponsors", "icon" => "diversity_2", "path" => "/events/dashboard/sponsors"],
+                ["id" => "budgets", "name" => "Budgets", "icon" => "diversity_2", "path" => "/events/dashboard/budgets"],
+                ["id" => "agendas", "name" => "Agendas", "icon" => "diversity_2", "path" => "/events/dashboard/agendas"],
+                ["id" => "notifications", "name" => "Notifications", "icon" => "diversity_2", "path" => "/events/dashboard/Notifications"],
+                ["id" => "complaints", "name" => "Complaints", "icon" => "diversity_2", "path" => "/events/dashboard/complaints"]
+
             ]
         ];
         $data = [
