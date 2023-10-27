@@ -99,9 +99,9 @@
 
             <div class="title-bar">
                 <div class="title-wrap">
-                    <span class="title">Sponsers</span>
-                    <button class="button" data-variant="outlined" data-type="icon" data-size="small">
-                        <span>Add Sponser</span>
+                    <span class="title">Sponsors</span>
+                    <button onclick="addSponsor(event)" class="button contained" class="button" data-variant="outlined" data-type="icon" data-size="small">
+                        <span>Add Sponsor</span>
                         <span class="material-icons-outlined">
                             add
                         </span>
@@ -188,5 +188,5 @@
     </section>
 </div>
 
-<?php $this->view('includes/modals/event/register')  ?>
+<?php $this->view('includes/modals/event/sponsor.php')  ?>
 <script src="<?= ROOT ?>/assets/js/events/event.js"></script>

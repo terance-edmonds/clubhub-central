@@ -58,5 +58,5 @@
     <?php $this->view('includes/side-bars/events/right')  ?>
 </div>
 
-<?php $this->view('includes/modals/event/register')  ?>
+<?php $this->view('includes/modals/event/register')?>
 <script src="<?= ROOT ?>/assets/js/events/event.js"></script>
