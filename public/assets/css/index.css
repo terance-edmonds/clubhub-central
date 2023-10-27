@@ -263,6 +263,27 @@ a {
   color: #ff0000;
   font-size: x-small;
 }
+.input-wrap .textarea{
+  width: 100%;
+  border: 1px solid #2d2d2d;
+  border-radius: 8px;
+  background-color: #161616;
+  outline: none;
+  border: 1px solid #2d2d2d;
+  color: #fff;
+}
+.dd{
+  width: 100%;
+  border: 1px solid #2d2d2d;
+  height:44px ;
+  border-radius: 8px;
+  background-color: #161616;
+  outline: none;
+  border: 1px solid #2d2d2d;
+  color: #fff;
+}
+
+
 
 .multi-wrap {
   display: -webkit-box;

@@ -1,6 +1,6 @@
 <div class="popup-modal" popup-name="add-package">
     <div class="popup-header">
-        <span class="title">Register Now</span>
+        <span class="title">Add Package</span>
         <div class="icon" onclick="$(`[popup-name='add-package']`).popup(false)">
             <span class="material-icons-outlined">
                 close

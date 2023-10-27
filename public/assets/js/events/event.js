@@ -8,6 +8,13 @@ const addSponsor = ()=>{
 }
 
 const addPackage = ()=>{
-    console.log("hello")
     $('[popup-name="add-package"]').popup(true);
+}
+
+const addIncome = ()=>{
+    $('[popup-name="add-income"]').popup(true);
+}
+
+const addExpense = ()=>{
+    $('[popup-name="add-expense"]').popup(true);
 }
