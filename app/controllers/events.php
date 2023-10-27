@@ -20,11 +20,11 @@ class Events extends Controller
             "menu" => [
                 ["id" => "events", "name" => "Event Details", "icon" => "info", "path" => "/events/dashboard"],
                 ["id" => "registrations", "name" => "registrations", "icon" => "app_registration", "path" => "/events/dashboard/registrations"],
-                ["id" => "sponsors", "name" => "Sponsors", "icon" => "diversity_2", "path" => "/events/dashboard/sponsors"],
-                ["id" => "budgets", "name" => "Budgets", "icon" => "diversity_2", "path" => "/events/dashboard/budgets"],
-                ["id" => "agendas", "name" => "Agendas", "icon" => "diversity_2", "path" => "/events/dashboard/agendas"],
-                ["id" => "notifications", "name" => "Notifications", "icon" => "diversity_2", "path" => "/events/dashboard/Notifications"],
-                ["id" => "complaints", "name" => "Complaints", "icon" => "diversity_2", "path" => "/events/dashboard/complaints"]
+                ["id" => "sponsors", "name" => "Sponsors", "icon" => "diversity_3", "path" => "/events/dashboard/sponsors"],
+                ["id" => "budgets", "name" => "Budgets", "icon" => "monetization_on", "path" => "/events/dashboard/budgets"],
+                ["id" => "agendas", "name" => "Agendas", "icon" => "view_agenda", "path" => "/events/dashboard/agendas"],
+                ["id" => "notifications", "name" => "Notifications", "icon" => "notifications", "path" => "/events/dashboard/Notifications"],
+                ["id" => "complaints", "name" => "Complaints", "icon" => "inbox", "path" => "/events/dashboard/complaints"]
 
             ]
         ];

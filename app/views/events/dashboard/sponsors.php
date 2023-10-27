@@ -12,7 +12,7 @@
         <div class="title-bar">
             <div class="title-wrap">
                 <span class="title">Packages</span>
-                <button class="button" data-variant="outlined" data-type="icon" data-size="small">
+                <button onclick="addPackage(event)" class="button" data-variant="outlined" data-type="icon" data-size="small">
                     <span>Add Package</span>
                     <span class="material-icons-outlined">
                         add
@@ -188,5 +188,6 @@
     </section>
 </div>
 
-<?php $this->view('includes/modals/event/sponsor.php')  ?>
+<?php $this->view('includes/modals/event/sponsor')  ?>
+<?php $this->view('includes/modals/event/package')  ?>
 <script src="<?= ROOT ?>/assets/js/events/event.js"></script>

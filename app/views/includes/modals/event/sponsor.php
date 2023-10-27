@@ -1,7 +1,7 @@
 <div class="popup-modal" popup-name="add-sponsor">
     <div class="popup-header">
         <span class="title">Add New Sponsor</span>
-        <div class="icon" onclick="$(`[popup-name='add-sponsor']`).popup(true)">
+        <div class="icon" onclick="$(`[popup-name='add-sponsor']`).popup(false)">
             <span class="material-icons-outlined">
                 close
             </span>
