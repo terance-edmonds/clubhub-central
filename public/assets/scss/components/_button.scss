@@ -19,7 +19,8 @@
 
     &:disabled {
         background-color: $gray;
-        color: #ccc;
+        color: #969696;
+        cursor: not-allowed;
     }
 
     &[data-loading='true'] {
@@ -76,6 +77,11 @@
 
     span {
         border-radius: 50%;
+    }
+
+    &:disabled {
+        color: #969696;
+        cursor: not-allowed;
     }
 }
 

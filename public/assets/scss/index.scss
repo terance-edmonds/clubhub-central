@@ -46,6 +46,10 @@ a {
             border-style: solid;
             border-color: $border;
             padding: 20px;
+
+            &.no-padding {
+                padding: 0;
+            }
         }
     }
 
@@ -81,13 +85,6 @@ a {
     &.lines-3 {
         -webkit-line-clamp: 3;
     }
-}
-
-.form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 100%;
 }
 
 #overlay {
@@ -127,7 +124,9 @@ a {
     }
 }
 
+@import './components/switch';
 @import './components/input';
 @import './components/button';
 @import './components/table';
+@import './components/form';
 @import './components/popup';

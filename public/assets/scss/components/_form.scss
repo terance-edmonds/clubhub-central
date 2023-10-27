@@ -1,0 +1,44 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+
+    input {
+        color-scheme: dark;
+    }
+
+    .form-section {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        border-bottom: 1px solid $border;
+        padding: 20px;
+
+        &:first-child {
+            padding-top: 0;
+        }
+
+        .form-section-title-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: space-between;
+            align-items: center;
+
+            .button {
+                width: fit-content;
+            }
+        }
+
+        .form-section-title {
+            font-size: $px20;
+        }
+
+        .form-section-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+    }
+}

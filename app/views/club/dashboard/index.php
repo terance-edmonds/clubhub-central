@@ -1,5 +1,6 @@
 <head>
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/side-bar.css">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/dashboard.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/club-dashboard.css">
 </head>
 
@@ -12,12 +13,14 @@
         <div class="title-bar">
             <div class="title-wrap">
                 <span class="title">Events</span>
-                <button class="button" data-variant="outlined" data-type="icon" data-size="small">
-                    <span>Add Event</span>
-                    <span class="material-icons-outlined">
-                        add
-                    </span>
-                </button>
+                <a href="<?= ROOT ?>/events/dashboard/add-event">
+                    <button class="button" data-variant="outlined" data-type="icon" data-size="small">
+                        <span>Add Event</span>
+                        <span class="material-icons-outlined">
+                            add
+                        </span>
+                    </button>
+                </a>
             </div>
 
             <div class="input-wrap search-input">

@@ -1,5 +1,6 @@
 <head>
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/side-bar.css">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/dashboard.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/event-dashboard.css">
 </head>
 

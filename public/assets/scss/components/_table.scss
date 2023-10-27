@@ -15,7 +15,6 @@
         border-color: $secondary_dark;
         border-style: solid;
         border-top: 0;
-        text-transform: uppercase;
 
         &:first-child {
             border-top: 2px;
@@ -23,6 +22,7 @@
     }
 
     th {
+        text-transform: uppercase;
         background-color: $secondary_dark;
 
         &:first-child {

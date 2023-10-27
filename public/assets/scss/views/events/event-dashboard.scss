@@ -1,45 +1,6 @@
 @import '../../colors';
 @import '../../fonts';
 
-.event-dashboard {
-    .center-section {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        width: 100%;
-        border-top: 0;
-        border-bottom: 0;
-        border: 1px solid $border;
-        min-height: 100vh;
-
-        .title-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: space-between;
-            align-items: center;
-
-            .title-wrap {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 15px;
-                align-items: center;
-
-                .title {
-                    font-size: $px24;
-                }
-
-                .button {
-                    max-width: fit-content;
-                }
-            }
-
-            .search-input {
-                max-width: 350px;
-            }
-        }
-    }
-}
-
 @import './dashboard/events';
+@import './dashboard/edit-event';
 @import './dashboard/sponsors';

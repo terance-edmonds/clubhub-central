@@ -6,21 +6,18 @@
 
 <?php $this->view('includes/header') ?>
 
-<div id="event-dashboard-event-edit" class="container container-sections side-padding event-dashboard dashboard-container">
+<div id="event-dashboard-event-add" class="container container-sections side-padding event-dashboard dashboard-container">
     <?php $this->view('includes/side-bars/events/dashboard/left', $menu_data)  ?>
 
     <section class="center-section no-padding">
         <div class="title-bar set-padding">
             <div class="title-wrap">
-                <span class="title">Event Details</span>
-
+                <span class="title">Create Event</span>
             </div>
         </div>
 
         <div class="content-section">
             <form class="form" method="post">
-                <?php $this->view('/includes/image-upload', ["name" => "image"]) ?>
-
                 <div class="form-section">
                     <p class="form-section-title">General Details</p>
                     <div class="form-section-content">
@@ -59,28 +56,6 @@
                     </div>
                 </div>
 
-                <div class="form-section">
-                    <p class="form-section-title">Other Details</p>
-                    <div class="form-section-content">
-                        <div class="input-wrap">
-                            <label for="description">Description</label>
-                            <textarea value="<?= setValue('description') ?>" id="description" name="description" placeholder="Description" required></textarea>
-                            <?php if (!empty($errors['description'])) : ?>
-                                <small><?= $errors['description'] ?></small>
-                            <?php endif; ?>
-                        </div>
-
-                        <label class="checkbox-label">
-                            <span>Open For External Regisration</span>
-
-                            <label class="switch">
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                            </label>
-                        </label>
-                    </div>
-                </div>
-
                 <div class="form-section groups">
                     <div id="event-groups-section" class="form-section-title-wrap">
                         <p class="form-section-title">Group Details</p>
@@ -92,14 +67,86 @@
                         </div>
                     </div>
 
+                    <!-- <div class="created-groups">
+                        <div class="created-group">
+                            <div class="group-content-section">
+                                <p class="group-name">
+                                    <span class="title">Group Name : </span>
+                                    <span class="value">asdad</span>
+                                </p>
+                            </div>
+                            <div class="group-content-section">
+                                <p class="title">Members</p>
+                                <div class="group-members">
+                                    <div class="checkbox-wrap">
+                                        <label class="checkbox-label">
+                                            Terance
+                                            <input hidden type="checkbox" checked name="group_1-member" value="1">
+                                        </label>
+                                        <span class="material-icons-outlined">
+                                            clear
+                                        </span>
+                                    </div>
+                                    <div class="checkbox-wrap">
+                                        <label class="checkbox-label">
+                                            Raguram
+                                            <input hidden type="checkbox" checked name="group_1-member" value="1">
+                                        </label>
+                                        <span class="material-icons-outlined">
+                                            clear
+                                        </span>
+                                    </div>
+                                    <div class="checkbox-wrap">
+                                        <label class="checkbox-label">
+                                            Ramindu
+                                            <input hidden type="checkbox" checked name="group_1-member" value="1">
+                                        </label>
+                                        <span class="material-icons-outlined">
+                                            clear
+                                        </span>
+                                    </div>
+                                    <div class="checkbox-wrap">
+                                        <label class="checkbox-label">
+                                            Usama
+                                            <input hidden type="checkbox" checked name="group_1-member" value="1">
+                                        </label>
+                                        <span class="material-icons-outlined">
+                                            clear
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group-content-section sub-section">
+                                <p class="title">Access : </p>
+                                <div class="checkboxes-wrap">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" checked name="group_1-access" value="group_1-allow_budget_access">
+                                        Budgets
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" checked name="group_1-access" value="group_1-allow_event_details_access">
+                                        Event Details
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="group_1-access" value="group_1-allow_registration_access">
+                                        Registration
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="group_1-access" value="group_1-allow_sponsors_access">
+                                        Sponsors
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+
                 </div>
 
                 <div class="buttons-wrap">
-                    <button class="button contained">Save Event</button>
+                    <button class="button contained">Create Event</button>
                 </div>
             </form>
         </div>
-
     </section>
 
     <div id="{{group_name}}" class="form-section-content group-template group-form-section">
