@@ -510,9 +510,9 @@ input[type=checkbox]:checked {
   /* sizes */
 }
 .button.w-content {
-  max-width: -webkit-max-content;
-  max-width: -moz-max-content;
-  max-width: max-content;
+  max-width: -webkit-fit-content;
+  max-width: -moz-fit-content;
+  max-width: fit-content;
 }
 .button:disabled {
   background-color: #a5a5a5;
@@ -671,6 +671,25 @@ input[type=checkbox]:checked {
 }
 .form input {
   color-scheme: dark;
+}
+.form .buttons-wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  gap: 10px;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.form .buttons-wrap .button {
+  max-width: -webkit-fit-content;
+  max-width: -moz-fit-content;
+  max-width: fit-content;
 }
 .form .form-section {
   display: -webkit-box;

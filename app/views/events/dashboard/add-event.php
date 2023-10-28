@@ -7,7 +7,7 @@
 <?php $this->view('includes/header') ?>
 
 <div id="event-dashboard-event-add" class="container container-sections side-padding event-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/events/dashboard/left', $menu_data)  ?>
+    <?php $this->view('includes/side-bars/events/dashboard/left', ["menu" => $menu])  ?>
 
     <section class="center-section no-padding">
         <div class="title-bar set-padding">

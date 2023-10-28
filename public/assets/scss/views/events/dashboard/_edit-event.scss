@@ -1,5 +1,9 @@
 #event-dashboard-event-add,
 #event-dashboard-event-edit {
+    .center-section {
+        gap: 0;
+    }
+
     .group-template,
     .group-member-template {
         display: none;

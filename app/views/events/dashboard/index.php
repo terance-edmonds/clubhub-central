@@ -7,7 +7,7 @@
 <?php $this->view('includes/header') ?>
 
 <div id="event-dashboard-event-edit" class="container container-sections side-padding event-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/events/dashboard/left', $menu_data)  ?>
+    <?php $this->view('includes/side-bars/events/dashboard/left', ["menu" => $menu])  ?>
 
     <section class="center-section no-padding">
         <div class="title-bar set-padding">
@@ -117,8 +117,8 @@
                     <option value="1">Terance</option>
                     <option value="2">Raguram</option>
                 </select>
-                <?php if (!empty($errors['venue'])) : ?>
-                    <small><?= $errors['venue'] ?></small>
+                <?php if (!empty($errors['group_member'])) : ?>
+                    <small><?= $errors['group_member'] ?></small>
                 <?php endif; ?>
             </div>
         </div>

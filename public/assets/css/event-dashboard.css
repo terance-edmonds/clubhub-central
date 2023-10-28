@@ -64,6 +64,10 @@
   font-family: "Lexend Peta", sans-serif;
 }
 
+#event-dashboard-event-add .center-section,
+#event-dashboard-event-edit .center-section {
+  gap: 0;
+}
 #event-dashboard-event-add .group-template,
 #event-dashboard-event-add .group-member-template,
 #event-dashboard-event-edit .group-template,

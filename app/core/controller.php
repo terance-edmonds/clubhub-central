@@ -4,7 +4,8 @@ class Controller
 {
     function view($filename, $data = [])
     {
-        $path = "../app/views/" . $filename;
+        $views_path = "../app/views/";
+        $path = $views_path . $filename;
         extract($data); /* extract the elements in $data array */
 
         if (file_exists($path . ".php")) {
@@ -19,7 +20,7 @@ class Controller
                 echo "view index.php file not found: " . $path;
             }
         } else {
-            echo "view file not found: " . $path;
+            require $views_path . "not-found.php";
         }
     }
 }

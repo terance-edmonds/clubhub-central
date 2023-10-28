@@ -73,7 +73,6 @@ class Register extends Controller
                 $data["is_verified"] = True;
             }
         } catch (Throwable $th) {
-            var_dump($th);
             $data['errors'] = "Failed to register user, please try again later.";
             $db->rollback();
         }

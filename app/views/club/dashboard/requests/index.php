@@ -6,16 +6,16 @@
 
 <?php $this->view('includes/header') ?>
 
-<div id="club-dashboard-event" class="container container-sections side-padding club-dashboard dashboard-container">
+<div id="club-dashboard-requests" class="container container-sections side-padding club-dashboard dashboard-container">
     <?php $this->view('includes/side-bars/club/dashboard/left', ["menu" => $menu])  ?>
 
     <section class="center-section">
         <div class="title-bar">
             <div class="title-wrap">
-                <span class="title">Events</span>
-                <a href="<?= ROOT ?>/events/dashboard/add-event">
+                <span class="title">Requests</span>
+                <a href="<?= ROOT ?>/club/dashboard/requests/add">
                     <button class="button" data-variant="outlined" data-type="icon" data-size="small">
-                        <span>Add Event</span>
+                        <span>New Request</span>
                         <span class="material-icons-outlined">
                             add
                         </span>

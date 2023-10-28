@@ -7,7 +7,7 @@
 <?php $this->view('includes/header') ?>
 
 <div id="event-dashboard-sponsors" class="container container-sections side-padding event-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/events/dashboard/left', $menu_data)  ?>
+    <?php $this->view('includes/side-bars/events/dashboard/left', ["menu" => $menu])  ?>
 
     <section class="center-section">
         <div class="title-bar">
