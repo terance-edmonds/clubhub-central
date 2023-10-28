@@ -1,4 +1,12 @@
 @import '../../colors';
 @import '../../fonts';
 
+.club-dashboard {
+    .buttons {
+        display: flex;
+        gap: 10px;
+    }
+}
+
 @import './dashboard/events';
+@import './dashboard/members';

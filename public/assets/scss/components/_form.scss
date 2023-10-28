@@ -8,6 +8,18 @@
         color-scheme: dark;
     }
 
+    .buttons-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: flex-end;
+        align-items: center;
+
+        .button {
+            max-width: fit-content;
+        }
+    }
+
     .form-section {
         display: flex;
         flex-direction: column;

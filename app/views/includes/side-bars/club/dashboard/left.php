@@ -23,7 +23,7 @@
             <?php
             foreach ($menu as $x => $val) {
             ?>
-                <div id="menu-item-<?php echo $val["id"] ?>" class="item">
+                <div data-active="<?php echo $val["active"] ?>" class="item">
                     <div class="icon-wrap">
                         <span class="material-icons-outlined">
                             <?php echo $val["icon"] ?>
@@ -40,5 +40,3 @@
         </div>
     </div>
 </section>
-
-<script src="<?= ROOT ?>/assets/js/club/dashboard.js"></script>

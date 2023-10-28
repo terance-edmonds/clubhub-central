@@ -92,6 +92,8 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  border-bottom: 1px solid #2d2d2d;
+  padding-bottom: 20px;
 }
 .dashboard-container .center-section .title-bar.set-padding {
   padding: 20px;
