@@ -40,7 +40,7 @@
             </div>
         <?php } ?>
     </section>
-    <?php $this->view('includes/side-bars/profile/right')  ?>
+    <?php $this->view('includes/side-bars/profile/right', $menu_data)  ?>
 </div>
 
 <script src="<?= ROOT ?>/assets/js/common.js"></script>

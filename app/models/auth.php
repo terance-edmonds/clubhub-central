@@ -23,7 +23,7 @@ class Auth
     {
         if (!empty($_SESSION['USER'])) return $_SESSION['USER'];
 
-        return false;
+        return null;
     }
 
     /* to get attributes value as a function */

@@ -1,0 +1,78 @@
+$alert_green_border: #c3e6cb;
+$alert_green_container: #d4edda;
+$alert_green_text: #155724;
+
+$alert_yellow_border: #ffeeba;
+$alert_yellow_container: #fff3cd;
+$alert_yellow_text: #856404;
+
+$alert_red_border: #f5c6cb;
+$alert_red_container: #f8d7da;
+$alert_red_text: #721c24;
+
+$alert_blue_border: #b8daff;
+$alert_blue_container: #cce5ff;
+$alert_blue_text: #004085;
+
+$alert_gray_border: #d6d8db;
+$alert_gray_container: #e2e3e5;
+$alert_gray_text: #383d41;
+
+.alert {
+    width: 97%;
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    padding: 7px 15px;
+    border: 0.25em solid $alert_gray_border;
+    background-color: $alert_gray_container;
+    color: $alert_gray_text;
+    border-radius: 7px;
+    margin: 10px 10px 10px 0;
+    @include swing-in-top-fwd();
+
+    .icon {
+        cursor: pointer;
+        opacity: 0.5;
+    }
+
+    &[data-status='success'] {
+        color: $alert_green_text;
+        border-color: $alert_green_border;
+        background-color: $alert_green_container;
+
+        .icon {
+            color: $alert_green_text;
+        }
+    }
+
+    &[data-status='warning'] {
+        color: $alert_yellow_text;
+        border-color: $alert_yellow_border;
+        background-color: $alert_yellow_container;
+
+        .icon {
+            color: $alert_yellow_text;
+        }
+    }
+
+    &[data-status='error'] {
+        color: $alert_red_text;
+        border-color: $alert_red_border;
+        background-color: $alert_red_container;
+
+        .icon {
+            color: $alert_red_text;
+        }
+    }
+
+    &[data-status='info'] {
+        color: $alert_blue_text;
+        border-color: $alert_blue_border;
+        background-color: $alert_blue_container;
+
+        .icon {
+            color: $alert_blue_text;
+        }
+    }
+}

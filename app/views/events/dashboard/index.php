@@ -99,7 +99,6 @@
                 </div>
             </form>
         </div>
-
     </section>
 
     <div id="{{group_name}}" class="form-section-content group-template group-form-section">

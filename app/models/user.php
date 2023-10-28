@@ -9,11 +9,12 @@ class User extends Modal
         "last_name",
         "password",
         "role",
+        "image",
         "is_blacklisted",
         "is_verified"
     ];
 
-    public function validate($data)
+    public function validateRegister($data)
     {
         $this->errors = [];
 
@@ -31,6 +32,56 @@ class User extends Modal
             $this->errors['email'] = "Email is not valid";
         } else if ($this->find(['email' => $data['email']])) {
             $this->errors['email'] = "Email already exists";
+        }
+
+        if (empty($this->errors)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function validateUpdate($data)
+    {
+        $this->errors = [];
+
+        if (empty($data['first_name'])) $this->errors['first_name'] = "First name is required";
+        if (empty($data['last_name'])) $this->errors['last_name'] = "Last name is required";
+        if (empty($data['email'])) $this->errors['email'] = "Email is required";
+
+        if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+            $this->errors['email'] = "Email is not valid";
+        } else {
+            $user = $this->one(['email' => $data['email']]);
+
+            if ($user && $user->id != $data['id']) {
+                $this->errors['email'] = "Another user with this email already exists";
+            }
+        }
+
+        if (empty($this->errors)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function validateChangePassword($data)
+    {
+        $this->errors = [];
+        $auth_user = Auth::user();
+
+        if (empty($data['current_password'])) $this->errors['current_password'] = "Current password is required";
+        if (empty($data['new_password'])) $this->errors['new_password'] = "New password is required";
+        if (empty($data['confirm_new_password'])) $this->errors['confirm_new_password'] = "Confirm new password is required";
+        if ($data['new_password'] !== $data['confirm_new_password']) {
+            $this->errors['new_password'] = "New Passwords does not match";
+        }
+
+        /* validate current password */
+        $result = $this->one(['id' => $auth_user["id"]]);
+        if (!password_verify($_POST['current_password'], $result->password)) {
+            $this->errors['current_password'] = "Invalid current password";
         }
 
         if (empty($this->errors)) {

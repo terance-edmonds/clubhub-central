@@ -16,7 +16,7 @@ class Register extends Controller
             $user = new User($db);
             $user_invitation = new UserInvitation($db);
 
-            if ($user->validate($user_data)) {
+            if ($user->validateRegister($user_data)) {
                 try {
                     $db->transaction();
 
