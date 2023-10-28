@@ -1,0 +1,60 @@
+@import '../../colors';
+@import '../../fonts';
+
+#calendar {
+    width: 100%;
+
+    .top-bar {
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .center {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            font-size: $px20;
+            font-weight: 600;
+        }
+
+        .icon-wrap {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            background-color: $secondary_dark;
+            border-radius: 7px;
+            border: 2px solid $gray;
+
+            span {
+                color: $gray;
+            }
+        }
+    }
+
+    .center-section {
+        width: 100%;
+    }
+
+    table,
+    th,
+    td {
+        border: 1px solid $border;
+        border-collapse: collapse;
+    }
+
+    .calendar-table {
+        width: 100%;
+        table-layout: fixed;
+
+        th,
+        td {
+            padding: 10px;
+        }
+
+        td {
+            height: 110px;
+        }
+    }
+}
