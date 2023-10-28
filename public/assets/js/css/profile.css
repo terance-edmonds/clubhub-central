@@ -1,0 +1,91 @@
+/* font colors */
+.cl-theme {
+  color: #69e4be;
+}
+
+.cl-secondary-theme {
+  color: #94d1be;
+}
+
+.cl-dark {
+  color: #09090b;
+}
+
+.cl-secondary-dark {
+  color: #161616;
+}
+
+.cl-red {
+  color: #ff0000;
+}
+
+.cl-orange {
+  color: #ff8800;
+}
+
+/* background colors */
+.bg-theme {
+  background-color: #69e4be;
+}
+
+.bg-secondary-theme {
+  background-color: #94d1be;
+}
+
+.bg-dark {
+  background-color: #09090b;
+}
+
+.bg-secondary-dark {
+  background-color: #161616;
+}
+
+.bg-red {
+  background-color: #ff0000;
+}
+
+.f-14 {
+  font-size: 0.875em;
+}
+
+.f-20 {
+  font-size: 1.25em;
+}
+
+.f-24 {
+  font-size: 1.5em;
+}
+
+.f-74 {
+  font-size: 4.625em;
+}
+
+.lexend {
+  font-family: "Lexend Peta", sans-serif;
+}
+
+#profile {
+  gap: 0;
+}
+#profile .center-section {
+  width: 100%;
+}
+#profile .center-section .cards {
+  padding: 20px;
+}
+#profile .center-section .gallery {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: 15px;
+}
+@media screen and (max-width: 600px) {
+  #profile .center-section .gallery {
+    grid-template-columns: auto auto;
+  }
+}
+#profile .center-section .gallery .gallery-image {
+  border-radius: 5px;
+  width: 100%;
+  max-width: 190px;
+}

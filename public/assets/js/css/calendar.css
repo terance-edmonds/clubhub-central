@@ -103,10 +103,12 @@
   background-color: #161616;
   border-radius: 7px;
   border: 2px solid #a5a5a5;
-  cursor: pointer;
 }
 #calendar .top-bar .icon-wrap span {
   color: #a5a5a5;
+}
+#calendar .center-section {
+  width: 100%;
 }
 #calendar table,
 #calendar th,
@@ -117,9 +119,6 @@
 #calendar .calendar-table {
   width: 100%;
   table-layout: fixed;
-}
-#calendar .calendar-table th {
-  color: #69e4be;
 }
 #calendar .calendar-table th,
 #calendar .calendar-table td {
