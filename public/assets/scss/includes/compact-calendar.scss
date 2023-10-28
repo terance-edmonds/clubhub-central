@@ -1,8 +1,11 @@
-@import '../../colors';
-@import '../../fonts';
+@import '../colors';
+@import '../fonts';
 
-#calendar {
+.compact-calendar {
     width: 100%;
+    background-color: $secondary_dark;
+    font-size: $px14;
+    border-radius: 8px;
 
     .top-bar {
         padding: 10px;
@@ -14,21 +17,21 @@
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
-            font-size: $px20;
-            font-weight: 600;
+            font-weight: 500;
         }
 
         .icon-wrap {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 10px;
+            padding: 2px;
             background-color: $secondary_dark;
             border-radius: 7px;
-            border: 2px solid $gray;
+            border: 1px solid $gray;
             cursor: pointer;
 
             span {
+                font-size: 1em;
                 color: $gray;
             }
         }
@@ -37,7 +40,6 @@
     table,
     th,
     td {
-        border: 1px solid $border;
         border-collapse: collapse;
     }
 
@@ -51,11 +53,25 @@
 
         th,
         td {
-            padding: 10px;
+            padding: 5px;
         }
 
         td {
-            height: 110px;
+            height: 40px;
+
+            .td {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 2px;
+
+                .dot {
+                    width: 4px;
+                    height: 4px;
+                    border-radius: 50%;
+                    background-color: $green;
+                }
+            }
         }
     }
 }

@@ -4,7 +4,17 @@ class Events extends Controller
 {
     public function index()
     {
-        $this->view("events");
+        $left_bar = [
+            "calendar_data" => [
+                "current_path" => "/"
+            ]
+        ];
+
+        $data = [
+            "left_bar" => $left_bar
+        ];
+
+        $this->view("events", $data);
     }
 
     public function event()

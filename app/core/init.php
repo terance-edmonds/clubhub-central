@@ -9,5 +9,6 @@ require "config.php";
 require "database.php";
 require "modal.php";
 require "functions.php";
+require "calendar.php";
 require "controller.php";
 require "app.php";

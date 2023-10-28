@@ -64,67 +64,59 @@
   font-family: "Lexend Peta", sans-serif;
 }
 
-#calendar {
-  width: 100%;
-}
-#calendar .top-bar {
-  padding: 10px;
+.dashboard-container .center-section {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  border-top: 0;
+  border-bottom: 0;
+  border: 1px solid #2d2d2d;
+  min-height: 100vh;
+}
+.dashboard-container .center-section .title-bar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  gap: 20px;
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  border-bottom: 1px solid #2d2d2d;
+  padding-bottom: 20px;
 }
-#calendar .top-bar .center {
+.dashboard-container .center-section .title-bar.set-padding {
+  padding: 20px;
+}
+.dashboard-container .center-section .title-bar .title-wrap {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  gap: 10px;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
-  font-size: 1.25em;
-  font-weight: 600;
-}
-#calendar .top-bar .icon-wrap {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  gap: 15px;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  padding: 10px;
-  background-color: #161616;
-  border-radius: 7px;
-  border: 2px solid #a5a5a5;
-  cursor: pointer;
 }
-#calendar .top-bar .icon-wrap span {
-  color: #a5a5a5;
+.dashboard-container .center-section .title-bar .title-wrap .title {
+  font-size: 1.5em;
 }
-#calendar table,
-#calendar th,
-#calendar td {
-  border: 1px solid #2d2d2d;
-  border-collapse: collapse;
+.dashboard-container .center-section .title-bar .title-wrap .button {
+  max-width: -webkit-fit-content;
+  max-width: -moz-fit-content;
+  max-width: fit-content;
 }
-#calendar .calendar-table {
-  width: 100%;
-  table-layout: fixed;
-}
-#calendar .calendar-table th {
-  color: #69e4be;
-}
-#calendar .calendar-table th,
-#calendar .calendar-table td {
-  padding: 10px;
-}
-#calendar .calendar-table td {
-  height: 110px;
+.dashboard-container .center-section .title-bar .search-input {
+  max-width: 350px;
 }
