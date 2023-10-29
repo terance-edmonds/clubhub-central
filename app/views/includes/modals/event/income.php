@@ -8,36 +8,53 @@
                 </span>
             </div>
         </div>
+
         <div class="popup-body">
-            <form class="form">
+            <form class="form" method="post">
+                <input name="type" type="text" value="INCOME" hidden>
+
                 <div class="input-wrap">
                     <label for="name">Name</label>
-                    <input id="name" type="text" required>
+                    <input value="<?= setValue('name') ?>" id="name" name="name" type="text" required>
+                    <?php if (!empty($errors['name'])) : ?>
+                        <small><?= $errors['name'] ?></small>
+                    <?php endif; ?>
                 </div>
                 <div class="input-wrap">
                     <label for="description">Description</label>
-                    <textarea class="textarea" id="description" type="text" rows="5" cols="50"></textarea>
+                    <textarea class="textarea" name="description" id="description" type="text" rows="5" cols="50"><?= setValue('description') ?></textarea>
+                    <?php if (!empty($errors['description'])) : ?>
+                        <small><?= $errors['description'] ?></small>
+                    <?php endif; ?>
                 </div>
                 <div class="input-wrap">
                     <label for="amount">Amount</label>
-                    <input id="amount" type="text" required>
+                    <input value="<?= setValue('amount') ?>" id="amount" name="amount" type="number" min="0" required>
+                    <?php if (!empty($errors['amount'])) : ?>
+                        <small><?= $errors['amount'] ?></small>
+                    <?php endif; ?>
                 </div>
                 <div class="input-wrap">
                     <label for="from">From</label>
-                    <input id="from" type="text" required>
+                    <input value="<?= setValue('from') ?>" id="from" name="from" type="text" required>
+                    <?php if (!empty($errors['from'])) : ?>
+                        <small><?= $errors['from'] ?></small>
+                    <?php endif; ?>
                 </div>
                 <div class="input-wrap">
                     <label for="payment-type">Payment Type</label>
-                    <select name="payment" id="payment-type" class="dd">
-                        <option value="cash">Cash</option>
-                        <option value="cheque">Cheque</option>
-                        <option value="online">Online</option>
+                    <select value="<?= setValue('payment_type') ?>" name="payment_type" id="payment-type">
+                        <option value="CASH" selected>Cash</option>
+                        <option value="BANK_TRANSFER">Bank Transfer</option>
+                        <option value="CHEQUE">Cheque</option>
+                        <option value="CARD">Card</option>
                     </select>
+                    <?php if (!empty($errors['payment_type'])) : ?>
+                        <small><?= $errors['payment_type'] ?></small>
+                    <?php endif; ?>
                 </div>
 
-
-
-                <button class="button contained">Submit</button>
+                <button name="submit" value="add-income" class="button contained">Submit</button>
             </form>
         </div>
     </div>

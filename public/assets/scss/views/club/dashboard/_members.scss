@@ -16,7 +16,7 @@
             .action-link {
                 &[data-active='true'] {
                     .button {
-                        background-color: $theme;
+                        background-color: $secondary_theme;
                         color: $dark;
                     }
                 }

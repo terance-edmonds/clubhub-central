@@ -28,7 +28,7 @@ class Modal
 
         $keys = array_keys($data);
         $query = "insert into " . $this->table . " ";
-        $query .= " (" . implode(",", $keys) . ") values (:" . implode(",:", $keys) . ")";
+        $query .= " (`" . implode("`,`", $keys) . "`) values (:" . implode(",:", $keys) . ")";
 
         $this->db->query($query, $data);
 
@@ -97,7 +97,7 @@ class Modal
 
         /* update columns */
         foreach ($keys as $key) {
-            $query .= $key . "=:" . $key . ",";
+            $query .= "`" . $key . "`" . "=:" . $key . ",";
         }
         $query = trim($query, ",");
 
