@@ -47,6 +47,9 @@ class Events extends Controller
         }
 
         $data = [
+            "popups" => [],
+            "alerts" => [],
+            "errors" => [],
             "menu" => $menu
         ];
 
@@ -70,6 +73,53 @@ class Events extends Controller
 
     private function budgets($path, $data)
     {
+        $tabs = ['income', 'expense'];
+        $tab = $tabs[0];
+
+        if (!empty($_GET['tab'])) {
+            $tab = in_array($_GET['tab'], $tabs) ? $_GET['tab'] : $tabs[0];
+        }
+
+        $data["tab"] = $tab;
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $storage = new Storage();
+            $budget = new Budget();
+            $form_data = $_POST;
+
+            if ($_POST['submit'] = "add-income") {
+                $club_id = $storage->get('club_id');
+                $club_event_id = $storage->get('club_event_id');
+
+                /* remove these */
+                $club_id = 1;
+                $club_event_id = 1;
+
+                if (empty($club_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Club details are not found"]];
+                else if (empty($club_event_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Event details are not found"]];
+                else {
+                    $form_data['club_id'] = $club_id;
+                    $form_data['club_event_id'] = $club_event_id;
+
+                    if ($budget->validateAddIncome($form_data)) {
+                        try {
+                            $budget->create($form_data);
+
+                            $_SESSION['alerts'] = [["status" => "success", "message" => "Income budget details added successfully"]];
+
+                            redirect();
+                        } catch (Throwable $th) {
+                            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to add budget details"]];
+                        }
+                    } else {
+                        $data['popups']["add-income"] = true;
+                    }
+
+                    $data['errors'] = $budget->errors;
+                }
+            }
+        }
+
         $this->view($path, $data);
     }
 

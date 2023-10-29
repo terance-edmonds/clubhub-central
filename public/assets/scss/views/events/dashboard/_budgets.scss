@@ -1,0 +1,105 @@
+#event-dashboard-budgets {
+    .summary-section {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        .cards-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 280px));
+            gap: 20px;
+            row-gap: 20px;
+            border-bottom: 1px solid $border;
+            padding-bottom: 20px;
+
+            .summary-card {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                padding: 20px;
+                border-radius: 8px;
+                border: 1px solid $border;
+                background: linear-gradient(101deg, #09090b 0%, #2c2c31 100%);
+                max-width: 312px;
+                min-height: 137px;
+
+                .top-bar {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                }
+
+                .amount {
+                    width: 100%;
+                    text-align: right;
+                    font-size: $px24;
+                    font-weight: 500;
+
+                    &.green {
+                        color: $theme;
+                    }
+
+                    &.red {
+                        color: $red-matt;
+                    }
+                }
+            }
+        }
+    }
+
+    .content-section {
+        .actions-wrap {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+
+            .action-buttons {
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 10px;
+
+                .button {
+                    background-color: transparent;
+                    color: #fff;
+                    border: 1px solid $theme;
+                    max-width: fit-content;
+                }
+
+                .action-link {
+                    &[data-active='true'] {
+                        .button {
+                            background-color: $secondary_theme;
+                            color: $dark;
+                        }
+                    }
+                }
+            }
+
+            .action-search {
+                display: flex;
+                gap: 20px;
+                align-items: center;
+                width: 100%;
+                max-width: 470px;
+
+                .search-input {
+                    max-width: 350px;
+                }
+
+                @media screen and (max-width: 770px) {
+                    flex-direction: column-reverse;
+                    align-items: flex-start;
+                    max-width: 100%;
+
+                    .search-input {
+                        max-width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}

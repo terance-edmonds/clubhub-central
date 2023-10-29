@@ -54,7 +54,9 @@ class Profile extends Controller
                 if ($image_uploaded && $user->validateUpdate($_POST)) {
                     $user->update(["id" => $auth_user["id"]], $update_data);
 
-                    $data['alerts'] = [["status" => "success", "message" => "Profile data updated successfully"]];
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Profile data updated successfully"]];
+
+                    redirect();
                 }
             } else if ($_POST['submit'] === 'change_password') {
                 /* change password */
@@ -63,6 +65,8 @@ class Profile extends Controller
 
                     $user->update(["id" => $auth_user["id"]], ["password" => $pass]);
                     $_POST = array();
+
+                    redirect();
                 }
             }
         }

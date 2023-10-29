@@ -2,8 +2,8 @@
     <script src="<?= ROOT ?>/assets/js/alerts.js"></script>
 </head>
 
-<?php if (!empty($alerts) && is_array($alerts)) {
-    foreach ($alerts as $x => $val) {
+<?php if (!empty($_SESSION) && !empty($_SESSION['alerts']) && is_array($_SESSION)) {
+    foreach ($_SESSION['alerts'] as $x => $val) {
 ?>
         <div data-status=<?= $val["status"] ?> class="alert">
             <span class="message"><?= $val["message"] ?></span>

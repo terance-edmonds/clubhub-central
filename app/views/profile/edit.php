@@ -4,10 +4,11 @@
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/side-bar.css">
 </head>
 
-<!-- alerts -->
-<?php $this->view('includes/alerts', ["alerts" => $alerts]) ?>
 
 <?php $this->view('includes/header') ?>
+
+<!-- alerts -->
+<?php $this->view('includes/alerts') ?>
 
 <div id="profile-edit" class="container container-sections side-padding dashboard-container">
     <?php $this->view('includes/side-bars/profile/left')  ?>

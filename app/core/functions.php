@@ -1,10 +1,13 @@
 <?php
 
 /* route to path */
-function redirect($link)
+function redirect($link = '')
 {
-    header("Location: " . ROOT . "/" . $link);
-    die;
+    if (empty($link)) {
+        header('location: ' . $_SERVER['HTTP_REFERER']);
+    } else {
+        header("location: " . ROOT . "/" . $link);
+    }
 }
 
 /* set values on inputs */

@@ -1,6 +1,14 @@
 @import '../../colors';
 @import '../../fonts';
 
+.event-dashboard {
+    .buttons {
+        display: flex;
+        gap: 10px;
+    }
+}
+
 @import './dashboard/events';
 @import './dashboard/edit-event';
 @import './dashboard/sponsors';
+@import './dashboard/budgets';
