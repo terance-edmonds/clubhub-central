@@ -11,7 +11,7 @@
     <section class="center-section">
             <div class="title-bar">
                 <div class="title-wrap">
-                    <span class="title">Expenses</span>
+                    <span class="title">Budget</span>
                     <button  class="button contained" class="button" data-variant="outlined" data-type="icon" data-size="small">
                         <span>Income</span>
                     </button>

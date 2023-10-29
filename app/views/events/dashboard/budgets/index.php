@@ -11,7 +11,7 @@
     <section class="center-section">
             <div class="title-bar">
                 <div class="title-wrap">
-                    <span class="title">Income</span>
+                    <span class="title">Budget</span>
                     <button onclick="addIncome(event)" class="button contained" class="button" data-variant="outlined" data-type="icon" data-size="small">
                         <span>Add Income</span>
                         <span class="material-icons-outlined">
