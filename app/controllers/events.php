@@ -68,6 +68,9 @@ class Events extends Controller
 
     private function sponsors($path, $data)
     {
+        function packages($path, $data){
+
+        }
         $this->view($path, $data);
     }
 
