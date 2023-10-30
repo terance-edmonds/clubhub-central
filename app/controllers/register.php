@@ -24,10 +24,26 @@ class Register extends Controller
                     $result = $user->create($user_data, "email");
 
                     if (!empty($result)) {
+                        $mail = new Mail();
+                        $token = randomString();
+
                         $user_invitation->create([
                             "user_id" => $result->id,
-                            "invitation_code" => randomString(),
+                            "invitation_code" => $token,
                             "is_valid" => 1
+                        ]);
+
+                        $mail->send([
+                            "to" => [
+                                "mail" => $user_data['email'],
+                                "name" => $user_data['first_name'] . " " . $user_data['last_name'],
+                            ],
+                            "subject" => "Email Verification",
+                            "body" => $mail->template("email-verification", [
+                                "from_email" => MAIL_USER,
+                                "from_name" => MAIL_USERNAME,
+                                "verification_link" => ROOT . "/register/verify?token=" . $token
+                            ])
                         ]);
 
                         $db->commit();

@@ -12,5 +12,9 @@
         <div class="title-wrap">
             <p class="title">Event Calendar</p>
         </div>
+
+        <div class="content">
+            <?php $this->view('includes/calendar', $calendar_data) ?>
+        </div>
     </div>
 </section>

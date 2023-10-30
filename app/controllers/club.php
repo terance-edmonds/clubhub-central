@@ -6,9 +6,20 @@ class Club extends Controller
 {
     public function index()
     {
+        $left_bar = [
+            "calendar_data" => [
+                "current_path" => "/"
+            ]
+        ];
+        $right_bar = [
+            "clubs" => []
+        ];
+
         $data = [
             "tab" => "club-posts",
-            "club_id" => ""
+            "club_id" => "",
+            "left_bar" => $left_bar,
+            "right_bar" => $right_bar
         ];
         $params = $_GET;
 

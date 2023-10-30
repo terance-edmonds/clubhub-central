@@ -2,6 +2,7 @@
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/dashboard.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/edit-profile.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/side-bar.css">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/compact-calendar.css">
 </head>
 
 
@@ -11,7 +12,7 @@
 <?php $this->view('includes/alerts') ?>
 
 <div id="profile-edit" class="container container-sections side-padding dashboard-container">
-    <?php $this->view('includes/side-bars/profile/left')  ?>
+    <?php $this->view('includes/side-bars/profile/left', $left_bar)  ?>
     <section class="center-section">
         <div class="title-bar set-padding">
             <div class="title-wrap">

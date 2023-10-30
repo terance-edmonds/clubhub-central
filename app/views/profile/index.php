@@ -2,12 +2,13 @@
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/cards.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/profile.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/side-bar.css">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/compact-calendar.css">
 </head>
 
 <?php $this->view('includes/header') ?>
 
 <div id="profile" class="container container-sections side-padding">
-    <?php $this->view('includes/side-bars/profile/left')  ?>
+    <?php $this->view('includes/side-bars/profile/left', $left_bar)  ?>
     <section class="center-section">
         <div class="tabs">
             <a href="<?= ROOT ?>/profile" class="tab" data-active="<?php if ($tab == 'gallery') echo 'true'; ?>"><span class="text">Gallery</span></a>
@@ -40,7 +41,7 @@
             </div>
         <?php } ?>
     </section>
-    <?php $this->view('includes/side-bars/profile/right', $menu_data)  ?>
+    <?php $this->view('includes/side-bars/profile/right', $right_bar)  ?>
 </div>
 
 <script src="<?= ROOT ?>/assets/js/common.js"></script>

@@ -23,6 +23,8 @@ define('DB_PASS', $_ENV["DB_PASS"]);
 define('DB_DRIVER', $_ENV["DB_DRIVER"]);
 
 /* mail variables */
+if (empty($_ENV["MAIL_USERNAME"])) $_ENV["MAIL_USERNAME"] = "ClubHub Central";
+
 define('MAIL_HOST', $_ENV["MAIL_HOST"]);
 define('MAIL_USERNAME', $_ENV["MAIL_USERNAME"]);
 define('MAIL_USER', $_ENV["MAIL_USER"]);

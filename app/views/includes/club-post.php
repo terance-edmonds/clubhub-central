@@ -2,7 +2,7 @@
     <div class="top">
         <img loading="lazy" src="https://picsum.photos/200/200" alt="Club Logo" class="club-logo">
         <div class="details">
-            <a href="#" class="club-title">IEEE</a>
+            <a href="<?= ROOT ?>/club?id=" class="club-title">IEEE</a>
             <p class="other-details">
                 <span class="text">Student Name</span>
                 <span class="dot"></span>

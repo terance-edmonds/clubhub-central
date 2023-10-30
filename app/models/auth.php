@@ -2,7 +2,7 @@
 
 class Auth
 {
-    public static function authenticate($user)
+    public static function set($user)
     {
         $_SESSION['USER'] = $user;
     }
@@ -17,6 +17,13 @@ class Auth
         if (!empty($_SESSION['USER'])) return true;
 
         return false;
+    }
+
+    public static function authenticate()
+    {
+        if (empty($_SESSION['USER'])) return redirect('login');
+
+        return true;
     }
 
     public static function user()
