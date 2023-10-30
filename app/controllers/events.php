@@ -33,9 +33,9 @@ class Events extends Controller
             ["id" => "registrations", "name" => "registrations", "icon" => "app_registration", "path" => "/events/dashboard/registrations", "active" => "false"],
             ["id" => "sponsors", "name" => "Sponsors", "icon" => "diversity_3", "path" => "/events/dashboard/sponsors", "active" => "false"],
             ["id" => "budgets", "name" => "Budgets", "icon" => "monetization_on", "path" => "/events/dashboard/budgets", "active" => "false"],
-            ["id" => "agendas", "name" => "Agendas", "icon" => "view_agenda", "path" => "/events/dashboard/agendas", "active" => "false"],
+            ["id" => "agenda", "name" => "Agenda", "icon" => "view_agenda", "path" => "/events/dashboard/agenda", "active" => "false"],
             ["id" => "notifications", "name" => "Notifications", "icon" => "notifications", "path" => "/events/dashboard/Notifications", "active" => "false"],
-            ["id" => "complaints", "name" => "Complaints", "icon" => "inbox", "path" => "/events/dashboard/complaints", "active" => "false"]
+            ["id" => "complains", "name" => "Complaints", "icon" => "inbox", "path" => "/events/dashboard/complains", "active" => "false"]
 
         ];
         /* update the active menu item */
@@ -68,8 +68,8 @@ class Events extends Controller
 
     private function sponsors($path, $data)
     {
-        function packages($path, $data){
-
+        function packages($path, $data)
+        {
         }
         $this->view($path, $data);
     }
@@ -158,7 +158,7 @@ class Events extends Controller
         $this->view($path, $data);
     }
 
-    private function agendas($path, $data)
+    private function agenda($path, $data)
     {
         $this->view($path, $data);
     }
@@ -168,7 +168,7 @@ class Events extends Controller
         $this->view($path, $data);
     }
 
-    private function complaints($path, $data)
+    private function complains($path, $data)
     {
         $this->view($path, $data);
     }
