@@ -71,7 +71,7 @@
                         </div>
 
                         <label class="checkbox-label">
-                            <span>Open For External Regisration</span>
+                            <span>Open For External Registrations</span>
 
                             <label class="switch">
                                 <input type="checkbox">

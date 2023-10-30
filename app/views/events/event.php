@@ -14,7 +14,7 @@
             <div class="title-wrap">
                 <span class="title f-24">Event Name</span>
 
-                <button onclick="registerToEvent(event)" class="button contained">Register Now</button>
+                <button onclick="$(`[popup-name='event-register']`).popup(true)" class="button contained">Register Now</button>
             </div>
 
             <div class="details-wrap">
@@ -58,5 +58,4 @@
     <?php $this->view('includes/side-bars/events/right')  ?>
 </div>
 
-<?php $this->view('includes/modals/event/register')?>
-<script src="<?= ROOT ?>/assets/js/events/event.js"></script>
+<?php $this->view('includes/modals/event/register') ?>

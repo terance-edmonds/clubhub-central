@@ -1,0 +1,14 @@
+#event-dashboard-registrations {
+    .table-wrap {
+        .status-button {
+            color: $yellow;
+            background-color: $yellow-light;
+            cursor: default;
+
+            &[data-attended='true'] {
+                color: $green;
+                background-color: $green-light;
+            }
+        }
+    }
+}

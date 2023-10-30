@@ -373,3 +373,13 @@
     max-width: 100%;
   }
 }
+
+#event-dashboard-registrations .table-wrap .status-button {
+  color: #edff7d;
+  background-color: #303021;
+  cursor: default;
+}
+#event-dashboard-registrations .table-wrap .status-button[data-attended=true] {
+  color: #7dff7a;
+  background-color: #213021;
+}
