@@ -35,6 +35,14 @@ function setFile($key, $default = '')
     return '';
 }
 
+/* display column value */
+function displayValue($val)
+{
+    if (empty($val)) $val = '-';
+
+    return $val;
+}
+
 /* random key string */
 function randomString()
 {
