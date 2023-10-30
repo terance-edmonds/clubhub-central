@@ -53,24 +53,7 @@
             <div class="card">
                 <img loading="lazy" src="https://picsum.photos/110/110" alt="Post Image" class="post-image">
                 <div class="details">
-                    <a href="#" class="title">Event Name</a>
-                    <p class="date-time">
-                        <span>Time</span>
-                        <span>:</span>
-                        <span>4.30 PM - 6.30 PM</span>
-                    </p>
-                    <p class="date-time">
-                        <span>Venue</span>
-                        <span>:</span>
-                        <span class="truncate-text">UCSC Grounds</span>
-                    </p>
-                    <p class="club truncate-text">IEEE</p>
-                </div>
-            </div>
-            <div class="card">
-                <img loading="lazy" src="https://picsum.photos/110/110" alt="Post Image" class="post-image">
-                <div class="details">
-                    <a href="#" class="title">Event Name</a>
+                    <a href="<?= ROOT ?>/events/event?id=" class="title">Event Name</a>
                     <p class="date-time">
                         <span>Time</span>
                         <span>:</span>

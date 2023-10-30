@@ -4,7 +4,13 @@ class Profile extends Controller
 {
     public function index()
     {
-        $menu_data = [
+        $left_bar = [
+            "calendar_data" => [
+                "current_path" => "/"
+            ]
+        ];
+        $right_bar = [
+            "clubs" => [],
             "menu" => [
                 ["id" => "profile", "name" => "Profile Details", "icon" => "info", "path" => "/profile/edit"],
                 ["id" => "system", "name" => "Manage System", "icon" => "dashboard", "path" => "/system/dashboard"]
@@ -13,8 +19,9 @@ class Profile extends Controller
         ];
 
         $data = [
-            "menu_data" => $menu_data,
-            "tab" => "gallery"
+            "tab" => "gallery",
+            "left_bar" => $left_bar,
+            "right_bar" => $right_bar,
         ];
         $params = $_GET;
 
@@ -27,7 +34,14 @@ class Profile extends Controller
     {
         $user = new User();
         $auth_user = Auth::user();
+
+        $left_bar = [
+            "calendar_data" => [
+                "current_path" => "/"
+            ]
+        ];
         $data = [
+            "left_bar" => $left_bar,
             "alerts" => [],
             "errors" => []
         ];

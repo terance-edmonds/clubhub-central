@@ -2,12 +2,13 @@
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/cards.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/club.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/side-bar.css">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/compact-calendar.css">
 </head>
 
 <?php $this->view('includes/header') ?>
 
 <div id="club" class="container container-sections side-padding">
-    <?php $this->view('includes/side-bars/club/left')  ?>
+    <?php $this->view('includes/side-bars/club/left', $left_bar)  ?>
     <section class="center-section">
         <div class="tabs">
             <a href="<?= ROOT ?>/club?id=<?php $club_id ?>" class="tab" data-active="<?php if ($tab == 'club-posts') echo 'true'; ?>"><span class="text">Club Posts</span></a>
@@ -45,7 +46,7 @@
             </div>
         <?php } ?>
     </section>
-    <?php $this->view('includes/side-bars/club/right')  ?>
+    <?php $this->view('includes/side-bars/club/right', $right_bar)  ?>
 </div>
 
 <script src="<?= ROOT ?>/assets/js/common.js"></script>

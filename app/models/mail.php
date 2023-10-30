@@ -6,13 +6,12 @@ use PHPMailer\PHPMailer\Exception;
 
 class Mail
 {
-    private static $mail;
+    private $mail;
 
     function __construct()
     {
         $this->mail = new PHPMailer(true);
 
-        $this->mail->SMTPDebug = SMTP::DEBUG_SERVER;
         $this->mail->isSMTP();
         $this->mail->Host       = MAIL_HOST;
         $this->mail->SMTPAuth   = true;
@@ -43,5 +42,21 @@ class Mail
         } catch (Exception $e) {
             return "Message could not be sent. Mailer Error: {$this->mail->ErrorInfo}";
         }
+    }
+
+    public function template($template, $data)
+    {
+        extract($data);
+
+        $currentRoot = dirname(__DIR__, 2);
+        $template = $currentRoot . '/app/assets/mails/' . $template . ".php";
+
+        if (is_file($template)) {
+            ob_start();
+            include $template;
+            return ob_get_clean();
+        }
+
+        return false;
     }
 }

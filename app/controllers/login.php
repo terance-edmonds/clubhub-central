@@ -4,7 +4,6 @@ class Login extends Controller
 {
     public function index()
     {
-
         $data = [
             "errors" => []
         ];
@@ -19,7 +18,7 @@ class Login extends Controller
                 } else if ($result->is_blacklisted) {
                     $data['errors']['email'] = "User account has been suspended";
                 } else if (password_verify($_POST['password'], $result->password)) {
-                    Auth::authenticate([
+                    Auth::set([
                         "id" => $result->id,
                         "first_name" => $result->first_name,
                         "last_name" => $result->last_name,

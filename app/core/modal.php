@@ -110,7 +110,7 @@ class Modal
             $query .= $where_key . "=:" . $where_key . ",";
         }
         $query = trim($query, ",");
-        var_dump($query);
+
         /* merge array and where data */
         $data = array_merge($data, $where);
 
@@ -128,7 +128,7 @@ class Modal
         }
 
         $query = trim($query, "&& ");
-        var_dump($query);
+
         $this->db->query($query, $data);
 
         return true;
