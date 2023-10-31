@@ -55,7 +55,7 @@
                     <?php endif; ?>
                 </div>
 
-                <button name="submit" value="edit-income" class="button contained">Save</button>
+                <button name="submit" value="edit-income" class="button contained">Submit</button>
             </form>
         </div>
     </div>
