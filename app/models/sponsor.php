@@ -12,7 +12,7 @@
             "amount"
         ];
 
-        public function validateCreateSponsor($data){
+        public function validateCreateSponsor( $data){
             $this->errors = [];
 
             if (empty($data['club_id'])) $this->errors['club_id'] = "Club ID is required";
