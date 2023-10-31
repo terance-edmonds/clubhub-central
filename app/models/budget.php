@@ -33,7 +33,6 @@ class Budget extends Modal
         if (empty($this->errors)) {
             return true;
         }
-
         return false;
     }
 }
