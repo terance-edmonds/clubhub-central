@@ -154,11 +154,7 @@ class Events extends Controller
     private function budgets($path, $data)
     {
         $tabs = ['income', 'expense'];
-        $tab = $tabs[0];
-        if (!empty($_GET['tab'])) {
-            $tab = in_array($_GET['tab'], $tabs) ? $_GET['tab'] : $tabs[0];
-        }
-        $data["tab"] = $tab;
+        $data["tab"] = getActiveTab($tabs, $_GET);
 
         $storage = new Storage();
         $budget = new Budget();
