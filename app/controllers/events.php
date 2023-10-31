@@ -68,9 +68,42 @@ class Events extends Controller
 
     private function sponsors($path, $data)
     {
-        function packages($path, $data)
-        {
-        }
+        $tab = 'sponsor';
+        $data["tab"] = $tab;
+        $storage = new Storage();
+        $sponsor = new Sponsor();
+    
+        $club_id = $storage->get('club_id');
+        $club_event_id = $storage->get('club_event_id');
+
+        $club_id = 1;
+        $club_event_id = 1;
+
+        if($_SERVER['REQUEST_METHOD'] == "POST"){
+            $form_data = $_POST;
+            if ($_POST['submit'] == "add-sponsor") {
+                if (empty($club_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Club details are not found"]];
+                else if (empty($club_event_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Event details are not found"]];
+                else {
+                    $form_data['club_id'] = $club_id;
+                    $form_data['club_event_id'] = $club_event_id;
+                        if ($sponsor->validateCreateSponsor($form_data)) {
+                            try {
+                                $sponsor->create($form_data);
+                                $_SESSION['alerts'] = [["status" => "success", "message" => "Sponsor details added successfully"]];
+                                redirect();
+                            } catch (Throwable $th) {
+                                     $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to add sponsor details"]];
+                                 }
+                             } else {
+                                    $data['popups']["add-sponsor"] = true;
+                             }
+        
+                             $data['errors'] = $sponsor->errors;
+                         }
+                     }
+            }
+        
         $this->view($path, $data);
     }
 
