@@ -54,7 +54,7 @@
                     <input id="package" type="text" placeholder="Package" required>
                 </div> -->
 
-                <button class="button contained">Submit</button>
+                <button name="submit" value="add-sponsor" class="button contained">Submit</button>
             </form>
         </div>
     </div>

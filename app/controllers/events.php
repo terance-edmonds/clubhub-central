@@ -70,16 +70,19 @@ class Events extends Controller
     {
         $tab = 'sponsor';
         $data["tab"] = $tab;
+        $data["sponsors_data"] = [];
+        $data["packages_data"] = [];
         $storage = new Storage();
         $sponsor = new Sponsor();
-    
+        $package = new Package();
+
         $club_id = $storage->get('club_id');
         $club_event_id = $storage->get('club_event_id');
 
         $club_id = 1;
         $club_event_id = 1;
 
-        if($_SERVER['REQUEST_METHOD'] == "POST"){
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $form_data = $_POST;
             if ($_POST['submit'] == "add-sponsor") {
                 if (empty($club_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Club details are not found"]];
@@ -87,27 +90,33 @@ class Events extends Controller
                 else {
                     $form_data['club_id'] = $club_id;
                     $form_data['club_event_id'] = $club_event_id;
-                        if ($sponsor->validateCreateSponsor($form_data)) {
-                            try {
-                                $sponsor->create($form_data);
-                                $_SESSION['alerts'] = [["status" => "success", "message" => "Sponsor details added successfully"]];
-                                redirect();
-                            } catch (Throwable $th) {
-                                     $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to add sponsor details"]];
-                                 }
-                             } else {
-                                    $data['popups']["add-sponsor"] = true;
-                             }
-        
-                             $data['errors'] = $sponsor->errors;
-                         }
-                     }
+                    if ($sponsor->validateCreateSponsor($form_data)) {
+                        try {
+                            $sponsor->create($form_data);
+                            $_SESSION['alerts'] = [["status" => "success", "message" => "Sponsor details added successfully"]];
+                            redirect();
+                        } catch (Throwable $th) {
+                            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to add sponsor details"]];
+                        }
+                    } else {
+                        $data['popups']["add-sponsor"] = true;
+                    }
+
+                    $data['errors'] = $sponsor->errors;
+                }
+            } else if ($_POST['submit'] == "add-package" || $_POST['submit'] == "edit-package") {
+                $this->packages($_POST);
             }
-        
+
+            //redirect();
+        }
+        $data["packages_data"] = $package->find(["club_id" => $club_id, "club_event_id" => $club_event_id]);
+        //$data["sponsors_data"] = $sponsor->find(["club_id" => $club_id, "club_event_id" => $club_event_id]);
         $this->view($path, $data);
     }
 
-    private function packages($path, $data){
+    private function packages($data)
+    {
         $storage = new Storage();
         $package = new Package();
 
@@ -117,7 +126,7 @@ class Events extends Controller
         $club_id = 1;
         $club_event_id = 1;
 
-        if($_SERVER['REQUEST_METHOD'] == "POST"){
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $form_data = $_POST;
 
             if ($_POST['submit'] == "add-package") {
@@ -135,6 +144,7 @@ class Events extends Controller
 
                             redirect();
                         } catch (Throwable $th) {
+                            var_dump($th);
                             $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to add package details"]];
                         }
                     } else {
@@ -143,8 +153,7 @@ class Events extends Controller
 
                     $data['errors'] = $package->errors;
                 }
-            }
-            else if ($_POST['submit'] == "edit-package") {
+            } else if ($_POST['submit'] == "edit-package") {
                 $where['id'] = $form_data['id'];
 
                 if ($package->validateEditPackage($form_data)) {
@@ -162,8 +171,7 @@ class Events extends Controller
                 }
 
                 $data['errors'] = $package->errors;
-            }
-            else if ($_POST['submit'] == "delete-package") {
+            } else if ($_POST['submit'] == "delete-package") {
                 try {
                     $package->delete(["id" => $form_data['id']]);
 
@@ -177,12 +185,9 @@ class Events extends Controller
 
                 $data['errors'] = $package->errors;
             }
-
-
         }
-        $data["income_data"] = $package->find(["club_id" => $club_id, "club_event_id" => $club_event_id]);
-       
     }
+
 
     private function budgets($path, $data)
     {

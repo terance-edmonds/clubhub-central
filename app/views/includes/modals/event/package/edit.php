@@ -11,7 +11,8 @@
 
         <div class="popup-body">
             <form class="form" method="post">
-            <div class="input-wrap">
+                <input name="id" type="text" hidden>
+                <div class="input-wrap">
                     <label for="name">Name</label>
                     <input value="<?= setValue('name') ?>" id="name" name="name" type="text" required>
                     <?php if (!empty($errors['name'])) : ?>
@@ -26,7 +27,7 @@
                     <?php endif; ?>
                 </div>
 
-                <button name="submit" value="edit-income" class="button contained">Save</button>
+                <button name="submit" value="edit-package" class="button contained">Save</button>
             </form>
         </div>
     </div>
