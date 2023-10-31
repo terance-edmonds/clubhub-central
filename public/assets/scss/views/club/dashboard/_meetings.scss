@@ -1,0 +1,45 @@
+#club-dashboard-add-meeting {
+    .selected-member-template {
+        display: none;
+    }
+
+    .selected-members {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+
+        .checkbox-wrap {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border: 2px solid $border;
+            padding: 5px 10px;
+            border-radius: 20px;
+            position: relative;
+            transition: all 0.4s ease;
+
+            label,
+            .material-icons-outlined {
+                font-size: $px14;
+            }
+
+            .material-icons-outlined {
+                position: absolute;
+                opacity: 0;
+                right: 0;
+                margin-top: 3px;
+                cursor: pointer;
+                color: $red;
+                z-index: 8;
+                transition: all 0.3s ease;
+            }
+
+            &:hover {
+                .material-icons-outlined {
+                    position: relative;
+                    opacity: 1;
+                }
+            }
+        }
+    }
+}

@@ -87,3 +87,14 @@ function uploadFile($name)
 
     return null;
 }
+
+/* get active tab */
+function getActiveTab($tabs, $get)
+{
+    $tab = $tabs[0];
+    if (!empty($get) && !empty($get['tab'])) {
+        $tab = in_array($get['tab'], $tabs) ? $get['tab'] : $tabs[0];
+    }
+
+    return $tab;
+}

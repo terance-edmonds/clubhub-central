@@ -27,9 +27,9 @@
 
         <div class="content-section">
             <div class="action-buttons">
-                <a class="action-link" data-active="<?php if ($type == 'ACCEPTED') echo 'true'; ?>" href="<?= ROOT ?>/club/dashboard/members?type=accepted"><button class="button">Accepted</button></a>
-                <a class="action-link" data-active="<?php if ($type == 'REJECTED') echo 'true'; ?>" href="<?= ROOT ?>/club/dashboard/members?type=rejected"><button class="button">Rejected</button></a>
-                <a class="action-link" data-active="<?php if ($type == 'REQUESTED') echo 'true'; ?>" href="<?= ROOT ?>/club/dashboard/members?type=requested"><button class="button">Requested</button></a>
+                <a class="action-link" data-active="<?php if ($tab == 'accepted') echo 'true'; ?>" href="<?= ROOT ?>/club/dashboard/members?tab=accepted"><button class="button">Accepted</button></a>
+                <a class="action-link" data-active="<?php if ($tab == 'rejected') echo 'true'; ?>" href="<?= ROOT ?>/club/dashboard/members?tab=rejected"><button class="button">Rejected</button></a>
+                <a class="action-link" data-active="<?php if ($tab == 'requested') echo 'true'; ?>" href="<?= ROOT ?>/club/dashboard/members?tab=requested"><button class="button">Requested</button></a>
             </div>
             <div class="table-wrap">
                 <table>

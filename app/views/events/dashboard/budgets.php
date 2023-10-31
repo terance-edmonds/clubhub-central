@@ -150,4 +150,4 @@
 </script>
 
 <script src="<?= ROOT ?>/assets/js/events/event.js"></script>
-<script src="<?= ROOT ?>/assets/js/events/budget.js"></script>
+<script src="<?= ROOT ?>/assets/js/form.js"></script>
