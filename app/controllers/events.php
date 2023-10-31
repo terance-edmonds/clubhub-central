@@ -104,14 +104,14 @@ class Events extends Controller
 
                     $data['errors'] = $sponsor->errors;
                 }
-            } else if ($_POST['submit'] == "add-package" || $_POST['submit'] == "edit-package") {
+            } else if ($_POST['submit'] == "add-package" || $_POST['submit'] == "edit-package" || $_POST['submit'] == "delete-package") {
                 $this->packages($_POST);
             }
 
             //redirect();
         }
         $data["packages_data"] = $package->find(["club_id" => $club_id, "club_event_id" => $club_event_id]);
-        //$data["sponsors_data"] = $sponsor->find(["club_id" => $club_id, "club_event_id" => $club_event_id]);
+        $data["sponsors_data"] = $sponsor->find(["club_id" => $club_id, "club_event_id" => $club_event_id]);
         $this->view($path, $data);
     }
 
