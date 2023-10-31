@@ -171,9 +171,7 @@
             </div>
         </div>
 
-        <div id="{{group_name}}-group_members" class="group-members">
-
-        </div>
+        <div id="{{group_name}}-group_members" class="group-members"></div>
 
         <div class="sub-section">
             <p class="sub-section-title">Allow Access To</p>

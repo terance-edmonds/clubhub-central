@@ -1,0 +1,26 @@
+#club-dashboard-logs {
+    .center-section {
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+
+            .button {
+                background-color: transparent;
+                color: #fff;
+                border: 1px solid $theme;
+                max-width: fit-content;
+            }
+
+            .action-link {
+                &[data-active='true'] {
+                    .button {
+                        background-color: $secondary_theme;
+                        color: $dark;
+                    }
+                }
+            }
+        }
+    }
+}

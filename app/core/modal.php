@@ -34,14 +34,17 @@ class Modal
 
         if (!empty($select_key)) return $this->one([$select_key => $data[$select_key]]);
 
-        return false;
+        return true;
     }
 
-    public function find($data)
+    public function find($data = [])
     {
         $keys = array_keys($data);
 
-        $query = "select * from " . $this->table . " where ";
+        $query = "select * from " . $this->table;
+        if (count($data) > 0) {
+            $query .= " where ";
+        }
 
         foreach ($keys as $key) {
             $query .= $key . "=:" . $key . " && ";
@@ -55,7 +58,7 @@ class Modal
             return $res;
         }
 
-        return false;
+        return [];
     }
 
     public function one($data)
@@ -112,5 +115,22 @@ class Modal
         $data = array_merge($data, $where);
 
         $this->db->query($query, $data);
+    }
+
+    public function delete($data)
+    {
+        $keys = array_keys($data);
+
+        $query = "delete from " . $this->table . " where ";
+
+        foreach ($keys as $key) {
+            $query .= $key . "=:" . $key . " && ";
+        }
+
+        $query = trim($query, "&& ");
+
+        $this->db->query($query, $data);
+
+        return true;
     }
 }

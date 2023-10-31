@@ -638,6 +638,7 @@ input[type=checkbox]:checked {
 .table-wrap th,
 .table-wrap td {
   padding: 20px;
+  vertical-align: top;
 }
 .table-wrap th[data-align=center],
 .table-wrap td[data-align=center] {

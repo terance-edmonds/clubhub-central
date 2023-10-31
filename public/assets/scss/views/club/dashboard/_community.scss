@@ -1,0 +1,42 @@
+#club-dashboard-community {
+    .content-section {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .chat-box {
+        background-color: $secondary_dark;
+        height: 500px;
+        padding: 10px 15px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+
+        .text-wrap {
+            display: flex;
+            width: 100%;
+
+            .text {
+                background-color: $secondary_theme;
+                color: $dark;
+                border-radius: 8px;
+                padding: 5px 10px;
+            }
+        }
+    }
+
+    .chat-form {
+        display: flex;
+        gap: 10px;
+        align-items: flex-end;
+
+        .button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: fit-content;
+        }
+    }
+}

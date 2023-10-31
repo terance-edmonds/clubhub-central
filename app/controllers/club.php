@@ -6,9 +6,20 @@ class Club extends Controller
 {
     public function index()
     {
+        $left_bar = [
+            "calendar_data" => [
+                "current_path" => "/"
+            ]
+        ];
+        $right_bar = [
+            "clubs" => []
+        ];
+
         $data = [
             "tab" => "club-posts",
-            "club_id" => ""
+            "club_id" => "",
+            "left_bar" => $left_bar,
+            "right_bar" => $right_bar
         ];
         $params = $_GET;
 
@@ -30,6 +41,8 @@ class Club extends Controller
             ["id" => "reports", "name" => "Reports", "icon" => "description", "path" => "/club/dashboard/reports", "active" => "false"],
             ["id" => "community", "name" => "Community Chat", "icon" => "mark_unread_chat_alt", "path" => "/club/dashboard/community", "active" => "false"],
             ["id" => "requests", "name" => "Requests", "icon" => "crisis_alert", "path" => "/club/dashboard/requests", "active" => "false"],
+            ["id" => "posts", "name" => "Posts", "icon" => "history_edu", "path" => "/club/dashboard/posts", "active" => "false"],
+            ["id" => "logs", "name" => "Logs", "icon" => "article", "path" => "/club/dashboard/logs", "active" => "false"],
         ];
         /* update the active menu item */
         foreach ($menu as $x => &$val) {
@@ -53,9 +66,8 @@ class Club extends Controller
 
     private function members($path, $data)
     {
-        $type = "accepted";
-        if (!empty($_GET["type"])) $type = $_GET["type"];
-        $data["type"] = upperCase($type);
+        $tabs = ['accepted', 'rejected', 'requested'];
+        $data["tab"] = getActiveTab($tabs, $_GET);
 
         $this->view($path, $data);
     }
@@ -72,6 +84,24 @@ class Club extends Controller
 
     private function requests($path, $data)
     {
+        $this->view($path, $data);
+    }
+
+    private function reports($path, $data)
+    {
+        $this->view($path, $data);
+    }
+
+    private function posts($path, $data)
+    {
+        $this->view($path, $data);
+    }
+
+    private function logs($path, $data)
+    {
+        $tabs = ['posts', 'budgets'];
+        $data["tab"] = getActiveTab($tabs, $_GET);
+
         $this->view($path, $data);
     }
 }

@@ -97,82 +97,57 @@
                         <th>Payment Type</th>
                         <th>Actions</th>
                     </tr>
-                    <tr class="table-data table-align">
-                        <td>Freshers'day</td>
-                        <td>For Decorations</td>
-                        <td>20,000</td>
-                        <td>WSO2</td>
-                        <td>Cash</td>
-                        <td>
-                            <div class="buttons">
-                                <button class="icon-button">
-                                    <span class="material-icons-outlined">
-                                        edit
-                                    </span>
-                                </button>
-                                <button class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        delete
-                                    </span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="table-data table-align">
-                        <td>Freshers'day</td>
-                        <td>For Decorations</td>
-                        <td>20,000</td>
-                        <td>WSO2</td>
-                        <td>Cheque</td>
-                        <td>
-                            <div class="buttons">
-                                <button class="icon-button">
-                                    <span class="material-icons-outlined">
-                                        edit
-                                    </span>
-                                </button>
-                                <button class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        delete
-                                    </span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="table-data table-align">
-                        <td>Freshers'day</td>
-                        <td>For Decorations</td>
-                        <td>20,000</td>
-                        <td>WSO2</td>
-                        <td>Cash</td>
-                        <td>
-                            <div class="buttons">
-                                <button class="icon-button">
-                                    <span class="material-icons-outlined">
-                                        edit
-                                    </span>
-                                </button>
-                                <button class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        delete
-                                    </span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                    <?php if (count($income_data) == 0) { ?>
+                        <tr>
+                            <td colspan="6">No Records.</td>
+                        </tr>
+                    <?php } ?>
+                    <?php foreach ($income_data as $x => $val) {
+                    ?>
+                        <?php $json = json_encode($val); ?>
+                        <tr class="table-data table-align">
+                            <td><?= displayValue($val->name) ?></td>
+                            <td><?= displayValue($val->description) ?></td>
+                            <td><?= displayValue($val->amount) ?></td>
+                            <td><?= displayValue($val->from) ?></td>
+                            <td><?= displayValue($val->payment_type) ?></td>
+                            <td>
+                                <div class="buttons">
+                                    <button onclick='onDataPopup("edit-<?= $tab ?>", <?= $json ?>)' class="icon-button">
+                                        <span class="material-icons-outlined">
+                                            edit
+                                        </span>
+                                    </button>
+                                    <button onclick='onDataPopup("delete-<?= $tab ?>", <?= $json ?>)' class="icon-button cl-red">
+                                        <span class="material-icons-outlined">
+                                            delete
+                                        </span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php } ?>
+
                 </table>
             </div>
         </div>
     </section>
 </div>
 
-<?php $this->view('includes/modals/event/expense') ?>
-<?php $this->view('includes/modals/event/income') ?>
+<?php $this->view("includes/modals/event/$tab") ?>
+<?php $this->view("includes/modals/event/$tab/edit") ?>
+<?php $this->view("includes/modals/event/$tab/delete") ?>
 
-<?php if (!empty($popups["add-income"])) { ?>
-    <script>
+<script>
+    <?php if (!empty($popups["add-$tab"])) { ?>
         $(`[popup-name='add-<?= $tab ?>']`).popup(true)
-    </script>
-<?php } ?>
+    <?php } ?>
+    <?php if (!empty($popups["edit-$tab"])) {
+        $json = json_encode($popups["edit-$tab"]);
+    ?>
+        onDataPopup("edit-<?= $tab ?>", <?= $json ?>)
+    <?php } ?>
+</script>
 
 <script src="<?= ROOT ?>/assets/js/events/event.js"></script>
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

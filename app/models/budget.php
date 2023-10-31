@@ -35,4 +35,25 @@ class Budget extends Modal
         }
         return false;
     }
+
+    public function validateEditIncome($data)
+    {
+        $this->errors = [];
+
+        if (empty($data['type'])) $this->errors['type'] = "Type is required";
+        if (empty($data['name'])) $this->errors['name'] = "Name is required";
+        if (empty($data['amount'])) $this->errors['amount'] = "Amount is required";
+        if (empty($data['from'])) $this->errors['from'] = "From is required";
+        if (empty($data['payment_type'])) $this->errors['payment_type'] = "Payment type is required";
+
+        if ($data['amount'] < 0) {
+            $this->errors['amount'] = "Amount is not valid";
+        }
+
+        if (empty($this->errors)) {
+            return true;
+        }
+
+        return false;
+    }
 }

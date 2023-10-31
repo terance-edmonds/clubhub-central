@@ -36,6 +36,7 @@
     th,
     td {
         padding: 20px;
+        vertical-align: top;
 
         &[data-align='center'] {
             display: flex;

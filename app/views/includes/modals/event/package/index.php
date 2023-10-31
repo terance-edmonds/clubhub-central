@@ -8,18 +8,26 @@
                 </span>
             </div>
         </div>
+
         <div class="popup-body">
-            <form class="form">
+            <form class="form" method="POST">
+
                 <div class="input-wrap">
                     <label for="name">Name</label>
-                    <input id="name" type="text" placeholder="Name" required>
+                    <input value="<?= setValue('name') ?>" id="name" name="name" type="text" placeholder="Name" required>
+                    <?php if (!empty($errors['name'])) : ?>
+                        <small><?= $errors['name'] ?></small>
+                    <?php endif; ?>
                 </div>
                 <div class="input-wrap">
                     <label for="amount">Amount</label>
-                    <input id="amount" type="email" placeholder="Amount" required>
+                    <input value="<?= setValue('amount') ?>" id="amount" name="amount" type="number" min="0" required>
+                    <?php if (!empty($errors['amount'])) : ?>
+                        <small><?= $errors['amount'] ?></small>
+                    <?php endif; ?>
                 </div>
 
-                <button class="button contained">Submit</button>
+                <button name="submit" value="add-package" class="button contained">Submit</button>
             </form>
         </div>
     </div>

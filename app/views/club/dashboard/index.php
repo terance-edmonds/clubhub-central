@@ -62,11 +62,13 @@
                         </td>
                         <td align="center">
                             <div class="buttons">
-                                <button class="icon-button">
-                                    <span class="material-icons-outlined">
-                                        edit
-                                    </span>
-                                </button>
+                                <a href="<?= ROOT ?>/events/dashboard">
+                                    <button class="icon-button">
+                                        <span class="material-icons-outlined">
+                                            edit
+                                        </span>
+                                    </button>
+                                </a>
                                 <button class="icon-button cl-red">
                                     <span class="material-icons-outlined">
                                         delete
@@ -93,11 +95,13 @@
                         </td>
                         <td align="center">
                             <div class="buttons">
-                                <button class="icon-button">
-                                    <span class="material-icons-outlined">
-                                        edit
-                                    </span>
-                                </button>
+                                <a href="<?= ROOT ?>/events/dashboard">
+                                    <button class="icon-button">
+                                        <span class="material-icons-outlined">
+                                            edit
+                                        </span>
+                                    </button>
+                                </a>
                                 <button class="icon-button cl-red">
                                     <span class="material-icons-outlined">
                                         delete
@@ -124,11 +128,13 @@
                         </td>
                         <td align="center">
                             <div class="buttons">
-                                <button class="icon-button">
-                                    <span class="material-icons-outlined">
-                                        edit
-                                    </span>
-                                </button>
+                                <a href="<?= ROOT ?>/events/dashboard">
+                                    <button class="icon-button">
+                                        <span class="material-icons-outlined">
+                                            edit
+                                        </span>
+                                    </button>
+                                </a>
                                 <button class="icon-button cl-red">
                                     <span class="material-icons-outlined">
                                         delete
