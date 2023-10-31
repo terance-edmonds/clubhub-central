@@ -9,4 +9,4 @@ const onDataPopup = (name, data = {}) => {
     }
 
     $(`[popup-name=${name}]`).popup(true);
-}
+};

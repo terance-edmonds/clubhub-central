@@ -1,0 +1,94 @@
+.f-14 {
+  font-size: 0.875em;
+}
+
+.f-20 {
+  font-size: 1.25em;
+}
+
+.f-24 {
+  font-size: 1.5em;
+}
+
+.f-74 {
+  font-size: 4.625em;
+}
+
+.lexend {
+  font-family: "Lexend Peta", sans-serif;
+}
+
+/* font colors */
+.cl-theme {
+  color: #69e4be;
+}
+
+.cl-secondary-theme {
+  color: #94d1be;
+}
+
+.cl-dark {
+  color: #09090b;
+}
+
+.cl-secondary-dark {
+  color: #161616;
+}
+
+.cl-red {
+  color: #ff0000;
+}
+
+.cl-orange {
+  color: #ff8800;
+}
+
+/* background colors */
+.bg-theme {
+  background-color: #69e4be;
+}
+
+.bg-secondary-theme {
+  background-color: #94d1be;
+}
+
+.bg-dark {
+  background-color: #09090b;
+}
+
+.bg-secondary-dark {
+  background-color: #161616;
+}
+
+.bg-red {
+  background-color: #ff0000;
+}
+
+#profile-edit .center-section .content-section {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+#profile-edit .center-section .content-section .form {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #2d2d2d;
+}
+#profile-edit .center-section .content-section .form:last-child {
+  border: none;
+}
+#profile-edit .center-section .content-section .form .image-upload {
+  max-width: 200px;
+  max-height: 200px;
+}
+#profile-edit .center-section .content-section .form .form-section {
+  border: none;
+}
+#profile-edit .center-section .content-section .buttons-wrap {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+#profile-edit .center-section .content-section .buttons-wrap .button {
+  max-width: -moz-fit-content;
+  max-width: fit-content;
+}/*# sourceMappingURL=edit-profile.css.map */

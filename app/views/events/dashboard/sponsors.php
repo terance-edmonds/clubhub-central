@@ -5,6 +5,7 @@
 </head>
 
 <?php $this->view('includes/header') ?>
+<?php $this->view('includes/alerts') ?>
 
 <div id="event-dashboard-sponsors" class="container container-sections side-padding event-dashboard dashboard-container">
     <?php $this->view('includes/side-bars/events/dashboard/left', ["menu" => $menu])  ?>
@@ -20,7 +21,6 @@
                     </span>
                 </button>
             </div>
-
             <div class="input-wrap search-input">
                 <div class="input">
                     <span class="icon material-icons-outlined">
@@ -39,156 +39,114 @@
                         <th align="left">Amount</th>
                         <th align="left">Actions</th>
                     </tr>
-                    <tr class="table-data">
-                        <td>Platinum</td>
-                        <td>200,000</td>
-                        <td>
-                            <div class="buttons">
-                                <button class="icon-button">
-                                    <span class="material-icons-outlined">
-                                        edit
-                                    </span>
-                                </button>
-                                <button class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        delete
-                                    </span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="table-data">
-                        <td>Gold</td>
-                        <td>100,000</td>
-                        <td>
-                            <div class="buttons">
-                                <button class="icon-button">
-                                    <span class="material-icons-outlined">
-                                        edit
-                                    </span>
-                                </button>
-                                <button class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        delete
-                                    </span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="table-data">
-                        <td>Silver</td>
-                        <td>50,000</td>
-                        <td>
-                            <div class="buttons">
-                                <button class="icon-button">
-                                    <span class="material-icons-outlined">
-                                        edit
-                                    </span>
-                                </button>
-                                <button class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        delete
-                                    </span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                    <?php if (count($packages_data) == 0) { ?>
+                        <tr>
+                            <td colspan="6">No Records.</td>
+                        </tr>
+                    <?php } ?>
+                    <?php foreach ($packages_data as $x => $val) {
+                    ?>
+                        <?php $json = json_encode($val); ?>
+                        <tr class="table-data table-align">
+                            <td><?= displayValue($val->name) ?></td>
+                            <td><?= displayValue($val->amount) ?></td>
+                            <td>
+                                <div class="buttons">
+                                    <button onclick='onDataPopup("edit-package", <?= $json ?>)' class="icon-button">
+                                        <span class="material-icons-outlined">
+                                            edit
+                                        </span>
+                                    </button>
+                                    <button onclick='onDataPopup("delete-package", <?= $json ?>)' class="icon-button cl-red">
+                                        <span class="material-icons-outlined">
+                                            delete
+                                        </span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php } ?>
                 </table>
             </div>
+        </div>
 
-
-
-            <div class="title-bar">
-                <div class="title-wrap">
-                    <span class="title">Sponsors</span>
-                    <button onclick="addSponsor(event)" class="button contained" class="button" data-variant="outlined" data-type="icon" data-size="small">
-                        <span>Add Sponsor</span>
-                        <span class="material-icons-outlined">
-                            add
-                        </span>
-                    </button>
-                </div>
-                <div class="content-section">
-                    <div class="table-wrap">
-                        <table>
-                            <tr class="table-header">
-                                <th>Sponser Name</th>
-                                <th>Contact Person</th>
-                                <th>Contact No</th>
-                                <th>Email</th>
-                                <th>Amount</th>
-                                <th>Actions</th>
-                            </tr>
-                            <tr class="table-data">
-                                <td>WSO2</td>
-                                <td>Terence Edmonds</td>
-                                <td>0777123456</td>
-                                <td>terence@gmail.com</td>
-                                <td>2,000,000</td>
-                                <td>
-                                    <div class="buttons">
-                                        <button class="icon-button">
-                                            <span class="material-icons-outlined">
-                                                edit
-                                            </span>
-                                        </button>
-                                        <button class="icon-button cl-red">
-                                            <span class="material-icons-outlined">
-                                                delete
-                                            </span>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="table-data">
-                                <td>WSO2</td>
-                                <td>Terence Edmonds</td>
-                                <td>0777123456</td>
-                                <td>terence@gmail.com</td>
-                                <td>2,000,000</td>
-                                <td>
-                                    <div class="buttons">
-                                        <button class="icon-button">
-                                            <span class="material-icons-outlined">
-                                                edit
-                                            </span>
-                                        </button>
-                                        <button class="icon-button cl-red">
-                                            <span class="material-icons-outlined">
-                                                delete
-                                            </span>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="table-data">
-                                <td>WSO2</td>
-                                <td>Terence Edmonds</td>
-                                <td>0777123456</td>
-                                <td>terence@gmail.com</td>
-                                <td>2,000,000</td>
-                                <td>
-                                    <div class="buttons">
-                                        <button class="icon-button">
-                                            <span class="material-icons-outlined">
-                                                edit
-                                            </span>
-                                        </button>
-                                        <button class="icon-button cl-red">
-                                            <span class="material-icons-outlined">
-                                                delete
-                                            </span>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
+        <div class="title-bar">
+            <div class="title-wrap">
+                <span class="title">Sponsors</span>
+                <button onclick="$(`[popup-name='add-sponsor']`).popup(true)" class="button contained" class="button" data-variant="outlined" data-type="icon" data-size="small">
+                    <span>Add Sponsor</span>
+                    <span class="material-icons-outlined">
+                        add
+                    </span>
+                </button>
             </div>
+        </div>
+
+        <div class="content-section">
+            <div class="table-wrap">
+                <table>
+                    <tr class="table-header">
+                        <th>Sponser Name</th>
+                        <th>Contact Person</th>
+                        <th>Contact No</th>
+                        <th>Email</th>
+                        <th>Amount</th>
+                        <th>Actions</th>
+                    </tr>
+                    <?php if (count($sponsors_data) == 0) { ?>
+                        <tr>
+                            <td colspan="6">No Records.</td>
+                        </tr>
+                    <?php } ?>
+                    <?php foreach ($sponsors_data as $x => $val) {
+                    ?>
+                        <?php $json = json_encode($val); ?>
+                        <tr class="table-data table-align">
+                            <td><?= displayValue($val->name) ?></td>
+                            <td><?= displayValue($val->contact_person) ?></td>
+                            <td><?= displayValue($val->contact_number) ?></td>
+                            <td><?= displayValue($val->email) ?></td>
+                            <td><?= displayValue($val->amount) ?></td>
+                            <td>
+                                <div class="buttons">
+                                    <button class="icon-button">
+                                        <span class="material-icons-outlined">
+                                            edit
+                                        </span>
+                                    </button>
+                                    <button class="icon-button cl-red">
+                                        <span class="material-icons-outlined">
+                                            delete
+                                        </span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                </table>
+            </div>
+        </div>
     </section>
 </div>
 
-<?php $this->view('includes/modals/event/sponsor')  ?>
-<?php $this->view('includes/modals/event/package')  ?>
+
+<script>
+    <?php if (!empty($popups["add-package"])) { ?>
+        $(`[popup-name='add-package']`).popup(true)
+    <?php } ?>
+    <?php if (!empty($popups["edit-package"])) {
+        $json = json_encode($popups["edit-pacakge"]);
+    ?>
+        onDataPopup("edit-package", <?= $json ?>)
+    <?php } ?>
+</script>
+
+
 <script src="<?= ROOT ?>/assets/js/events/event.js"></script>
+<script src="<?= ROOT ?>/assets/js/events/sponsor.js"></script>
+
+<?php $this->view('includes/modals/event/sponsor') ?>
+
+<?php $this->view('includes/modals/event/package') ?>
+<?php $this->view('includes/modals/event/package/edit') ?>
+<?php $this->view('includes/modals/event/package/delete') ?>

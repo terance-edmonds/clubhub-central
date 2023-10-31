@@ -10,7 +10,7 @@
         </div>
 
         <div class="popup-body">
-            <form class="form" method="post">
+            <form class="form" method="POST">
 
                 <div class="input-wrap">
                     <label for="name">Name</label>
