@@ -40,8 +40,8 @@ class Auth
         $key = str_replace("get", "", strtolower($func_name));
         $key = _::snakeCase($key);
 
-        if (!empty($_SESSION['USER_DATA']->$key)) {
-            return $_SESSION['USER_DATA']->$key;
+        if (!empty($_SESSION['USER'][$key])) {
+            return $_SESSION['USER'][$key];
         }
 
         return '';

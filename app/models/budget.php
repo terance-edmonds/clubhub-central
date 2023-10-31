@@ -11,7 +11,8 @@ class Budget extends Modal
         "description",
         "amount",
         "from",
-        "payment_type"
+        "payment_type",
+        "is_deleted"
     ];
 
     public function validateAddIncome($data)
