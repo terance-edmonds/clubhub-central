@@ -28,6 +28,9 @@
 <body>
 
     <?php
+
+    use function _\replace;
+
     class App
     {
         protected $controller = 'not-found';
@@ -37,6 +40,10 @@
             $arr = $this->getURL();
             $filename = $arr[0];
             $method = $arr[1] ?? 'index';
+
+            /* route authentication */
+            // $authorized = Auth::authenticate($_GET);
+            // if (!$authorized) $filename = 'not-found';
 
             unset($arr[0]); // remove the first item of the array
             if (!empty($arr[1])) unset($arr[1]); // remove the second item of the array
@@ -52,6 +59,7 @@
 
             /* convert kebab case to pascal case */
             $this->controller = _::startCase($this->controller);
+            $this->controller = str_replace(" ", "", $this->controller);
 
             /* initiate the controller */
             $curr_controller = new $this->controller();
@@ -75,6 +83,13 @@
         private function getFilePath($fileName)
         {
             return "../app/controllers/" . $fileName . ".php";
+        }
+
+        private function routeAuthenticate($url)
+        {
+
+
+            return false;
         }
     }
 

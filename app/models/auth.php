@@ -1,7 +1,8 @@
 <?php
 
-class Auth
+class Auth extends Routes
 {
+
     public static function set($user)
     {
         $_SESSION['USER'] = $user;
@@ -19,9 +20,22 @@ class Auth
         return false;
     }
 
-    public static function authenticate()
+    public static function authenticate($get = [])
     {
-        if (empty($_SESSION['USER'])) return redirect('login');
+        if (empty($get['url'])) $get['url'] = 'main';
+        $path = $get['url'];
+
+        if (!array_key_exists($path, self::$routes)) return false;
+        $route_auth = self::$routes[$path];
+
+        if (in_array('ANY', $route_auth)) return true;
+
+        if (empty($_SESSION['USER'])) return redirect("not-found");
+
+        $auth_user = $_SESSION['USER'];
+        if (!in_array($auth_user['role'], $route_auth)) {
+            return redirect("not-found");
+        }
 
         return true;
     }
