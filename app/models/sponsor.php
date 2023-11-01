@@ -41,6 +41,7 @@
             if (empty($data['contact_number'])) $this->errors['contact_number'] = "Contact Number is required";
             if (empty($data['email'])) $this->errors['email'] = "Email is required";
             if (empty($data['amount'])) $this->errors['amount'] = "Amount is required";
+            
             if ($data['amount'] < 0) {
                 $this->errors['amount'] = "Amount is not valid";
             }
