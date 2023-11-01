@@ -51,7 +51,7 @@ class Profile extends Controller
             if ($_POST['submit'] === 'update_profile') {
                 $_POST['id'] = $auth_user['id'];
                 $image_uploaded = true;
-                $update_data = ["first_name" => $_POST['first_name'], "last_name" => $_POST['last_name'], "email" => $_POST['email']];
+                $update_data = ["first_name" => $_POST['first_name'], "last_name" => $_POST['last_name']];
 
                 if (!empty($_FILES['image']['name'])) {
                     $file_upload = uploadFile('image');
@@ -101,6 +101,7 @@ class Profile extends Controller
             if ($result->last_name) $_POST['last_name'] = $result->last_name;
             if ($result->email) $_POST['email'] = $result->email;
             if ($result->image) $_POST['image'] = $result->image;
+            if ($result->nic) $_POST['nic'] = $result->nic;
         }
     }
 }

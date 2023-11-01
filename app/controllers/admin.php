@@ -70,17 +70,18 @@ class Admin extends Controller
                     /* create a user invitation */
                     $user_invitation->create($user_invitation_data);
 
-                    /* $mail->send([
+                    $mail->send([
                         "to" => [
-                            "mail" => $form_data['email']
+                            "mail" => $form_data['club_in_charge_email']
                         ],
                         "subject" => "You Are Invited As Club In Charge",
-                        "body" => $mail->template("email-verification", [
+                        "body" => $mail->template("club-invitation", [
                             "from_email" => MAIL_USER,
                             "from_name" => MAIL_USERNAME,
-                            "verification_link" => ROOT . "/" . $link_path . "/verify?token=" . $user_invitation_data["token"]
+                            "club_name" => $form_data["name"],
+                            "invitation_link" => ROOT . "/" . $link_path . "/verify?token=" . $user_invitation_data["token"]
                         ])
-                    ]); */
+                    ]);
 
                     $_SESSION['alerts'] = [["status" => "success", "message" => "Club account created and club in charge email sent successfully"]];
                     $redirect_link = "admin/dashboard";

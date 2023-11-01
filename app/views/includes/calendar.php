@@ -15,7 +15,7 @@ extract($data);
 ?>
 
 <div class="compact-calendar">
-    <div class=" center-section">
+    <div class="calendar-center-section">
         <div class="top-bar">
             <a href="<?= ROOT ?><?= $current_path . "?" . $previous_params ?>">
                 <button class="icon-wrap">

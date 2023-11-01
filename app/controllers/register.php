@@ -11,6 +11,7 @@ class Register extends Controller
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $user_data = $_POST;
+            $params = $_GET;
 
             $db = new Database();
             $user = new User($db);
@@ -27,11 +28,16 @@ class Register extends Controller
                         $mail = new Mail();
                         $token = randomString();
 
-                        $user_invitation->create([
-                            "user_id" => $result->id,
-                            "invitation_code" => $token,
-                            "is_valid" => 1
-                        ]);
+                        if (!empty($params) && !empty($params['token'])) {
+                            $token = $params['token'];
+                            $user_invitation->update(["invitation_code" => $token], ["user_id" => $result->id]);
+                        } else {
+                            $user_invitation->create([
+                                "user_id" => $result->id,
+                                "invitation_code" => $token,
+                                "is_valid" => 1
+                            ]);
+                        }
 
                         /* send verification mail */
                         $mail->send([
@@ -74,23 +80,40 @@ class Register extends Controller
         $db = new Database();
         $user = new User($db);
         $user_invitation = new UserInvitation($db);
+        $club_member = new ClubMember($db);
+        $club = new Clubs($db);
+
         $token = $_GET["token"];
 
         try {
+            $db->transaction();
             $result = $user_invitation->one(["invitation_code" => $token, "is_valid" => 1]);
 
             if (!empty($result)) {
-                $db->transaction();
 
+                /* update user state and invitation states */
                 $user->update(["id" => $result->user_id], ["is_verified" => 1]);
                 $user_invitation->update(["id" => $result->id], ["is_valid" => 0]);
 
-                $db->commit();
+                /* create club member record */
+                if ($result->club_role && $result->club_id) {
+                    $club_member_data = [
+                        "user_id" => $result->user_id,
+                        "club_id" => $result->club_id,
+                        "role" => $result->club_role,
+                        "state" => "ACCEPTED"
+                    ];
+
+                    $club->update(["id" => $result->club_id], ["state" => "ACTIVE"]);
+                    $club_member->create($club_member_data);
+                }
 
                 $data["is_verified"] = True;
             }
+
+            $db->commit();
         } catch (Throwable $th) {
-            $data['errors'] = "Failed to register user, please try again later.";
+            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to register user, please try again later."]];
             $db->rollback();
         }
 

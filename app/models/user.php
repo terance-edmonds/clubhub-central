@@ -9,6 +9,7 @@ class User extends Modal
         "last_name",
         "password",
         "role",
+        "nic",
         "image",
         "is_blacklisted",
         "is_verified"
@@ -17,10 +18,12 @@ class User extends Modal
     public function validateRegister($data)
     {
         $this->errors = [];
+        $pattern = '/^[a-zA-Z0-9._%+-]+@stu\.ucsc\.cmb\.ac\.lk$/';
 
         if (empty($data['first_name'])) $this->errors['first_name'] = "First name is required";
         if (empty($data['last_name'])) $this->errors['last_name'] = "Last name is required";
         if (empty($data['email'])) $this->errors['email'] = "Email is required";
+        if (empty($data['nic'])) $this->errors['nic'] = "NIC is required";
 
         if (empty($data['password'])) $this->errors['password'] = "Password is required";
         if (empty($data['confirm_password'])) $this->errors['password'] = "Confirm password is required";
@@ -28,10 +31,17 @@ class User extends Modal
             $this->errors['password'] = "Passwords does not match";
         }
 
+        // check email format preg_match($pattern, $email)
+        /* check if email exists */
         if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $this->errors['email'] = "Email is not valid";
-        } else if ($this->find(['email' => $data['email']])) {
+        } else if ($this->one(['email' => $data['email']])) {
             $this->errors['email'] = "Email already exists";
+        }
+
+        /* check if nic exists */
+        if ($this->one(['nic' => $data['nic']])) {
+            $this->errors['nic'] = "NIC already exists";
         }
 
         if (empty($this->errors)) {
@@ -47,17 +57,6 @@ class User extends Modal
 
         if (empty($data['first_name'])) $this->errors['first_name'] = "First name is required";
         if (empty($data['last_name'])) $this->errors['last_name'] = "Last name is required";
-        if (empty($data['email'])) $this->errors['email'] = "Email is required";
-
-        if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-            $this->errors['email'] = "Email is not valid";
-        } else {
-            $user = $this->one(['email' => $data['email']]);
-
-            if ($user && $user->id != $data['id']) {
-                $this->errors['email'] = "Another user with this email already exists";
-            }
-        }
 
         if (empty($this->errors)) {
             return true;

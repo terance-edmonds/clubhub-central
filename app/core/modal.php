@@ -118,7 +118,6 @@ class Modal
         /* merge array and where data */
         $data = array_merge($data, $where);
 
-        var_dump($query);
         $this->db->query($query, $data);
     }
 

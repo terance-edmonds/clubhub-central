@@ -2,6 +2,9 @@
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/register.css">
 </head>
 
+<!-- alerts -->
+<?php $this->view('includes/alerts') ?>
+
 <div id="register" class="full-container">
     <section class="section left">
         <div class="content">
@@ -34,6 +37,13 @@
                 <input value="<?= setValue('email') ?>" id="email" type="email" name="email" placeholder="Email Address" required>
                 <?php if (!empty($errors['email'])) : ?>
                     <small><?= $errors['email'] ?></small>
+                <?php endif; ?>
+            </div>
+            <div class="input-wrap">
+                <label for="nic">NIC</label>
+                <input value="<?= setValue('nic') ?>" id="nic" type="text" name="nic" placeholder="NIC" required>
+                <?php if (!empty($errors['nic'])) : ?>
+                    <small><?= $errors['nic'] ?></small>
                 <?php endif; ?>
             </div>
             <div class="multi-wrap">

@@ -44,12 +44,21 @@
                                 <?php endif; ?>
                             </div>
                         </div>
-                        <div class="input-wrap">
-                            <label for="email">Email Address</label>
-                            <input value="<?= setValue('email') ?>" id="email" type="email" name="email" placeholder="Email Address" required>
-                            <?php if (!empty($errors['email'])) : ?>
-                                <small><?= $errors['email'] ?></small>
-                            <?php endif; ?>
+                        <div class="multi-wrap">
+                            <div class="input-wrap">
+                                <label for="email">Email Address</label>
+                                <input disabled value="<?= setValue('email') ?>" id="email" type="email" name="email" placeholder="Email Address">
+                                <?php if (!empty($errors['email'])) : ?>
+                                    <small><?= $errors['email'] ?></small>
+                                <?php endif; ?>
+                            </div>
+                            <div class="input-wrap">
+                                <label for="nic">NIC</label>
+                                <input disabled value="<?= setValue('nic') ?>" id="nic" type="text" name="nic" placeholder="NIC">
+                                <?php if (!empty($errors['nic'])) : ?>
+                                    <small><?= $errors['nic'] ?></small>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </div>
                 </div>
