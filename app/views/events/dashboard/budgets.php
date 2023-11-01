@@ -97,19 +97,19 @@
                         <th>Payment Type</th>
                         <th>Actions</th>
                     </tr>
-                    <?php if (count($income_data) == 0) { ?>
+                    <?php if (count($table_data) == 0) { ?>
                         <tr>
                             <td colspan="6">No Records.</td>
                         </tr>
                     <?php } ?>
-                    <?php foreach ($income_data as $x => $val) {
+                    <?php foreach ($table_data as $x => $val) {
                     ?>
                         <?php $json = json_encode($val); ?>
                         <tr class="table-data table-align">
                             <td><?= displayValue($val->name) ?></td>
                             <td><?= displayValue($val->description) ?></td>
                             <td><?= displayValue($val->amount) ?></td>
-                            <td><?= displayValue($val->from) ?></td>
+                            <td><?= displayValue($val->third_party) ?></td>
                             <td><?= displayValue($val->payment_type) ?></td>
                             <td>
                                 <div class="buttons">

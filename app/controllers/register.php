@@ -33,6 +33,7 @@ class Register extends Controller
                             "is_valid" => 1
                         ]);
 
+                        /* send verification mail */
                         $mail->send([
                             "to" => [
                                 "mail" => $user_data['email'],

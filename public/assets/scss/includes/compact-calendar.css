@@ -1,0 +1,129 @@
+/* font colors */
+.cl-theme {
+  color: #69e4be;
+}
+
+.cl-secondary-theme {
+  color: #94d1be;
+}
+
+.cl-dark {
+  color: #09090b;
+}
+
+.cl-secondary-dark {
+  color: #161616;
+}
+
+.cl-red {
+  color: #ff0000;
+}
+
+.cl-orange {
+  color: #ff8800;
+}
+
+/* background colors */
+.bg-theme {
+  background-color: #69e4be;
+}
+
+.bg-secondary-theme {
+  background-color: #94d1be;
+}
+
+.bg-dark {
+  background-color: #09090b;
+}
+
+.bg-secondary-dark {
+  background-color: #161616;
+}
+
+.bg-red {
+  background-color: #ff0000;
+}
+
+.f-14 {
+  font-size: 0.875em;
+}
+
+.f-20 {
+  font-size: 1.25em;
+}
+
+.f-24 {
+  font-size: 1.5em;
+}
+
+.f-74 {
+  font-size: 4.625em;
+}
+
+.lexend {
+  font-family: "Lexend Peta", sans-serif;
+}
+
+.compact-calendar {
+  width: 100%;
+  background-color: #161616;
+  font-size: 0.875em;
+  border-radius: 8px;
+}
+.compact-calendar .top-bar {
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.compact-calendar .top-bar .center {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-weight: 500;
+}
+.compact-calendar .top-bar .icon-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2px;
+  background-color: #161616;
+  border-radius: 7px;
+  border: 1px solid #a5a5a5;
+  cursor: pointer;
+}
+.compact-calendar .top-bar .icon-wrap span {
+  font-size: 1em;
+  color: #a5a5a5;
+}
+.compact-calendar table,
+.compact-calendar th,
+.compact-calendar td {
+  border-collapse: collapse;
+}
+.compact-calendar .calendar-table {
+  width: 100%;
+  table-layout: fixed;
+}
+.compact-calendar .calendar-table th {
+  color: #69e4be;
+}
+.compact-calendar .calendar-table th,
+.compact-calendar .calendar-table td {
+  padding: 5px;
+}
+.compact-calendar .calendar-table td {
+  height: 40px;
+}
+.compact-calendar .calendar-table td .td {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.compact-calendar .calendar-table td .td .dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: #7dff7a;
+}/*# sourceMappingURL=compact-calendar.css.map */

@@ -1,7 +1,7 @@
 <?php 
 
     class Package extends Modal{
-        protected $table = "club_event_package";
+        protected $table = "club_event_packages";
         protected $allowed_columns = [
             "club_id",
             "club_event_id",

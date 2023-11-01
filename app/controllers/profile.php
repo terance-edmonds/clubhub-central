@@ -13,7 +13,7 @@ class Profile extends Controller
             "clubs" => [],
             "menu" => [
                 ["id" => "profile", "name" => "Profile Details", "icon" => "info", "path" => "/profile/edit"],
-                ["id" => "system", "name" => "Manage System", "icon" => "dashboard", "path" => "/system/dashboard"]
+                ["id" => "system", "name" => "Manage System", "icon" => "dashboard", "path" => "/admin/dashboard"]
 
             ]
         ];

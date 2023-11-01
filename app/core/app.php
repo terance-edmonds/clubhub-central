@@ -50,11 +50,13 @@
 
             /* get the controller */
             $file = $this->getFilePath($filename);
+
             if (file_exists($file)) {
                 require $file;
                 $this->controller = $filename;
             } else {
                 require $this->getFilePath($this->controller);
+                $method = "index";
             }
 
             /* convert kebab case to pascal case */

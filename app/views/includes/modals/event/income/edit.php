@@ -36,10 +36,10 @@
                     <?php endif; ?>
                 </div>
                 <div class="input-wrap">
-                    <label for="from">From</label>
-                    <input value="<?= setValue('from') ?>" id="from" name="from" type="text" required>
-                    <?php if (!empty($errors['from'])) : ?>
-                        <small><?= $errors['from'] ?></small>
+                    <label for="third_party">From</label>
+                    <input value="<?= setValue('third_party') ?>" id="third_party" name="third_party" type="text" required>
+                    <?php if (!empty($errors['third_party'])) : ?>
+                        <small><?= $errors['third_party'] ?></small>
                     <?php endif; ?>
                 </div>
                 <div class="input-wrap">
@@ -55,7 +55,7 @@
                     <?php endif; ?>
                 </div>
 
-                <button name="submit" value="edit-income" class="button contained">Save</button>
+                <button name="submit" value="edit-income" class="button contained">Submit</button>
             </form>
         </div>
     </div>
