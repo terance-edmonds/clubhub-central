@@ -130,6 +130,19 @@
 </div>
 
 
+
+
+<script>
+    <?php if (!empty($popups["add-sponsor"])) { ?>
+        $(`[popup-name='add-sponsor']`).popup(true)
+    <?php } ?>
+    <?php if (!empty($popups["edit-sponsor"])) {
+        $json = json_encode($popups["edit-sponsor"]);
+    ?>
+        onDataPopup("edit-sponsor", <?= $json ?>)
+    <?php } ?>
+</script>
+
 <script>
     <?php if (!empty($popups["add-package"])) { ?>
         $(`[popup-name='add-package']`).popup(true)
@@ -146,6 +159,8 @@
 <script src="<?= ROOT ?>/assets/js/events/sponsor.js"></script>
 
 <?php $this->view('includes/modals/event/sponsor') ?>
+<?php $this->view('includes/modals/event/sponsor/edit') ?>
+<?php $this->view('includes/modals/event/sponsor/delete') ?>
 
 <?php $this->view('includes/modals/event/package') ?>
 <?php $this->view('includes/modals/event/package/edit') ?>

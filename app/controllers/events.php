@@ -68,8 +68,6 @@ class Events extends Controller
 
     private function sponsors($path, $data)
     {
-        $tab = 'sponsor';
-        $data["tab"] = $tab;
         $data["sponsors_data"] = [];
         $data["packages_data"] = [];
         $storage = new Storage();
@@ -104,14 +102,45 @@ class Events extends Controller
 
                     $data['errors'] = $sponsor->errors;
                 }
-            } else if ($_POST['submit'] == "add-package" || $_POST['submit'] == "edit-package") {
+            } else if ($_POST['submit'] == "edit-sponsor") {
+                $where['id'] = $form_data['id'];
+
+                if ($sponsor->validateEditSponsor($form_data)) {
+                    try {
+                        $sponsor->update($where, $form_data);
+
+                        $_SESSION['alerts'] = [["status" => "success", "message" => "Sponsor details updated successfully"]];
+
+                        redirect();
+                    } catch (Throwable $th) {
+                        $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to update sponsor details"]];
+                    }
+                } else {
+                    $data['popups']["edit-sponsor"] = $form_data;
+                }
+
+                $data['errors'] = $sponsor->errors;
+            } else if ($_POST['submit'] == "delete-sponsor") {
+                try {
+                    $sponsor->delete(["id" => $form_data['id']]);
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Sponsor deleted successfully"]];
+
+                    redirect();
+                } catch (Throwable $th) {
+                    var_dump($th);
+                    $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to delete Sponsor details"]];
+                }
+
+                $data['errors'] = $sponsor->errors;
+            } else if ($_POST['submit'] == "add-package" || $_POST['submit'] == "edit-package" || $_POST['submit'] == "delete-package") {
                 $this->packages($_POST);
             }
 
-            //redirect();
+            redirect();
         }
         $data["packages_data"] = $package->find(["club_id" => $club_id, "club_event_id" => $club_event_id]);
-        //$data["sponsors_data"] = $sponsor->find(["club_id" => $club_id, "club_event_id" => $club_event_id]);
+        $data["sponsors_data"] = $sponsor->find(["club_id" => $club_id, "club_event_id" => $club_event_id]);
         $this->view($path, $data);
     }
 
