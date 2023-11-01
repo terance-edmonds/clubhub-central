@@ -261,6 +261,8 @@ class Events extends Controller
 
                 $data['errors'] = $budget->errors;
             }
+
+            
             else if ($_POST['submit'] == "add-expense") {
                 if (empty($club_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Club details are not found"]];
                 else if (empty($club_event_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Event details are not found"]];
