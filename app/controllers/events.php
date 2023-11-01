@@ -290,6 +290,61 @@ class Events extends Controller
 
                 $data['errors'] = $budget->errors;
             }
+            else if ($_POST['submit'] == "add-expense") {
+                if (empty($club_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Club details are not found"]];
+                else if (empty($club_event_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Event details are not found"]];
+                else {
+                    $form_data['club_id'] = $club_id;
+                    $form_data['club_event_id'] = $club_event_id;
+
+                    if ($budget->validateAddExpense($form_data)) {
+                        try {
+                            $budget->create($form_data);
+
+                            $_SESSION['alerts'] = [["status" => "success", "message" => "Expense budget details added successfully"]];
+
+                            redirect();
+                        } catch (Throwable $th) {
+                            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to add budget details"]];
+                        }
+                    } else {
+                        $data['popups']["add-expense"] = true;
+                    }
+
+                    $data['errors'] = $budget->errors;
+                }
+
+            } else if ($_POST['submit'] == "edit-expense") {
+                $where['id'] = $form_data['id'];
+
+                if ($budget->validateEditExpense($form_data)) {
+                    try {
+                        $budget->update($where, $form_data);
+
+                        $_SESSION['alerts'] = [["status" => "success", "message" => "Expense budget details updated successfully"]];
+
+                        redirect();
+                    } catch (Throwable $th) {
+                        $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to update budget details"]];
+                    }
+                } else {
+                    $data['popups']["edit-expense"] = $form_data;
+                }
+
+                $data['errors'] = $budget->errors;
+            } else if ($_POST['submit'] == "delete-expense") {
+                try {
+                    $budget->delete(["id" => $form_data['id']]);
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Expense budget details deleted successfully"]];
+
+                    redirect();
+                } catch (Throwable $th) {
+                    $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to delete budget details"]];
+                }
+
+                $data['errors'] = $budget->errors;
+            }
         }
 
         /* fetch results */
