@@ -6,6 +6,8 @@ class UserInvitation extends Modal
     protected $allowed_columns = [
         "user_id",
         "invitation_code",
-        "is_valid"
+        "is_valid",
+        "club_role",
+        "club_id"
     ];
 }

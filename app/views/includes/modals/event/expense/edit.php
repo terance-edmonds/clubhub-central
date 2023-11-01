@@ -16,7 +16,7 @@
 
                 <div class="input-wrap">
                     <label for="name">Name</label>
-                    <input  value="<?= setValue('name') ?>" id="name" name="name" type="text" required>
+                    <input value="<?= setValue('name') ?>" id="name" name="name" type="text" required>
                     <?php if (!empty($errors['name'])) : ?>
                         <small><?= $errors['name'] ?></small>
                     <?php endif; ?>
@@ -36,10 +36,10 @@
                     <?php endif; ?>
                 </div>
                 <div class="input-wrap">
-                    <label for="from">To</label>
-                    <input value="<?= setValue('from') ?>" id="from" name="from" type="text" required>
-                    <?php if (!empty($errors['from'])) : ?>
-                        <small><?= $errors['from'] ?></small>
+                    <label for="third_party">To</label>
+                    <input value="<?= setValue('third_party') ?>" id="third_party" name="third_party" type="text" required>
+                    <?php if (!empty($errors['third_party'])) : ?>
+                        <small><?= $errors['third_party'] ?></small>
                     <?php endif; ?>
                 </div>
                 <div class="input-wrap">
@@ -55,7 +55,7 @@
                     <?php endif; ?>
                 </div>
 
-                <button name="submit" value="add-expense" class="button contained">Submit</button>
+                <button name="submit" value="edit-expense" class="button contained">Submit</button>
             </form>
         </div>
     </div>

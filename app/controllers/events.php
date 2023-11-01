@@ -1,5 +1,7 @@
 <?php
 
+use function _\upperCase;
+
 class Events extends Controller
 {
     public function index()
@@ -34,7 +36,7 @@ class Events extends Controller
             ["id" => "sponsors", "name" => "Sponsors", "icon" => "diversity_3", "path" => "/events/dashboard/sponsors", "active" => "false"],
             ["id" => "budgets", "name" => "Budgets", "icon" => "monetization_on", "path" => "/events/dashboard/budgets", "active" => "false"],
             ["id" => "agenda", "name" => "Agenda", "icon" => "view_agenda", "path" => "/events/dashboard/agenda", "active" => "false"],
-            ["id" => "notifications", "name" => "Notifications", "icon" => "notifications", "path" => "/events/dashboard/Notifications", "active" => "false"],
+            ["id" => "notifications", "name" => "Announcement", "icon" => "campaign", "path" => "/events/dashboard/Notifications", "active" => "false"],
             ["id" => "complains", "name" => "Complaints", "icon" => "inbox", "path" => "/events/dashboard/complains", "active" => "false"]
 
         ];
@@ -152,9 +154,15 @@ class Events extends Controller
 
         $club_id = $storage->get('club_id');
         $club_event_id = $storage->get('club_event_id');
+        $club_member_id = $storage->get('club_member_id');
+        $user_id = Auth::getId();
 
         $club_id = 1;
         $club_event_id = 1;
+        $club_member_id = 1;
+
+        if (empty($club_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Club details are not found"]];
+        if (empty($club_event_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Event details are not found"]];
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $form_data = $_POST;
@@ -218,40 +226,61 @@ class Events extends Controller
         }
     }
 
-
     private function budgets($path, $data)
     {
         $tabs = ['income', 'expense'];
         $data["tab"] = getActiveTab($tabs, $_GET);
 
         $storage = new Storage();
-        $budget = new Budget();
+        $db = new Database();
+        $budget = new Budget($db);
+        $budget_log = new BudgetLogs($db);
 
         $club_id = $storage->get('club_id');
         $club_event_id = $storage->get('club_event_id');
+        $club_member_id = $storage->get('club_member_id');
+        $user_id = Auth::getId();
 
         /* remove these on production */
         $club_id = 1;
         $club_event_id = 1;
+        $club_member_id = 1;
 
-        if ($_SERVER['REQUEST_METHOD'] == "POST") {
-            $form_data = $_POST;
+        if (empty($club_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Club details are not found"]];
+        if (empty($club_event_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Event details are not found"]];
 
-            if ($_POST['submit'] == "add-income") {
-                if (empty($club_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Club details are not found"]];
-                else if (empty($club_event_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Event details are not found"]];
-                else {
+        try {
+            $db->transaction();
+
+            if ($_SERVER['REQUEST_METHOD'] == "POST") {
+                $form_data = $_POST;
+                $budget_log_data = [
+                    "club_id" => $club_id,
+                    "user_id" => $user_id,
+                    "club_event_id" => $club_event_id,
+                    "club_member_id" => $club_member_id,
+                    "club_event_budget_id" => "",
+                    "type" => "",
+                    "description" => ""
+                ];
+
+                if ($_POST['submit'] == "add-income") {
+                    $budget_log_data["type"] = "INCOME";
+                    $budget_log_data["description"] = "Added a new budget income.";
                     $form_data['club_id'] = $club_id;
                     $form_data['club_event_id'] = $club_event_id;
 
                     if ($budget->validateAddIncome($form_data)) {
                         try {
-                            $budget->create($form_data);
+                            $result = $budget->create($form_data);
+                            if (!empty($result)) {
+                                $budget_log_data["club_event_budget_id"] = $result->id;
+                                $budget_log->create($budget_log_data);
+                            }
 
                             $_SESSION['alerts'] = [["status" => "success", "message" => "Income budget details added successfully"]];
-
-                            redirect();
                         } catch (Throwable $th) {
+                            var_dump($th);
                             $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to add budget details"]];
                         }
                     } else {
@@ -259,54 +288,62 @@ class Events extends Controller
                     }
 
                     $data['errors'] = $budget->errors;
-                }
-            } else if ($_POST['submit'] == "edit-income") {
-                $where['id'] = $form_data['id'];
+                } else if ($_POST['submit'] == "edit-income") {
+                    $budget_log_data["type"] = "INCOME";
+                    $budget_log_data["description"] = "Updated budget income details.";
+                    $budget_log_data["club_event_budget_id"] = $form_data['id'];
+                    $where['id'] = $form_data['id'];
 
-                if ($budget->validateEditIncome($form_data)) {
-                    try {
-                        $budget->update($where, $form_data);
+                    if ($budget->validateEditIncome($form_data)) {
+                        try {
+                            $budget->update($where, $form_data);
+                            $budget_log->create($budget_log_data);
 
-                        $_SESSION['alerts'] = [["status" => "success", "message" => "Income budget details updated successfully"]];
-
-                        redirect();
-                    } catch (Throwable $th) {
-                        $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to update budget details"]];
+                            $_SESSION['alerts'] = [["status" => "success", "message" => "Income budget details updated successfully"]];
+                        } catch (Throwable $th) {
+                            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to update budget details"]];
+                        }
+                    } else {
+                        $data['popups']["edit-income"] = $form_data;
                     }
-                } else {
-                    $data['popups']["edit-income"] = $form_data;
-                }
 
-                $data['errors'] = $budget->errors;
-            } else if ($_POST['submit'] == "delete-income") {
-                try {
-                    $budget->delete(["id" => $form_data['id']]);
+                    $data['errors'] = $budget->errors;
+                } else if ($_POST['submit'] == "delete-income") {
+                    try {
+                        $budget_log_data["type"] = "INCOME";
+                        $budget_log_data["description"] = "Deleted budget income details.";
+                        $budget_log_data["club_event_budget_id"] = $form_data['id'];
 
-                    $_SESSION['alerts'] = [["status" => "success", "message" => "Income budget details deleted successfully"]];
+                        /* delete the item */
+                        // $budget_log->delete(["club_event_budget_id" => $form_data['id']]);
+                        // $budget->delete(["id" => $form_data['id']]);
 
-                    redirect();
-                } catch (Throwable $th) {
-                    $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to delete budget details"]];
-                }
+                        /* set the state as deleted */
+                        $budget->update(["id" => $form_data['id']], ["is_deleted" => 1]);
+                        $budget_log->create($budget_log_data);
 
-                $data['errors'] = $budget->errors;
-            }
+                        $_SESSION['alerts'] = [["status" => "success", "message" => "Income budget details deleted successfully"]];
+                    } catch (Throwable $th) {
+                        var_dump($th);
+                        $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to delete budget details"]];
+                    }
 
-            
-            else if ($_POST['submit'] == "add-expense") {
-                if (empty($club_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Club details are not found"]];
-                else if (empty($club_event_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Event details are not found"]];
-                else {
+                    $data['errors'] = $budget->errors;
+                } else if ($_POST['submit'] == "add-expense") {
+                    $budget_log_data["type"] = "EXPENSE";
+                    $budget_log_data["description"] = "Added a new budget expense.";
                     $form_data['club_id'] = $club_id;
                     $form_data['club_event_id'] = $club_event_id;
 
                     if ($budget->validateAddExpense($form_data)) {
                         try {
-                            $budget->create($form_data);
+                            $result = $budget->create($form_data);
+                            if (!empty($result)) {
+                                $budget_log_data["club_event_budget_id"] = $result->id;
+                                $budget_log->create($budget_log_data);
+                            }
 
                             $_SESSION['alerts'] = [["status" => "success", "message" => "Expense budget details added successfully"]];
-
-                            redirect();
                         } catch (Throwable $th) {
                             $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to add budget details"]];
                         }
@@ -315,43 +352,61 @@ class Events extends Controller
                     }
 
                     $data['errors'] = $budget->errors;
-                }
+                } else if ($_POST['submit'] == "edit-expense") {
+                    $budget_log_data["type"] = "EXPENSE";
+                    $budget_log_data["description"] = "Updated budget expense details.";
+                    $budget_log_data["club_event_budget_id"] = $form_data['id'];
+                    $where['id'] = $form_data['id'];
 
-            } else if ($_POST['submit'] == "edit-expense") {
-                $where['id'] = $form_data['id'];
+                    if ($budget->validateEditExpense($form_data)) {
+                        try {
+                            $budget->update($where, $form_data);
+                            $budget_log->create($budget_log_data);
 
-                if ($budget->validateEditExpense($form_data)) {
-                    try {
-                        $budget->update($where, $form_data);
+                            $_SESSION['alerts'] = [["status" => "success", "message" => "Expense budget details updated successfully"]];
 
-                        $_SESSION['alerts'] = [["status" => "success", "message" => "Expense budget details updated successfully"]];
-
-                        redirect();
-                    } catch (Throwable $th) {
-                        $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to update budget details"]];
+                            redirect();
+                        } catch (Throwable $th) {
+                            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to update budget details"]];
+                        }
+                    } else {
+                        $data['popups']["edit-expense"] = $form_data;
                     }
-                } else {
-                    $data['popups']["edit-expense"] = $form_data;
+
+                    $data['errors'] = $budget->errors;
+                } else if ($_POST['submit'] == "delete-expense") {
+                    try {
+                        $budget_log_data["type"] = "EXPENSE";
+                        $budget_log_data["description"] = "Deleted budget expense details.";
+                        $budget_log_data["club_event_budget_id"] = $form_data['id'];
+
+                        /* delete the item */
+                        // $budget_log->delete(["club_event_budget_id" => $form_data['id']]);
+                        // $budget->delete(["id" => $form_data['id']]);
+
+                        /* set the state as deleted */
+                        $budget->update(["id" => $form_data['id']], ["is_deleted" => 1]);
+                        $budget_log->create($budget_log_data);
+
+                        $_SESSION['alerts'] = [["status" => "success", "message" => "Expense budget details deleted successfully"]];
+                    } catch (Throwable $th) {
+                        $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to delete budget details"]];
+                    }
+
+                    $data['errors'] = $budget->errors;
                 }
-
-                $data['errors'] = $budget->errors;
-            } else if ($_POST['submit'] == "delete-expense") {
-                try {
-                    $budget->delete(["id" => $form_data['id']]);
-
-                    $_SESSION['alerts'] = [["status" => "success", "message" => "Expense budget details deleted successfully"]];
-
-                    redirect();
-                } catch (Throwable $th) {
-                    $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to delete budget details"]];
-                }
-
-                $data['errors'] = $budget->errors;
             }
+
+            $data["table_data"] = $budget->find(["club_id" => $club_id, "club_event_id" => $club_event_id, "is_deleted" => 0, "type" => upperCase($data['tab'])]);
+            /* fetch results */
+            $db->commit();
+
+            if ($_SERVER['REQUEST_METHOD'] == "POST") redirect();
+        } catch (\Throwable $th) {
+            $data['errors'] = "Failed to process the action, please try again later.";
+            $db->rollback();
         }
 
-        /* fetch results */
-        $data["income_data"] = $budget->find(["club_id" => $club_id, "club_event_id" => $club_event_id]);
 
         $this->view($path, $data);
     }

@@ -2,6 +2,9 @@
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/login.css">
 </head>
 
+<!-- alerts -->
+<?php $this->view('includes/alerts') ?>
+
 <div id="login" class="full-container">
     <section class="section left">
         <div class="content">

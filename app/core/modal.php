@@ -7,7 +7,7 @@ class Modal
     public $offset = 0;
 
     public $errors = [];
-    protected $table = "users";
+    protected $table = "";
     protected $allowed_columns = [];
     protected $db = null;
 
@@ -29,12 +29,16 @@ class Modal
         $keys = array_keys($data);
         $query = "insert into " . $this->table . " ";
         $query .= " (`" . implode("`,`", $keys) . "`) values (:" . implode(",:", $keys) . ")";
+        $query .= " returning *";
 
-        $this->db->query($query, $data);
+        $result = $this->db->query($query, $data);
 
-        if (!empty($select_key)) return $this->one([$select_key => $data[$select_key]]);
+        // if (!empty($select_key)) return $this->one([$select_key => $data[$select_key]]);
+        if (empty($result)) $result = null;
 
-        return true;
+        if (!empty($result[0])) $result = $result[0];
+
+        return $result;
     }
 
     public function find($data = [])

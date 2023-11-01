@@ -35,10 +35,10 @@
                     <?php endif; ?>
                 </div>
                 <div class="input-wrap">
-                    <label for="from">To</label>
-                    <input value="<?= setValue('from') ?>" id="from" name="from" type="text" required>
-                    <?php if (!empty($errors['from'])) : ?>
-                        <small><?= $errors['from'] ?></small>
+                    <label for="third_party">To</label>
+                    <input value="<?= setValue('third_party') ?>" id="third_party" name="third_party" type="text" required>
+                    <?php if (!empty($errors['third_party'])) : ?>
+                        <small><?= $errors['third_party'] ?></small>
                     <?php endif; ?>
                 </div>
                 <div class="input-wrap">

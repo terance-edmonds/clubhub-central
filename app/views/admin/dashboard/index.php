@@ -6,6 +6,9 @@
 
 <?php $this->view('includes/header') ?>
 
+<!-- alerts -->
+<?php $this->view('includes/alerts') ?>
+
 <div id="admin-dashboard-club" class="container container-sections side-padding club-dashboard dashboard-container">
     <?php $this->view('includes/side-bars/club/dashboard/left', ["menu" => $menu])  ?>
 
@@ -13,7 +16,7 @@
         <div class="title-bar">
             <div class="title-wrap">
                 <span class="title">Clubs</span>
-                <a href="<?= ROOT ?>/admin/dashboard/add-club">
+                <a href="<?= ROOT ?>/admin/dashboard/add">
                     <button class="button" data-variant="outlined" data-type="icon" data-size="small">
                         <span>Add Club</span>
                         <span class="material-icons-outlined">
@@ -43,90 +46,42 @@
                         <th>View</th>
                         <th>Actions</th>
                     </tr>
-                    <tr class="table-data">
-                        <td>IEEE</td>
-                        <td>user@test.com</td>
-                        <td>11/04/23 - 10.00 AM</td>
-                        <td align="center">
-                            <button class="icon-button">
-                                <span class="material-icons-outlined">
-                                    visibility
-                                </span>
-                            </button>
-                        </td>
-                        <td align="center">
-                            <div class="buttons">
-                                <a href="<?= ROOT ?>/events/dashboard">
-                                    <button class="icon-button">
-                                        <span class="material-icons-outlined">
-                                            edit
-                                        </span>
-                                    </button>
-                                </a>
-                                <button class="icon-button cl-red">
+                    <?php if (count($table_data) == 0) { ?>
+                        <tr>
+                            <td colspan="6">No Records.</td>
+                        </tr>
+                    <?php } ?>
+                    <?php foreach ($table_data as $x => $val) {
+                    ?>
+                        <tr class="table-data">
+                            <td><?= displayValue($val->name) ?></td>
+                            <td>-</td>
+                            <td>11/04/23 - 10.00 AM</td>
+                            <td align="center">
+                                <button class="icon-button">
                                     <span class="material-icons-outlined">
-                                        delete
+                                        visibility
                                     </span>
                                 </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="table-data">
-                        <td>IEEE</td>
-                        <td>user@test.com</td>
-                        <td>11/04/23 - 10.00 AM</td>
-                        <td align="center">
-                            <button class="icon-button">
-                                <span class="material-icons-outlined">
-                                    visibility
-                                </span>
-                            </button>
-                        </td>
-                        <td align="center">
-                            <div class="buttons">
-                                <a href="<?= ROOT ?>/events/dashboard">
-                                    <button class="icon-button">
+                            </td>
+                            <td align="center">
+                                <div class="buttons">
+                                    <a href="<?= ROOT ?>/events/dashboard">
+                                        <button class="icon-button">
+                                            <span class="material-icons-outlined">
+                                                edit
+                                            </span>
+                                        </button>
+                                    </a>
+                                    <button class="icon-button cl-red">
                                         <span class="material-icons-outlined">
-                                            edit
+                                            delete
                                         </span>
                                     </button>
-                                </a>
-                                <button class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        delete
-                                    </span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="table-data">
-                        <td>IEEE</td>
-                        <td>user@test.com</td>
-                        <td>11/04/23 - 10.00 AM</td>
-                        <td align="center">
-                            <button class="icon-button">
-                                <span class="material-icons-outlined">
-                                    visibility
-                                </span>
-                            </button>
-                        </td>                        
-                        <td align="center">
-                            <div class="buttons">
-                                <a href="<?= ROOT ?>/events/dashboard">
-                                    <button class="icon-button">
-                                        <span class="material-icons-outlined">
-                                            edit
-                                        </span>
-                                    </button>
-                                </a>
-                                <button class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        delete
-                                    </span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php } ?>
                 </table>
             </div>
         </div>

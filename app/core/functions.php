@@ -98,3 +98,23 @@ function getActiveTab($tabs, $get)
 
     return $tab;
 }
+
+/* get active menu */
+function getActiveMenu(&$menu, $path)
+{
+    $func = "view";
+    $path = "/" . $path;
+
+    foreach ($menu as $x => &$val) {
+        if (is_array($val["path"])) {
+            if (in_array($path, $val["path"])) {
+                $func = $val["id"];
+                $val["active"] = 'true';
+            }
+        } else if ($val["path"] ==  $path) {
+            $func = $val["id"];
+            $val["active"] = 'true';
+        }
+    }
+    return $func;
+}

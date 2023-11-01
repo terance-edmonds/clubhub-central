@@ -10,8 +10,9 @@ class Budget extends Modal
         "name",
         "description",
         "amount",
-        "from",
-        "payment_type"
+        "third_party",
+        "payment_type",
+        "is_deleted"
     ];
 
     public function validateAddIncome($data)
@@ -23,7 +24,7 @@ class Budget extends Modal
         if (empty($data['type'])) $this->errors['type'] = "Type is required";
         if (empty($data['name'])) $this->errors['name'] = "Name is required";
         if (empty($data['amount'])) $this->errors['amount'] = "Amount is required";
-        if (empty($data['from'])) $this->errors['from'] = "From is required";
+        if (empty($data['third_party'])) $this->errors['third_party'] = "From is required";
         if (empty($data['payment_type'])) $this->errors['payment_type'] = "Payment type is required";
 
         if ($data['amount'] < 0) {
@@ -43,7 +44,7 @@ class Budget extends Modal
         if (empty($data['type'])) $this->errors['type'] = "Type is required";
         if (empty($data['name'])) $this->errors['name'] = "Name is required";
         if (empty($data['amount'])) $this->errors['amount'] = "Amount is required";
-        if (empty($data['from'])) $this->errors['from'] = "From is required";
+        if (empty($data['third_party'])) $this->errors['third_party'] = "From is required";
         if (empty($data['payment_type'])) $this->errors['payment_type'] = "Payment type is required";
 
         if ($data['amount'] < 0) {
@@ -66,7 +67,7 @@ class Budget extends Modal
         if (empty($data['type'])) $this->errors['type'] = "Type is required";
         if (empty($data['name'])) $this->errors['name'] = "Name is required";
         if (empty($data['amount'])) $this->errors['amount'] = "Amount is required";
-        if (empty($data['from'])) $this->errors['from'] = "To is required";
+        if (empty($data['third_party'])) $this->errors['third_party'] = "To is required";
         if (empty($data['payment_type'])) $this->errors['payment_type'] = "Payment type is required";
 
         if ($data['amount'] < 0) {
@@ -86,7 +87,7 @@ class Budget extends Modal
         if (empty($data['type'])) $this->errors['type'] = "Type is required";
         if (empty($data['name'])) $this->errors['name'] = "Name is required";
         if (empty($data['amount'])) $this->errors['amount'] = "Amount is required";
-        if (empty($data['from'])) $this->errors['from'] = "To is required";
+        if (empty($data['third_party'])) $this->errors['third_party'] = "To is required";
         if (empty($data['payment_type'])) $this->errors['payment_type'] = "Payment type is required";
 
         if ($data['amount'] < 0) {
@@ -98,5 +99,5 @@ class Budget extends Modal
         }
 
         return false;
-    }    
+    }
 }

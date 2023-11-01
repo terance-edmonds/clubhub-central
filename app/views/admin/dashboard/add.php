@@ -6,7 +6,10 @@
 
 <?php $this->view('includes/header') ?>
 
-<div id="admin-dashboard-add-report" class="container container-sections side-padding club-dashboard dashboard-container">
+<!-- alerts -->
+<?php $this->view('includes/alerts') ?>
+
+<div id="admin-dashboard-add-club" class="container container-sections side-padding club-dashboard dashboard-container">
     <?php $this->view('includes/side-bars/club/dashboard/left', ["menu" => $menu])  ?>
 
     <section class="center-section">
@@ -30,10 +33,10 @@
                                 <?php endif; ?>
                             </div>
                             <div class="input-wrap">
-                                <label for="email">Club In-charge Email</label>
-                                <input value="<?= setValue('email') ?>" id="email" type="email" name="email" placeholder="Club In-charge Email" required>
-                                <?php if (!empty($errors['email'])) : ?>
-                                    <small><?= $errors['email'] ?></small>
+                                <label for="club_in_charge_email">Club In-charge Email</label>
+                                <input value="<?= setValue('club_in_charge_email') ?>" id="club_in_charge_email" type="email" name="club_in_charge_email" placeholder="Club In-charge Email" required>
+                                <?php if (!empty($errors['club_in_charge_email'])) : ?>
+                                    <small><?= $errors['club_in_charge_email'] ?></small>
                                 <?php endif; ?>
                             </div>
                         </div>
