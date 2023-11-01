@@ -109,12 +109,12 @@
                             <td><?= displayValue($val->amount) ?></td>
                             <td>
                                 <div class="buttons">
-                                    <button class="icon-button">
+                                    <button onclick='onDataPopup("edit-package", <?= $json ?>)' class="icon-button">
                                         <span class="material-icons-outlined">
                                             edit
                                         </span>
                                     </button>
-                                    <button class="icon-button cl-red">
+                                    <button onclick='onDataPopup("delete-sponsor", <?= $json ?>)' class="icon-button cl-red">
                                         <span class="material-icons-outlined">
                                             delete
                                         </span>
