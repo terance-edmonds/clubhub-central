@@ -2,10 +2,11 @@
     overflow-x: auto;
     width: 100%;
     min-height: 400px;
+    max-width: 883px;
 
     table {
         width: 100%;
-        min-width: 750px;
+        min-width: 880px;
         border-spacing: 0 !important;
         border-collapse: collapse;
     }
@@ -35,6 +36,7 @@
 
     th,
     td {
+        min-width: 220px;
         padding: 20px;
         vertical-align: top;
 

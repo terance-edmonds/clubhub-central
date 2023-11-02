@@ -107,7 +107,7 @@
                             <td><?= displayValue($val->contact_number) ?></td>
                             <td><?= displayValue($val->email) ?></td>
                             <td><?= displayValue($val->amount) ?></td>
-                            <td>
+                            <td align="center">
                                 <div class="buttons">
                                     <button onclick='onDataPopup("edit-sponsor", <?= $json ?>)' class="icon-button">
                                         <span class="material-icons-outlined">

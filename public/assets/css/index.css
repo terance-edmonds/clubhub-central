@@ -73,6 +73,7 @@
           box-sizing: border-box;
   margin: 0;
   padding: 0;
+  color-scheme: dark;
 }
 
 html,
@@ -613,10 +614,11 @@ input[type=checkbox]:checked {
   overflow-x: auto;
   width: 100%;
   min-height: 400px;
+  max-width: 883px;
 }
 .table-wrap table {
   width: 100%;
-  min-width: 750px;
+  min-width: 880px;
   border-spacing: 0 !important;
   border-collapse: collapse;
 }
@@ -641,6 +643,7 @@ input[type=checkbox]:checked {
 }
 .table-wrap th,
 .table-wrap td {
+  min-width: 220px;
   padding: 20px;
   vertical-align: top;
 }

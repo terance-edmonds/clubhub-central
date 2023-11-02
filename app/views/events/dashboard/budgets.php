@@ -111,7 +111,7 @@
                             <td><?= displayValue($val->amount) ?></td>
                             <td><?= displayValue($val->third_party) ?></td>
                             <td><?= displayValue($val->payment_type) ?></td>
-                            <td>
+                            <td align="center">
                                 <div class="buttons">
                                     <button onclick='onDataPopup("edit-<?= $tab ?>", <?= $json ?>)' class="icon-button">
                                         <span class="material-icons-outlined">

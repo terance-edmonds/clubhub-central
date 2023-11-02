@@ -51,11 +51,11 @@ extract($data);
             <tbody>
                 <?php foreach ($weeks as $week) { ?>
                     <tr>
-                        <?php foreach ($week as $day) { ?>
+                        <?php foreach ($week as $data) { ?>
                             <td align="center">
                                 <div class="td">
-                                    <span class="day"><?= $day ?></span>
-                                    <?php if (!empty($day["active"])) { ?>
+                                    <span class="day"><?= $data["day"] ?></span>
+                                    <?php if (!empty($data["items"]) && count($data["items"]) > 0) { ?>
                                         <span class="dot"></span>
                                     <?php } ?>
                                 </div>
