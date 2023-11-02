@@ -12,9 +12,6 @@
 
     <!-- main styles -->
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/index.css">
-    <!-- swal alert -->
-    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/libs/sweetalert2.min.css">
-    <script src="<?= ROOT ?>/assets/js/libs/sweetalert2.all.min.js"></script>
 
     <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -104,6 +101,7 @@
 
     <!-- other -->
     <script src="<?= ROOT ?>/assets/js/index.js"></script>
+    <script src="<?= ROOT ?>/assets/js/libs/moment.min.js"></script>
 </body>
 
 </html>

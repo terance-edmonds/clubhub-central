@@ -11,6 +11,7 @@
 
         <div class="popup-body">
             <form class="form" method="POST">
+                <input name="id" type="text" hidden>
                 <div class="input-wrap">
                     <label for="name">Name</label>
                     <input value="<?= setValue('name') ?>" id="name" name="name" type="text" placeholder="Name" required>

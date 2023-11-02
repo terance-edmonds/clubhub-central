@@ -4,8 +4,65 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bcaaabecd13e9869096877bb9cdcc351",
+    "content-hash": "3ddca4b6671d11a8e1bd7ef96306f0a1",
     "packages": [
+        {
+            "name": "fightbulc/moment",
+            "version": "1.34",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fightbulc/moment.php.git",
+                "reference": "c813018ff87dfe77353f838908fc644cc5536b50"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fightbulc/moment.php/zipball/c813018ff87dfe77353f838908fc644cc5536b50",
+                "reference": "c813018ff87dfe77353f838908fc644cc5536b50",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.36 || ^5.5 || ^6.5 || ^7.5 || ^9.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Moment\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tino Ehrich",
+                    "email": "tino@bigpun.me",
+                    "role": "developer"
+                }
+            ],
+            "description": "Parse, validate, manipulate, and display dates in PHP w/ i18n support. Inspired by moment.js",
+            "keywords": [
+                "date",
+                "display",
+                "format",
+                "i18n",
+                "locale",
+                "manipulate",
+                "moment",
+                "parse",
+                "time",
+                "translation",
+                "validate"
+            ],
+            "support": {
+                "issues": "https://github.com/fightbulc/moment.php/issues",
+                "source": "https://github.com/fightbulc/moment.php/tree/1.34"
+            },
+            "time": "2023-01-26T21:18:59+00:00"
+        },
         {
             "name": "graham-campbell/result-type",
             "version": "v1.1.1",

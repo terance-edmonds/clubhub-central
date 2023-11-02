@@ -36,9 +36,14 @@ function setFile($key, $default = '')
 }
 
 /* display column value */
-function displayValue($val)
+function displayValue($val, $format = 'text')
 {
     if (empty($val)) $val = '-';
+
+    if ($format == 'datetime') {
+        $moment = new \Moment\Moment();
+        $val = $moment->format('d/m/Y - h:m A');
+    }
 
     return $val;
 }

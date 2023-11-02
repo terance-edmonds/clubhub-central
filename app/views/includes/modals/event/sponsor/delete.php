@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="popup-body">
-            Are you sure you want to delete this Sponsor?
+            Are you sure you want to delete this sponsor?
             <form class="form" method="post">
                 <input name="id" type="text" hidden>
                 <button name="submit" value="delete-sponsor" class="button contained">Delete</button>

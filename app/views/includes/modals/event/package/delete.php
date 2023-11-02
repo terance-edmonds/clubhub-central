@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="popup-body">
-            Are you sure you want to delete this Package?
+            Are you sure you want to delete this package?
             <form class="form" method="post">
                 <input name="id" type="text" hidden>
                 <button name="submit" value="delete-package" class="button contained">Delete</button>
