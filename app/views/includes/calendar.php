@@ -25,14 +25,14 @@ extract($data);
                 </button>
             </a>
 
-            <div class="center">
+            <a href="<?= ROOT ?>/calendar" class="center">
                 <p class="month">
                     <?= $month ?>
                 </p>
                 <p class="year">
                     <?= $year ?>
                 </p>
-            </div>
+            </a>
 
             <a href="<?= ROOT ?><?= $current_path . "?" . $next_params ?>">
                 <button class="icon-wrap">

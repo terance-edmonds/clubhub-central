@@ -1,0 +1,16 @@
+#admin-dashboard-clubs {
+    .table-wrap {
+        .status-button {
+            cursor: default;
+
+            &[data-status='ACTIVE'] {
+                color: $green;
+                background-color: $green-light;
+            }
+            &[data-status='DEACTIVE'] {
+                color: $red-2;
+                background-color: $red-2-light;
+            }
+        }
+    }
+}

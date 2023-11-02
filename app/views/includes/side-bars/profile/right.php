@@ -29,7 +29,7 @@
             <?php
             foreach ($menu as $x => $val) {
             ?>
-                <div id="menu-item-<?php echo $val["id"] ?>" class="item">
+                <div class="item">
                     <div class="icon-wrap">
                         <span class="material-icons-outlined">
                             <?php echo $val["icon"] ?>
@@ -51,21 +51,12 @@
             Assigned Clubs
         </p>
 
-        <?php if (count($clubs) > 0) { ?>
+        <?php if (count($clubs) == 0) { ?>
             <div class="cards">
                 <div class="card">
                     <img loading="lazy" src="https://picsum.photos/110/110" alt="Club Logo" class="club-logo">
                     <div class="details">
-                        <a href="<?= ROOT ?>/club?id=" class="title">IEEE</a>
-                        <span class="material-icons-outlined">
-                            chevron_right
-                        </span>
-                    </div>
-                </div>
-                <div class="card">
-                    <img loading="lazy" src="https://picsum.photos/110/110" alt="Club Logo" class="club-logo">
-                    <div class="details">
-                        <a href="<?= ROOT ?>/club?id=" class="title">IEEE</a>
+                        <a href="<?= ROOT ?>/club/dashboard" class="title">IEEE</a>
                         <span class="material-icons-outlined">
                             chevron_right
                         </span>
@@ -74,7 +65,7 @@
             </div>
         <?php } ?>
 
-        <?php if (count($clubs) == 0) { ?>
+        <?php if (count($clubs) != 0) { ?>
             <div class="empty-content">
                 <img loading="lazy" src="<?= ROOT ?>/assets/images/other/empty.png" alt="Not Found" class="empty-image">
                 <div class="titles">

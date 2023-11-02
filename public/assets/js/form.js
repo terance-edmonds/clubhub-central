@@ -9,4 +9,22 @@ const onDataPopup = (name, data = {}) => {
     }
 
     $(`[popup-name=${name}]`).popup(true);
-}
+};
+
+(() => {
+    const inputs = $(`[set-default]`);
+
+    for (const input of inputs) {
+        const obj = $(input);
+
+        if (obj.attr('set-default') == 'datetime') {
+            obj.val(moment().format('yyyy-MM-DDTHH:mm'));
+        }
+        if (obj.attr('set-default') == 'date') {
+            obj.val(moment().format('yyyy-MM-DD'));
+        }
+        if (obj.attr('set-default') == 'time') {
+            obj.val(moment().format('HH:mm'));
+        }
+    }
+})();

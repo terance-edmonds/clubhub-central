@@ -1,0 +1,13 @@
+@import '../../colors';
+@import '../../fonts';
+
+.admin-dashboard {
+    .buttons {
+        display: flex;
+        gap: 10px;
+    }
+}
+
+@import './dashboard/clubs';
+@import './dashboard/events';
+@import './dashboard/requests';

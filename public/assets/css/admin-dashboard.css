@@ -1,0 +1,120 @@
+/* font colors */
+.cl-theme {
+  color: #69e4be;
+}
+
+.cl-secondary-theme {
+  color: #94d1be;
+}
+
+.cl-dark {
+  color: #09090b;
+}
+
+.cl-secondary-dark {
+  color: #161616;
+}
+
+.cl-red {
+  color: #ff0000;
+}
+
+.cl-orange {
+  color: #ff8800;
+}
+
+.cl-green {
+  color: #7dff7a;
+}
+
+/* background colors */
+.bg-theme {
+  background-color: #69e4be;
+}
+
+.bg-secondary-theme {
+  background-color: #94d1be;
+}
+
+.bg-dark {
+  background-color: #09090b;
+}
+
+.bg-secondary-dark {
+  background-color: #161616;
+}
+
+.bg-red {
+  background-color: #ff0000;
+}
+
+.f-14 {
+  font-size: 0.875em;
+}
+
+.f-20 {
+  font-size: 1.25em;
+}
+
+.f-24 {
+  font-size: 1.5em;
+}
+
+.f-74 {
+  font-size: 4.625em;
+}
+
+.lexend {
+  font-family: "Lexend Peta", sans-serif;
+}
+
+.admin-dashboard .buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 10px;
+}
+
+#admin-dashboard-clubs .table-wrap .status-button {
+  cursor: default;
+}
+#admin-dashboard-clubs .table-wrap .status-button[data-status=ACTIVE] {
+  color: #7dff7a;
+  background-color: #213021;
+}
+#admin-dashboard-clubs .table-wrap .status-button[data-status=DEACTIVE] {
+  color: #ff4646;
+  background-color: #392a2d;
+}
+
+#admin-dashboard-events .table-wrap .status-button {
+  cursor: default;
+}
+#admin-dashboard-events .table-wrap .status-button[data-status=PENDING] {
+  color: #edff7d;
+  background-color: #303021;
+}
+#admin-dashboard-events .table-wrap .status-button[data-status=APPROVED] {
+  color: #7dff7a;
+  background-color: #213021;
+}
+#admin-dashboard-events .table-wrap .status-button[data-status=REJECTED] {
+  color: #ff4646;
+  background-color: #392a2d;
+}
+
+#admin-dashboard-requests .table-wrap .status-button {
+  cursor: default;
+}
+#admin-dashboard-requests .table-wrap .status-button[data-status=PENDING] {
+  color: #edff7d;
+  background-color: #303021;
+}
+#admin-dashboard-requests .table-wrap .status-button[data-status=APPROVED] {
+  color: #7dff7a;
+  background-color: #213021;
+}
+#admin-dashboard-requests .table-wrap .status-button[data-status=REJECTED] {
+  color: #ff4646;
+  background-color: #392a2d;
+}

@@ -8,7 +8,9 @@ class Clubs extends Modal
         "description",
         "image",
         "state",
-        "is_deleted"
+        "is_deleted",
+        "created_datetime",
+        "club_in_charge_email"
     ];
 
     public function validateCreateClub($data)
@@ -17,6 +19,7 @@ class Clubs extends Modal
 
         if (empty($data['name'])) $this->errors['name'] = "Name is required";
         if (empty($data['club_in_charge_email'])) $this->errors['club_in_charge_email'] = "Club in charge email is required";
+        if (empty($data['created_datetime'])) $this->errors['created_datetime'] = "Created date & time is required";
 
         if (empty($this->errors)) {
             return true;
