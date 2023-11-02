@@ -70,6 +70,21 @@ class ModCalendar
 
         $this->weeks = array_chunk($days, 7);
 
+        foreach ($this->weeks as &$week) {
+            foreach ($week as &$item) {
+                if ($item["day"] == 1) {
+                    $item["items"] = [
+                        [
+                            "name" => "Fresher's Day",
+                            "date" => "11/10/2023",
+                            "start_time" => "10.00 A.M",
+                            "location" => "UCSC Grounds"
+                        ]
+                    ];
+                }
+            }
+        }
+
         return [
             "previous_params" => "month=" . $this->prev_datetime->format('m') . "&year=" . $this->prev_datetime->format('Y'),
             "next_params" => "month=" . $this->next_datetime->format('m') . "&year=" . $this->next_datetime->format('Y'),

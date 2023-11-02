@@ -12,7 +12,8 @@ class User extends Modal
         "nic",
         "image",
         "is_blacklisted",
-        "is_verified"
+        "is_verified",
+        "description"
     ];
 
     public function validateRegister($data)

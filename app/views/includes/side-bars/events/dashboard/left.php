@@ -1,10 +1,16 @@
+<?php
+$side_bar_user = new User();
+$side_bar_auth_user_id = Auth::getId();
+$side_bar_user = $side_bar_user->one(["id" => $side_bar_auth_user_id]);
+?>
+
 <section class="side-bar event-dashboard-side-bar left">
     <div class="inner-section no-border profile-section">
-        <img src="https://picsum.photos/100/100" alt="Profile Image" class="image">
+        <img src="<?php echo (!empty($side_bar_user->image)) ? $side_bar_user->image : ROOT . '/assets/images/other/empty-profile.jpg' ?>" alt="Profile Image" class="image">
 
         <div class="details">
-            <span class="name">Terance Edmonds</span>
-            <p class="desc">Bio Description here!</p>
+            <span class="name"><?= $side_bar_user->first_name ?> <?= $side_bar_user->last_name ?></span>
+            <p class="desc"><?= $side_bar_user->description ?></p>
         </div>
     </div>
 

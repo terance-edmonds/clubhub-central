@@ -40,6 +40,7 @@ class Profile extends Controller
                 "current_path" => "/"
             ]
         ];
+
         $data = [
             "left_bar" => $left_bar,
             "alerts" => [],
@@ -51,7 +52,7 @@ class Profile extends Controller
             if ($_POST['submit'] === 'update_profile') {
                 $_POST['id'] = $auth_user['id'];
                 $image_uploaded = true;
-                $update_data = ["first_name" => $_POST['first_name'], "last_name" => $_POST['last_name']];
+                $update_data = $_POST;
 
                 if (!empty($_FILES['image']['name'])) {
                     $file_upload = uploadFile('image');
@@ -102,6 +103,7 @@ class Profile extends Controller
             if ($result->email) $_POST['email'] = $result->email;
             if ($result->image) $_POST['image'] = $result->image;
             if ($result->nic) $_POST['nic'] = $result->nic;
+            if ($result->description) $_POST['description'] = $result->description;
         }
     }
 }
