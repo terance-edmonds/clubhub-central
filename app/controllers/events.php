@@ -96,6 +96,7 @@ class Events extends Controller
                             $_SESSION['alerts'] = [["status" => "success", "message" => "Sponsor details added successfully"]];
                             redirect();
                         } catch (Throwable $th) {
+                            var_dump($th);
                             $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to add sponsor details"]];
                         }
                     } else {
