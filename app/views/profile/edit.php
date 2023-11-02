@@ -60,6 +60,14 @@
                                 <?php endif; ?>
                             </div>
                         </div>
+
+                        <div class="input-wrap">
+                            <label for="description">Description</label>
+                            <textarea id="description" name="description" placeholder="Description"><?= setValue('description') ?></textarea>
+                            <?php if (!empty($errors['description'])) : ?>
+                                <small><?= $errors['description'] ?></small>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 </div>
 

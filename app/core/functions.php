@@ -41,7 +41,7 @@ function displayValue($val, $format = 'text')
     if (empty($val)) $val = '-';
 
     if ($format == 'datetime') {
-        $moment = new \Moment\Moment();
+        $moment = new \Moment\Moment($val);
         $val = $moment->format('d/m/Y - h:m A');
     }
 

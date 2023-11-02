@@ -124,6 +124,11 @@ input {
     .preview-image {
         display: none;
         max-width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top;
+        border-radius: 8px;
+        width: 100%;
 
         &[data-show='true'] {
             display: block;

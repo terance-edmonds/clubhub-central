@@ -52,17 +52,38 @@ class ModCalendar
         $days_in_month = $this->datetime->format('t');
         $day_month_starts = $this->datetime->format('N');
 
-        $days = array_fill(0, ($day_month_starts - 1), '');
+        $days = array_fill(0, ($day_month_starts - 1), [
+            "day" => ''
+        ]);
 
         for ($i = 1; $i <= $days_in_month; $i++) {
-            $days[] = $i;
+            $days[] = [
+                "day" => $i
+            ];
         }
 
         while (count($days) % 7 != 0) {
-            $days[] = '';
+            $days[] = [
+                "day" => ''
+            ];
         }
 
         $this->weeks = array_chunk($days, 7);
+
+        foreach ($this->weeks as &$week) {
+            foreach ($week as &$item) {
+                if ($item["day"] == 1) {
+                    $item["items"] = [
+                        [
+                            "name" => "Fresher's Day",
+                            "date" => "11/10/2023",
+                            "start_time" => "10.00 A.M",
+                            "location" => "UCSC Grounds"
+                        ]
+                    ];
+                }
+            }
+        }
 
         return [
             "previous_params" => "month=" . $this->prev_datetime->format('m') . "&year=" . $this->prev_datetime->format('Y'),

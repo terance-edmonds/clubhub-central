@@ -58,4 +58,78 @@
             height: 110px;
         }
     }
+
+    .calendar-cell {
+        .cell-content {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            height: 100%;
+
+            .content {
+                display: flex;
+                flex-direction: column;
+                gap: 3px;
+
+                .item {
+                    position: relative;
+                    cursor: pointer;
+
+                    .name {
+                        background-color: $secondary_theme;
+                        padding: 2px 4px;
+                        border-radius: 5px;
+                        color: $dark;
+                        font-size: $px14;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    .pop-over {
+                        visibility: hidden;
+                        top: 0;
+                        right: 0;
+                        position: absolute;
+                        min-height: 100px;
+                        min-width: 250px;
+                        background-color: $green-light;
+                        border-radius: 5px;
+                        opacity: 0;
+                        padding: 10px;
+                        transition: all 0.4s ease;
+                        z-index: 2;
+                        font-size: $px14;
+
+                        .name {
+                            padding: 0;
+                            background-color: transparent;
+                            color: #fff;
+                            font-weight: 600;
+                            margin-bottom: 10px;
+                            font-size: 1rem;
+                        }
+
+                        .info-wrap {
+                            display: flex;
+                            gap: 5px;
+
+                            .icon-wrap {
+                                span {
+                                    font-size: $px14;
+                                }
+                            }
+                        }
+                    }
+
+                    &:hover {
+                        .pop-over {
+                            opacity: 100%;
+                            visibility: visible;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
