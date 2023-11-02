@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="popup-body">
-            Are you sure you want to delete this item?
+            Are you sure you want to delete this expense details?
             <form class="form" method="post">
                 <input name="id" type="text" hidden>
                 <button name="submit" value="delete-expense" class="button contained">Delete</button>
