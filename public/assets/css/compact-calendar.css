@@ -76,35 +76,20 @@
 }
 .compact-calendar .top-bar {
   padding: 10px;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: space-between;
+  align-items: center;
 }
 .compact-calendar .top-bar .center {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   gap: 10px;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+  flex-wrap: wrap;
   font-weight: 500;
 }
 .compact-calendar .top-bar .icon-wrap {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
   padding: 2px;
   background-color: #161616;
   border-radius: 7px;
@@ -135,16 +120,9 @@
   height: 40px;
 }
 .compact-calendar .calendar-table td .td {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  flex-direction: column;
+  align-items: center;
   gap: 2px;
 }
 .compact-calendar .calendar-table td .td .dot {
@@ -152,4 +130,4 @@
   height: 4px;
   border-radius: 50%;
   background-color: #7dff7a;
-}
+}/*# sourceMappingURL=compact-calendar.css.map */

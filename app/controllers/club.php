@@ -43,7 +43,7 @@ class Club extends Controller
             ["id" => "requests", "name" => "Requests", "icon" => "crisis_alert", "path" => "/club/dashboard/requests", "active" => "false"],
             ["id" => "posts", "name" => "Posts", "icon" => "history_edu", "path" => "/club/dashboard/posts", "active" => "false"],
             ["id" => "logs", "name" => "Logs", "icon" => "article", "path" => "/club/dashboard/logs", "active" => "false"],
-            ["id" => "committee_election", "name" => "Committee Election", "icon" => "how_to_vote", "path" => "/club/dashboard/committee_election", "active" => "false"],
+            ["id" => "election", "name" => "Election", "icon" => "how_to_vote", "path" => "/club/dashboard/election", "active" => "false"],
         ];
         /* update the active menu item */
         foreach ($menu as $x => &$val) {
@@ -105,7 +105,7 @@ class Club extends Controller
 
         $this->view($path, $data);
     }
-    private function committee_election($path, $data){
+    private function election($path, $data){
         $this->view($path,$data);
     }
 }
