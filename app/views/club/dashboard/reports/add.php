@@ -24,7 +24,7 @@
                         <div class="multi-wrap">
                             <div class="input-wrap">
                                 <label for="name">Report Name</label>
-                                <input value="<?= setValue('name') ?>" id="name" type="text" name="name" placeholder="Meeting Name" required>
+                                <input value="<?= setValue('name') ?>" id="name" type="text" name="name" placeholder="Report Name" required>
                                 <?php if (!empty($errors['name'])) : ?>
                                     <small><?= $errors['name'] ?></small>
                                 <?php endif; ?>
@@ -51,7 +51,7 @@
                             </div>
                             <div class="input-wrap">
                                 <label for="end_datetime">End Date & Time</label>
-                                <input value="<?= setValue('end_datetime') ?>" id="end_datetime" type="time" name="end_datetime" placeholder="End Date & Time" required>
+                                <input value="<?= setValue('end_datetime') ?>" id="end_datetime" type="datetime-local" name="end_datetime" placeholder="End Date & Time" required>
                                 <?php if (!empty($errors['end_datetime'])) : ?>
                                     <small><?= $errors['end_datetime'] ?></small>
                                 <?php endif; ?>

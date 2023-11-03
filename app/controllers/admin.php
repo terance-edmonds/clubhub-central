@@ -15,7 +15,7 @@ class Admin extends Controller
 
         /* use outlined icons */
         $menu = [
-            ["id" => "clubs", "name" => "Clubs", "icon" => "info", "path" => ["/admin/dashboard", "/admin/dashboard/add"], "active" => "false"],
+            ["id" => "clubs", "name" => "Clubs", "icon" => "info", "path" => ["/admin/dashboard", "/admin/dashboard/club/add"], "active" => "false"],
             ["id" => "events", "name" => "Events", "icon" => "app_registration", "path" => "/admin/dashboard/events", "active" => "false"],
             ["id" => "requests", "name" => "Requests", "icon" => "diversity_3", "path" => "/admin/dashboard/requests", "active" => "false"],
             ["id" => "users", "name" => "Users", "icon" => "people", "path" => "/admin/dashboard/users", "active" => "false"],
@@ -42,8 +42,8 @@ class Admin extends Controller
 
         try {
             $db->transaction();
-
             if ($_SERVER['REQUEST_METHOD'] == "POST") {
+
                 $form_data = $_POST;
                 $link_path = "register";
 
@@ -79,14 +79,14 @@ class Admin extends Controller
                             "from_email" => MAIL_USER,
                             "from_name" => MAIL_USERNAME,
                             "club_name" => $form_data["name"],
-                            "invitation_link" => ROOT . "/" . $link_path . "/verify?token=" . $user_invitation_data["token"]
+                            "invitation_link" => ROOT . "/" . $link_path . "?token=" . $user_invitation_data["invitation_code"]
                         ])
                     ]);
 
                     $_SESSION['alerts'] = [["status" => "success", "message" => "Club account created and club in charge email sent successfully"]];
                     $redirect_link = "admin/dashboard";
                 }
-                var_dump($club->errors);
+                //var_dump($club->errors);
                 $data['errors'] = $club->errors;
             }
 
@@ -95,12 +95,12 @@ class Admin extends Controller
 
             $db->commit();
         } catch (\Throwable $th) {
-            var_dump($th);
+            //var_dump($th);
             $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to process the action, please try again later."]];
             $db->rollback();
         }
 
-        if ($_SERVER['REQUEST_METHOD'] == "POST") redirect($redirect_link);
+        if ($_SERVER['REQUEST_METHOD'] == "POST" &&  count($data['errors']) == 0) redirect($redirect_link);
 
         $this->view($path, $data);
     }

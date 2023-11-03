@@ -69,8 +69,13 @@
 }
 
 #profile-edit .center-section .content-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   gap: 30px;
 }
 #profile-edit .center-section .content-section .form {
@@ -88,11 +93,18 @@
   border: none;
 }
 #profile-edit .center-section .content-section .buttons-wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 #profile-edit .center-section .content-section .buttons-wrap .button {
+  max-width: -webkit-fit-content;
   max-width: -moz-fit-content;
   max-width: fit-content;
-}/*# sourceMappingURL=edit-profile.css.map */
+}

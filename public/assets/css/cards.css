@@ -69,13 +69,23 @@
 }
 
 .cards {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   gap: 20px;
 }
 .cards .club-post {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   gap: 15px;
   width: 100%;
   background-color: #161616;
@@ -84,6 +94,8 @@
   border-radius: 12px;
 }
 .cards .club-post .top {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   gap: 15px;
 }
@@ -97,18 +109,28 @@
   border-radius: 8px;
 }
 .cards .club-post .top .details {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   gap: 5px;
 }
 .cards .club-post .top .details .club-title {
   font-size: 1.25em;
+  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
 }
 .cards .club-post .top .details .other-details {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   gap: 10px;
   color: #94d1be;
 }
@@ -131,8 +153,13 @@
   color: #e7e7e7;
 }
 .cards .event-post {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   gap: 15px;
   width: 100%;
   background-color: #161616;
@@ -141,6 +168,8 @@
   border-radius: 12px;
 }
 .cards .event-post .top {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   gap: 15px;
 }
@@ -154,18 +183,28 @@
   border-radius: 8px;
 }
 .cards .event-post .top .details {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   gap: 5px;
 }
 .cards .event-post .top .details .club-title {
   font-size: 1.25em;
+  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
 }
 .cards .event-post .top .details .other-details {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   gap: 10px;
   color: #94d1be;
 }
@@ -197,15 +236,25 @@
   gap: 20px;
 }
 .cards .event-post .details-wrap .detail-wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   gap: 15px;
   width: 100%;
 }
 .cards .event-post .details-wrap .detail-wrap .icon {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   padding: 10px;
   color: #94d1be;
   background-color: #161616;
@@ -216,8 +265,13 @@
   font-size: 1.5em;
 }
 .cards .event-post .details-wrap .detail-wrap .texts {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   gap: 2px;
   color: #e7e7e7;
-}/*# sourceMappingURL=cards.css.map */
+}

@@ -27,6 +27,7 @@ class Login extends Controller
                         $data['errors']['email'] = "User account has been suspended";
                     } else if (password_verify($_POST['password'], $result->password)) {
                         $params = $_GET;
+                        $success = true;
 
                         if (!empty($params) && !empty($params['token'])) {
                             $invitation_result = $user_invitation->one(["invitation_code" => $params['token'], "is_valid" => 1]);
@@ -46,17 +47,24 @@ class Login extends Controller
                                     $club->update(["id" => $invitation_result->club_id], ["state" => "ACTIVE"]);
                                     $club_member->create($club_member_data);
                                 }
+                            } else {
+                                $success = false;
+                                $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to login, invalid token or token has expired."]];
                             }
                         }
 
-                        Auth::set([
-                            "id" => $result->id,
-                            "first_name" => $result->first_name,
-                            "last_name" => $result->last_name,
-                            "role" => $result->role,
-                        ]);
+                        if ($success) {
+                            Auth::set([
+                                "id" => $result->id,
+                                "first_name" => $result->first_name,
+                                "last_name" => $result->last_name,
+                                "role" => $result->role,
+                            ]);
 
-                        redirect('home');
+                            redirect('home');
+                        } else {
+                            redirect('login');
+                        }
                     } else {
                         $data['errors']['password'] = "Incorrect password";
                     }

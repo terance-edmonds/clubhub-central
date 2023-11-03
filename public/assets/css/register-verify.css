@@ -69,8 +69,12 @@
 }
 
 #register-verify {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   padding: 20px;
 }
 #register-verify .icon.error span {
@@ -81,11 +85,18 @@
   color: #69e4be;
 }
 #register-verify .section {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   gap: 20px;
   width: 100%;
   max-width: 600px;
   text-align: center;
-}/*# sourceMappingURL=register-verify.css.map */
+}

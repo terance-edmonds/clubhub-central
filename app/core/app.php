@@ -83,13 +83,6 @@
         {
             return "../app/controllers/" . $fileName . ".php";
         }
-
-        private function routeAuthenticate($url)
-        {
-
-
-            return false;
-        }
     }
 
     ?>

@@ -21,6 +21,10 @@ class Clubs extends Modal
         if (empty($data['club_in_charge_email'])) $this->errors['club_in_charge_email'] = "Club in charge email is required";
         if (empty($data['created_datetime'])) $this->errors['created_datetime'] = "Created date & time is required";
 
+        if ($this->one(['name' => $data['name']])) {
+            $this->errors['name'] = "Club name already exists";
+        }
+
         if (empty($this->errors)) {
             return true;
         }
