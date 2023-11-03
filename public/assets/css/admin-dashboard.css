@@ -69,11 +69,8 @@
 }
 
 .admin-dashboard .buttons {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   gap: 10px;
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
 }
@@ -120,4 +117,4 @@
 #admin-dashboard-requests .table-wrap .status-button[data-status=REJECTED] {
   color: #ff4646;
   background-color: #392a2d;
-}
+}/*# sourceMappingURL=admin-dashboard.css.map */
