@@ -43,6 +43,19 @@
                     </div>
                 </div>
             <?php } ?>
+
+            <form action="" method="post">
+                <button name="submit" value="logout" class="item logout">
+                    <div class="icon-wrap">
+                        <span class="material-icons-outlined cl-red">
+                            logout
+                        </span>
+                    </div>
+                    <div class="details">
+                        <p class="title cl-red">Logout</p>
+                    </div>
+                </button>
+            </form>
         </div>
     </div>
 
@@ -51,8 +64,8 @@
             Assigned Clubs
         </p>
 
-        <?php if (count($clubs) == 0) { ?>
-            <div class="cards">
+        <div class="cards">
+            <?php if (count($clubs) == 0) { ?>
                 <div class="card">
                     <img loading="lazy" src="https://picsum.photos/110/110" alt="Club Logo" class="club-logo">
                     <div class="details">
@@ -62,8 +75,8 @@
                         </span>
                     </div>
                 </div>
-            </div>
-        <?php } ?>
+            <?php } ?>
+        </div>
 
         <?php if (count($clubs) != 0) { ?>
             <div class="empty-content">

@@ -42,7 +42,7 @@
                         </div>
                         <div class="multi-wrap">
                             <div class="input-wrap">
-                                <label for="created_datetime">Club Name</label>
+                                <label for="created_datetime">Create On</label>
                                 <input set-default="datetime" readonly value="<?= setValue('created_datetime') ?>" id="created_datetime" type="datetime-local" name="created_datetime" placeholder="Created Date & Time" required>
                                 <?php if (!empty($errors['created_datetime'])) : ?>
                                     <small><?= $errors['created_datetime'] ?></small>

@@ -30,6 +30,7 @@
                 <table>
                     <tr class="table-header">
                         <th>Event Name</th>
+                        <th>Club Name</th>
                         <th>Date & Time</th>
                         <th>Venue</th>
                         <th>View</th>
@@ -38,6 +39,7 @@
                     </tr>
                     <tr class="table-data">
                         <td>Freshers' Day</td>
+                        <td>IEEE</td>
                         <td>11/04/23 - 10.00 AM</td>
                         <td>UCSC Ground</td>
                         <td align="center">
@@ -71,6 +73,7 @@
                     </tr>
                     <tr class="table-data">
                         <td>Freshers' Day</td>
+                        <td>LEO</td>
                         <td>11/04/23 - 10.00 AM</td>
                         <td>UCSC Ground</td>
                         <td align="center">
@@ -102,6 +105,7 @@
                     </tr>
                     <tr class="table-data">
                         <td>Freshers' Day</td>
+                        <td>Pahasara</td>
                         <td>11/04/23 - 10.00 AM</td>
                         <td>UCSC Ground</td>
                         <td align="center">

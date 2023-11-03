@@ -269,6 +269,10 @@
   background-color: #161616;
   border-radius: 7px;
 }
+.profile-side-bar .options-section .menu .item.logout {
+  cursor: pointer;
+  width: 100%;
+}
 .profile-side-bar .options-section .menu .item[data-active=true] {
   border-color: #69e4be;
 }

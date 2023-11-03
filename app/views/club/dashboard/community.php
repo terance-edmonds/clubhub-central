@@ -31,7 +31,7 @@
             <form class="chat-form" action="" method="post">
                 <div class="input-wrap">
                     <label for="name">Add a Comment</label>
-                    <input value="<?= setValue('name') ?>" id="name" type="text" name="name" placeholder="Meeting Name" required>
+                    <input value="<?= setValue('name') ?>" id="name" type="text" name="name" placeholder="Comment.." required>
                     <?php if (!empty($errors['name'])) : ?>
                         <small><?= $errors['name'] ?></small>
                     <?php endif; ?>

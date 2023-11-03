@@ -27,6 +27,14 @@ class Profile extends Controller
 
         if (isset($params["tab"])) $data["tab"] = $params["tab"];
 
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            if ($_POST['submit'] == 'logout') {
+                Auth::logout();
+
+                redirect('login');
+            }
+        }
+
         $this->view("profile", $data);
     }
 
@@ -49,7 +57,7 @@ class Profile extends Controller
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             /* update profile details */
-            if ($_POST['submit'] === 'update_profile') {
+            if ($_POST['submit'] == 'update_profile') {
                 $_POST['id'] = $auth_user['id'];
                 $image_uploaded = true;
                 $update_data = $_POST;
