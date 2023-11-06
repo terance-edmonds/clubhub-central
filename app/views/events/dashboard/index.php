@@ -95,7 +95,7 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button class="button contained">Save Event</button>
+                    <button type="submit" class="button contained">Save Event</button>
                 </div>
             </form>
         </div>
@@ -170,3 +170,4 @@
 </div>
 
 <script src="<?= ROOT ?>/assets/js/events/edit-event.js"></script>
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

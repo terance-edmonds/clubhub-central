@@ -18,7 +18,7 @@ class ClubMember extends Modal
         if (empty($data['club_id'])) $this->errors['club_id'] = "Club ID is required";
         if (empty($data['role'])) $this->errors['role'] = "Role is required";
 
-        /* check if nic exists */
+        /* check if user exists */
         if ($this->one(['user_id' => $data['user_id'], 'club_id' => $data['club_id']])) {
             $this->errors['user_id'] = "User already assigned to the club";
         }

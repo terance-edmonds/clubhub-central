@@ -32,7 +32,7 @@
             </div>
             <a href="/forgot-password" class="cl-theme f-14">Forgot Password?</a>
 
-            <button class="button contained">Login</button>
+            <button type="submit" class="button contained">Login</button>
 
             <div class="bottom-text">
                 Don't have an account? <a href="<?= ROOT ?>/register" class="cl-theme">Register here</a>
@@ -42,3 +42,4 @@
 </div>
 
 <script src="<?= ROOT ?>/assets/js/common.js"></script>
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

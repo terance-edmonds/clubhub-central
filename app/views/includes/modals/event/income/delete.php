@@ -12,8 +12,10 @@
             Are you sure you want to delete this income details?
             <form class="form" method="post">
                 <input name="id" type="text" hidden>
-                <button name="submit" value="delete-income" class="button contained">Delete</button>
+                <button type="submit" name="submit" value="delete-income" class="button contained">Delete</button>
             </form>
         </div>
     </div>
 </div>
+
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

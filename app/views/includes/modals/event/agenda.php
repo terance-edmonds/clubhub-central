@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="popup-body">
-            <form class="form">
+            <form class="form" method="post">
                 <div class="input-wrap">
                     <label for="agenda_name">Agenda Name</label>
                     <input id="agenda_name" type="text" placeholder="Agenda Name" required>
@@ -23,8 +23,10 @@
                     <input id="location" type="text" placeholder="Location">
                 </div>
 
-                <button class="button contained">Submit</button>
+                <button type="submit" class="button contained">Submit</button>
             </form>
         </div>
     </div>
 </div>
+
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

@@ -20,7 +20,7 @@
                 </div>
                 <div class="input-wrap">
                     <label for="contact_person">Contact Person</label>
-                    <input value="<?= setValue('contact_person') ?>"id="contact_person" name="contact_person" type="text" placeholder="Contact Person" required>
+                    <input value="<?= setValue('contact_person') ?>" id="contact_person" name="contact_person" type="text" placeholder="Contact Person" required>
                     <?php if (!empty($errors['contact_person'])) : ?>
                         <small><?= $errors['contact_person'] ?></small>
                     <?php endif; ?>
@@ -41,7 +41,7 @@
                 </div>
                 <div class="input-wrap">
                     <label for="amount">Amount</label>
-                    <input value="<?= setValue('amount') ?>"id="amount" name="amount" type="text" placeholder="Amount" required>
+                    <input value="<?= setValue('amount') ?>" id="amount" name="amount" type="text" placeholder="Amount" required>
                     <?php if (!empty($errors['amount'])) : ?>
                         <small><?= $errors['amount'] ?></small>
                     <?php endif; ?>
@@ -55,8 +55,10 @@
                     <input id="package" type="text" placeholder="Package" required>
                 </div> -->
 
-                <button name="submit" value="add-sponsor" class="button contained">Submit</button>
+                <button type="submit" name="submit" value="add-sponsor" class="button contained">Submit</button>
             </form>
         </div>
     </div>
 </div>
+
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

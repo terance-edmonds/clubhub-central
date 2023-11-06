@@ -56,8 +56,10 @@
                     <input id="package" type="text" placeholder="Package" required>
                 </div> -->
 
-                <button name="submit" value="edit-sponsor" class="button contained">Submit</button>
+                <button type="submit" name="submit" value="edit-sponsor" class="button contained">Submit</button>
             </form>
         </div>
     </div>
 </div>
+
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

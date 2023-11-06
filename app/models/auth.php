@@ -15,9 +15,7 @@ class Auth extends Routes
 
     public static function logged()
     {
-        if (!empty($_SESSION['USER'])) return true;
-
-        return false;
+        session_destroy();
     }
 
     public static function authenticate($get = [])
@@ -30,14 +28,23 @@ class Auth extends Routes
 
         if (in_array('ANY', $route_auth)) return true;
 
-        if (empty($_SESSION['USER'])) return redirect("not-found");
+        if (empty($_SESSION['USER'])) return redirect("login");
 
         $auth_user = $_SESSION['USER'];
-        if (!in_array($auth_user['role'], $route_auth)) {
-            return redirect("not-found");
+
+        if (in_array($auth_user['role'], $route_auth)) {
+            return true;
+        } else {
+            $storage = new Storage();
+            $club_id = $storage->get('club_id');
+            $club_role = $storage->get('club_role');
+
+            if (!empty($club_id) && in_array($club_role, $route_auth)) {
+                return true;
+            }
         }
 
-        return true;
+        return redirect("not-found");
     }
 
     public static function user()

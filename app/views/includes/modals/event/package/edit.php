@@ -27,8 +27,10 @@
                     <?php endif; ?>
                 </div>
 
-                <button name="submit" value="edit-package" class="button contained">Save</button>
+                <button type="submit" name="submit" value="edit-package" class="button contained">Save</button>
             </form>
         </div>
     </div>
 </div>
+
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

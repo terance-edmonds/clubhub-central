@@ -104,6 +104,8 @@
             }
 
             .card {
+                width: 100%;
+                background-color: transparent;
                 display: flex;
                 gap: 16px;
                 align-items: center;
@@ -111,6 +113,7 @@
                 border: 1px solid $border;
                 border-left: 0;
                 border-right: 0;
+                cursor: pointer;
 
                 .club-logo {
                     width: 70px;

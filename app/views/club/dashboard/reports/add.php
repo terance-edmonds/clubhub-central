@@ -61,9 +61,11 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button class="button contained">Generate</button>
+                    <button type="submit" class="button contained">Generate</button>
                 </div>
             </form>
         </div>
     </section>
 </div>
+
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

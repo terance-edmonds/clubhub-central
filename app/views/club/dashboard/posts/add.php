@@ -42,9 +42,11 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button name="submit" value="update_profile" class="button contained">Create Post</button>
+                    <button type="submit" name="submit" value="update_profile" class="button contained">Create Post</button>
                 </div>
             </form>
         </div>
     </section>
 </div>
+
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

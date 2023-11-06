@@ -13,7 +13,7 @@
         <div class="title-bar">
             <div class="title-wrap">
                 <span class="title">Events</span>
-                <a href="<?= ROOT ?>/events/dashboard/add-event">
+                <a href="<?= ROOT ?>/club/dashboard/events/add">
                     <button class="button" data-variant="outlined" data-type="icon" data-size="small">
                         <span>Add Event</span>
                         <span class="material-icons-outlined">

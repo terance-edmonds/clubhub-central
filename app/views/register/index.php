@@ -39,13 +39,6 @@
                     <small><?= $errors['email'] ?></small>
                 <?php endif; ?>
             </div>
-            <div class="input-wrap">
-                <label for="nic">NIC</label>
-                <input value="<?= setValue('nic') ?>" id="nic" type="text" name="nic" placeholder="NIC" required>
-                <?php if (!empty($errors['nic'])) : ?>
-                    <small><?= $errors['nic'] ?></small>
-                <?php endif; ?>
-            </div>
             <div class="multi-wrap">
                 <div class="input-wrap">
                     <label for="password">Password</label>
@@ -63,7 +56,7 @@
                 </div>
             </div>
 
-            <button class="button contained">Register</button>
+            <button type="submit" class="button contained">Register</button>
 
             <div class="bottom-text">
                 Already have an account? <a href="<?= ROOT ?>/login" class="cl-theme">Login here</a>
@@ -76,3 +69,4 @@
 
 <script src="<?= ROOT ?>/assets/js/common.js"></script>
 <script src="<?= ROOT ?>/assets/js/register.js"></script>
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

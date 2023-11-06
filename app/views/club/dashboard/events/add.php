@@ -7,7 +7,7 @@
 <?php $this->view('includes/header') ?>
 
 <div id="event-dashboard-event-add" class="container container-sections side-padding event-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/events/dashboard/left', ["menu" => $menu])  ?>
+    <?php $this->view('includes/side-bars/club/dashboard/left', ["menu" => $menu])  ?>
 
     <section class="center-section no-padding">
         <div class="title-bar set-padding">
@@ -143,7 +143,7 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button class="button contained">Create Event</button>
+                    <button type="submit" class="button contained">Create Event</button>
                 </div>
             </form>
         </div>
@@ -216,3 +216,4 @@
 </div>
 
 <script src="<?= ROOT ?>/assets/js/events/edit-event.js"></script>
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

@@ -44,21 +44,12 @@
                                 <?php endif; ?>
                             </div>
                         </div>
-                        <div class="multi-wrap">
-                            <div class="input-wrap">
-                                <label for="email">Email Address</label>
-                                <input disabled value="<?= setValue('email') ?>" id="email" type="email" name="email" placeholder="Email Address">
-                                <?php if (!empty($errors['email'])) : ?>
-                                    <small><?= $errors['email'] ?></small>
-                                <?php endif; ?>
-                            </div>
-                            <div class="input-wrap">
-                                <label for="nic">NIC</label>
-                                <input disabled value="<?= setValue('nic') ?>" id="nic" type="text" name="nic" placeholder="NIC">
-                                <?php if (!empty($errors['nic'])) : ?>
-                                    <small><?= $errors['nic'] ?></small>
-                                <?php endif; ?>
-                            </div>
+                        <div class="input-wrap">
+                            <label for="email">Email Address</label>
+                            <input disabled value="<?= setValue('email') ?>" id="email" type="email" name="email" placeholder="Email Address">
+                            <?php if (!empty($errors['email'])) : ?>
+                                <small><?= $errors['email'] ?></small>
+                            <?php endif; ?>
                         </div>
 
                         <div class="input-wrap">
@@ -72,7 +63,7 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button name="submit" value="update_profile" class="button contained">Save Details</button>
+                    <button type="submit" name="submit" value="update_profile" class="button contained">Save Details</button>
                 </div>
             </form>
 
@@ -109,7 +100,7 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button name="submit" value="change_password" class="button contained">Change Password</button>
+                    <button type="submit" name="submit" value="change_password" class="button contained">Change Password</button>
                 </div>
             </form>
         </div>
@@ -117,3 +108,4 @@
 </div>
 
 <script src="<?= ROOT ?>/assets/js/common.js"></script>
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

@@ -51,7 +51,7 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button class="button contained">Send Request</button>
+                    <button type="submit" class="button contained">Send Request</button>
                 </div>
             </form>
         </div>
@@ -59,4 +59,6 @@
 </div>
 
 <?php $this->view('includes/modals/event/register')  ?>
+
 <script src="<?= ROOT ?>/assets/js/events/event.js"></script>
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

@@ -36,7 +36,7 @@
                         <small><?= $errors['name'] ?></small>
                     <?php endif; ?>
                 </div>
-                <button class="button" data-type="icon" data-size="small">
+                <button type="submit" class="button" data-type="icon" data-size="small">
                     <span class="material-icons-outlined">
                         send
                     </span>
@@ -45,3 +45,5 @@
         </div>
     </section>
 </div>
+
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

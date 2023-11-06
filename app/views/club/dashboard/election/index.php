@@ -1,4 +1,3 @@
-
 <head>
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/side-bar.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/dashboard.css">
@@ -14,7 +13,7 @@
         <div class="title-bar">
             <div class="title-wrap">
                 <span class="title">Elections</span>
-                <a href="<?= ROOT ?>/club/dashboard/committee_election/add">
+                <a href="<?= ROOT ?>/club/dashboard/election/add">
                     <button class="button" data-variant="outlined" data-type="icon" data-size="small">
                         <span>New Election</span>
                         <span class="material-icons-outlined">
@@ -34,12 +33,12 @@
             </div>
         </div>
 
-         <div class="content-section">
+        <div class="content-section">
             <div class="table-wrap">
                 <table>
                     <tr class="table-header">
                         <th>Name</th>
-                        <th>Canditates</th>
+                        <th>Candidates</th>
                         <th>Votes</th>
                         <th>View</th>
                         <th>Status</th>

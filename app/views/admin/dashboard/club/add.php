@@ -53,7 +53,7 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button class="button contained">Create Club</button>
+                    <button type="submit" class="button contained">Create Club</button>
                 </div>
             </form>
         </div>

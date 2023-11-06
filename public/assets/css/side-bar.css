@@ -370,6 +370,8 @@
   padding-bottom: 0;
 }
 .profile-side-bar.right .clubs-section .card {
+  width: 100%;
+  background-color: transparent;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -381,6 +383,7 @@
   border: 1px solid #2d2d2d;
   border-left: 0;
   border-right: 0;
+  cursor: pointer;
 }
 .profile-side-bar.right .clubs-section .card .club-logo {
   width: 70px;

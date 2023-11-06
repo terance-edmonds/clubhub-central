@@ -55,8 +55,10 @@
                     <?php endif; ?>
                 </div>
 
-                <button name="submit" value="edit-expense" class="button contained">Submit</button>
+                <button type="submit" name="submit" value="edit-expense" class="button contained">Submit</button>
             </form>
         </div>
     </div>
 </div>
+
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

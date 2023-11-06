@@ -81,7 +81,7 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button class="button contained">Schedule</button>
+                    <button type="submit" class="button contained">Schedule</button>
                 </div>
             </form>
         </div>
@@ -99,3 +99,4 @@
 </div>
 
 <script src="<?= ROOT ?>/assets/js/club/dashboard/edit-meeting.js"></script>
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

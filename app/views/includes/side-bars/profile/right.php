@@ -44,7 +44,7 @@
                 </div>
             <?php } ?>
 
-            <form action="" method="post">
+            <form method="post">
                 <button name="submit" value="logout" class="item logout">
                     <div class="icon-wrap">
                         <span class="material-icons-outlined cl-red">
@@ -65,27 +65,32 @@
         </p>
 
         <div class="cards">
-            <?php if (count($clubs) == 0) { ?>
-                <div class="card">
-                    <img loading="lazy" src="https://picsum.photos/110/110" alt="Club Logo" class="club-logo">
-                    <div class="details">
-                        <a href="<?= ROOT ?>/club/dashboard" class="title">IEEE</a>
-                        <span class="material-icons-outlined">
-                            chevron_right
-                        </span>
+            <?php if (count($clubs) > 0) { ?>
+                <?php foreach ($clubs as $x => $club) { ?>
+                    <form method="post">
+                        <input type="text" name="club_id" value="<?= $club->club_id ?>" hidden>
+                        <input type="text" name="club_role" value="<?= $club->club_role ?>" hidden>
+                        <button name="submit" value="club-redirect" class="card">
+                            <img loading="lazy" src="<?= $club->club_image ?>" alt="Club Logo" class="club-logo">
+                            <div class="details">
+                                <p class="title"><?= $club->club_name ?></p>
+                                <span class="material-icons-outlined">
+                                    chevron_right
+                                </span>
+                            </div>
+                        </button>
+                    </form>
+                <?php }
+            } else { ?>
+                <div class="empty-content">
+                    <img loading="lazy" src="<?= ROOT ?>/assets/images/other/empty.png" alt="Not Found" class="empty-image">
+                    <div class="titles">
+                        <span class="title">No Clubs Yet</span>
+                        <span class="sub-title">You are not assigned under any club yet</span>
                     </div>
                 </div>
             <?php } ?>
-        </div>
 
-        <?php if (count($clubs) != 0) { ?>
-            <div class="empty-content">
-                <img loading="lazy" src="<?= ROOT ?>/assets/images/other/empty.png" alt="Not Found" class="empty-image">
-                <div class="titles">
-                    <span class="title">No Clubs Yet</span>
-                    <span class="sub-title">You are not assigned under any club yet</span>
-                </div>
-            </div>
-        <?php } ?>
+        </div>
     </div>
 </section>

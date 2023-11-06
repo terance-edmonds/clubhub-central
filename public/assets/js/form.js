@@ -11,7 +11,8 @@ const onDataPopup = (name, data = {}) => {
     $(`[popup-name=${name}]`).popup(true);
 };
 
-(() => {
+/* set default values for inputs */
+const setDefaultInputValues = () => {
     const inputs = $(`[set-default]`);
 
     for (const input of inputs) {
@@ -27,4 +28,24 @@ const onDataPopup = (name, data = {}) => {
             obj.val(moment().format('HH:mm'));
         }
     }
+};
+
+/* set button to loading state after submission */
+const setButtonLoading = () => {
+    const forms = $('form');
+
+    forms.each(function () {
+        const form = $(this);
+
+        form.on('submit', function (event) {
+            const button = $(this).find('[type="submit"]');
+
+            button.attr('data-loading', 'true');
+        });
+    });
+};
+
+(() => {
+    setDefaultInputValues();
+    setButtonLoading();
 })();

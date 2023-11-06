@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="popup-body">
-            <form class="form">
+            <form class="form" method="post">
                 <div class="input-wrap">
                     <label for="full_name">Full Name</label>
                     <input id="full_name" type="text" placeholder="Full Name" required>
@@ -23,8 +23,10 @@
                     <input id="contact_number" type="text" placeholder="Contact Number" required>
                 </div>
 
-                <button class="button contained">Submit</button>
+                <button type="submit" class="button contained">Submit</button>
             </form>
         </div>
     </div>
 </div>
+
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

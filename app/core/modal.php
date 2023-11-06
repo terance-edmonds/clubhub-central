@@ -41,21 +41,43 @@ class Modal
         return $result;
     }
 
-    public function find($data = [])
+    public function find($data = [], $attributes = [], $include = [])
     {
         $keys = array_keys($data);
 
-        $query = "select * from " . $this->table;
+        $query = "select ";
+        /* set attributes */
+        if (count($attributes) > 0) {
+            foreach ($attributes as $attribute) {
+                $query .= $attribute . ", ";
+            }
+        } else {
+            $query .= "* ";
+        }
+        $query = trim($query, ", ");
+
+        /* set table */
+        $query .= " from " . $this->table;
+
+        /* left join */
+        if (count($include) > 0) {
+            foreach ($include as $item) {
+                $query .= " left join " . $item['table'] . " as " . $item['as'] . " on " . $item['on'];
+            }
+        }
+
+        /* where clause */
         if (count($data) > 0) {
             $query .= " where ";
         }
-
         foreach ($keys as $key) {
             $query .= $key . "=:" . $key . " && ";
         }
-
         $query = trim($query, "&& ");
-        $query .= " order by id $this->order limit $this->limit offset $this->offset";
+
+        /* order by */
+        $query .= " order by $this->table.id $this->order limit $this->limit offset $this->offset";
+
         $res = $this->db->query($query, $data);
 
         if (is_array($res)) {

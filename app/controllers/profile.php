@@ -13,25 +13,49 @@ class Profile extends Controller
             "clubs" => [],
             "menu" => [
                 ["id" => "profile", "name" => "Profile Details", "icon" => "info", "path" => "/profile/edit"],
-                ["id" => "system", "name" => "Manage System", "icon" => "dashboard", "path" => "/admin/dashboard"]
-
             ]
         ];
 
+        /* if super admin add the menu item */
+        $auth_user = Auth::user();
+        if ($auth_user['role'] == 'SUPER_ADMIN') {
+            array_push($right_bar["menu"], ["id" => "system", "name" => "Manage System", "icon" => "dashboard", "path" => "/admin/dashboard"]);
+        }
+
+        /* fetch clubs */
+        $member_clubs = new ClubMember();
+        $right_bar["clubs"] = $member_clubs->find(
+            ["user_id" => $auth_user['id']],
+            ["role as club_role", "club.id as club_id", "club.name as club_name", "club.image as club_image"],
+            [
+                ["table" => "clubs", "as" => "club", "on" => "club_members.club_id = club.id", "attributes" => ["id", "name"]]
+            ]
+        );
+
+        /* set data */
         $data = [
             "tab" => "gallery",
             "left_bar" => $left_bar,
             "right_bar" => $right_bar,
         ];
         $params = $_GET;
-
         if (isset($params["tab"])) $data["tab"] = $params["tab"];
 
+        /* post requests */
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            /* logout */
             if ($_POST['submit'] == 'logout') {
                 Auth::logout();
 
                 redirect('login');
+            }
+            /* club redirect */
+            if ($_POST['submit'] == 'club-redirect') {
+                $storage = new Storage();
+                $storage->set('club_id', $_POST['club_id']);
+                $storage->set('club_role', $_POST['club_role']);
+
+                redirect('club/dashboard');
             }
         }
 
@@ -110,7 +134,6 @@ class Profile extends Controller
             if ($result->last_name) $_POST['last_name'] = $result->last_name;
             if ($result->email) $_POST['email'] = $result->email;
             if ($result->image) $_POST['image'] = $result->image;
-            if ($result->nic) $_POST['nic'] = $result->nic;
             if ($result->description) $_POST['description'] = $result->description;
         }
     }

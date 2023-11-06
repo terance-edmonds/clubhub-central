@@ -15,7 +15,7 @@
     <section class="center-section">
         <div class="title-bar">
             <div class="title-wrap">
-                <span class="title">Notifications</span>
+                <span class="title">Announcements</span>
             </div>
         </div>
 
@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button name="submit" value="update_profile" class="button contained">Send Email</button>
+                    <button type="submit" name="submit" value="update_profile" class="button contained">Send Email</button>
                 </div>
             </form>
         </div>
@@ -57,3 +57,4 @@
 </div>
 
 <script src="<?= ROOT ?>/assets/js/events/event.js"></script>
+<script src="<?= ROOT ?>/assets/js/form.js"></script>
