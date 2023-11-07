@@ -43,7 +43,7 @@ class Club extends Controller
         }
 
         $menu = [
-            ["id" => "events", "name" => "Events", "icon" => "emoji_events", "path" => ["/club/dashboard", "/club/dashboard/event/add"], "active" => "false"],
+            ["id" => "events", "name" => "Events", "icon" => "emoji_events", "path" => ["/club/dashboard", "/club/dashboard/events/add"], "active" => "false"],
             ["id" => "community", "name" => "Community Chat", "icon" => "mark_unread_chat_alt", "path" => "/club/dashboard/community", "active" => "false"],
             ["id" => "posts", "name" => "Posts", "icon" => "history_edu", "path" => ["/club/dashboard/posts", "/club/dashboard/posts/add"], "active" => "false"],
         ];
@@ -75,6 +75,56 @@ class Club extends Controller
 
     private function events($path, $data)
     {
+        $db = new Database();
+        $storage = new Storage();
+        $event = new Event($db);
+        $event_group = new EventGroup($db);
+        $event_group_member = new EventGroupMember($db);
+
+        $db->transaction();
+
+        try {
+            if ($_SERVER['REQUEST_METHOD'] == "POST") {
+                $form_data = $_POST;
+
+                $club_id = $storage->get('club_id');
+
+                show($form_data);
+                if ($form_data['submit'] == 'create_event') {
+                    if (empty($club_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Club details are not found"]];
+                    else {
+                        $form_data['club_id'] = $club_id;
+
+                        if ($event->validateCreateEvent($form_data)) {
+                            try {
+                                $event->create([
+                                    "name" => $form_data['name'],
+                                    "venue" => $form_data['venue'],
+                                    "start_datetime" => $form_data['start_datetime'],
+                                    "end_datetime" => $form_data['end_datetime'],
+                                    "created_datetime" => $form_data['created_datetime'],
+                                    "description" => $form_data['description']
+                                ]);
+
+                                $_SESSION['alerts'] = [["status" => "success", "message" => "Created an event successfully"]];
+                            } catch (\Throwable $e) {
+                                throw new Error("Failed to create an event");
+                            }
+                        }
+                    }
+                }
+            }
+
+            $data['errors'] = $event->errors;
+
+            $db->commit();
+
+            // if ($_SERVER['REQUEST_METHOD'] == "POST") redirect();
+        } catch (\Throwable $e) {
+            $_SESSION['alerts'] = [["status" => "error", "message" => $e->getMessage() || "Failed to process the action, please try again later."]];
+            $db->rollback();
+        }
+
         $this->view($path, $data);
     }
 

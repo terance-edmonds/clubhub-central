@@ -126,7 +126,7 @@ class Events extends Controller
 
                     redirect();
                 } catch (Throwable $th) {
-                    var_dump($th);
+                    //var_dump($th);
                     $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to delete Sponsor details"]];
                 }
 

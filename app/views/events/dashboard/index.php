@@ -105,9 +105,9 @@
         <div class="multi-wrap">
             <div class="input-wrap">
                 <label for="{{group_name}}-name">Group Name</label>
-                <input value="<?= setValue("{{group_name}}-name") ?>" id="{{group_name}}-name" type="text" name="{{group_name}}-name" placeholder="Group Name" required>
-                <?php if (!empty($errors["{{group_name}}-name"])) : ?>
-                    <small><?= $errors["{{group_name}}-name"] ?></small>
+                <input value="<?= setValue("groups[{{group_name}}][name]") ?>" id="{{group_name}}-name" type="text" name="groups[{{group_name}}][name]" placeholder="Group Name" required>
+                <?php if (!empty($errors["groups[{{group_name}}][name]"])) : ?>
+                    <small><?= $errors["groups[{{group_name}}][name]"] ?></small>
                 <?php endif; ?>
             </div>
             <div class="input-wrap">
@@ -117,33 +117,31 @@
                     <option value="1">Terance</option>
                     <option value="2">Raguram</option>
                 </select>
-                <?php if (!empty($errors['group_member'])) : ?>
-                    <small><?= $errors['group_member'] ?></small>
+                <?php if (!empty($errors['venue'])) : ?>
+                    <small><?= $errors['venue'] ?></small>
                 <?php endif; ?>
             </div>
         </div>
 
-        <div id="{{group_name}}-group_members" class="group-members">
-
-        </div>
+        <div id="{{group_name}}-group_members" class="group-members"></div>
 
         <div class="sub-section">
             <p class="sub-section-title">Allow Access To</p>
             <div class="checkboxes-wrap">
                 <label class="checkbox-label">
-                    <input type="checkbox" name="{{group_name}}-group_access" value="allow_budget_access">
+                    <input type="checkbox" name="groups[{{group_name}}][access][]" value="allow_budget_access">
                     Budgets
                 </label>
                 <label class="checkbox-label">
-                    <input type="checkbox" name="{{group_name}}-group_access" value="allow_event_details_access">
+                    <input type="checkbox" name="groups[{{group_name}}][access][]" value="allow_event_details_access">
                     Event Details
                 </label>
                 <label class="checkbox-label">
-                    <input type="checkbox" name="{{group_name}}-group_access" value="allow_registration_access">
+                    <input type="checkbox" name="groups[{{group_name}}][access][]" value="allow_registration_access">
                     Registration
                 </label>
                 <label class="checkbox-label">
-                    <input type="checkbox" name="{{group_name}}-group_access" value="allow_sponsors_access">
+                    <input type="checkbox" name="groups[{{group_name}}][access][]" value="allow_sponsors_access">
                     Sponsors
                 </label>
             </div>
@@ -161,7 +159,7 @@
     <div class="checkbox-wrap group-member-template">
         <label class="checkbox-label">
             {{group_member_name}}
-            <input hidden type="checkbox" checked name="{{group_name}}-group_member" value="{{group_member_id}}">
+            <input hidden type="checkbox" checked name="groups[{{group_name}}][members][]" value="{{group_member_id}}">
         </label>
         <span onclick="onRemoveGroupMember(event)" class="material-icons-outlined">
             clear

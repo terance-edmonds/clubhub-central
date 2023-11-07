@@ -153,7 +153,7 @@ class Routes
             "SUPER_ADMIN",
             "ADMIN",
         ],
-        "club/dashboard/event/add" => [
+        "club/dashboard/events/add" => [
             "PRESIDENT",
             "CLUB_IN_CHARGE",
         ],

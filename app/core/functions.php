@@ -1,5 +1,13 @@
 <?php
 
+/* show formatted */
+function show($data)
+{
+    print_r("<pre>");
+    print_r($data);
+    print_r("</pre>");
+}
+
 /* route to path */
 function redirect($link = '')
 {
@@ -11,16 +19,26 @@ function redirect($link = '')
 }
 
 /* set values on inputs */
-function setValue($key, $default = '')
+function setValue($str, $default = '')
 {
-    if (!empty($_POST[$key])) {
-        return $_POST[$key];
-    } else
-	if (!empty($default)) {
-        return $default;
+    preg_match_all("/\w+/", $str, $matches);
+    $parts = $matches[0];
+    $data = $_POST;
+
+    foreach ($parts as $key) {
+        if (!empty($data[$key])) {
+            $data = $data[$key];
+        } else {
+            $data = '';
+            break;
+        }
     }
 
-    return '';
+    if (empty($data) && !empty($default)) {
+        $data = $default;
+    }
+
+    return $data;
 }
 
 function setFile($key, $default = '')

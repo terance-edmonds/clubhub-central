@@ -6,6 +6,8 @@
 
 <?php $this->view('includes/header') ?>
 
+<?php $this->view('includes/alerts') ?>
+
 <div id="event-dashboard-event-add" class="container container-sections side-padding event-dashboard dashboard-container">
     <?php $this->view('includes/side-bars/club/dashboard/left', ["menu" => $menu])  ?>
 
@@ -40,19 +42,35 @@
                         <div class="multi-wrap">
                             <div class="input-wrap">
                                 <label for="start_datetime">Start Date & Time</label>
-                                <input value="" id="start_datetime" type="datetime-local" name="start_datetime" placeholder="Start Date & Time" required>
+                                <input set-default="datetime" value="<?= setValue('start_datetime') ?>" id="start_datetime" type="datetime-local" name="start_datetime" placeholder="Start Date & Time" required>
                                 <?php if (!empty($errors['start_datetime'])) : ?>
                                     <small><?= $errors['start_datetime'] ?></small>
                                 <?php endif; ?>
                             </div>
                             <div class="input-wrap">
                                 <label for="end_datetime">End Date & Time</label>
-                                <input value="<?= setValue('end_datetime') ?>" id="end_datetime" type="datetime-local" name="end_datetime" placeholder="End Date & Time" required>
+                                <input set-default="datetime" value="<?= setValue('end_datetime') ?>" id="end_datetime" type="datetime-local" name="end_datetime" placeholder="End Date & Time" required>
                                 <?php if (!empty($errors['end_datetime'])) : ?>
                                     <small><?= $errors['end_datetime'] ?></small>
                                 <?php endif; ?>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="input-wrap">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" placeholder="Description" required><?= setValue('description') ?></textarea>
+                        <?php if (!empty($errors['description'])) : ?>
+                            <small><?= $errors['description'] ?></small>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="input-wrap">
+                        <label for="created_datetime">Create On</label>
+                        <input set-default="datetime" readonly value="<?= setValue('created_datetime') ?>" id="created_datetime" type="datetime-local" name="created_datetime" placeholder="Created Date & Time" required>
+                        <?php if (!empty($errors['created_datetime'])) : ?>
+                            <small><?= $errors['created_datetime'] ?></small>
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -67,95 +85,94 @@
                         </div>
                     </div>
 
-                    <!-- <div class="created-groups">
-                        <div class="created-group">
-                            <div class="group-content-section">
-                                <p class="group-name">
-                                    <span class="title">Group Name : </span>
-                                    <span class="value">asdad</span>
-                                </p>
-                            </div>
-                            <div class="group-content-section">
-                                <p class="title">Members</p>
-                                <div class="group-members">
-                                    <div class="checkbox-wrap">
-                                        <label class="checkbox-label">
-                                            Terance
-                                            <input hidden type="checkbox" checked name="group_1-member" value="1">
-                                        </label>
-                                        <span class="material-icons-outlined">
-                                            clear
-                                        </span>
+                    <?php if (!empty($_POST['groups'])) { ?>
+                        <?php foreach ($_POST['groups'] as $key => $group) { ?>
+                            <div id="<?= $key ?>" class="form-section-content group-form-section">
+                                <div class="multi-wrap">
+                                    <div class="input-wrap">
+                                        <label for="<?= $key ?>-name">Group Name</label>
+                                        <input value="<?= setValue("groups[$key][name]") ?>" id="<?= $key ?>-name" type="text" name="groups[<?= $key ?>][name]" placeholder="Group Name" required>
+                                        <?php if (!empty($errors["groups[$key][name]"])) : ?>
+                                            <small><?= $errors["groups[$key][name]"] ?></small>
+                                        <?php endif; ?>
                                     </div>
-                                    <div class="checkbox-wrap">
-                                        <label class="checkbox-label">
-                                            Raguram
-                                            <input hidden type="checkbox" checked name="group_1-member" value="1">
-                                        </label>
-                                        <span class="material-icons-outlined">
-                                            clear
-                                        </span>
-                                    </div>
-                                    <div class="checkbox-wrap">
-                                        <label class="checkbox-label">
-                                            Ramindu
-                                            <input hidden type="checkbox" checked name="group_1-member" value="1">
-                                        </label>
-                                        <span class="material-icons-outlined">
-                                            clear
-                                        </span>
-                                    </div>
-                                    <div class="checkbox-wrap">
-                                        <label class="checkbox-label">
-                                            Usama
-                                            <input hidden type="checkbox" checked name="group_1-member" value="1">
-                                        </label>
-                                        <span class="material-icons-outlined">
-                                            clear
-                                        </span>
+                                    <div class="input-wrap">
+                                        <label for="<?= $key ?>-group_member_select">Group Members</label>
+                                        <select onchange="onAddGroupMember(event, '<?= $key ?>')" value="" name="<?= $key ?>-group_member_select" id="<?= $key ?>-group_member_select">
+                                            <option value="" selected disabled hidden>Choose Member</option>
+                                            <option value="1">Terance</option>
+                                            <option value="2">Raguram</option>
+                                        </select>
+                                        <?php if (!empty($errors["groups[$key][group_member]"])) : ?>
+                                            <small><?= $errors["groups[$key][group_member]"] ?></small>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="group-content-section sub-section">
-                                <p class="title">Access : </p>
-                                <div class="checkboxes-wrap">
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" checked name="group_1-access" value="group_1-allow_budget_access">
-                                        Budgets
-                                    </label>
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" checked name="group_1-access" value="group_1-allow_event_details_access">
-                                        Event Details
-                                    </label>
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" name="group_1-access" value="group_1-allow_registration_access">
-                                        Registration
-                                    </label>
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" name="group_1-access" value="group_1-allow_sponsors_access">
-                                        Sponsors
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
 
+                                <div id="<?= $key ?>-group_members" class="group-members">
+                                    <?php foreach ($group['members'] as $member) { ?>
+                                        <div class="checkbox-wrap">
+                                            <label class="checkbox-label">
+                                                <?= $member['name'] ?>
+                                                <input hidden type="checkbox" checked name="groups[<?= $key ?>][members][<?= $member['id'] ?>][id]" value="<?= $member['id'] ?>">
+                                                <input hidden type="checkbox" checked name="groups[<?= $key ?>][members][<?= $member['id'] ?>][name]" value="<?= $member['name'] ?>">
+                                            </label>
+                                            <span onclick="onRemoveGroupMember(event)" class="material-icons-outlined">
+                                                clear
+                                            </span>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+
+                                <div class="sub-section">
+                                    <p class="sub-section-title">Allow Access To</p>
+                                    <div class="checkboxes-wrap">
+                                        <label class="checkbox-label">
+                                            <input <?php if (!empty($group['access']['allow_budget_access'])) { ?> checked <?php } ?> type="checkbox" name="groups[<?= $key ?>][access][allow_budget_access]" value="1">
+                                            Budgets
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input <?php if (!empty($group['access']['allow_event_details_access'])) { ?> checked <?php } ?> type="checkbox" name="groups[<?= $key ?>][access][allow_event_details_access]" value="1">
+                                            Event Details
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input <?php if (!empty($group['access']['allow_registration_access'])) { ?> checked <?php } ?> type="checkbox" name="groups[<?= $key ?>][access][allow_registration_access]" value="1">
+                                            Registration
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input <?php if (!empty($group['access']['allow_sponsors_access'])) { ?> checked <?php } ?> type="checkbox" name="groups[<?= $key ?>][access][allow_sponsors_access]" value="1">
+                                            Sponsors
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-section-buttons-wrap">
+                                    <button type="button" onclick="onRemoveGroup('<?= $key ?>')" class="icon-button cl-red remove-group-btn">
+                                        <span class="material-icons-outlined">
+                                            delete
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        <?php } ?>
+                    <?php } ?>
                 </div>
 
                 <div class="buttons-wrap">
-                    <button type="submit" class="button contained">Create Event</button>
+                    <button type="submit" name="submit" value="create_event" class="button contained">Create Event</button>
                 </div>
             </form>
         </div>
     </section>
 
+
     <div id="{{group_name}}" class="form-section-content group-template group-form-section">
         <div class="multi-wrap">
             <div class="input-wrap">
                 <label for="{{group_name}}-name">Group Name</label>
-                <input value="<?= setValue("{{group_name}}-name") ?>" id="{{group_name}}-name" type="text" name="{{group_name}}-name" placeholder="Group Name" required>
-                <?php if (!empty($errors["{{group_name}}-name"])) : ?>
-                    <small><?= $errors["{{group_name}}-name"] ?></small>
+                <input value="<?= setValue("groups[{{group_name}}][name]") ?>" id="{{group_name}}-name" type="text" name="groups[{{group_name}}][name]" placeholder="Group Name" required>
+                <?php if (!empty($errors["groups[{{group_name}}][name]"])) : ?>
+                    <small><?= $errors["groups[{{group_name}}][name]"] ?></small>
                 <?php endif; ?>
             </div>
             <div class="input-wrap">
@@ -177,19 +194,19 @@
             <p class="sub-section-title">Allow Access To</p>
             <div class="checkboxes-wrap">
                 <label class="checkbox-label">
-                    <input type="checkbox" name="{{group_name}}-group_access" value="allow_budget_access">
+                    <input type="checkbox" name="groups[{{group_name}}][access][allow_budget_access]" value="true">
                     Budgets
                 </label>
                 <label class="checkbox-label">
-                    <input type="checkbox" name="{{group_name}}-group_access" value="allow_event_details_access">
+                    <input type="checkbox" name="groups[{{group_name}}][access][allow_event_details_access]" value="true">
                     Event Details
                 </label>
                 <label class="checkbox-label">
-                    <input type="checkbox" name="{{group_name}}-group_access" value="allow_registration_access">
+                    <input type="checkbox" name="groups[{{group_name}}][access][allow_registration_access]" value="true">
                     Registration
                 </label>
                 <label class="checkbox-label">
-                    <input type="checkbox" name="{{group_name}}-group_access" value="allow_sponsors_access">
+                    <input type="checkbox" name="groups[{{group_name}}][access][allow_sponsors_access]" value="true">
                     Sponsors
                 </label>
             </div>
@@ -207,7 +224,8 @@
     <div class="checkbox-wrap group-member-template">
         <label class="checkbox-label">
             {{group_member_name}}
-            <input hidden type="checkbox" checked name="{{group_name}}-group_member" value="{{group_member_id}}">
+            <input hidden type="checkbox" checked name="groups[{{group_name}}][members][{{group_member_id}}][id]" value="{{group_member_id}}">
+            <input hidden type="checkbox" checked name="groups[{{group_name}}][members][{{group_member_id}}][name]" value="{{group_member_name}}">
         </label>
         <span onclick="onRemoveGroupMember(event)" class="material-icons-outlined">
             clear

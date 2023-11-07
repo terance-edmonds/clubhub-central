@@ -16,7 +16,7 @@
     <section class="center-section">
         <div class="title-bar set-padding">
             <div class="title-wrap">
-                <span class="title">Event Details</span>
+                <span class="title">Profile Details</span>
 
             </div>
         </div>

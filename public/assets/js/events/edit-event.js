@@ -65,8 +65,33 @@ const onRemoveGroup = (group_name) => {
     resetGroupAttributes();
 };
 
+/* handle on start and end dates change */
+const onStartEndDatesChange = () => {
+    $('#start_datetime').attr('min', moment().format('yyyy-MM-DDTHH:mm'));
+    $('#end_datetime').attr('min', moment().format('yyyy-MM-DDTHH:mm'));
+
+    $('#start_datetime').on('change', function () {
+        let start = $(this).val();
+        let min = moment(start).format('yyyy-MM-DDTHH:mm');
+
+        $('#end_datetime').attr('min', min).val(min);
+    });
+
+    $('#end_datetime').on('change', function () {
+        let end = $(this).val();
+        let start = $('#start_datetime').val();
+        let min = moment(start).format('yyyy-MM-DDTHH:mm');
+
+        if (start > end) {
+            $(this).val(min);
+        }
+    });
+};
+
 $(document).ready(() => {
     if ($('.group-form-section').length === 1) {
         onAddNewGroup();
     }
+
+    onStartEndDatesChange();
 });
