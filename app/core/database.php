@@ -20,7 +20,9 @@ class Database
             $check = $stm->execute($data);
 
             if ($check) {
-                if ($type == 'array') {
+                if ($type == 'group') {
+                    $type = PDO::FETCH_GROUP | PDO::FETCH_ASSOC;
+                } else if ($type == 'array') {
                     $type = PDO::FETCH_ASSOC;
                 } else {
                     $type = PDO::FETCH_OBJ;

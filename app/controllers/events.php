@@ -55,6 +55,48 @@ class Events extends Controller
 
     private function events($path, $data)
     {
+        $event = new Event();
+        $event_group = new EventGroup();
+        $storage = new Storage();
+
+        $club_id = $storage->get('club_id');
+        $club_event_id = $storage->get('club_event_id');
+
+
+        $event_data = $event->one(["id" => $club_event_id, "club_id" => $club_id]);
+        /* set event details */
+        $_POST['name'] = $event_data->name;
+        $_POST['image'] = $event_data->image;
+        $_POST['venue'] = $event_data->venue;
+        $_POST['open_registrations'] = $event_data->open_registrations;
+        $_POST['description'] = $event_data->description;
+        $_POST['start_datetime'] = $event_data->start_datetime;
+        $_POST['end_datetime'] = $event_data->end_datetime;
+
+        $event_group_data = $event_group->find(
+            ["club_event_groups.club_event_id" => $club_event_id],
+            [
+                "club_event_groups.id as group_id",
+                "club_event_groups.name as group_name",
+                "club_event_groups.club_id as club_id",
+                "club_event_groups.club_event_id as club_event_id",
+                "member.id as member_id",
+                "member.user_id as user_id",
+                "user.first_name as first_name",
+                "user.last_name as last_name",
+            ],
+            [
+                ["table" => "club_event_group_members", "as" => "member", "on" => "member.club_event_group_id = club_event_groups.id"],
+                ["table" => "users", "as" => "user", "on" => "user.id = member.user_id"],
+            ],
+            [
+                "type" => "group"
+            ]
+        );
+
+        foreach ($event_group_data as $group_id => $group_data) {
+        }
+        show($event_group_data);
         $this->view($path, $data);
     }
 
@@ -73,9 +115,6 @@ class Events extends Controller
 
         $club_id = $storage->get('club_id');
         $club_event_id = $storage->get('club_event_id');
-
-        $club_id = 1;
-        $club_event_id = 1;
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $form_data = $_POST;

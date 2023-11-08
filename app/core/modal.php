@@ -41,9 +41,10 @@ class Modal
         return $result;
     }
 
-    public function find($data = [], $attributes = [], $include = [])
+    public function find($data = [], $attributes = [], $include = [], $options = [])
     {
         $keys = array_keys($data);
+        $type = 'array';
 
         $query = "select ";
         /* set attributes */
@@ -71,14 +72,28 @@ class Modal
             $query .= " where ";
         }
         foreach ($keys as $key) {
-            $query .= $key . "=:" . $key . " && ";
+            $value = $key;
+
+            $multi_keys = explode('.', $key);
+            if (count($multi_keys) > 1) {
+                $value = $multi_keys[1];
+                $data[$value] = $data[$key];
+                unset($data[$key]);
+            }
+
+            $query .= $key . "=:" . $value . " && ";
         }
         $query = trim($query, "&& ");
 
         /* order by */
         $query .= " order by $this->table.id $this->order limit $this->limit offset $this->offset";
 
-        $res = $this->db->query($query, $data);
+        /* set type */
+        if (!empty($options['type'])) {
+            $type = $options['type'];
+        }
+
+        $res = $this->db->query($query, $data, $type);
 
         if (is_array($res)) {
             return $res;
