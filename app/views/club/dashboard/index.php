@@ -38,111 +38,52 @@
                 <table>
                     <tr class="table-header">
                         <th>Event Name</th>
-                        <th>Date & Time</th>
+                        <th>Start Date & Time</th>
+                        <th>End Date & Time</th>
                         <th>Venue</th>
                         <th>View</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
-                    <tr class="table-data">
-                        <td>Freshers' Day</td>
-                        <td>11/04/23 - 10.00 AM</td>
-                        <td>UCSC Ground</td>
-                        <td align="center">
-                            <button class="icon-button">
-                                <span class="material-icons-outlined">
-                                    visibility
-                                </span>
-                            </button>
-                        </td>
-                        <td>
-                            <button class="button status-button" data-status="PENDING">
-                                Pending
-                            </button>
-                        </td>
-                        <td align="center">
-                            <div class="buttons">
-                                <a href="<?= ROOT ?>/events/dashboard">
-                                    <button class="icon-button">
+                    <?php foreach ($events_data as $event) { ?>
+                        <tr class="table-data">
+                            <td><?= displayValue($event->name) ?></td>
+                            <td><?= displayValue($event->start_datetime, 'datetime') ?></td>
+                            <td><?= displayValue($event->end_datetime, 'datetime') ?></td>
+                            <td><?= displayValue($event->venue) ?></td>
+                            <td align="center">
+                                <a href="<?php echo ($event->state == 'ACTIVE') ? ROOT . '/events/event?id=' . $event->id : 'javascript:void(0);' ?>">
+                                    <button <?php if ($event->state != 'ACTIVE') { ?> disabled <?php } ?> class="icon-button">
                                         <span class="material-icons-outlined">
-                                            edit
+                                            visibility
                                         </span>
                                     </button>
                                 </a>
-                                <button class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        delete
-                                    </span>
+                            </td>
+                            <td>
+                                <button class="button status-button" data-status="<?= $event->state ?>">
+                                    <?= displayValue($event->state, 'start-case') ?>
                                 </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="table-data">
-                        <td>Freshers' Day</td>
-                        <td>11/04/23 - 10.00 AM</td>
-                        <td>UCSC Ground</td>
-                        <td align="center">
-                            <button class="icon-button">
-                                <span class="material-icons-outlined">
-                                    visibility
-                                </span>
-                            </button>
-                        </td>
-                        <td>
-                            <button class="button status-button" data-status="APPROVED">
-                                Approved
-                            </button>
-                        </td>
-                        <td align="center">
-                            <div class="buttons">
-                                <a href="<?= ROOT ?>/events/dashboard">
-                                    <button class="icon-button">
+                            </td>
+                            <td align="center">
+                                <div class="buttons">
+                                    <form method="post">
+                                        <input type="text" hidden name="club_event_id" value="<?= $event->id ?>">
+                                        <button <?php if ($event->state != 'ACTIVE') { ?> disabled <?php } ?> name="submit" value="event-redirect" class="icon-button">
+                                            <span class="material-icons-outlined">
+                                                edit
+                                            </span>
+                                        </button>
+                                    </form>
+                                    <button class="icon-button cl-red">
                                         <span class="material-icons-outlined">
-                                            edit
+                                            delete
                                         </span>
                                     </button>
-                                </a>
-                                <button class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        delete
-                                    </span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="table-data">
-                        <td>Freshers' Day</td>
-                        <td>11/04/23 - 10.00 AM</td>
-                        <td>UCSC Ground</td>
-                        <td align="center">
-                            <button class="icon-button">
-                                <span class="material-icons-outlined">
-                                    visibility
-                                </span>
-                            </button>
-                        </td>
-                        <td>
-                            <button class="button status-button" data-status="REJECTED">
-                                Rejected
-                            </button>
-                        </td>
-                        <td align="center">
-                            <div class="buttons">
-                                <a href="<?= ROOT ?>/events/dashboard">
-                                    <button class="icon-button">
-                                        <span class="material-icons-outlined">
-                                            edit
-                                        </span>
-                                    </button>
-                                </a>
-                                <button class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        delete
-                                    </span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php } ?>
                 </table>
             </div>
         </div>

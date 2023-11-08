@@ -28,21 +28,8 @@ class Event extends Modal
         if (empty($data['description'])) $this->errors['description'] = "Description is required";
         if (empty($data['created_datetime'])) $this->errors['created_datetime'] = "Created date & time is required";
 
-        if ($data['end_datetime'] > $data['start_datetime']) {
+        if ($data['start_datetime'] > $data['end_datetime']) {
             $this->errors['end_datetime'] = "Invalid end date & time";
-        }
-
-        $groups_errors = [];
-        foreach ($data['groups'] as $key => $group) {
-            $group_errors = [];
-
-            if (empty($group['name'])) $group_errors['name'] = 'Group name is required';
-
-            $groups_errors[$key] = $group_errors;
-        }
-
-        if (count($groups_errors) > 0) {
-            $this->errors['groups'] =  $groups_errors;
         }
 
         if (empty($this->errors)) {

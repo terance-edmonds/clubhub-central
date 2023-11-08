@@ -82,18 +82,18 @@
 #club-dashboard-requests .table-wrap .status-button {
   cursor: default;
 }
-#club-dashboard-event .table-wrap .status-button[data-status=PENDING],
-#club-dashboard-requests .table-wrap .status-button[data-status=PENDING] {
+#club-dashboard-event .table-wrap .status-button[data-status=PROCESSING],
+#club-dashboard-requests .table-wrap .status-button[data-status=PROCESSING] {
   color: #edff7d;
   background-color: #303021;
 }
-#club-dashboard-event .table-wrap .status-button[data-status=APPROVED],
-#club-dashboard-requests .table-wrap .status-button[data-status=APPROVED] {
+#club-dashboard-event .table-wrap .status-button[data-status=ACTIVE],
+#club-dashboard-requests .table-wrap .status-button[data-status=ACTIVE] {
   color: #7dff7a;
   background-color: #213021;
 }
-#club-dashboard-event .table-wrap .status-button[data-status=REJECTED],
-#club-dashboard-requests .table-wrap .status-button[data-status=REJECTED] {
+#club-dashboard-event .table-wrap .status-button[data-status=DEACTIVE],
+#club-dashboard-requests .table-wrap .status-button[data-status=DEACTIVE] {
   color: #ff4646;
   background-color: #392a2d;
 }

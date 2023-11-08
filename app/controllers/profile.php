@@ -28,7 +28,7 @@ class Profile extends Controller
             ["user_id" => $auth_user['id']],
             ["role as club_role", "club.id as club_id", "club.name as club_name", "club.image as club_image"],
             [
-                ["table" => "clubs", "as" => "club", "on" => "club_members.club_id = club.id", "attributes" => ["id", "name"]]
+                ["table" => "clubs", "as" => "club", "on" => "club_members.club_id = club.id"]
             ]
         );
 

@@ -141,3 +141,21 @@ function getActiveMenu(&$menu, $path)
     }
     return $func;
 }
+
+/* to json */
+function toJson($data, $attributes = [])
+{
+    $json = [];
+
+    if (count($attributes) == 0) {
+        $json = $data;
+    } else {
+        foreach ($data as $key => $value) {
+            if (in_array($key, $attributes)) {
+                $json[$key] = $value;
+            }
+        }
+    }
+
+    return json_encode($json);
+}

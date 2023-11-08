@@ -6,7 +6,7 @@ class EventGroupMember extends Modal
     protected $allowed_columns = [
         "club_id",
         "club_event_id",
-        "club_user_id",
+        "user_id",
         "club_event_group_id",
         "club_member_id",
     ];

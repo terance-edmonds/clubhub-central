@@ -29,12 +29,14 @@ const onAddNewGroup = () => {
 
 const onAddGroupMember = (e, group_name) => {
     const option_value = $(`#${group_name}-group_member_select`).val();
-    const name = $(`#${group_name}-group_member_select option:eq(${option_value})`).text();
+    const name = $(`#${group_name}-group_member_select option[value="${option_value}"]`).text();
+    const values = option_value.split(',');
+
     /* reset select */
     $(`#${group_name}-group_member_select option:first`).prop('selected', true);
 
     /* check if member already added */
-    const exists = $(`#${group_name}-group_members`).find(`:checkbox[value=${option_value}]`);
+    const exists = $(`#${group_name}-group_members`).find(`:checkbox[value="${values[0]}"]`);
     if (exists.length) return;
 
     /* add new group member */
@@ -44,7 +46,8 @@ const onAddGroupMember = (e, group_name) => {
         .html()
         .replaceAll('{{group_name}}', group_name)
         .replaceAll('{{group_member_name}}', name)
-        .replaceAll('{{group_member_id}}', option_value);
+        .replaceAll('{{group_member_user_id}}', values[1])
+        .replaceAll('{{group_member_id}}', values[0]);
 
     clone
         .html(element)

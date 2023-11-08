@@ -8,7 +8,7 @@ class EventGroup extends Modal
         "club_event_id",
         "name",
         "budget_permission",
-        "detail_permission",
+        "details_permission",
         "registration_permission",
         "sponsor_permission"
     ];

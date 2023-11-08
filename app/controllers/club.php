@@ -76,54 +76,123 @@ class Club extends Controller
     private function events($path, $data)
     {
         $db = new Database();
-        $storage = new Storage();
+        $club_member = new ClubMember();
         $event = new Event($db);
         $event_group = new EventGroup($db);
         $event_group_member = new EventGroupMember($db);
 
-        $db->transaction();
+        $storage = new Storage();
+        $club_id = $storage->get('club_id');
+
+        $redirect_link = null;
+
+        if (empty($club_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Club details are not found"]];
 
         try {
+            $db->transaction();
             if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 $form_data = $_POST;
 
-                $club_id = $storage->get('club_id');
-
-                show($form_data);
                 if ($form_data['submit'] == 'create_event') {
-                    if (empty($club_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Club details are not found"]];
-                    else {
-                        $form_data['club_id'] = $club_id;
+                    $form_data['club_id'] = $club_id;
 
-                        if ($event->validateCreateEvent($form_data)) {
-                            try {
-                                $event->create([
-                                    "name" => $form_data['name'],
-                                    "venue" => $form_data['venue'],
-                                    "start_datetime" => $form_data['start_datetime'],
-                                    "end_datetime" => $form_data['end_datetime'],
-                                    "created_datetime" => $form_data['created_datetime'],
-                                    "description" => $form_data['description']
-                                ]);
+                    $group_errors = [];
+                    if ($event->validateCreateEvent($form_data)) {
+                        try {
+                            $event_result = $event->create([
+                                "name" => $form_data['name'],
+                                "venue" => $form_data['venue'],
+                                "club_id" => $form_data['club_id'],
+                                "start_datetime" => $form_data['start_datetime'],
+                                "end_datetime" => $form_data['end_datetime'],
+                                "created_datetime" => $form_data['created_datetime'],
+                                "description" => $form_data['description']
+                            ]);
+                        } catch (\Throwable $th) {
+                            throw new Error("Failed to create an event");
+                        }
 
-                                $_SESSION['alerts'] = [["status" => "success", "message" => "Created an event successfully"]];
-                            } catch (\Throwable $e) {
-                                throw new Error("Failed to create an event");
+                        foreach ($form_data['groups'] as $key => $group) {
+                            $permissions = $group['permissions'];
+
+                            if ($event_group->validateCreateEventGroup($group)) {
+                                try {
+                                    $event_group_result = $event_group->create([
+                                        "name" => $group['name'],
+                                        "club_id" => $form_data['club_id'],
+                                        "club_event_id" => $event_result->id,
+                                        "budget_permission" => empty($permissions['budget_permission']) ? 0 : 1,
+                                        "details_permission" => empty($permissions['details_permission']) ? 0 : 1,
+                                        "registration_permission" => empty($permissions['registration_permission']) ? 0 :  1,
+                                        "sponsor_permission" => empty($permissions['sponsor_permission']) ? 0 : 1,
+                                    ]);
+                                } catch (\Throwable $th) {
+                                    throw new Error("Failed to create an event " . $group['name'] . " group");
+                                }
+
+                                foreach ($group['members'] as $member) {
+                                    try {
+                                        $event_group_member->create([
+                                            "club_id" => $form_data['club_id'],
+                                            "club_event_id" => $event_result->id,
+                                            "club_event_group_id" => $event_group_result->id,
+                                            "user_id" => $member['user_id'],
+                                            "club_member_id" => $member['id'],
+                                        ]);
+                                    } catch (\Throwable $th) {
+                                        throw new Error("Failed to add member to event " . $group['name'] . " group");
+                                    }
+                                }
+                            }
+
+                            if (count($event_group->errors) > 0) {
+                                $group_errors[$key] = $event_group->errors;
                             }
                         }
+
+                        $_SESSION['alerts'] = [["status" => "success", "message" => "Created an event successfully"]];
+                        $redirect_link = 'club/dashboard';
                     }
+                } else if ($_POST['submit'] == 'event-redirect') {
+                    $storage = new Storage();
+                    $storage->set('club_event_id', $_POST['club_event_id']);
+
+                    redirect('events/dashboard');
+                }
+
+                $data['errors'] = $event->errors;
+                if (count($group_errors) > 0) {
+                    $data['errors']['groups'] = $group_errors;
                 }
             }
 
-            $data['errors'] = $event->errors;
-
             $db->commit();
 
-            // if ($_SERVER['REQUEST_METHOD'] == "POST") redirect();
-        } catch (\Throwable $e) {
-            $_SESSION['alerts'] = [["status" => "error", "message" => $e->getMessage() || "Failed to process the action, please try again later."]];
+            if ($_SERVER['REQUEST_METHOD'] == "POST") redirect($redirect_link);
+        } catch (\Throwable $th) {
+            $_SESSION['alerts'] = [["status" => "error", "message" => $th->getMessage() || "Failed to process the action, please try again later."]];
             $db->rollback();
         }
+
+        /* fetch club members */
+        if ($path == 'club/dashboard/event/add') {
+            $data['club_members_data'] = $club_member->find(
+                ["club_id" => $club_id, "state" => "ACCEPTED"],
+                [
+                    "club_members.id as id",
+                    "user_id",
+                    "club_id",
+                    "user.first_name as first_name",
+                    "user.last_name as last_name",
+                ],
+                [
+                    ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"]
+                ]
+            );
+        }
+
+        /* fetch events */
+        $data['events_data'] = $event->find(["club_id" => $club_id]);
 
         $this->view($path, $data);
     }

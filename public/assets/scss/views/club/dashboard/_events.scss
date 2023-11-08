@@ -4,15 +4,15 @@
         .status-button {
             cursor: default;
 
-            &[data-status='PENDING'] {
+            &[data-status='PROCESSING'] {
                 color: $yellow;
                 background-color: $yellow-light;
             }
-            &[data-status='APPROVED'] {
+            &[data-status='ACTIVE'] {
                 color: $green;
                 background-color: $green-light;
             }
-            &[data-status='REJECTED'] {
+            &[data-status='DEACTIVE'] {
                 color: $red-2;
                 background-color: $red-2-light;
             }
