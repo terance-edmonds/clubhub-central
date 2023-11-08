@@ -43,14 +43,14 @@
                         <div class="multi-wrap">
                             <div class="input-wrap">
                                 <label for="start_datetime">Start Date & Time</label>
-                                <input value="<?= setValue('start_datetime') ?>" id="start_datetime" type="datetime-local" name="start_datetime" placeholder="Start Date & Time" required>
+                                <input set-min="<?= $start_datetime ?>" value="<?= setValue('start_datetime', '', 'datetime') ?>" id="start_datetime" type="datetime-local" name="start_datetime" placeholder="Start Date & Time" required>
                                 <?php if (!empty($errors['start_datetime'])) : ?>
                                     <small><?= $errors['start_datetime'] ?></small>
                                 <?php endif; ?>
                             </div>
                             <div class="input-wrap">
                                 <label for="end_datetime">End Date & Time</label>
-                                <input value="<?= setValue('end_datetime') ?>" id="end_datetime" type="datetime-local" name="end_datetime" placeholder="End Date & Time" required>
+                                <input set-min="<?= $start_datetime ?>" value="<?= setValue('end_datetime', '', 'datetime') ?>" id="end_datetime" type="datetime-local" name="end_datetime" placeholder="End Date & Time" required>
                                 <?php if (!empty($errors['end_datetime'])) : ?>
                                     <small><?= $errors['end_datetime'] ?></small>
                                 <?php endif; ?>
@@ -74,7 +74,7 @@
                             <span>Open For External Registrations</span>
 
                             <label class="switch">
-                                <input name="open_registrations" type="checkbox" <?php if (setValue('open_registrations') == '1') { ?> checked <?php } ?> />
+                                <input name="open_registrations" type="checkbox" <?php if (in_array(setValue('open_registrations'), ['1', 'on'])) { ?> checked <?php } ?> required />
                                 <span class="slider"></span>
                             </label>
                         </label>
@@ -104,8 +104,8 @@
                                         <?php endif; ?>
                                     </div>
                                     <div class="input-wrap">
-                                        <label for="<?= $key ?>-group_member_select">Group Members</label>
-                                        <select onchange="onAddGroupMember(event, '<?= $key ?>')" value="" name="<?= $key ?>-group_member_select" id="<?= $key ?>-group_member_select">
+                                        <label for="group_member_select-<?= $key ?>">Group Members</label>
+                                        <select onchange="onAddGroupMember(event, '<?= $key ?>')" value="" name="group_member_select-<?= $key ?>" id="group_member_select-<?= $key ?>">
                                             <option value="" selected disabled hidden>Choose Member</option>
                                             <?php foreach ($club_members_data as $club_member) { ?>
                                                 <option value=<?= toJson($club_member) ?>><?= $club_member->first_name ?> <?= $club_member->last_name ?></option>
@@ -168,7 +168,7 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button type="submit" class="button contained">Save Event</button>
+                    <button type="submit" name="submit" value="update_event" class="button contained">Save Event</button>
                 </div>
             </form>
         </div>
@@ -184,8 +184,8 @@
                 <?php endif; ?>
             </div>
             <div class="input-wrap">
-                <label for="{{group_name}}-group_member_select">Group Members</label>
-                <select onchange="onAddGroupMember(event, '{{group_name}}')" value="" name="{{group_name}}-group_member_select" id="{{group_name}}-group_member_select">
+                <label for="group_member_select-{{group_name}}">Group Members</label>
+                <select onchange="onAddGroupMember(event, '{{group_name}}')" value="" name="group_member_select-{{group_name}}" id="group_member_select-{{group_name}}">
                     <option value="" selected disabled hidden>Choose Member</option>
                     <?php foreach ($club_members_data as $club_member) { ?>
                         <option value="<?= $club_member->id ?>,<?= $club_member->user_id ?>"><?= $club_member->first_name ?> <?= $club_member->last_name ?></option>

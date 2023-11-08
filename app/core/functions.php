@@ -19,7 +19,7 @@ function redirect($link = '')
 }
 
 /* set values on inputs */
-function setValue($str, $default = '')
+function setValue($str, $default = '', $format = 'text')
 {
     preg_match_all("/\w+/", $str, $matches);
     $parts = $matches[0];
@@ -36,6 +36,15 @@ function setValue($str, $default = '')
 
     if (empty($data) && !empty($default)) {
         $data = $default;
+    }
+
+    if ($format == 'datetime' && !empty($data)) {
+        try {
+            $moment = new \Moment\Moment($data);
+            $data = $moment->format('Y-m-d') . 'T' . $moment->format('H:i');
+        } catch (\Throwable $th) {
+            //
+        }
     }
 
     return $data;
@@ -60,7 +69,7 @@ function displayValue($val, $format = 'text')
 
     if ($format == 'datetime') {
         $moment = new \Moment\Moment($val);
-        $val = $moment->format('d/m/Y - h:m A');
+        $val = $moment->format('d/m/Y - h:i A');
     }
 
     return $val;

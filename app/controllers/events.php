@@ -55,48 +55,176 @@ class Events extends Controller
 
     private function events($path, $data)
     {
-        $event = new Event();
-        $event_group = new EventGroup();
-        $storage = new Storage();
+        $db = new Database();
+        $club_member = new ClubMember();
+        $event = new Event($db);
+        $event_group = new EventGroup($db);
+        $event_group_member = new EventGroupMember($db);
 
+        $storage = new Storage($db);
         $club_id = $storage->get('club_id');
         $club_event_id = $storage->get('club_event_id');
 
-
         $event_data = $event->one(["id" => $club_event_id, "club_id" => $club_id]);
-        /* set event details */
-        $_POST['name'] = $event_data->name;
-        $_POST['image'] = $event_data->image;
-        $_POST['venue'] = $event_data->venue;
-        $_POST['open_registrations'] = $event_data->open_registrations;
-        $_POST['description'] = $event_data->description;
-        $_POST['start_datetime'] = $event_data->start_datetime;
-        $_POST['end_datetime'] = $event_data->end_datetime;
 
-        $event_group_data = $event_group->find(
-            ["club_event_groups.club_event_id" => $club_event_id],
+        $data['start_datetime'] = $event_data->start_datetime;
+        $data['club_members_data'] = $club_member->find(
+            ["club_id" => $club_id, "state" => "ACCEPTED"],
             [
-                "club_event_groups.id as group_id",
-                "club_event_groups.name as group_name",
-                "club_event_groups.club_id as club_id",
-                "club_event_groups.club_event_id as club_event_id",
-                "member.id as member_id",
-                "member.user_id as user_id",
+                "club_members.id as id",
+                "user_id",
+                "club_id",
                 "user.first_name as first_name",
                 "user.last_name as last_name",
             ],
             [
-                ["table" => "club_event_group_members", "as" => "member", "on" => "member.club_event_group_id = club_event_groups.id"],
-                ["table" => "users", "as" => "user", "on" => "user.id = member.user_id"],
+                ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"]
             ],
             [
-                "type" => "group"
+                "type" => "object"
             ]
         );
 
-        foreach ($event_group_data as $group_id => $group_data) {
+        try {
+            $db->transaction();
+
+            if ($_SERVER['REQUEST_METHOD'] == "POST") {
+                $form_data = $_POST;
+
+                if ($form_data['submit'] == 'update_event') {
+                    $group_errors = [];
+
+                    if ($event->validateUpdateEvent($form_data)) {
+                        try {
+                            /* remove current records */
+                            $event_group_member->delete(["club_event_id" => $club_event_id]);
+                            $event_group->delete(["club_event_id" => $club_event_id]);
+
+                            $event->update([
+                                "id" => $club_event_id
+                            ], [
+                                "name" => $form_data['name'],
+                                "venue" => $form_data['venue'],
+                                "open_registrations" => empty($form_data['open_registrations']) ? 0 : 1,
+                                "start_datetime" => $form_data['start_datetime'],
+                                "end_datetime" => $form_data['end_datetime'],
+                                "description" => $form_data['description']
+                            ]);
+                        } catch (\Throwable $th) {
+                            throw new Error("Failed to update event details");
+                        }
+
+                        foreach ($form_data['groups'] as $key => $group) {
+                            $permissions = $group['permissions'];
+
+                            if ($event_group->validateCreateEventGroup($group)) {
+                                try {
+                                    $event_group_result = $event_group->create([
+                                        "name" => $group['name'],
+                                        "club_id" => $club_id,
+                                        "club_event_id" =>  $club_event_id,
+                                        "budget_permission" => empty($permissions['budget_permission']) ? 0 : 1,
+                                        "details_permission" => empty($permissions['details_permission']) ? 0 : 1,
+                                        "registration_permission" => empty($permissions['registration_permission']) ? 0 :  1,
+                                        "sponsor_permission" => empty($permissions['sponsor_permission']) ? 0 : 1,
+                                    ]);
+                                } catch (\Throwable $th) {
+                                    throw new Error("Failed to create an event " . $group['name'] . " group");
+                                }
+
+                                foreach ($group['members'] as $member) {
+                                    try {
+                                        $event_group_member->create([
+                                            "club_id" => $club_id,
+                                            "club_event_id" => $club_event_id,
+                                            "club_event_group_id" => $event_group_result->id,
+                                            "user_id" => $member['user_id'],
+                                            "club_member_id" => $member['id'],
+                                        ]);
+                                    } catch (\Throwable $th) {
+                                        throw new Error("Failed to add member to event " . $group['name'] . " group");
+                                    }
+                                }
+                            }
+
+                            if (count($event_group->errors) > 0) {
+                                $group_errors[$key] = $event_group->errors;
+                            }
+                        }
+
+                        $_SESSION['alerts'] = [["status" => "success", "message" => "Updated event details successfully"]];
+                        redirect();
+                    }
+
+                    $data['errors'] = $event->errors;
+                    if (count($group_errors) > 0) {
+                        $data['errors']['groups'] = $group_errors;
+                    }
+                }
+            } else {
+                /* set event details */
+                $_POST['name'] = $event_data->name;
+                $_POST['image'] = $event_data->image;
+                $_POST['venue'] = $event_data->venue;
+                $_POST['open_registrations'] = $event_data->open_registrations;
+                $_POST['description'] = $event_data->description;
+                $_POST['start_datetime'] = $event_data->start_datetime;
+                $_POST['end_datetime'] = $event_data->end_datetime;
+
+                $event_group_data = $event_group->find(
+                    ["club_event_groups.club_event_id" => $club_event_id],
+                    [
+                        "club_event_groups.id as group_id",
+                        "club_event_groups.name as group_name",
+                        "club_event_groups.club_id as club_id",
+                        "club_event_groups.club_event_id as club_event_id",
+                        "club_event_groups.budget_permission as budget_permission",
+                        "club_event_groups.details_permission as details_permission",
+                        "club_event_groups.sponsor_permission as sponsor_permission",
+                        "club_event_groups.registration_permission as registration_permission",
+                        "member.club_member_id as member_id",
+                        "member.user_id as user_id",
+                        "user.first_name as first_name",
+                        "user.last_name as last_name",
+                    ],
+                    [
+                        ["table" => "club_event_group_members", "as" => "member", "on" => "member.club_event_group_id = club_event_groups.id"],
+                        ["table" => "users", "as" => "user", "on" => "user.id = member.user_id"],
+                    ],
+                    [
+                        "type" => "group"
+                    ]
+                );
+
+                foreach ($event_group_data as $group_id => $group_data) {
+                    $_POST['groups'][$group_id] = [
+                        "id" => $group_id,
+                        "name" => $group_data[0]['group_name'],
+                        "permissions" => [
+                            "budget_permission" => $group_data[0]['budget_permission'],
+                            "details_permission" => $group_data[0]['details_permission'],
+                            "registration_permission" => $group_data[0]['registration_permission'],
+                            "sponsor_permission" => $group_data[0]['sponsor_permission'],
+                        ],
+                        "members" => []
+                    ];
+
+                    foreach ($group_data as $group_member) {
+                        array_push($_POST['groups'][$group_id]['members'], [
+                            "user_id" => $group_member['user_id'],
+                            "id" => $group_member['member_id'] . "," . $group_member['user_id'],
+                            "name" => $group_member['first_name'] . " " . $group_member['last_name'],
+                        ]);
+                    }
+                }
+            }
+
+            $db->commit();
+        } catch (\Throwable $th) {
+            $db->rollback();
+            $_SESSION['alerts'] = [["status" => "error", "message" => $th->getMessage() || "Failed to process the action, please try again later."]];
         }
-        show($event_group_data);
+
         $this->view($path, $data);
     }
 

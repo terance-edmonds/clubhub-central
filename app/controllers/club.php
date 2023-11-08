@@ -90,6 +90,7 @@ class Club extends Controller
 
         try {
             $db->transaction();
+
             if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 $form_data = $_POST;
 
@@ -170,8 +171,8 @@ class Club extends Controller
 
             if ($_SERVER['REQUEST_METHOD'] == "POST") redirect($redirect_link);
         } catch (\Throwable $th) {
-            $_SESSION['alerts'] = [["status" => "error", "message" => $th->getMessage() || "Failed to process the action, please try again later."]];
             $db->rollback();
+            $_SESSION['alerts'] = [["status" => "error", "message" => $th->getMessage() || "Failed to process the action, please try again later."]];
         }
 
         /* fetch club members */

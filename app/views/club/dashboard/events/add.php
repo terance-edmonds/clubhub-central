@@ -97,8 +97,8 @@
                                         <?php endif; ?>
                                     </div>
                                     <div class="input-wrap">
-                                        <label for="<?= $key ?>-group_member_select">Group Members</label>
-                                        <select onchange="onAddGroupMember(event, '<?= $key ?>')" value="" name="<?= $key ?>-group_member_select" id="<?= $key ?>-group_member_select">
+                                        <label for="group_member_select-<?= $key ?>">Group Members</label>
+                                        <select onchange="onAddGroupMember(event, '<?= $key ?>')" value="" name="group_member_select-<?= $key ?>" id="group_member_select-<?= $key ?>">
                                             <option value="" selected disabled hidden>Choose Member</option>
                                             <?php foreach ($club_members_data as $club_member) { ?>
                                                 <option value=<?= toJson($club_member) ?>><?= $club_member->first_name ?> <?= $club_member->last_name ?></option>
@@ -178,8 +178,8 @@
                 <?php endif; ?>
             </div>
             <div class="input-wrap">
-                <label for="{{group_name}}-group_member_select">Group Members</label>
-                <select onchange="onAddGroupMember(event, '{{group_name}}')" value="" name="{{group_name}}-group_member_select" id="{{group_name}}-group_member_select">
+                <label for="group_member_select-{{group_name}}">Group Members</label>
+                <select onchange="onAddGroupMember(event, '{{group_name}}')" value="" name="group_member_select-{{group_name}}" id="group_member_select-{{group_name}}">
                     <option value="" selected disabled hidden>Choose Member</option>
                     <?php foreach ($club_members_data as $club_member) { ?>
                         <option value="<?= $club_member->id ?>,<?= $club_member->user_id ?>"><?= $club_member->first_name ?> <?= $club_member->last_name ?></option>

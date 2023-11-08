@@ -70,12 +70,20 @@ const onRemoveGroup = (group_name) => {
 
 /* handle on start and end dates change */
 const onStartEndDatesChange = () => {
-    $('#start_datetime').attr('min', moment().format('yyyy-MM-DDTHH:mm'));
-    $('#end_datetime').attr('min', moment().format('yyyy-MM-DDTHH:mm'));
+    let min = moment().format('yyyy-MM-DDTHH:mm');
+
+    if ($('#start_datetime').attr('set-min'))
+        min = moment($('#start_datetime').attr('set-min')).format('yyyy-MM-DDTHH:mm');
+
+    $('#start_datetime').attr('min', min);
+    $('#end_datetime').attr('min', min);
 
     $('#start_datetime').on('change', function () {
         let start = $(this).val();
         let min = moment(start).format('yyyy-MM-DDTHH:mm');
+
+        if ($(this).attr('set-min'))
+            min = moment($('#start_datetime').attr('set-min')).format('yyyy-MM-DDTHH:mm');
 
         $('#end_datetime').attr('min', min).val(min);
     });
@@ -84,6 +92,9 @@ const onStartEndDatesChange = () => {
         let end = $(this).val();
         let start = $('#start_datetime').val();
         let min = moment(start).format('yyyy-MM-DDTHH:mm');
+
+        if ($('#start_datetime').attr('set-min'))
+            min = moment($('#start_datetime').attr('set-min')).format('yyyy-MM-DDTHH:mm');
 
         if (start > end) {
             $(this).val(min);
