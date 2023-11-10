@@ -72,16 +72,25 @@ class Modal
             $query .= " where ";
         }
         foreach ($keys as $key) {
+            $operator = '=';
             $value = $key;
 
+            /* if the data is an array of options */
+            if (is_array($data[$key])) {
+                $operator = $data[$key]['operator'];
+                $data[$key] = $data[$value]['data'];
+            }
+
+            /* handle joined table columns */
             $multi_keys = explode('.', $key);
             if (count($multi_keys) > 1) {
                 $value = $multi_keys[1];
                 $data[$value] = $data[$key];
+
                 unset($data[$key]);
             }
 
-            $query .= $key . "=:" . $value . " && ";
+            $query .= $key . " " . $operator . " :" . $value . " && ";
         }
         $query = trim($query, "&& ");
 

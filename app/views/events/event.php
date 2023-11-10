@@ -5,6 +5,8 @@
 
 <?php $this->view('includes/header') ?>
 
+<?php $this->view('includes/alerts') ?>
+
 <div id="event" class="container container-sections side-padding">
 
     <section class="center-section">
@@ -47,7 +49,13 @@
         </div>
     </section>
 
-    <?php $this->view('includes/side-bars/events/right')  ?>
+    <?php $this->view('includes/side-bars/events/right', $right_bar)  ?>
 </div>
 
-<?php $this->view('includes/modals/event/register') ?>
+<?php if ($event_data['open_registrations']) $this->view('includes/modals/event/register', ["errors" => $errors]); ?>
+
+<script>
+    <?php if (!empty($popups["event-register"])) { ?>
+        $(`[popup-name='event-register']`).popup(true)
+    <?php } ?>
+</script>

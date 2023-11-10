@@ -11,11 +11,15 @@ class Auth extends Routes
     public static function logout()
     {
         if (!empty($_SESSION['USER'])) unset($_SESSION['USER']);
+
+        session_destroy();
     }
 
     public static function logged()
     {
-        session_destroy();
+        if (!empty($_SESSION['USER'])) return true;
+
+        return false;
     }
 
     public static function authenticate($get = [])

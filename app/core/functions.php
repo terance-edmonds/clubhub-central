@@ -67,9 +67,15 @@ function displayValue($val, $format = 'text')
 {
     if (empty($val)) $val = '-';
 
-    if ($format == 'datetime') {
-        $moment = new \Moment\Moment($val);
-        $val = $moment->format('d/m/Y - h:i A');
+    switch ($format) {
+        case 'datetime':
+            $moment = new \Moment\Moment($val);
+            $val = $moment->format('d/m/Y - h:i A');
+            break;
+        case 'time':
+            $moment = new \Moment\Moment($val);
+            $val = $moment->format('h:i A');
+            break;
     }
 
     return $val;

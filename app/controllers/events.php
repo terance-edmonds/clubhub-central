@@ -1,7 +1,5 @@
 <?php
 
-use Moment\Moment;
-
 use function _\upperCase;
 
 class Events extends Controller
@@ -23,12 +21,10 @@ class Events extends Controller
 
     public function event()
     {
-        $right_bar = [
-            "events" => []
-        ];
-
         $event_id = $_GET["id"];
+        $moment = new \Moment\Moment();
         $event = new Event();
+        $event_registration = new EventRegistration();
 
         /* if event ID is not found */
         if (empty($event_id)) {
@@ -37,7 +33,6 @@ class Events extends Controller
 
         /* if event details are not found */
         $event_details = $event->one(["id" => $event_id]);
-
         if (empty($event_details) || $event_details->state != 'ACTIVE') {
             return redirect('not-found');
         }
@@ -47,8 +42,41 @@ class Events extends Controller
             return redirect('login');
         }
 
-        $moment = new \Moment\Moment();
+        /* right side bar data */
+        $today_event_options = [
+            "start_datetime" => [
+                "data" => $moment->format('Y-m-d') . "%",
+                "operator" => "like"
+            ],
+            "club_events.state" => "ACTIVE"
+        ];
+
+        if ($event_details->is_public) $today_event_options['is_public'] = $event_details->is_public;
+        $today_events = $event->find(
+            $today_event_options,
+            [
+                "club_events.id as id",
+                "club_events.name as name",
+                "club_events.venue as venue",
+                "club_events.image as image",
+                "club_events.start_datetime as start_datetime",
+                "club_events.end_datetime as end_datetime",
+                "club_events.state as state",
+                "club.id as club_id",
+                "club.name as club_name"
+            ],
+            [
+                ["table" => "clubs", "as" => "club", "on" => "club_events.club_id = club.id"]
+            ]
+        );
+
+        $right_bar = [
+            "events" => $today_events
+        ];
+
         $data = [
+            "popups" => [],
+            "errors" => [],
             "right_bar" => $right_bar,
             "event_data" => [
                 "name" => $event_details->name,
@@ -61,6 +89,39 @@ class Events extends Controller
                 "venue" => $event_details->venue,
             ]
         ];
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $form_data = $_POST;
+
+            /* if no status then start a new session */
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();
+            }
+
+            if ($_POST['submit'] == 'event_registration') {
+                if ($event_registration->validateAddEventRegistration($form_data)) {
+                    try {
+                        $event_registration->create([
+                            "club_id" => $event_details->club_id,
+                            "club_event_id" => $event_details->id,
+                            "user_name" => $form_data['user_name'],
+                            "user_email" => $form_data['user_email'],
+                            "user_contact" => $form_data['user_contact'],
+                        ]);
+
+                        $_SESSION['alerts'] = [["status" => "success", "message" => "Registered to the event successfully"]];
+                    } catch (\Throwable $th) {
+                        $_SESSION['alerts'] = [["status" => "error", "message" => "Event registration failed, please try again later"]];
+                    }
+
+                    return redirect();
+                } else {
+                    $data['popups']['event-register'] = true;
+                }
+            }
+
+            $data['errors'] = $event_registration->errors;
+        }
 
         $this->view("events/event", $data);
     }
