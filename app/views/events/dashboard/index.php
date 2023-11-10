@@ -18,7 +18,7 @@
         </div>
 
         <div class="content-section">
-            <form class="form" method="post">
+            <form class="form" method="post" enctype="multipart/form-data">
                 <?php $this->view('/includes/image-upload', ["name" => "image"]) ?>
 
                 <div class="form-section">
@@ -74,7 +74,7 @@
                             <span>Open For External Registrations</span>
 
                             <label class="switch">
-                                <input name="open_registrations" type="checkbox" <?php if (in_array(setValue('open_registrations'), ['1', 'on'])) { ?> checked <?php } ?> required />
+                                <input name="is_public" type="checkbox" <?php if (in_array(setValue('is_public'), ['1', 'on'])) { ?> checked <?php } ?> required />
                                 <span class="slider"></span>
                             </label>
                         </label>
@@ -108,7 +108,7 @@
                                         <select onchange="onAddGroupMember(event, '<?= $key ?>')" value="" name="group_member_select-<?= $key ?>" id="group_member_select-<?= $key ?>">
                                             <option value="" selected disabled hidden>Choose Member</option>
                                             <?php foreach ($club_members_data as $club_member) { ?>
-                                                <option value=<?= toJson($club_member) ?>><?= $club_member->first_name ?> <?= $club_member->last_name ?></option>
+                                                <option value="<?= $club_member->id ?>,<?= $club_member->user_id ?>"><?= $club_member->first_name ?> <?= $club_member->last_name ?></option>
                                             <?php } ?>
                                         </select>
                                         <?php if (!empty($errors["groups[$key][group_member]"])) : ?>

@@ -22,6 +22,9 @@ class Routes
         "register/verify" => [
             "ANY"
         ],
+        "not-found" => [
+            "ANY"
+        ],
         "home" => [
             "MEMBER",
             "TREASURER",

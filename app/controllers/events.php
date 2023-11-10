@@ -1,5 +1,7 @@
 <?php
 
+use Moment\Moment;
+
 use function _\upperCase;
 
 class Events extends Controller
@@ -21,13 +23,61 @@ class Events extends Controller
 
     public function event()
     {
-        $this->view("events/event");
+        $right_bar = [
+            "events" => []
+        ];
+
+        $event_id = $_GET["id"];
+        $event = new Event();
+
+        /* if event ID is not found */
+        if (empty($event_id)) {
+            return redirect('not-found');
+        }
+
+        /* if event details are not found */
+        $event_details = $event->one(["id" => $event_id]);
+
+        if (empty($event_details) || $event_details->state != 'ACTIVE') {
+            return redirect('not-found');
+        }
+
+        /* if event is not public */
+        if (!Auth::logged() && !$event_details->is_public) {
+            return redirect('login');
+        }
+
+        $moment = new \Moment\Moment();
+        $data = [
+            "right_bar" => $right_bar,
+            "event_data" => [
+                "name" => $event_details->name,
+                "description" => $event_details->description,
+                "is_public" => $event_details->is_public,
+                "open_registrations" => $event_details->open_registrations,
+                "image" => $event_details->image,
+                "start_date" => $moment->format('dS F'),
+                "start_time" => $moment->format('h:i A'),
+                "venue" => $event_details->venue,
+            ]
+        ];
+
+        $this->view("events/event", $data);
     }
 
     public function dashboard()
     {
         $path = $_GET["url"];
         $func = "view";
+
+        $storage = new Storage();
+        $club_id = $storage->get('club_id');
+        $club_role = $storage->get('club_role');
+        $club_event_id = $storage->get('club_event_id');
+
+        if (empty($club_id) || empty($club_event_id)) {
+            return redirect('not-found');
+        }
 
         /* use outlined icons */
         $menu = [
@@ -40,6 +90,7 @@ class Events extends Controller
             ["id" => "complains", "name" => "Complaints", "icon" => "inbox", "path" => "/events/dashboard/complains", "active" => "false"]
 
         ];
+
         /* update the active menu item */
         $func = getActiveMenu($menu, $path);
 
@@ -61,7 +112,7 @@ class Events extends Controller
         $event_group = new EventGroup($db);
         $event_group_member = new EventGroupMember($db);
 
-        $storage = new Storage($db);
+        $storage = new Storage();
         $club_id = $storage->get('club_id');
         $club_event_id = $storage->get('club_event_id');
 
@@ -79,11 +130,10 @@ class Events extends Controller
             ],
             [
                 ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"]
-            ],
-            [
-                "type" => "object"
             ]
         );
+
+        $image_uploaded = true;
 
         try {
             $db->transaction();
@@ -94,7 +144,18 @@ class Events extends Controller
                 if ($form_data['submit'] == 'update_event') {
                     $group_errors = [];
 
-                    if ($event->validateUpdateEvent($form_data)) {
+                    if (!empty($_FILES['image']['name'])) {
+                        $file_upload = uploadFile('image');
+
+                        if (empty($file_upload)) {
+                            $image_uploaded = false;
+                            $data["errors"]["image"] = "Failed to upload the image, please try again later";
+                        } else {
+                            $form_data['image'] = $file_upload['url'];
+                        }
+                    }
+
+                    if ($image_uploaded && $event->validateUpdateEvent($form_data)) {
                         try {
                             /* remove current records */
                             $event_group_member->delete(["club_event_id" => $club_event_id]);
@@ -104,8 +165,10 @@ class Events extends Controller
                                 "id" => $club_event_id
                             ], [
                                 "name" => $form_data['name'],
+                                "image" => $form_data['image'],
                                 "venue" => $form_data['venue'],
                                 "open_registrations" => empty($form_data['open_registrations']) ? 0 : 1,
+                                "is_public" => empty($form_data['is_public']) ? 0 : 1,
                                 "start_datetime" => $form_data['start_datetime'],
                                 "end_datetime" => $form_data['end_datetime'],
                                 "description" => $form_data['description']
@@ -153,7 +216,6 @@ class Events extends Controller
                         }
 
                         $_SESSION['alerts'] = [["status" => "success", "message" => "Updated event details successfully"]];
-                        redirect();
                     }
 
                     $data['errors'] = $event->errors;
@@ -167,6 +229,7 @@ class Events extends Controller
                 $_POST['image'] = $event_data->image;
                 $_POST['venue'] = $event_data->venue;
                 $_POST['open_registrations'] = $event_data->open_registrations;
+                $_POST['is_public'] = $event_data->is_public;
                 $_POST['description'] = $event_data->description;
                 $_POST['start_datetime'] = $event_data->start_datetime;
                 $_POST['end_datetime'] = $event_data->end_datetime;
@@ -212,7 +275,7 @@ class Events extends Controller
                     foreach ($group_data as $group_member) {
                         array_push($_POST['groups'][$group_id]['members'], [
                             "user_id" => $group_member['user_id'],
-                            "id" => $group_member['member_id'] . "," . $group_member['user_id'],
+                            "id" => $group_member['member_id'],
                             "name" => $group_member['first_name'] . " " . $group_member['last_name'],
                         ]);
                     }
@@ -220,6 +283,8 @@ class Events extends Controller
             }
 
             $db->commit();
+
+            if ($_SERVER['REQUEST_METHOD'] == "POST" &&  count($data['errors']) == 0) return redirect();
         } catch (\Throwable $th) {
             $db->rollback();
             $_SESSION['alerts'] = [["status" => "error", "message" => $th->getMessage() || "Failed to process the action, please try again later."]];
@@ -256,7 +321,6 @@ class Events extends Controller
                         try {
                             $sponsor->create($form_data);
                             $_SESSION['alerts'] = [["status" => "success", "message" => "Sponsor details added successfully"]];
-                            redirect();
                         } catch (Throwable $th) {
                             var_dump($th);
                             $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to add sponsor details"]];
@@ -275,8 +339,6 @@ class Events extends Controller
                         $sponsor->update($where, $form_data);
 
                         $_SESSION['alerts'] = [["status" => "success", "message" => "Sponsor details updated successfully"]];
-
-                        redirect();
                     } catch (Throwable $th) {
                         $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to update sponsor details"]];
                     }
@@ -290,8 +352,6 @@ class Events extends Controller
                     $sponsor->delete(["id" => $form_data['id']]);
 
                     $_SESSION['alerts'] = [["status" => "success", "message" => "Sponsor deleted successfully"]];
-
-                    redirect();
                 } catch (Throwable $th) {
                     //var_dump($th);
                     $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to delete Sponsor details"]];
@@ -302,8 +362,9 @@ class Events extends Controller
                 $this->packages($_POST);
             }
 
-            redirect();
+            if (count($data['errors']) == 0) return redirect();
         }
+
         $data["packages_data"] = $package->find(["club_id" => $club_id, "club_event_id" => $club_event_id]);
         $data["sponsors_data"] = $sponsor->find(["club_id" => $club_id, "club_event_id" => $club_event_id]);
         $this->view($path, $data);
@@ -318,10 +379,6 @@ class Events extends Controller
         $club_event_id = $storage->get('club_event_id');
         $club_member_id = $storage->get('club_member_id');
         $user_id = Auth::getId();
-
-        $club_id = 1;
-        $club_event_id = 1;
-        $club_member_id = 1;
 
         if (empty($club_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Club details are not found"]];
         if (empty($club_event_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Event details are not found"]];
@@ -341,8 +398,6 @@ class Events extends Controller
                             $package->create($form_data);
 
                             $_SESSION['alerts'] = [["status" => "success", "message" => "Package details added successfully"]];
-
-                            redirect();
                         } catch (Throwable $th) {
                             var_dump($th);
                             $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to add package details"]];
@@ -361,8 +416,6 @@ class Events extends Controller
                         $package->update($where, $form_data);
 
                         $_SESSION['alerts'] = [["status" => "success", "message" => "Package details updated successfully"]];
-
-                        redirect();
                     } catch (Throwable $th) {
                         $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to update package details"]];
                     }
@@ -376,8 +429,6 @@ class Events extends Controller
                     $package->delete(["id" => $form_data['id']]);
 
                     $_SESSION['alerts'] = [["status" => "success", "message" => "Package details deleted successfully"]];
-
-                    redirect();
                 } catch (Throwable $th) {
                     var_dump($th);
                     $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to delete Package details"]];
@@ -385,6 +436,8 @@ class Events extends Controller
 
                 $data['errors'] = $package->errors;
             }
+
+            if (count($data['errors']) == 0) return redirect();
         }
     }
 
@@ -526,8 +579,6 @@ class Events extends Controller
                             $budget_log->create($budget_log_data);
 
                             $_SESSION['alerts'] = [["status" => "success", "message" => "Expense budget details updated successfully"]];
-
-                            redirect();
                         } catch (Throwable $th) {
                             $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to update budget details"]];
                         }
@@ -557,13 +608,13 @@ class Events extends Controller
 
                     $data['errors'] = $budget->errors;
                 }
+
+                if (count($data['errors']) == 0) return redirect();
             }
 
             $data["table_data"] = $budget->find(["club_id" => $club_id, "club_event_id" => $club_event_id, "is_deleted" => 0, "type" => upperCase($data['tab'])]);
             /* fetch results */
             $db->commit();
-
-            if ($_SERVER['REQUEST_METHOD'] == "POST") redirect();
         } catch (\Throwable $th) {
             $data['errors'] = "Failed to process the action, please try again later.";
             $db->rollback();

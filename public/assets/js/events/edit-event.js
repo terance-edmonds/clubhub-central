@@ -28,12 +28,12 @@ const onAddNewGroup = () => {
 };
 
 const onAddGroupMember = (e, group_name) => {
-    const option_value = $(`#${group_name}-group_member_select`).val();
-    const name = $(`#${group_name}-group_member_select option[value="${option_value}"]`).text();
+    const option_value = $(`#group_member_select-${group_name}`).val();
+    const name = $(`#group_member_select-${group_name} option[value="${option_value}"]`).text();
     const values = option_value.split(',');
 
     /* reset select */
-    $(`#${group_name}-group_member_select option:first`).prop('selected', true);
+    $(`#group_member_select-${group_name} option:first`).prop('selected', true);
 
     /* check if member already added */
     const exists = $(`#${group_name}-group_members`).find(`:checkbox[value="${values[0]}"]`);

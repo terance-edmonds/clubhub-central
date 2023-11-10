@@ -100,7 +100,7 @@ class Admin extends Controller
             $db->rollback();
         }
 
-        if ($_SERVER['REQUEST_METHOD'] == "POST" &&  count($data['errors']) == 0) redirect($redirect_link);
+        if ($_SERVER['REQUEST_METHOD'] == "POST" &&  count($data['errors']) == 0) return redirect($redirect_link);
 
         $this->view($path, $data);
     }

@@ -44,7 +44,7 @@ class Modal
     public function find($data = [], $attributes = [], $include = [], $options = [])
     {
         $keys = array_keys($data);
-        $type = 'array';
+        $type = 'object';
 
         $query = "select ";
         /* set attributes */

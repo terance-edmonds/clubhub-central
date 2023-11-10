@@ -14,6 +14,7 @@ class Login extends Controller
             $user_invitation = new UserInvitation($db);
             $club_member = new ClubMember($db);
             $club = new Clubs($db);
+            $success = false;
 
             $db->transaction();
 
@@ -27,7 +28,6 @@ class Login extends Controller
                         $data['errors']['email'] = "User account has been suspended";
                     } else if (password_verify($_POST['password'], $result->password)) {
                         $params = $_GET;
-                        $success = true;
 
                         if (!empty($params) && !empty($params['token'])) {
                             $invitation_result = $user_invitation->one(["invitation_code" => $params['token'], "is_valid" => 1]);
@@ -47,23 +47,11 @@ class Login extends Controller
                                     $club->update(["id" => $invitation_result->club_id], ["state" => "ACTIVE"]);
                                     $club_member->create($club_member_data);
                                 }
+
+                                $success = true;
                             } else {
-                                $success = false;
                                 $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to login, invalid token or token has expired."]];
                             }
-                        }
-
-                        if ($success) {
-                            Auth::set([
-                                "id" => $result->id,
-                                "first_name" => $result->first_name,
-                                "last_name" => $result->last_name,
-                                "role" => $result->role,
-                            ]);
-
-                            redirect('home');
-                        } else {
-                            redirect('login');
                         }
                     } else {
                         $data['errors']['password'] = "Incorrect password";
@@ -73,6 +61,19 @@ class Login extends Controller
                 }
 
                 $db->commit();
+
+                if ($success) {
+                    Auth::set([
+                        "id" => $result->id,
+                        "first_name" => $result->first_name,
+                        "last_name" => $result->last_name,
+                        "role" => $result->role,
+                    ]);
+
+                    return redirect('home');
+                } else {
+                    return redirect('login');
+                }
             } catch (Throwable $th) {
                 $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to login, please try again later."]];
                 $db->rollback();

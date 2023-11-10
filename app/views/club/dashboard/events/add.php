@@ -101,7 +101,7 @@
                                         <select onchange="onAddGroupMember(event, '<?= $key ?>')" value="" name="group_member_select-<?= $key ?>" id="group_member_select-<?= $key ?>">
                                             <option value="" selected disabled hidden>Choose Member</option>
                                             <?php foreach ($club_members_data as $club_member) { ?>
-                                                <option value=<?= toJson($club_member) ?>><?= $club_member->first_name ?> <?= $club_member->last_name ?></option>
+                                                <option value="<?= $club_member->id ?>,<?= $club_member->user_id ?>"><?= $club_member->first_name ?> <?= $club_member->last_name ?></option>
                                             <?php } ?>
                                         </select>
                                         <?php if (!empty($errors["groups[$key][group_member]"])) : ?>

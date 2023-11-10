@@ -47,15 +47,16 @@ class Profile extends Controller
             if ($_POST['submit'] == 'logout') {
                 Auth::logout();
 
-                redirect('login');
+                return redirect('login');
             }
+
             /* club redirect */
             if ($_POST['submit'] == 'club-redirect') {
                 $storage = new Storage();
                 $storage->set('club_id', $_POST['club_id']);
                 $storage->set('club_role', $_POST['club_role']);
 
-                redirect('club/dashboard');
+                return redirect('club/dashboard');
             }
         }
 
@@ -102,8 +103,6 @@ class Profile extends Controller
                     $user->update(["id" => $auth_user["id"]], $update_data);
 
                     $_SESSION['alerts'] = [["status" => "success", "message" => "Profile data updated successfully"]];
-
-                    redirect();
                 }
             } else if ($_POST['submit'] === 'change_password') {
                 /* change password */
@@ -112,15 +111,16 @@ class Profile extends Controller
 
                     $user->update(["id" => $auth_user["id"]], ["password" => $pass]);
                     $_POST = array();
-
-                    redirect();
                 }
             }
+
+            $data['errors'] = $user->errors;
+
+            if (count($data['errors']) == 0) return redirect();
         }
 
         /* fetch data and fill the form */
         $this->setUserDetails($user, $auth_user);
-        $data['errors'] = $user->errors;
 
         $this->view("profile/edit", $data);
     }

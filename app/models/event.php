@@ -23,6 +23,7 @@ class Event extends Modal
 
         if (empty($data['name'])) $this->errors['name'] = "Name is required";
         if (empty($data['venue'])) $this->errors['venue'] = "Venue is required";
+        if (empty($data['image'])) $this->errors['image'] = "Image is required";
         if (empty($data['start_datetime'])) $this->errors['start_datetime'] = "Start date & time is required";
         if (empty($data['end_datetime'])) $this->errors['end_datetime'] = "End date & time is required";
         if (empty($data['description'])) $this->errors['description'] = "Description is required";
@@ -45,7 +46,6 @@ class Event extends Modal
 
         if (empty($data['name'])) $this->errors['name'] = "Name is required";
         if (empty($data['venue'])) $this->errors['venue'] = "Venue is required";
-        if (empty($data['open_registrations'])) $this->errors['open_registrations'] = "Open registration state is required";
         if (empty($data['start_datetime'])) $this->errors['start_datetime'] = "Start date & time is required";
         if (empty($data['end_datetime'])) $this->errors['end_datetime'] = "End date & time is required";
         if (empty($data['description'])) $this->errors['description'] = "Description is required";

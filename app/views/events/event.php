@@ -8,13 +8,15 @@
 <div id="event" class="container container-sections side-padding">
 
     <section class="center-section">
-        <img loading="lazy" src="https://picsum.photos/1020/315" alt="Event Cover" class="club-event-image">
+        <img loading="lazy" src="<?= $event_data['image'] ?>" alt="Event Cover" class="club-event-image">
 
         <div class="content">
             <div class="title-wrap">
-                <span class="title f-24">Event Name</span>
+                <span class="title f-24"><?= $event_data['name'] ?></span>
 
-                <button onclick="$(`[popup-name='event-register']`).popup(true)" class="button contained">Register Now</button>
+                <?php if ($event_data['open_registrations']) { ?>
+                    <button onclick="$(`[popup-name='event-register']`).popup(true)" class="button contained">Register Now</button>
+                <?php } ?>
             </div>
 
             <div class="details-wrap">
@@ -25,8 +27,8 @@
                         </span>
                     </div>
                     <div class="texts">
-                        <span>24th August</span>
-                        <span>11.00 A.M</span>
+                        <span><?= $event_data['start_date'] ?></span>
+                        <span><?= $event_data['start_time'] ?></span>
                     </div>
                 </div>
                 <div class="detail-wrap">
@@ -36,22 +38,12 @@
                         </span>
                     </div>
                     <div class="texts">
-                        <span>UCSC Grounds</span>
+                        <span><?= $event_data['venue'] ?></span>
                     </div>
                 </div>
             </div>
 
-            <p class="description">
-                Explore the World of APIs with Postman! Join us in the API 101 session brought to you by the IEEE Student Branch of UCSC. The session will be hosted by Suraif Muhammad, a Postman Student Expert and a 3rd-year undergraduate at UCSC. Delve into
-
-                Pharetra pharetra massa massa ultricies mi quis hendrerit. Odio ut sem nulla pharetra diam sit amet. Magnis dis parturient montes nascetur ridiculus. Ac turpis egestas integer eget aliquet nibh praesent tristique. Quis vel eros donec ac odio tempor orci.
-
-                Pharetra pharetra massa massa ultricies mi quis hendrerit. Odio ut sem nulla pharetra diam sit amet. Magnis dis parturient montes nascetur ridiculus. Ac turpis egestas integer eget aliquet nibh praesent tristique. Quis vel eros donec ac odio tempor orci.
-
-                Pharetra pharetra massa massa ultricies mi quis hendrerit. Odio ut sem nulla pharetra diam sit amet. Magnis dis parturient montes nascetur ridiculus. Ac turpis egestas integer eget aliquet nibh praesent tristique. Quis vel eros donec ac odio tempor orci.
-
-                Pharetra pharetra massa massa ultricies mi quis hendrerit. Odio ut sem nulla pharetra diam sit amet. Magnis dis parturient montes nascetur ridiculus. Ac turpis egestas integer eget aliquet nibh praesent tristique. Quis vel eros donec ac odio tempor orci.
-            </p>
+            <p class="description"><?= $event_data['description'] ?></p>
         </div>
     </section>
 

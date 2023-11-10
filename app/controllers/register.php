@@ -55,7 +55,7 @@ class Register extends Controller
 
                         $db->commit();
 
-                        redirect('login');
+                        return redirect('login');
                     } else {
                         $data["errors"]["email"] = "Something went wrong!";
                     }

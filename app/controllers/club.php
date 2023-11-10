@@ -39,13 +39,13 @@ class Club extends Controller
         $club_role = $storage->get('club_role');
 
         if (empty($club_id)) {
-            redirect('/not-found');
+            return redirect('not-found');
         }
 
         $menu = [
             ["id" => "events", "name" => "Events", "icon" => "emoji_events", "path" => ["/club/dashboard", "/club/dashboard/events/add"], "active" => "false"],
-            ["id" => "community", "name" => "Community Chat", "icon" => "mark_unread_chat_alt", "path" => "/club/dashboard/community", "active" => "false"],
             ["id" => "posts", "name" => "Posts", "icon" => "history_edu", "path" => ["/club/dashboard/posts", "/club/dashboard/posts/add"], "active" => "false"],
+            ["id" => "community", "name" => "Community Chat", "icon" => "mark_unread_chat_alt", "path" => "/club/dashboard/community", "active" => "false"],
         ];
 
         /* filter menu */
@@ -158,7 +158,7 @@ class Club extends Controller
                     $storage = new Storage();
                     $storage->set('club_event_id', $_POST['club_event_id']);
 
-                    redirect('events/dashboard');
+                    return redirect('events/dashboard');
                 }
 
                 $data['errors'] = $event->errors;
@@ -169,7 +169,7 @@ class Club extends Controller
 
             $db->commit();
 
-            if ($_SERVER['REQUEST_METHOD'] == "POST") redirect($redirect_link);
+            if ($_SERVER['REQUEST_METHOD'] == "POST") return redirect($redirect_link);
         } catch (\Throwable $th) {
             $db->rollback();
             $_SESSION['alerts'] = [["status" => "error", "message" => $th->getMessage() || "Failed to process the action, please try again later."]];
