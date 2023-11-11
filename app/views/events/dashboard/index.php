@@ -70,14 +70,25 @@
                             <?php endif; ?>
                         </div>
 
-                        <label class="checkbox-label">
-                            <span>Open For External Registrations</span>
+                        <div class="multi-wrap">
+                            <label class="checkbox-label max-width">
+                                <span>Open For External Registrations</span>
 
-                            <label class="switch">
-                                <input name="is_public" type="checkbox" <?php if (in_array(setValue('is_public'), ['1', 'on'])) { ?> checked <?php } ?> required />
-                                <span class="slider"></span>
+                                <label class="switch">
+                                    <input name="is_public" type="checkbox" <?php if (in_array(setValue('is_public'), ['1', 'on'])) { ?> checked <?php } ?> />
+                                    <span class="slider"></span>
+                                </label>
                             </label>
-                        </label>
+
+                            <label class="checkbox-label max-width">
+                                <span>Open Event Registrations</span>
+
+                                <label class="switch">
+                                    <input name="open_registrations" type="checkbox" <?php if (in_array(setValue('open_registrations'), ['1', 'on'])) { ?> checked <?php } ?> />
+                                    <span class="slider"></span>
+                                </label>
+                            </label>
+                        </div>
                     </div>
                 </div>
 

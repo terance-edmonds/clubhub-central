@@ -9,6 +9,7 @@ class EventRegistration extends Modal
         "user_name",
         "user_email",
         "user_contact",
+        "attended",
     ];
 
     public function validateAddEventRegistration($data)

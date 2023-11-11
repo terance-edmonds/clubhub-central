@@ -6,14 +6,46 @@ class Events extends Controller
 {
     public function index()
     {
+        $event = new Event();
+        $moment = new \Moment\Moment();
+
+        $today_events = $event->find(
+            [
+                "start_datetime" => [
+                    "data" => $moment->format('Y-m-d') . "%",
+                    "operator" => "like"
+                ],
+                "club_events.state" => "ACTIVE"
+            ],
+            [
+                "club_events.id as id",
+                "club_events.name as name",
+                "club_events.venue as venue",
+                "club_events.image as image",
+                "club_events.start_datetime as start_datetime",
+                "club_events.end_datetime as end_datetime",
+                "club_events.state as state",
+                "club.id as club_id",
+                "club.name as club_name"
+            ],
+            [
+                ["table" => "clubs", "as" => "club", "on" => "club_events.club_id = club.id"]
+            ]
+        );
+
         $left_bar = [
             "calendar_data" => [
                 "current_path" => "/"
             ]
         ];
 
+        $right_bar = [
+            "events" => $today_events
+        ];
+
         $data = [
-            "left_bar" => $left_bar
+            "left_bar" => $left_bar,
+            "right_bar" => $right_bar
         ];
 
         $this->view("events", $data);
@@ -214,6 +246,8 @@ class Events extends Controller
                         } else {
                             $form_data['image'] = $file_upload['url'];
                         }
+                    } else if (!empty($form_data['pre_uploaded_image'])) {
+                        $form_data['image'] = $form_data['pre_uploaded_image'];
                     }
 
                     if ($image_uploaded && $event->validateUpdateEvent($form_data)) {
@@ -356,6 +390,47 @@ class Events extends Controller
 
     private function registrations($path, $data)
     {
+        $event = new Event();
+        $event_registration = new EventRegistration();
+        $storage = new Storage();
+        $club_id = $storage->get('club_id');
+        $club_event_id = $storage->get('club_event_id');
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $form_data = $_POST;
+
+            if ($_POST['submit'] == 'event_registration') {
+                if ($event_registration->validateAddEventRegistration($form_data)) {
+                    try {
+                        $event_registration->create([
+                            "club_id" => $club_id,
+                            "club_event_id" => $club_event_id,
+                            "user_name" => $form_data['user_name'],
+                            "user_email" => $form_data['user_email'],
+                            "user_contact" => $form_data['user_contact'],
+                        ]);
+
+                        $_SESSION['alerts'] = [["status" => "success", "message" => "Registered to the event successfully"]];
+                    } catch (\Throwable $th) {
+                        $_SESSION['alerts'] = [["status" => "error", "message" => "Event registration failed, please try again later"]];
+                    }
+
+                    return redirect();
+                } else {
+                    $data['popups']['event-register'] = true;
+                }
+            }
+
+            $data['errors'] = $event_registration->errors;
+        }
+
+        /* fetch event registration data */
+        $data['event_registrations_data'] = $event_registration->find(["club_id" => $club_id, "club_event_id" => $club_event_id]);
+
+        /* fetch event details */
+        $event_data = $event->one(["id" => $club_event_id]);
+        $_POST['open_registrations'] = $event_data->open_registrations;
+
         $this->view($path, $data);
     }
 

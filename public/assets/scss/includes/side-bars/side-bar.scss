@@ -143,6 +143,29 @@
             }
         }
     }
+
+    .empty-content {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        padding: 20px;
+
+        .titles {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+
+            .title {
+                color: #fff;
+            }
+
+            .sub-title {
+                font-size: $px14;
+                color: $gray;
+            }
+        }
+    }
 }
 
 @media screen and (max-width: 1350px) {

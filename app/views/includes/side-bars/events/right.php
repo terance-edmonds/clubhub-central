@@ -28,22 +28,32 @@
         </p>
 
         <div class="cards">
-            <?php foreach ($events as $event) { ?>
-                <div class="card">
-                    <img loading="lazy" src="<?= $event->image ?>" alt="Post Image" class="post-image">
-                    <div class="details">
-                        <a href="<?= ROOT ?>/events/event?id=<?= $event->id ?>" class="title"><?= $event->name ?></a>
-                        <p class="date-time">
-                            <span>Time</span>
-                            <span>:</span>
-                            <span><?= displayValue($event->start_datetime, 'time') ?> - <?= displayValue($event->end_datetime, 'time') ?></span>
-                        </p>
-                        <p class="date-time">
-                            <span>Venue</span>
-                            <span>:</span>
-                            <span class="truncate-text"><?= $event->venue ?></span>
-                        </p>
-                        <p class="club truncate-text"><?= $event->club_name ?></p>
+            <?php if (count($events) > 0) { ?>
+                <?php foreach ($events as $event) { ?>
+                    <div class="card">
+                        <img loading="lazy" src="<?= $event->image ?>" alt="Post Image" class="post-image">
+                        <div class="details">
+                            <a href="<?= ROOT ?>/events/event?id=<?= $event->id ?>" class="title"><?= $event->name ?></a>
+                            <p class="date-time">
+                                <span>Time</span>
+                                <span>:</span>
+                                <span><?= displayValue($event->start_datetime, 'time') ?> - <?= displayValue($event->end_datetime, 'time') ?></span>
+                            </p>
+                            <p class="date-time">
+                                <span>Venue</span>
+                                <span>:</span>
+                                <span class="truncate-text"><?= $event->venue ?></span>
+                            </p>
+                            <p class="club truncate-text"><?= $event->club_name ?></p>
+                        </div>
+                    </div>
+                <?php }
+            } else { ?>
+                <div class="empty-content">
+                    <img loading="lazy" src="<?= ROOT ?>/assets/images/other/empty.png" alt="Not Found" class="empty-image">
+                    <div class="titles">
+                        <span class="title">No Events Yet</span>
+                        <span class="sub-title">There are no events scheduled for today</span>
                     </div>
                 </div>
             <?php } ?>

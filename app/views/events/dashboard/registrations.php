@@ -107,4 +107,10 @@
     </section>
 </div>
 
-<?php $this->view('includes/modals/event/register') ?>
+<?php $this->view('includes/modals/event/register', ["errors" => $errors]) ?>
+
+<script>
+    <?php if (!empty($popups["event-register"])) { ?>
+        $(`[popup-name='event-register']`).popup(true)
+    <?php } ?>
+</script>

@@ -111,20 +111,68 @@ class Modal
         return [];
     }
 
-    public function one($data)
+    public function one($data, $attributes = [], $include = [],)
     {
         $keys = array_keys($data);
+        $type = 'object';
 
-        $query = "select * from " . $this->table . " where ";
+        $query = "select ";
+        /* set attributes */
+        if (count($attributes) > 0) {
+            foreach ($attributes as $attribute) {
+                $query .= $attribute . ", ";
+            }
+        } else {
+            $query .= "* ";
+        }
+        $query = trim($query, ", ");
 
-        foreach ($keys as $key) {
-            $query .= $key . "=:" . $key . " && ";
+        /* set table */
+        $query .= " from " . $this->table;
+
+        /* left join */
+        if (count($include) > 0) {
+            foreach ($include as $item) {
+                $query .= " left join " . $item['table'] . " as " . $item['as'] . " on " . $item['on'];
+            }
         }
 
-        $query = trim($query, "&& ");
-        $query .= " order by id $this->order limit 1";
+        /* where clause */
+        if (count($data) > 0) {
+            $query .= " where ";
+        }
+        foreach ($keys as $key) {
+            $operator = '=';
+            $value = $key;
 
-        $res = $this->db->query($query, $data);
+            /* if the data is an array of options */
+            if (is_array($data[$key])) {
+                $operator = $data[$key]['operator'];
+                $data[$key] = $data[$value]['data'];
+            }
+
+            /* handle joined table columns */
+            $multi_keys = explode('.', $key);
+            if (count($multi_keys) > 1) {
+                $value = $multi_keys[1];
+                $data[$value] = $data[$key];
+
+                unset($data[$key]);
+            }
+
+            $query .= $key . " " . $operator . " :" . $value . " && ";
+        }
+        $query = trim($query, "&& ");
+
+        /* order by */
+        $query .= " order by $this->table.id $this->order limit 1";
+
+        /* set type */
+        if (!empty($options['type'])) {
+            $type = $options['type'];
+        }
+
+        $res = $this->db->query($query, $data, $type);
 
         if (is_array($res)) {
             return $res[0];

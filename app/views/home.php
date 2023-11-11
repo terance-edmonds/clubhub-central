@@ -14,5 +14,5 @@
             <?php $this->view('includes/club-post') ?>
         </div>
     </section>
-    <?php $this->view('includes/side-bars/events/right')  ?>
+    <?php $this->view('includes/side-bars/events/right', $right_bar)  ?>
 </div>

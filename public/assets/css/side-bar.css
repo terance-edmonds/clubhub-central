@@ -234,6 +234,35 @@
 .side-bar .events-section .cards .card .details .club {
   color: #a5a5a5;
 }
+.side-bar .empty-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 30px;
+  padding: 20px;
+}
+.side-bar .empty-content .titles {
+  text-align: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 5px;
+}
+.side-bar .empty-content .titles .title {
+  color: #fff;
+}
+.side-bar .empty-content .titles .sub-title {
+  font-size: 0.875em;
+  color: #a5a5a5;
+}
 
 @media screen and (max-width: 1350px) {
   .side-bar.right {
@@ -412,35 +441,6 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-}
-.profile-side-bar.right .clubs-section .empty-content {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  gap: 30px;
-  padding: 20px;
-}
-.profile-side-bar.right .clubs-section .empty-content .titles {
-  text-align: center;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  gap: 5px;
-}
-.profile-side-bar.right .clubs-section .empty-content .titles .title {
-  color: #fff;
-}
-.profile-side-bar.right .clubs-section .empty-content .titles .sub-title {
-  font-size: 0.875em;
-  color: #a5a5a5;
 }
 
 .club-side-bar .profile-section {
