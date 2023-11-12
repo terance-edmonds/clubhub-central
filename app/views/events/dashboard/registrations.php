@@ -34,14 +34,17 @@
             </div>
         </div>
 
-        <label class="checkbox-label">
-            <span>Open Registrations</span>
+        <form method="post">
+            <input type="text" hidden name="form" value="open_registrations_update" />
+            <label class="checkbox-label">
+                <span>Open Registrations</span>
 
-            <label class="switch">
-                <input type="checkbox">
-                <span class="slider"></span>
+                <label class="switch">
+                    <input <?php if (in_array(setValue('open_registrations'), ['1', 'on'])) { ?> checked <?php } ?> onchange="this.form.submit()" type="checkbox" name="open_registrations">
+                    <span class="slider"></span>
+                </label>
             </label>
-        </label>
+        </form>
 
         <div class="content-section">
             <div class="table-wrap">
@@ -53,54 +56,36 @@
                         <th>Attendance</th>
                         <th>Actions</th>
                     </tr>
-                    <tr class="table-data">
-                        <td>Participants Name</td>
-                        <td>0771234567</td>
-                        <td>dev@mailinator.com</td>
-                        <td>
-                            <button class="button status-button" data-attended="false">
-                                Pending
-                            </button>
-                        </td>
-                        <td align="center">
-                            <div class="buttons">
-                                <button class="icon-button">
-                                    <span class="material-icons-outlined">
-                                        edit
-                                    </span>
+                    <?php foreach ($event_registrations_data as $event_registration) { ?>
+                        <tr class="table-data">
+                            <td><?= displayValue($event_registration->user_name) ?></td>
+                            <td><?= displayValue($event_registration->user_contact) ?></td>
+                            <td><?= displayValue($event_registration->user_email) ?></td>
+                            <td>
+                                <button class="button status-button" data-attended="<?= displayValue($event_registration->attended, 'boolean') ?>">
+                                    <?php if ($event_registration->attended == '1') { ?>
+                                        Attended
+                                    <?php } else { ?>
+                                        Pending
+                                    <?php } ?>
                                 </button>
-                                <button class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        delete
-                                    </span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="table-data">
-                        <td>Participants Name</td>
-                        <td>0771234567</td>
-                        <td>dev@mailinator.com</td>
-                        <td>
-                            <button class="button status-button" data-attended="true">
-                                Attended
-                            </button>
-                        </td>
-                        <td align="center">
-                            <div class="buttons">
-                                <button class="icon-button">
-                                    <span class="material-icons-outlined">
-                                        edit
-                                    </span>
-                                </button>
-                                <button class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        delete
-                                    </span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                            </td>
+                            <td align="center">
+                                <div class="buttons">
+                                    <button onclick='onDataPopup("event-register-update", <?= toJson($event_registration, ["id", "user_name", "user_email", "user_contact"]) ?>)' class="icon-button">
+                                        <span class="material-icons-outlined">
+                                            edit
+                                        </span>
+                                    </button>
+                                    <button class="icon-button cl-red">
+                                        <span class="material-icons-outlined">
+                                            delete
+                                        </span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php } ?>
                 </table>
             </div>
         </div>
@@ -108,9 +93,15 @@
 </div>
 
 <?php $this->view('includes/modals/event/register', ["errors" => $errors]) ?>
+<?php $this->view('includes/modals/event/register/update', ["errors" => $errors]) ?>
+
+<script src="<?= ROOT ?>/assets/js/form.js"></script>
 
 <script>
     <?php if (!empty($popups["event-register"])) { ?>
         $(`[popup-name='event-register']`).popup(true)
+    <?php } ?>
+    <?php if (!empty($popups["event-register-update"])) { ?>
+        $(`[popup-name='event-register-update']`).popup(true)
     <?php } ?>
 </script>

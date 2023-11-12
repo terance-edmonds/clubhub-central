@@ -13,7 +13,7 @@ class Event extends Modal
         "is_public",
         "image",
         "state",
-        "open_registration",
+        "open_registrations",
         "created_datetime",
     ];
 

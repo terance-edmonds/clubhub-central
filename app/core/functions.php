@@ -76,6 +76,9 @@ function displayValue($val, $format = 'text')
             $moment = new \Moment\Moment($val);
             $val = $moment->format('h:i A');
             break;
+        case 'boolean':
+            $val = ($val == '1') ? 'true' : 'false';
+            break;
     }
 
     return $val;

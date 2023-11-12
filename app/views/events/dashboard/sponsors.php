@@ -156,7 +156,7 @@
 
 
 <script src="<?= ROOT ?>/assets/js/events/event.js"></script>
-<script src="<?= ROOT ?>/assets/js/events/sponsor.js"></script>
+<script src="<?= ROOT ?>/assets/js/form.js"></script>
 
 <?php $this->view('includes/modals/event/sponsor') ?>
 <?php $this->view('includes/modals/event/sponsor/edit') ?>

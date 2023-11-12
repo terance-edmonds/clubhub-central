@@ -399,7 +399,25 @@ class Events extends Controller
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $form_data = $_POST;
 
-            if ($_POST['submit'] == 'event_registration') {
+            if (!empty($_POST['form']) && $_POST['form'] == 'open_registrations_update') {
+                try {
+                    $event->update(
+                        [
+                            "id" => $club_event_id
+                        ],
+                        [
+                            "open_registrations" =>  empty($form_data['open_registrations']) ? 0 : 1,
+                        ]
+                    );
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Event registration state updated successfully"]];
+                } catch (\Throwable $th) {
+                    show($th);
+                    $_SESSION['alerts'] = [["status" => "error", "message" => "Event registration state update failed, please try again later"]];
+                }
+
+                return redirect();
+            } else if ($_POST['submit'] == 'event_registration') {
                 if ($event_registration->validateAddEventRegistration($form_data)) {
                     try {
                         $event_registration->create([
@@ -418,6 +436,25 @@ class Events extends Controller
                     return redirect();
                 } else {
                     $data['popups']['event-register'] = true;
+                }
+            } else if ($_POST['submit'] == 'event_registration_update') {
+                if ($event_registration->validateUpdateEventRegistration($form_data)) {
+                    try {
+                        $event_registration->update(["id" => $form_data['id']], [
+                            "user_name" => $form_data['user_name'],
+                            "user_email" => $form_data['user_email'],
+                            "user_contact" => $form_data['user_contact'],
+                            "attended" => empty($form_data['attended']) ? 0 : 1,
+                        ]);
+
+                        $_SESSION['alerts'] = [["status" => "success", "message" => "Registration details updated successfully"]];
+                    } catch (\Throwable $th) {
+                        $_SESSION['alerts'] = [["status" => "error", "message" => "Registration details update failed, please try again later"]];
+                    }
+
+                    return redirect();
+                } else {
+                    $data['popups']['event-register-update'] = true;
                 }
             }
 
