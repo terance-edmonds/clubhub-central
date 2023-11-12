@@ -1,5 +1,12 @@
 <?php
 
+use Endroid\QrCode\Color\Color;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\RoundBlockSizeMode;
+use Endroid\QrCode\Writer\PngWriter;
+
 use function _\upperCase;
 
 class Events extends Controller
@@ -130,7 +137,7 @@ class Events extends Controller
                 session_start();
             }
 
-            if ($_POST['submit'] == 'event_registration') {
+            if ($_POST['submit'] == 'event-registration') {
                 if ($event_registration->validateAddEventRegistration($form_data)) {
                     try {
                         $event_registration->create([
@@ -175,7 +182,7 @@ class Events extends Controller
         /* use outlined icons */
         $menu = [
             ["id" => "events", "name" => "Event Details", "icon" => "info", "path" => "/events/dashboard", "active" => "false"],
-            ["id" => "registrations", "name" => "registrations", "icon" => "app_registration", "path" => "/events/dashboard/registrations", "active" => "false"],
+            ["id" => "registrations", "name" => "registrations", "icon" => "app_registration", "path" => ["/events/dashboard/registrations", "/events/dashboard/registrations/attendance"], "active" => "false"],
             ["id" => "sponsors", "name" => "Sponsors", "icon" => "diversity_3", "path" => "/events/dashboard/sponsors", "active" => "false"],
             ["id" => "budgets", "name" => "Budgets", "icon" => "monetization_on", "path" => "/events/dashboard/budgets", "active" => "false"],
             ["id" => "agenda", "name" => "Agenda", "icon" => "view_agenda", "path" => "/events/dashboard/agenda", "active" => "false"],
@@ -396,10 +403,12 @@ class Events extends Controller
         $club_id = $storage->get('club_id');
         $club_event_id = $storage->get('club_event_id');
 
+        $data['user_found'] = False;
+
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $form_data = $_POST;
 
-            if (!empty($_POST['form']) && $_POST['form'] == 'open_registrations_update') {
+            if (!empty($_POST['form']) && $_POST['form'] == 'open-registrations-update') {
                 try {
                     $event->update(
                         [
@@ -412,15 +421,16 @@ class Events extends Controller
 
                     $_SESSION['alerts'] = [["status" => "success", "message" => "Event registration state updated successfully"]];
                 } catch (\Throwable $th) {
-                    show($th);
                     $_SESSION['alerts'] = [["status" => "error", "message" => "Event registration state update failed, please try again later"]];
                 }
 
                 return redirect();
-            } else if ($_POST['submit'] == 'event_registration') {
+            } else if ($_POST['submit'] == 'event-registration') {
                 if ($event_registration->validateAddEventRegistration($form_data)) {
                     try {
-                        $event_registration->create([
+                        $event_data = $event->one(["id" => $club_event_id]);
+
+                        $result = $event_registration->create([
                             "club_id" => $club_id,
                             "club_event_id" => $club_event_id,
                             "user_name" => $form_data['user_name'],
@@ -428,16 +438,24 @@ class Events extends Controller
                             "user_contact" => $form_data['user_contact'],
                         ]);
 
+                        /* send attendance mail */
+                        $this->sendAttendanceMail([
+                            "user_name" => $form_data['user_name'],
+                            "user_email" => $form_data['user_email'],
+                            "event_name" => $event_data->name,
+                            "id" => $result->id
+                        ]);
+
                         $_SESSION['alerts'] = [["status" => "success", "message" => "Registered to the event successfully"]];
                     } catch (\Throwable $th) {
                         $_SESSION['alerts'] = [["status" => "error", "message" => "Event registration failed, please try again later"]];
                     }
 
-                    return redirect();
+                    // return redirect();
                 } else {
                     $data['popups']['event-register'] = true;
                 }
-            } else if ($_POST['submit'] == 'event_registration_update') {
+            } else if ($_POST['submit'] == 'event-registration-update') {
                 if ($event_registration->validateUpdateEventRegistration($form_data)) {
                     try {
                         $event_registration->update(["id" => $form_data['id']], [
@@ -454,7 +472,40 @@ class Events extends Controller
 
                     return redirect();
                 } else {
-                    $data['popups']['event-register-update'] = true;
+                    $data['popups']['update-event-register'] = true;
+                }
+            } else if ($_POST['submit'] == 'event-attendance-search') {
+                $result = $event_registration->one(["id" => $form_data['id']]);
+
+                if (empty($result)) {
+                    $_SESSION['alerts'] = [["status" => "error", "message" => "User registration details not found"]];
+                } else {
+                    $_POST['id'] = $result->id;
+                    $_POST['user_name'] = $result->user_name;
+                    $_POST['user_email'] = $result->user_email;
+                    $_POST['user_contact'] = $result->user_contact;
+
+                    $data['user_found'] = True;
+                }
+            } else if ($_POST['submit'] == 'event-attendance-mark') {
+                try {
+                    $event_registration->update(["id" => $form_data['id']], [
+                        "attended" => 1,
+                    ]);
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Event attendance marked as attended"]];
+                } catch (\Throwable $th) {
+                    $_SESSION['alerts'] = [["status" => "error", "message" => "Attendance details update failed, please try again later"]];
+                }
+
+                return redirect();
+            } else if ($_POST['submit'] == "delete-event-register") {
+                try {
+                    $event_registration->delete(["id" => $form_data['id']]);
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Event registration details deleted successfully"]];
+                } catch (Throwable $th) {
+                    $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to delete registration details"]];
                 }
             }
 
@@ -572,7 +623,6 @@ class Events extends Controller
 
                             $_SESSION['alerts'] = [["status" => "success", "message" => "Package details added successfully"]];
                         } catch (Throwable $th) {
-                            var_dump($th);
                             $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to add package details"]];
                         }
                     } else {
@@ -810,5 +860,35 @@ class Events extends Controller
     private function complains($path, $data)
     {
         $this->view($path, $data);
+    }
+
+    private function sendAttendanceMail($data)
+    {
+        $mail = new Mail();
+        $writer = new PngWriter();
+
+        $qr_code = QrCode::create($data['id'])
+            ->setEncoding(new Encoding('UTF-8'))
+            ->setErrorCorrectionLevel(ErrorCorrectionLevel::Low)
+            ->setSize(300)
+            ->setMargin(10)
+            ->setRoundBlockSizeMode(RoundBlockSizeMode::Margin)
+            ->setForegroundColor(new Color(0, 0, 0))
+            ->setBackgroundColor(new Color(255, 255, 255));
+
+        $qr_code_result = $writer->write($qr_code);
+        show($qr_code_result->getDataUri());
+        $mail->send([
+            "to" => [
+                "mail" => $data['user_email'],
+                "name" => $data['user_name']
+            ],
+            "subject" => "Attendance Tracking",
+            "body" => $mail->template("event-attendance", [
+                "from_email" => MAIL_USER,
+                "from_name" => MAIL_USERNAME,
+                "event_name" => $data['event_name']
+            ])
+        ]);
     }
 }

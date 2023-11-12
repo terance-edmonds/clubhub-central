@@ -101,6 +101,13 @@ class Routes
             "PRESIDENT",
             "CLUB_IN_CHARGE",
         ],
+        "events/dashboard/registrations/attendance" => [
+            "MEMBER",
+            "TREASURER",
+            "SECRETORY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+        ],
         "events/dashboard/sponsors" => [
             "MEMBER",
             "TREASURER",

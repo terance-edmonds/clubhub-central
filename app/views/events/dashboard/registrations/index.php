@@ -34,17 +34,27 @@
             </div>
         </div>
 
-        <form method="post">
-            <input type="text" hidden name="form" value="open_registrations_update" />
-            <label class="checkbox-label">
-                <span>Open Registrations</span>
+        <div class="top-bar">
+            <form method="post">
+                <input type="text" hidden name="form" value="open-registrations-update" />
+                <label class="checkbox-label">
+                    <span>Open Registrations</span>
 
-                <label class="switch">
-                    <input <?php if (in_array(setValue('open_registrations'), ['1', 'on'])) { ?> checked <?php } ?> onchange="this.form.submit()" type="checkbox" name="open_registrations">
-                    <span class="slider"></span>
+                    <label class="switch">
+                        <input <?php if (in_array(setValue('open_registrations'), ['1', 'on'])) { ?> checked <?php } ?> onchange="this.form.submit()" type="checkbox" name="open_registrations">
+                        <span class="slider"></span>
+                    </label>
                 </label>
-            </label>
-        </form>
+            </form>
+            <a href="<?= ROOT ?>/events/dashboard/registrations/attendance">
+                <button class="button w-content" data-variant="outlined" data-type="icon" data-size="small">
+                    <span>Mark Attendance</span>
+                    <span class="material-icons-outlined">
+                        how_to_reg
+                    </span>
+                </button>
+            </a>
+        </div>
 
         <div class="content-section">
             <div class="table-wrap">
@@ -72,12 +82,12 @@
                             </td>
                             <td align="center">
                                 <div class="buttons">
-                                    <button onclick='onDataPopup("event-register-update", <?= toJson($event_registration, ["id", "user_name", "user_email", "user_contact"]) ?>)' class="icon-button">
+                                    <button onclick='onDataPopup("update-event-register", <?= toJson($event_registration, ["id", "user_name", "user_email", "user_contact"]) ?>)' class="icon-button">
                                         <span class="material-icons-outlined">
                                             edit
                                         </span>
                                     </button>
-                                    <button class="icon-button cl-red">
+                                    <button onclick='onDataPopup("delete-event-register", <?= toJson($event_registration, ["id"]) ?>)' class="icon-button cl-red">
                                         <span class="material-icons-outlined">
                                             delete
                                         </span>
@@ -94,6 +104,7 @@
 
 <?php $this->view('includes/modals/event/register', ["errors" => $errors]) ?>
 <?php $this->view('includes/modals/event/register/update', ["errors" => $errors]) ?>
+<?php $this->view('includes/modals/event/register/delete') ?>
 
 <script src="<?= ROOT ?>/assets/js/form.js"></script>
 
@@ -101,7 +112,7 @@
     <?php if (!empty($popups["event-register"])) { ?>
         $(`[popup-name='event-register']`).popup(true)
     <?php } ?>
-    <?php if (!empty($popups["event-register-update"])) { ?>
-        $(`[popup-name='event-register-update']`).popup(true)
+    <?php if (!empty($popups["update-event-register"])) { ?>
+        $(`[popup-name='update-event-register']`).popup(true)
     <?php } ?>
 </script>

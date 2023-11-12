@@ -24,7 +24,7 @@ class EventRegistration extends Modal
         if (!filter_var($data['user_email'], FILTER_VALIDATE_EMAIL)) {
             $this->errors['user_email'] = "Email is not valid";
         } else if ($this->one(['user_email' => $data['user_email']])) {
-            $this->errors['user_email'] = "Email already exists";
+            //$this->errors['user_email'] = "Email already exists";
         }
 
         if (empty($this->errors)) {

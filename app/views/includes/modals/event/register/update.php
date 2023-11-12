@@ -1,8 +1,8 @@
-<div class="popup-modal-wrap" popup-name="event-register-update">
+<div class="popup-modal-wrap" popup-name="update-event-register">
     <div class="popup-modal">
         <div class="popup-header">
             <span class="title">Update Details</span>
-            <div class="icon" onclick="$(`[popup-name='event-register-update']`).popup(false)">
+            <div class="icon" onclick="$(`[popup-name='update-event-register']`).popup(false)">
                 <span class="material-icons-outlined">
                     close
                 </span>
@@ -10,7 +10,12 @@
         </div>
         <div class="popup-body">
             <form class="form" method="post">
-                <input value="<?= setValue('id') ?>" name="id" id="id" type="text" hidden required>
+                <div class="input-wrap">
+                    <input value="<?= setValue('id') ?>" name="id" id="id" type="text" hidden required>
+                    <?php if (!empty($errors['id'])) : ?>
+                        <small><?= $errors['id'] ?></small>
+                    <?php endif; ?>
+                </div>
                 <div class="input-wrap">
                     <label for="user_name">Full Name</label>
                     <input value="<?= setValue('user_name') ?>" name="user_name" id="user_name" type="text" placeholder="Full Name" required>
@@ -42,7 +47,7 @@
                     </label>
                 </label>
 
-                <button type="submit" name="submit" value="event_registration_update" class="button contained">Save</button>
+                <button type="submit" name="submit" value="event-registration-update" class="button contained">Save</button>
             </form>
         </div>
     </div>

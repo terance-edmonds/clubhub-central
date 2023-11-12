@@ -129,8 +129,13 @@
     </section>
 </div>
 
+<?php $this->view('includes/modals/event/sponsor') ?>
+<?php $this->view('includes/modals/event/sponsor/edit') ?>
+<?php $this->view('includes/modals/event/sponsor/delete') ?>
 
-
+<?php $this->view('includes/modals/event/package') ?>
+<?php $this->view('includes/modals/event/package/edit') ?>
+<?php $this->view('includes/modals/event/package/delete') ?>
 
 <script>
     <?php if (!empty($popups["add-sponsor"])) { ?>
@@ -154,14 +159,5 @@
     <?php } ?>
 </script>
 
-
 <script src="<?= ROOT ?>/assets/js/events/event.js"></script>
 <script src="<?= ROOT ?>/assets/js/form.js"></script>
-
-<?php $this->view('includes/modals/event/sponsor') ?>
-<?php $this->view('includes/modals/event/sponsor/edit') ?>
-<?php $this->view('includes/modals/event/sponsor/delete') ?>
-
-<?php $this->view('includes/modals/event/package') ?>
-<?php $this->view('includes/modals/event/package/edit') ?>
-<?php $this->view('includes/modals/event/package/delete') ?>

@@ -36,7 +36,7 @@ $side_bar_user = $side_bar_user->one(["id" => $side_bar_auth_user_id]);
                         </span>
                     </div>
                     <div class="details">
-                        <a href="<?= ROOT ?><?php echo $val["path"] ?>" class="title"><?php echo $val["name"] ?></a>
+                        <a href="<?= ROOT ?><?php echo (is_array($val["path"])) ? $val["path"][0] : $val["path"] ?>" class="title"><?php echo $val["name"] ?></a>
                         <span class="material-icons-outlined">
                             chevron_right
                         </span>

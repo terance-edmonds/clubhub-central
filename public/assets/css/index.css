@@ -325,6 +325,7 @@ a {
   width: 20px;
   left: 2px;
   bottom: 2px;
+  top: 2px;
   background-color: #09090b;
   -webkit-transition: 0.4s;
   transition: 0.4s;

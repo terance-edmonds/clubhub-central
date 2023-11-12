@@ -32,7 +32,7 @@
                     <?php endif; ?>
                 </div>
 
-                <button type="submit" name="submit" value="event_registration" class="button contained">Submit</button>
+                <button type="submit" name="submit" value="event-registration" class="button contained">Submit</button>
             </form>
         </div>
     </div>

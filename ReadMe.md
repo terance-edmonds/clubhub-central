@@ -11,6 +11,17 @@ ClubHub Central web application. Build with `PHP` with `MVC` architecture model.
 | Functions | Camal Case 	| myFunction    |
 | Variable 	| Snake Case  	| my_variable 	|
 
+## Extensions Used
+
+To enable extension go to `xampp/php/php.ini` (open via notepad) and remove `;` from the start of the required extension line.
+
+```ini
+;extension=gd # when extension is disabled
+extension=gd # when extension is enabled
+```
+
+* extension=gd
+
 ## Usage
 
 1. Clone the repository to `xampp/htdocs/chc` with the below code.
