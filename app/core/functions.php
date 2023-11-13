@@ -1,6 +1,14 @@
 <?php
 
+use Endroid\QrCode\Color\Color;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\RoundBlockSizeMode;
+use Endroid\QrCode\Writer\PngWriter;
+
 /* show formatted */
+
 function show($data)
 {
     print_r("<pre>");
@@ -127,6 +135,35 @@ function uploadFile($name)
     }
 
     return null;
+}
+
+/* upload QR code */
+function generateQRCode($data)
+{
+    $writer = new PngWriter();
+
+    $qr_code = QrCode::create($data)
+        ->setEncoding(new Encoding('UTF-8'))
+        ->setErrorCorrectionLevel(ErrorCorrectionLevel::Low)
+        ->setSize(300)
+        ->setMargin(10)
+        ->setRoundBlockSizeMode(RoundBlockSizeMode::Margin)
+        ->setForegroundColor(new Color(0, 0, 0))
+        ->setBackgroundColor(new Color(255, 255, 255));
+
+    $qr_code_result = $writer->write($qr_code);
+
+    $currentRoot = dirname(__DIR__, 2);
+    $route = "/assets/qr_codes/";
+    $target_dir = $currentRoot . "/public" . $route;
+    if (!file_exists($target_dir)) {
+        mkdir($target_dir, 0777, true);
+    }
+
+    $file_name = milliseconds() . ".png";
+    $qr_code_result->saveToFile($target_dir . $file_name);
+
+    return ROOT . $route . $file_name;
 }
 
 /* get active tab */

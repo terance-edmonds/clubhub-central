@@ -66,6 +66,11 @@
                         <th>Attendance</th>
                         <th>Actions</th>
                     </tr>
+                    <?php if (count($event_registrations_data) == 0) { ?>
+                        <tr>
+                            <td colspan="5">No Records.</td>
+                        </tr>
+                    <?php } ?>
                     <?php foreach ($event_registrations_data as $event_registration) { ?>
                         <tr class="table-data">
                             <td><?= displayValue($event_registration->user_name) ?></td>
@@ -82,12 +87,20 @@
                             </td>
                             <td align="center">
                                 <div class="buttons">
-                                    <button onclick='onDataPopup("update-event-register", <?= toJson($event_registration, ["id", "user_name", "user_email", "user_contact"]) ?>)' class="icon-button">
+                                    <form method="post">
+                                        <input type="text" hidden name="id" value="<?= $event_registration->id ?>">
+                                        <button title="Send Attendance Mail" type="submit" name="submit" value="send-attendance-mail" class="icon-button">
+                                            <span class="material-icons-outlined">
+                                                forward_to_inbox
+                                            </span>
+                                        </button>
+                                    </form>
+                                    <button title="Edit Details" onclick='onDataPopup("update-event-register", <?= toJson($event_registration, ["id", "user_name", "user_email", "user_contact"]) ?>)' class="icon-button">
                                         <span class="material-icons-outlined">
                                             edit
                                         </span>
                                     </button>
-                                    <button onclick='onDataPopup("delete-event-register", <?= toJson($event_registration, ["id"]) ?>)' class="icon-button cl-red">
+                                    <button title="Delete Record" onclick='onDataPopup("delete-event-register", <?= toJson($event_registration, ["id"]) ?>)' class="icon-button cl-red">
                                         <span class="material-icons-outlined">
                                             delete
                                         </span>

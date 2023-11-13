@@ -304,7 +304,7 @@
                                                                 <tr>
                                                                     <td style="padding-right: 0px;padding-left: 0px;" align="center">
 
-                                                                        <img align="center" border="0" src="cid:qr_code_image" alt="QR Code" title="QR Code" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 580px;" width="580" />
+                                                                        <img align="center" border="0" src="<?= $qr_code_image ?>" alt="QR Code" title="QR Code" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 275px;" width="275" />
 
                                                                     </td>
                                                                 </tr>

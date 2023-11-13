@@ -1,12 +1,5 @@
 <?php
 
-use Endroid\QrCode\Color\Color;
-use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel;
-use Endroid\QrCode\QrCode;
-use Endroid\QrCode\RoundBlockSizeMode;
-use Endroid\QrCode\Writer\PngWriter;
-
 use function _\upperCase;
 
 class Events extends Controller
@@ -140,12 +133,22 @@ class Events extends Controller
             if ($_POST['submit'] == 'event-registration') {
                 if ($event_registration->validateAddEventRegistration($form_data)) {
                     try {
-                        $event_registration->create([
+                        $event_data = $event->one(["id" => $event_details->id]);
+
+                        $result = $event_registration->create([
                             "club_id" => $event_details->club_id,
                             "club_event_id" => $event_details->id,
                             "user_name" => $form_data['user_name'],
                             "user_email" => $form_data['user_email'],
                             "user_contact" => $form_data['user_contact'],
+                        ]);
+
+                        /* send attendance mail */
+                        $this->sendAttendanceMail([
+                            "user_name" => $form_data['user_name'],
+                            "user_email" => $form_data['user_email'],
+                            "event_name" => $event_data->name,
+                            "id" => $result->id
                         ]);
 
                         $_SESSION['alerts'] = [["status" => "success", "message" => "Registered to the event successfully"]];
@@ -451,7 +454,7 @@ class Events extends Controller
                         $_SESSION['alerts'] = [["status" => "error", "message" => "Event registration failed, please try again later"]];
                     }
 
-                    // return redirect();
+                    return redirect();
                 } else {
                     $data['popups']['event-register'] = true;
                 }
@@ -507,6 +510,28 @@ class Events extends Controller
                 } catch (Throwable $th) {
                     $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to delete registration details"]];
                 }
+
+                return redirect();
+            } else if ($_POST['submit'] == 'send-attendance-mail') {
+                show($form_data);
+                try {
+                    $event_registration_data = $event_registration->one(["id" => $form_data['id']]);
+                    $event_data = $event->one(["id" => $club_event_id]);
+
+                    /* send attendance mail */
+                    $this->sendAttendanceMail([
+                        "user_name" => $event_registration_data->user_name,
+                        "user_email" => $event_registration_data->user_email,
+                        "event_name" => $event_data->name,
+                        "id" => $form_data['id']
+                    ]);
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Event attendance mail sent successfully"]];
+                } catch (\Throwable $th) {
+                    $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to send attendance mail"]];
+                }
+
+                return redirect();
             }
 
             $data['errors'] = $event_registration->errors;
@@ -654,7 +679,7 @@ class Events extends Controller
                     $_SESSION['alerts'] = [["status" => "success", "message" => "Package details deleted successfully"]];
                 } catch (Throwable $th) {
                     var_dump($th);
-                    $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to delete Package details"]];
+                    $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to delete package details"]];
                 }
 
                 $data['errors'] = $package->errors;
@@ -678,11 +703,6 @@ class Events extends Controller
         $club_event_id = $storage->get('club_event_id');
         $club_member_id = $storage->get('club_member_id');
         $user_id = Auth::getId();
-
-        /* remove these on production */
-        $club_id = 1;
-        $club_event_id = 1;
-        $club_member_id = 1;
 
         if (empty($club_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Club details are not found"]];
         if (empty($club_event_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Event details are not found"]];
@@ -839,7 +859,7 @@ class Events extends Controller
             /* fetch results */
             $db->commit();
         } catch (\Throwable $th) {
-            $data['errors'] = "Failed to process the action, please try again later.";
+            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to process the action, please try again later"]];
             $db->rollback();
         }
 
@@ -849,6 +869,72 @@ class Events extends Controller
 
     private function agenda($path, $data)
     {
+        $storage = new Storage();
+        $agenda = new Agenda();
+
+        $club_id = $storage->get('club_id');
+        $club_event_id = $storage->get('club_event_id');
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $form_data = $_POST;
+
+            if ($_POST['submit'] == 'create-event-agenda') {
+                if ($agenda->validateAddEventAgenda($form_data)) {
+                    try {
+                        $agenda->create([
+                            "club_id" => $club_id,
+                            "club_event_id" => $club_event_id,
+                            "name" => $form_data['name'],
+                            "venue" => $form_data['venue'],
+                            "note" => $form_data['note'],
+                            "datetime" => $form_data['datetime'],
+                        ]);
+
+                        $_SESSION['alerts'] = [["status" => "success", "message" => "Agenda details added successfully"]];
+                    } catch (\Throwable $th) {
+                        $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to add agenda details"]];
+                    }
+
+                    return redirect();
+                } else {
+                    $data['popups']["add-agenda"] = true;
+                }
+            } else if ($_POST['submit'] == 'update-event-agenda') {
+                if ($agenda->validateAddEventAgenda($form_data)) {
+                    try {
+                        $agenda->update(["id" => $form_data['id']], [
+                            "name" => $form_data['name'],
+                            "venue" => $form_data['venue'],
+                            "note" => $form_data['note'],
+                            "datetime" => $form_data['datetime'],
+                        ]);
+
+                        $_SESSION['alerts'] = [["status" => "success", "message" => "Agenda details updated successfully"]];
+                    } catch (\Throwable $th) {
+                        $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to update agenda details"]];
+                    }
+
+                    return redirect();
+                } else {
+                    $data['popups']["edit-agenda"] = true;
+                }
+            } else if ($_POST['submit'] == "delete-agenda") {
+                try {
+                    $agenda->delete(["id" => $form_data['id']]);
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Agenda details deleted successfully"]];
+                } catch (Throwable $th) {
+                    $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to delete agenda details"]];
+                }
+
+                return redirect();
+            }
+
+            $data['errors'] = $agenda->errors;
+        }
+
+        $data['agenda_data'] = $agenda->find(["club_id" => $club_id, "club_event_id" => $club_event_id]);
+
         $this->view($path, $data);
     }
 
@@ -859,25 +945,38 @@ class Events extends Controller
 
     private function complains($path, $data)
     {
+        $complain = new Complain();
+        $storage = new Storage();
+
+        $club_id = $storage->get('club_id');
+        $club_event_id = $storage->get('club_event_id');
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $form_data = $_POST;
+
+            if ($_POST['submit'] == "delete-complain") {
+                try {
+                    $complain->delete(["id" => $form_data['id']]);
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Complain details deleted successfully"]];
+                } catch (Throwable $th) {
+                    $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to delete complain details"]];
+                }
+
+                return redirect();
+            }
+        }
+
+        $data['complains_data'] = $complain->find(["club_id" => $club_id, "club_event_id" => $club_event_id]);
+
         $this->view($path, $data);
     }
 
     private function sendAttendanceMail($data)
     {
         $mail = new Mail();
-        $writer = new PngWriter();
+        $qr_code_image = generateQRCode($data['id']);
 
-        $qr_code = QrCode::create($data['id'])
-            ->setEncoding(new Encoding('UTF-8'))
-            ->setErrorCorrectionLevel(ErrorCorrectionLevel::Low)
-            ->setSize(300)
-            ->setMargin(10)
-            ->setRoundBlockSizeMode(RoundBlockSizeMode::Margin)
-            ->setForegroundColor(new Color(0, 0, 0))
-            ->setBackgroundColor(new Color(255, 255, 255));
-
-        $qr_code_result = $writer->write($qr_code);
-        show($qr_code_result->getDataUri());
         $mail->send([
             "to" => [
                 "mail" => $data['user_email'],
@@ -887,7 +986,8 @@ class Events extends Controller
             "body" => $mail->template("event-attendance", [
                 "from_email" => MAIL_USER,
                 "from_name" => MAIL_USERNAME,
-                "event_name" => $data['event_name']
+                "event_name" => $data['event_name'],
+                "qr_code_image" => $qr_code_image
             ])
         ]);
     }

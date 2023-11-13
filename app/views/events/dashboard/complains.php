@@ -37,22 +37,31 @@
                         <th>Complain</th>
                         <th>Actions</th>
                     </tr>
-                    <tr class="table-data">
-                        <td>User Name</td>
-                        <td>sample@mailinator.com</td>
-                        <td>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Labore nulla obcaecati explicabo et perspiciatis quos consectetur impedit eum dolore. Assumenda libero explicabo necessitatibus magni amet minus eum suscipit adipisci aliquid.</td>
-                        <td align="center">
-                            <button class="icon-button cl-red">
-                                <span class="material-icons-outlined">
-                                    delete
-                                </span>
-                            </button>
-                        </td>
-                    </tr>
+                    <?php if (count($complains_data) == 0) { ?>
+                        <tr>
+                            <td colspan="4">No Records.</td>
+                        </tr>
+                    <?php } ?>
+                    <?php foreach ($complains_data as $complain) { ?>
+                        <tr class="table-data">
+                            <td><?= displayValue($complain->user_name) ?></td>
+                            <td><?= displayValue($complain->user_email) ?></td>
+                            <td><?= displayValue($complain->complain) ?></td>
+                            <td align="center">
+                                <button title="Delete Record" class="icon-button cl-red">
+                                    <span class="material-icons-outlined">
+                                        delete
+                                    </span>
+                                </button>
+                            </td>
+                        </tr>
+                    <?php } ?>
                 </table>
             </div>
         </div>
     </section>
 </div>
+
+<?php $this->view('includes/modals/event/complain/delete') ?>
 
 <script src="<?= ROOT ?>/assets/js/events/event.js"></script>

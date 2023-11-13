@@ -36,7 +36,7 @@
 
         <form class="form" method="post">
             <div class="input-wrap">
-                <label for="id">ID</label>
+                <label for="id">Attendees' Invitation ID</label>
                 <input readonly value="<?= setValue('id') ?>" name="id" id="id" type="text" placeholder="ID" required>
                 <?php if (!empty($errors['id'])) : ?>
                     <small><?= $errors['id'] ?></small>

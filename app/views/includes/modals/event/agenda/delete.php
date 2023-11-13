@@ -1,0 +1,19 @@
+<div class="popup-modal-wrap" popup-name="delete-agenda">
+    <div class="popup-modal">
+        <div class="popup-header">
+            <span class="title">Delete Agenda</span>
+            <div class="icon" onclick="$(`[popup-name='delete-agenda']`).popup(false)">
+                <span class="material-icons-outlined">
+                    close
+                </span>
+            </div>
+        </div>
+        <div class="popup-body">
+            Are you sure you want to delete this record?
+            <form class="form" method="post">
+                <input name="id" type="text" hidden>
+                <button type="submit" name="submit" value="delete-agenda" class="button contained">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>

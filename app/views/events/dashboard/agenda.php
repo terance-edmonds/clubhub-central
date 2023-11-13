@@ -16,7 +16,7 @@
         <div class="title-bar">
             <div class="title-wrap">
                 <span class="title">Agenda</span>
-                <button onclick="$(`[popup-name='event-add-agenda']`).popup(true)" class="button" data-variant="outlined" data-type="icon" data-size="small">
+                <button onclick="$(`[popup-name='add-agenda']`).popup(true)" class="button" data-variant="outlined" data-type="icon" data-size="small">
                     <span>Add New</span>
                     <span class="material-icons-outlined">
                         add
@@ -37,30 +37,39 @@
                 <div class="table-wrap">
                     <table>
                         <tr class="table-header">
-                            <th>Date & Time</th>
                             <th>Name</th>
+                            <th>Date & Time</th>
                             <th>Location</th>
+                            <th>Note</th>
                             <th>Actions</th>
                         </tr>
-                        <tr class="table-data">
-                            <td>11/04/23 - 10.00 AM</td>
-                            <td>Welcome & Introduction</td>
-                            <td>-</td>
-                            <td align="center">
-                                <div class="buttons">
-                                    <button class="icon-button">
-                                        <span class="material-icons-outlined">
-                                            edit
-                                        </span>
-                                    </button>
-                                    <button class="icon-button cl-red">
-                                        <span class="material-icons-outlined">
-                                            delete
-                                        </span>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
+                        <?php if (count($agenda_data) == 0) { ?>
+                            <tr>
+                                <td colspan="5">No Records.</td>
+                            </tr>
+                        <?php } ?>
+                        <?php foreach ($agenda_data as $agenda) { ?>
+                            <tr class="table-data">
+                                <td><?= displayValue($agenda->name) ?></td>
+                                <td><?= displayValue($agenda->datetime, 'datetime') ?></td>
+                                <td><?= displayValue($agenda->venue) ?></td>
+                                <td><?= displayValue($agenda->note) ?></td>
+                                <td align="center">
+                                    <div class="buttons">
+                                        <button title="Edit Details" onclick='onDataPopup("edit-agenda", <?= toJson($agenda, ["id", "name", "datetime", "venue", "note"]) ?>)' class="icon-button">
+                                            <span class="material-icons-outlined">
+                                                edit
+                                            </span>
+                                        </button>
+                                        <button title="Delete Record" onclick='onDataPopup("delete-agenda", <?= toJson($agenda, ["id"]) ?>)' class="icon-button cl-red">
+                                            <span class="material-icons-outlined">
+                                                delete
+                                            </span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php } ?>
                     </table>
                 </div>
             </div>
@@ -68,3 +77,17 @@
 </div>
 
 <?php $this->view('includes/modals/event/agenda') ?>
+<?php $this->view('includes/modals/event/agenda/edit') ?>
+<?php $this->view('includes/modals/event/agenda/delete') ?>
+
+<script>
+    <?php if (!empty($popups["add-agenda"])) { ?>
+        $(`[popup-name='add-agenda']`).popup(true)
+    <?php } ?>
+    <?php if (!empty($popups["edit-agenda"])) { ?>
+        $(`[popup-name='edit-agenda']`).popup(true)
+    <?php } ?>
+</script>
+
+<script src="<?= ROOT ?>/assets/js/form.js"></script>
+<script src="<?= ROOT ?>/assets/js/events/agenda.js"></script>
