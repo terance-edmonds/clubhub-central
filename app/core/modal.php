@@ -9,6 +9,7 @@ class Modal
     public $errors = [];
     protected $table = "";
     protected $allowed_columns = [];
+    protected $search_columns = [];
     protected $db = null;
 
     function __construct($db = new Database())
@@ -41,7 +42,7 @@ class Modal
         return $result;
     }
 
-    public function find($data = [], $attributes = [], $include = [], $options = [])
+    public function find($data = [], $attributes = [], $include = [], $options = [], $search = '')
     {
         $keys = array_keys($data);
         $type = 'object';
@@ -72,11 +73,13 @@ class Modal
             $query .= " where ";
         }
         foreach ($keys as $key) {
+            $condition = '&&';
             $operator = '=';
             $value = $key;
 
             /* if the data is an array of options */
             if (is_array($data[$key])) {
+                $condition = $data[$key]['condition'];
                 $operator = $data[$key]['operator'];
                 $data[$key] = $data[$value]['data'];
             }
@@ -90,9 +93,15 @@ class Modal
                 unset($data[$key]);
             }
 
-            $query .= $key . " " . $operator . " :" . $value . " && ";
+            $query .= $key . " " . $operator . " :" . $value . " " . $condition . " ";
         }
         $query = trim($query, "&& ");
+        $query = trim($query, "|| ");
+
+        /* search query */
+        if (!empty($search)) {
+            $query .= " && match(" . implode(',', $this->search_columns) . ") against ('" . $search . "')";
+        }
 
         /* order by */
         $query .= " order by $this->table.id $this->order limit $this->limit offset $this->offset";

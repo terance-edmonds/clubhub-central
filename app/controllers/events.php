@@ -513,7 +513,6 @@ class Events extends Controller
 
                 return redirect();
             } else if ($_POST['submit'] == 'send-attendance-mail') {
-                show($form_data);
                 try {
                     $event_registration_data = $event_registration->one(["id" => $form_data['id']]);
                     $event_data = $event->one(["id" => $club_event_id]);
@@ -538,7 +537,10 @@ class Events extends Controller
         }
 
         /* fetch event registration data */
-        $data['event_registrations_data'] = $event_registration->find(["club_id" => $club_id, "club_event_id" => $club_event_id]);
+        $data['event_registrations_data'] = $event_registration->find([
+            "club_id" => $club_id,
+            "club_event_id" => $club_event_id,
+        ], [], [], [], $_GET['search']);
 
         /* fetch event details */
         $event_data = $event->one(["id" => $club_event_id]);

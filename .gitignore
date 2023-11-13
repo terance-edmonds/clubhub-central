@@ -2,6 +2,7 @@
 vendor
 uploads
 backup
+qr-codes
 
 *.backup
 

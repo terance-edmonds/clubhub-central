@@ -122,5 +122,6 @@
   max-width: fit-content;
 }
 .dashboard-container .center-section .title-bar .search-input {
+  width: 100%;
   max-width: 350px;
 }

@@ -11,6 +11,11 @@ class EventRegistration extends Modal
         "user_contact",
         "attended",
     ];
+    protected $search_columns = [
+        "user_name",
+        "user_email",
+        "user_contact",
+    ];
 
     public function validateAddEventRegistration($data)
     {

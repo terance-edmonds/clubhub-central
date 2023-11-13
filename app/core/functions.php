@@ -27,11 +27,11 @@ function redirect($link = '')
 }
 
 /* set values on inputs */
-function setValue($str, $default = '', $format = 'text')
+function setValue($str, $default = '', $format = 'text', $method = 'post')
 {
     preg_match_all("/\w+/", $str, $matches);
     $parts = $matches[0];
-    $data = $_POST;
+    $data = ($method == 'get') ? $_GET : $_POST;
 
     foreach ($parts as $key) {
         if (!empty($data[$key])) {
@@ -154,7 +154,7 @@ function generateQRCode($data)
     $qr_code_result = $writer->write($qr_code);
 
     $currentRoot = dirname(__DIR__, 2);
-    $route = "/assets/qr_codes/";
+    $route = "/assets/qr-codes/";
     $target_dir = $currentRoot . "/public" . $route;
     if (!file_exists($target_dir)) {
         mkdir($target_dir, 0777, true);
