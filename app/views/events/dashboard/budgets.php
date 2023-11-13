@@ -33,7 +33,7 @@
                         <p class="card-title">Income</p>
                     </div>
 
-                    <p class="amount green">LKR 200,000</p>
+                    <p class="amount green">LKR <?= displayValue($income_data, 'number') ?></p>
                 </div>
                 <div class="summary-card">
                     <div class="top-bar">
@@ -45,7 +45,7 @@
                         <p class="card-title">Expenses</p>
                     </div>
 
-                    <p class="amount red">LKR 200,000</p>
+                    <p class="amount red">LKR <?= displayValue($expense_data, 'number') ?></p>
                 </div>
                 <div class="summary-card">
                     <div class="top-bar">
@@ -57,7 +57,7 @@
                         <p class="card-title">Net Profit / Loss</p>
                     </div>
 
-                    <p class="amount green">LKR 200,000</p>
+                    <p class="amount <?php echo ($net_value < 0) ? 'red' : 'green' ?>">LKR <?= displayValue($net_value, 'number') ?></p>
                 </div>
             </div>
         </div>
@@ -92,7 +92,7 @@
                     <tr class="table-header">
                         <th>Transaction Name</th>
                         <th>Description</th>
-                        <th>Amount</th>
+                        <th>Amount (LKR)</th>
                         <th>From</th>
                         <th>Payment Type</th>
                         <th>Actions</th>

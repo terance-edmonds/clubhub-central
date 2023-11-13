@@ -540,7 +540,7 @@ class Events extends Controller
         $data['event_registrations_data'] = $event_registration->find([
             "club_id" => $club_id,
             "club_event_id" => $club_event_id,
-        ], [], [], [], $_GET['search']);
+        ], [], [], [], isset($_GET['search']) ? $_GET['search'] : '');
 
         /* fetch event details */
         $event_data = $event->one(["id" => $club_event_id]);
@@ -616,8 +616,8 @@ class Events extends Controller
             if (count($data['errors']) == 0) return redirect();
         }
 
-        $data["packages_data"] = $package->find(["club_id" => $club_id, "club_event_id" => $club_event_id]);
-        $data["sponsors_data"] = $sponsor->find(["club_id" => $club_id, "club_event_id" => $club_event_id]);
+        $data["packages_data"] = $package->find(["club_id" => $club_id, "club_event_id" => $club_event_id], [], [], [], isset($_GET['packages_search']) ? $_GET['packages_search'] : '');
+        $data["sponsors_data"] = $sponsor->find(["club_id" => $club_id, "club_event_id" => $club_event_id], [], [], [], isset($_GET['sponsors_search']) ? $_GET['sponsors_search'] : '');
         $this->view($path, $data);
     }
 
@@ -733,6 +733,7 @@ class Events extends Controller
                     if ($budget->validateAddIncome($form_data)) {
                         try {
                             $result = $budget->create($form_data);
+
                             if (!empty($result)) {
                                 $budget_log_data["club_event_budget_id"] = $result->id;
                                 $budget_log->create($budget_log_data);
@@ -740,7 +741,6 @@ class Events extends Controller
 
                             $_SESSION['alerts'] = [["status" => "success", "message" => "Income budget details added successfully"]];
                         } catch (Throwable $th) {
-                            var_dump($th);
                             $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to add budget details"]];
                         }
                     } else {
@@ -853,13 +853,24 @@ class Events extends Controller
 
                     $data['errors'] = $budget->errors;
                 }
-
-                if (count($data['errors']) == 0) return redirect();
             }
 
-            $data["table_data"] = $budget->find(["club_id" => $club_id, "club_event_id" => $club_event_id, "is_deleted" => 0, "type" => upperCase($data['tab'])]);
+            $data["table_data"] = $budget->find(["club_id" => $club_id, "club_event_id" => $club_event_id, "is_deleted" => 0, "type" => upperCase($data['tab'])], [], [], [], isset($_GET['search']) ? $_GET['search'] : '');
+
+            /* calculate the income/expenses/profile/loss */
+            $data['income_data'] = 0;
+            $data['expense_data'] = 0;
+            $income_data = $budget->find(["club_id" => $club_id, "club_event_id" => $club_event_id, "is_deleted" => 0, "type" => "INCOME"], ["sum(amount) as total"]);
+            $expense_data = $budget->find(["club_id" => $club_id, "club_event_id" => $club_event_id, "is_deleted" => 0, "type" => "EXPENSE"], ["sum(amount) as total"]);
+
+            if ($income_data[0]->total) $data['income_data'] = $income_data[0]->total;
+            if ($expense_data[0]->total) $data['expense_data'] = $expense_data[0]->total;
+            $data['net_value'] = $data['income_data'] - $data['expense_data'];
+
             /* fetch results */
             $db->commit();
+
+            if ($_SERVER['REQUEST_METHOD'] == "POST" && count($data['errors']) == 0) return redirect();
         } catch (\Throwable $th) {
             $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to process the action, please try again later"]];
             $db->rollback();
@@ -935,7 +946,7 @@ class Events extends Controller
             $data['errors'] = $agenda->errors;
         }
 
-        $data['agenda_data'] = $agenda->find(["club_id" => $club_id, "club_event_id" => $club_event_id]);
+        $data['agenda_data'] = $agenda->find(["club_id" => $club_id, "club_event_id" => $club_event_id], [], [], [], isset($_GET['search']) ? $_GET['search'] : '');
 
         $this->view($path, $data);
     }

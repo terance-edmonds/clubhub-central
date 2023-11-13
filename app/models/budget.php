@@ -14,6 +14,10 @@ class Budget extends Modal
         "payment_type",
         "is_deleted"
     ];
+    protected $search_columns = [
+        "name",
+        "description",
+    ];
 
     public function validateAddIncome($data)
     {

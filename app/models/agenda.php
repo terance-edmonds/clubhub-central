@@ -11,6 +11,11 @@ class Agenda extends Modal
         "venue",
         "datetime",
     ];
+    protected $search_columns = [
+        "name",
+        "note",
+        "venue"
+    ];
 
     public function validateAddEventAgenda($data)
     {

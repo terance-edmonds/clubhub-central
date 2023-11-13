@@ -21,14 +21,18 @@
                     </span>
                 </button>
             </div>
-            <div class="input-wrap search-input">
-                <div class="input">
-                    <span class="icon material-icons-outlined">
-                        search
-                    </span>
-                    <input type="text" placeholder="Search">
+            <form method="get" class="search-input">
+                <div class="input-wrap">
+                    <div class="input">
+                        <button type="submit" class="icon-button">
+                            <span class="icon material-icons-outlined">
+                                search
+                            </span>
+                        </button>
+                        <input type="text" placeholder="Search" name="packages_search" value="<?= setValue('packages_search', '', 'text', 'get') ?>">
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
 
         <div class="content-section">
@@ -80,6 +84,18 @@
                     </span>
                 </button>
             </div>
+            <form method="get" class="search-input">
+                <div class="input-wrap">
+                    <div class="input">
+                        <button type="submit" class="icon-button">
+                            <span class="icon material-icons-outlined">
+                                search
+                            </span>
+                        </button>
+                        <input type="text" placeholder="Search" name="sponsors_search" value="<?= setValue('sponsors_search', '', 'text', 'get') ?>">
+                    </div>
+                </div>
+            </form>
         </div>
 
         <div class="content-section">

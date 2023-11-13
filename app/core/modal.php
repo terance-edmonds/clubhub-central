@@ -79,8 +79,8 @@ class Modal
 
             /* if the data is an array of options */
             if (is_array($data[$key])) {
-                $condition = $data[$key]['condition'];
-                $operator = $data[$key]['operator'];
+                if (!empty($condition)) $condition = $data[$key]['condition'];
+                if (!empty($operator)) $operator = $data[$key]['operator'];
                 $data[$key] = $data[$value]['data'];
             }
 

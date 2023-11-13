@@ -87,6 +87,9 @@ function displayValue($val, $format = 'text')
         case 'boolean':
             $val = ($val == '1') ? 'true' : 'false';
             break;
+        case 'number':
+            $val = numberFormat($val);
+            break;
     }
 
     return $val;
@@ -213,4 +216,38 @@ function toJson($data, $attributes = [])
     }
 
     return json_encode($json);
+}
+
+/* format number */
+function numberFormat($number = 0, $decimals = 0)
+{
+    if (strpos($number, '.') != null) {
+        $decimal_numbers = substr($number, strpos($number, '.'));
+        $decimal_numbers = substr($decimal_numbers, 1, $decimals);
+    } else {
+        $decimal_numbers = 0;
+        for ($i = 2; $i <= $decimals; $i++) {
+            $decimal_numbers = $decimal_numbers . '0';
+        }
+    }
+
+    $number = (int) $number;
+    $number = strrev($number);
+
+    $n = '';
+    $str_len = strlen($number);
+
+    for ($i = 0; $i < $str_len; $i++) {
+        if ($i == 2 || ($i > 2 && $i % 2 == 0)) $n = $n . $number[$i] . ',';
+        else $n = $n . $number[$i];
+    }
+
+    $number = $n;
+    $number = strrev($number);
+
+    ($decimals != 0) ? $number = $number . '.' . $decimal_numbers : $number;
+    if (!empty($number[0]) && $number[0] == ',') $number = substr_replace($number, '', 0, 1);
+    if (!empty($number[1]) && $number[1] == ',' && $number[0] == '-') $number = substr_replace($number, '', 1, 1);
+
+    return $number;
 }

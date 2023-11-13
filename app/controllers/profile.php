@@ -26,7 +26,7 @@ class Profile extends Controller
         $member_clubs = new ClubMember();
         $right_bar["clubs"] = $member_clubs->find(
             ["user_id" => $auth_user['id']],
-            ["role as club_role", "club.id as club_id", "club.name as club_name", "club.image as club_image"],
+            ["club_members.id as club_member_id", "role as club_role", "club.id as club_id", "club.name as club_name", "club.image as club_image"],
             [
                 ["table" => "clubs", "as" => "club", "on" => "club_members.club_id = club.id"]
             ]
@@ -53,8 +53,10 @@ class Profile extends Controller
             /* club redirect */
             if ($_POST['submit'] == 'club-redirect') {
                 $storage = new Storage();
+
                 $storage->set('club_id', $_POST['club_id']);
                 $storage->set('club_role', $_POST['club_role']);
+                $storage->set('club_member_id', $_POST['club_member_id']);
 
                 return redirect('club/dashboard');
             }

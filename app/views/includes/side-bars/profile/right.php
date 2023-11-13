@@ -68,6 +68,7 @@
             <?php if (count($clubs) > 0) { ?>
                 <?php foreach ($clubs as $x => $club) { ?>
                     <form method="post">
+                        <input type="text" name="club_member_id" value="<?= $club->club_member_id ?>" hidden>
                         <input type="text" name="club_id" value="<?= $club->club_id ?>" hidden>
                         <input type="text" name="club_role" value="<?= $club->club_role ?>" hidden>
                         <button name="submit" value="club-redirect" class="card">
