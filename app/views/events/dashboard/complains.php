@@ -17,15 +17,6 @@
             <div class="title-wrap">
                 <span class="title">Complains</span>
             </div>
-
-            <div class="input-wrap search-input">
-                <div class="input">
-                    <span class="icon material-icons-outlined">
-                        search
-                    </span>
-                    <input type="text" placeholder="Search">
-                </div>
-            </div>
         </div>
 
         <div class="content-section">
@@ -57,6 +48,11 @@
                         </tr>
                     <?php } ?>
                 </table>
+                <?php $this->view('includes/pagination', [
+                    "total_count" => $total_count,
+                    "limit" => $limit,
+                    "page" => $page
+                ]) ?>
             </div>
         </div>
     </section>

@@ -127,8 +127,12 @@
                             </td>
                         </tr>
                     <?php } ?>
-
                 </table>
+                <?php $this->view('includes/pagination', [
+                    "total_count" => $total_count,
+                    "limit" => $limit,
+                    "page" => $page
+                ]) ?>
             </div>
         </div>
     </section>

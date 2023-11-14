@@ -14,7 +14,7 @@
         <div class="title-bar">
             <div class="title-wrap">
                 <span class="title">Packages</span>
-                <button onclick="addPackage(event)" class="button" data-variant="outlined" data-type="icon" data-size="small">
+                <button onclick="$(`[popup-name='add-package']`).popup(true);" class="button" data-variant="outlined" data-type="icon" data-size="small">
                     <span>Add Package</span>
                     <span class="material-icons-outlined">
                         add
@@ -71,6 +71,13 @@
                         </tr>
                     <?php } ?>
                 </table>
+                <?php $this->view('includes/pagination', [
+                    "total_count" => $total_packages_count,
+                    "limit" => $packages_limit,
+                    "page" => $packages_page,
+                    "script_included" => true,
+                    "page_name" => "package_page"
+                ]) ?>
             </div>
         </div>
 
@@ -102,7 +109,7 @@
             <div class="table-wrap">
                 <table>
                     <tr class="table-header">
-                        <th>Sponser Name</th>
+                        <th>Sponsor Name</th>
                         <th>Contact Person</th>
                         <th>Contact No</th>
                         <th>Email</th>
@@ -140,40 +147,44 @@
                         </tr>
                     <?php } ?>
                 </table>
+                <?php $this->view('includes/pagination', [
+                    "total_count" => $total_sponsors_count,
+                    "limit" => $sponsors_limit,
+                    "page" => $sponsors_page,
+                    "script_included" => true,
+                    "page_name" => "sponsor_page"
+                ]) ?>
             </div>
         </div>
     </section>
 </div>
 
-<?php $this->view('includes/modals/event/sponsor') ?>
-<?php $this->view('includes/modals/event/sponsor/edit') ?>
-<?php $this->view('includes/modals/event/sponsor/delete') ?>
-
 <?php $this->view('includes/modals/event/package') ?>
 <?php $this->view('includes/modals/event/package/edit') ?>
 <?php $this->view('includes/modals/event/package/delete') ?>
 
-<script>
-    <?php if (!empty($popups["add-sponsor"])) { ?>
-        $(`[popup-name='add-sponsor']`).popup(true)
-    <?php } ?>
-    <?php if (!empty($popups["edit-sponsor"])) {
-        $json = json_encode($popups["edit-sponsor"]);
-    ?>
-        onDataPopup("edit-sponsor", <?= $json ?>)
-    <?php } ?>
-</script>
+<?php $this->view('includes/modals/event/sponsor') ?>
+<?php $this->view('includes/modals/event/sponsor/edit') ?>
+<?php $this->view('includes/modals/event/sponsor/delete') ?>
 
 <script>
     <?php if (!empty($popups["add-package"])) { ?>
         $(`[popup-name='add-package']`).popup(true)
     <?php } ?>
-    <?php if (!empty($popups["edit-package"])) {
-        $json = json_encode($popups["edit-pacakge"]);
-    ?>
-        onDataPopup("edit-package", <?= $json ?>)
+    <?php if (!empty($popups["edit-package"])) { ?>
+        $(`[popup-name='edit-package']`).popup(true)
+    <?php } ?>
+</script>
+
+<script>
+    <?php if (!empty($popups["add-sponsor"])) { ?>
+        $(`[popup-name='add-sponsor']`).popup(true)
+    <?php } ?>
+    <?php if (!empty($popups["edit-sponsor"])) { ?>
+        $(`[popup-name='edit-sponsor']`).popup(true)
     <?php } ?>
 </script>
 
 <script src="<?= ROOT ?>/assets/js/events/event.js"></script>
 <script src="<?= ROOT ?>/assets/js/form.js"></script>
+<script src="<?= ROOT ?>/assets/js/pagination.js"></script>

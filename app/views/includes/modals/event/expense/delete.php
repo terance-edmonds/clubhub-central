@@ -17,5 +17,3 @@
         </div>
     </div>
 </div>
-
-<script src="<?= ROOT ?>/assets/js/form.js"></script>

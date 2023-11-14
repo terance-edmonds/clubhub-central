@@ -255,6 +255,9 @@
   color: #ff4646;
   background-color: #392a2d;
 }
+#event-dashboard-sponsors .center-section .content-section {
+  min-height: 400px;
+}
 
 #event-dashboard-budgets .summary-section {
   display: -webkit-box;

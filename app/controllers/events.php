@@ -574,6 +574,14 @@ class Events extends Controller
         $club_id = $storage->get('club_id');
         $club_event_id = $storage->get('club_event_id');
 
+        $data['total_packages_count'] = 0;
+        $data['packages_limit'] = 10;
+        $data['packages_page'] = isset($_GET['package_page']) && is_numeric($_GET['package_page']) ? $_GET['package_page'] : 1;
+
+        $data['total_sponsors_count'] = 0;
+        $data['sponsors_limit'] = 10;
+        $data['sponsors_page'] = isset($_GET['sponsor_page']) && is_numeric($_GET['sponsor_page']) ? $_GET['sponsor_page'] : 1;
+
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $form_data = $_POST;
             if ($_POST['submit'] == "add-sponsor") {
@@ -630,8 +638,26 @@ class Events extends Controller
             if (count($data['errors']) == 0) return redirect();
         }
 
+        /* fetch package data */
+        /* pagination */
+        $packages_total_count = $package->find([
+            "club_id" => $club_id,
+            "club_event_id" => $club_event_id
+        ], ["count(*) as count"], [], [], isset($_GET['packages_search']) ? $_GET['packages_search'] : '');
+        if (!empty($packages_total_count[0]->count)) $data['total_packages_count'] = $packages_total_count[0]->count;
+        /* data */
         $data["packages_data"] = $package->find(["club_id" => $club_id, "club_event_id" => $club_event_id], [], [], [], isset($_GET['packages_search']) ? $_GET['packages_search'] : '');
+
+        /* fetch sponsors data */
+        /* pagination */
+        $sponsors_total_count = $sponsor->find([
+            "club_id" => $club_id,
+            "club_event_id" => $club_event_id
+        ], ["count(*) as count"], [], [], isset($_GET['sponsors_search']) ? $_GET['sponsors_search'] : '');
+        if (!empty($sponsors_total_count[0]->count)) $data['total_sponsors_count'] = $sponsors_total_count[0]->count;
+        /* data */
         $data["sponsors_data"] = $sponsor->find(["club_id" => $club_id, "club_event_id" => $club_event_id], [], [], [], isset($_GET['sponsors_search']) ? $_GET['sponsors_search'] : '');
+
         $this->view($path, $data);
     }
 
@@ -642,8 +668,6 @@ class Events extends Controller
 
         $club_id = $storage->get('club_id');
         $club_event_id = $storage->get('club_event_id');
-        $club_member_id = $storage->get('club_member_id');
-        $user_id = Auth::getId();
 
         if (empty($club_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Club details are not found"]];
         if (empty($club_event_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Event details are not found"]];
@@ -719,6 +743,10 @@ class Events extends Controller
         $club_event_id = $storage->get('club_event_id');
         $club_member_id = $storage->get('club_member_id');
         $user_id = Auth::getId();
+
+        $data['total_count'] = 0;
+        $data['limit'] = 10;
+        $data['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
 
         if (empty($club_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Club details are not found"]];
         if (empty($club_event_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Event details are not found"]];
@@ -869,6 +897,17 @@ class Events extends Controller
                 }
             }
 
+            /* fetch budget data */
+            /* pagination */
+            $total_count = $budget->find([
+                "club_id" => $club_id,
+                "club_event_id" => $club_event_id,
+                "is_deleted" => 0,
+                "type" => upperCase($data['tab'])
+            ], ["count(*) as count"], [], [], isset($_GET['search']) ? $_GET['search'] : '');
+            if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+
+            /* data */
             $data["table_data"] = $budget->find(["club_id" => $club_id, "club_event_id" => $club_event_id, "is_deleted" => 0, "type" => upperCase($data['tab'])], [], [], [], isset($_GET['search']) ? $_GET['search'] : '');
 
             /* calculate the income/expenses/profile/loss */
@@ -901,6 +940,10 @@ class Events extends Controller
 
         $club_id = $storage->get('club_id');
         $club_event_id = $storage->get('club_event_id');
+
+        $data['total_count'] = 0;
+        $data['limit'] = 10;
+        $data['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $form_data = $_POST;
@@ -960,6 +1003,15 @@ class Events extends Controller
             $data['errors'] = $agenda->errors;
         }
 
+        /* fetch data */
+        /* pagination */
+        $total_count = $agenda->find([
+            "club_id" => $club_id,
+            "club_event_id" => $club_event_id
+        ], ["count(*) as count"], [], [], isset($_GET['search']) ? $_GET['search'] : '');
+        if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+
+        /* data */
         $data['agenda_data'] = $agenda->find(["club_id" => $club_id, "club_event_id" => $club_event_id], [], [], [], isset($_GET['search']) ? $_GET['search'] : '');
 
         $this->view($path, $data);
@@ -978,6 +1030,10 @@ class Events extends Controller
         $club_id = $storage->get('club_id');
         $club_event_id = $storage->get('club_event_id');
 
+        $data['total_count'] = 0;
+        $data['limit'] = 10;
+        $data['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
+
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $form_data = $_POST;
 
@@ -994,6 +1050,7 @@ class Events extends Controller
             }
         }
 
+        /* fetch data */
         $data['complains_data'] = $complain->find(["club_id" => $club_id, "club_event_id" => $club_event_id]);
 
         $this->view($path, $data);

@@ -624,8 +624,18 @@ input[type=checkbox]:checked {
 .table-wrap {
   overflow-x: auto;
   width: 100%;
-  min-height: 400px;
   max-width: 883px;
+  min-height: 400px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 .table-wrap table {
   width: 100%;
@@ -682,9 +692,6 @@ input[type=checkbox]:checked {
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
 }
