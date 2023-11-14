@@ -407,6 +407,9 @@ class Events extends Controller
         $club_event_id = $storage->get('club_event_id');
 
         $data['user_found'] = False;
+        $data['total_count'] = 0;
+        $data['limit'] = 10;
+        $data['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $form_data = $_POST;
@@ -537,10 +540,21 @@ class Events extends Controller
         }
 
         /* fetch event registration data */
+        /* count */
+        $total_count = $event_registration->find([
+            "club_id" => $club_id,
+            "club_event_id" => $club_event_id,
+        ], ["count(*) as count"], [], [], isset($_GET['search']) ? $_GET['search'] : '');
+        if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+
+        /* data */
         $data['event_registrations_data'] = $event_registration->find([
             "club_id" => $club_id,
             "club_event_id" => $club_event_id,
-        ], [], [], [], isset($_GET['search']) ? $_GET['search'] : '');
+        ], [], [], [
+            "limit" => $data['limit'],
+            "offset" => ($data['page'] - 1) * $data['limit'],
+        ], isset($_GET['search']) ? $_GET['search'] : '');
 
         /* fetch event details */
         $event_data = $event->one(["id" => $club_event_id]);

@@ -47,6 +47,14 @@ class Modal
         $keys = array_keys($data);
         $type = 'object';
 
+        /* set options */
+        if (!empty($options['limit']) && is_numeric($options['limit'])) {
+            $this->limit = $options['limit'];
+        }
+        if (!empty($options['offset']) && is_numeric($options['offset'])) {
+            $this->offset = $options['offset'];
+        }
+
         $query = "select ";
         /* set attributes */
         if (count($attributes) > 0) {
@@ -79,8 +87,8 @@ class Modal
 
             /* if the data is an array of options */
             if (is_array($data[$key])) {
-                if (!empty($condition)) $condition = $data[$key]['condition'];
-                if (!empty($operator)) $operator = $data[$key]['operator'];
+                if (!empty($data[$key]['condition'])) $condition = $data[$key]['condition'];
+                if (!empty($data[$key]['operator'])) $operator = $data[$key]['operator'];
                 $data[$key] = $data[$value]['data'];
             }
 

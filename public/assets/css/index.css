@@ -676,6 +676,52 @@ input[type=checkbox]:checked {
       -ms-flex-pack: end;
           justify-content: flex-end;
 }
+.table-wrap .pagination {
+  list-style-type: none;
+  padding: 10px 0;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+.table-wrap .pagination li {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding-right: 10px;
+}
+.table-wrap .pagination li button {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  background-color: #e2e6e6;
+  padding: 8px;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: bold;
+  color: #616872;
+  border-radius: 4px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+.table-wrap .pagination li button:hover {
+  background-color: #d4dada;
+}
+.table-wrap .pagination .next button,
+.table-wrap .pagination .prev button {
+  text-transform: uppercase;
+  font-size: 12px;
+}
+.table-wrap .pagination .current button {
+  background-color: #94d1be;
+  color: #fff;
+}
+.table-wrap .pagination .current button:hover {
+  background-color: #94d1be;
+}
 
 .form {
   display: -webkit-box;
