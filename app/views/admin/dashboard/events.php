@@ -7,7 +7,7 @@
 <?php $this->view('includes/header') ?>
 
 <div id="admin-dashboard-events" class="container container-sections side-padding admin-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/admin/left', ["menu" => $menu])  ?>
+    <?php $this->view('includes/side-bars/admin/left', ["menu" => $menu]) ?>
 
     <section class="center-section">
         <div class="title-bar">
@@ -143,5 +143,7 @@
     </section>
 </div>
 
-<?php $this->view('includes/modals/event/register')  ?>
+<?php $this->view('includes/modals/event/register') ?>
 <script src="<?= ROOT ?>/assets/js/events/event.js"></script>
+
+<?php $this->view('includes/header/bottom') ?>

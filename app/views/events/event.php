@@ -14,10 +14,13 @@
 
         <div class="content">
             <div class="title-wrap">
-                <span class="title f-24"><?= $event_data['name'] ?></span>
+                <span class="title f-24">
+                    <?= $event_data['name'] ?>
+                </span>
 
                 <?php if ($event_data['open_registrations']) { ?>
-                    <button onclick="$(`[popup-name='event-register']`).popup(true)" class="button contained">Register Now</button>
+                    <button onclick="$(`[popup-name='event-register']`).popup(true)" class="button contained">Register
+                        Now</button>
                 <?php } ?>
             </div>
 
@@ -29,8 +32,12 @@
                         </span>
                     </div>
                     <div class="texts">
-                        <span><?= $event_data['start_date'] ?></span>
-                        <span><?= $event_data['start_time'] ?></span>
+                        <span>
+                            <?= $event_data['start_date'] ?>
+                        </span>
+                        <span>
+                            <?= $event_data['start_time'] ?>
+                        </span>
                     </div>
                 </div>
                 <div class="detail-wrap">
@@ -40,22 +47,29 @@
                         </span>
                     </div>
                     <div class="texts">
-                        <span><?= $event_data['venue'] ?></span>
+                        <span>
+                            <?= $event_data['venue'] ?>
+                        </span>
                     </div>
                 </div>
             </div>
 
-            <p class="description"><?= $event_data['description'] ?></p>
+            <p class="description">
+                <?= $event_data['description'] ?>
+            </p>
         </div>
     </section>
 
-    <?php $this->view('includes/side-bars/events/right', $right_bar)  ?>
+    <?php $this->view('includes/side-bars/events/right', $right_bar) ?>
 </div>
 
-<?php if ($event_data['open_registrations']) $this->view('includes/modals/event/register', ["errors" => $errors]); ?>
+<?php if ($event_data['open_registrations'])
+    $this->view('includes/modals/event/register', ["errors" => $errors]); ?>
 
 <script>
     <?php if (!empty($popups["event-register"])) { ?>
         $(`[popup-name='event-register']`).popup(true)
     <?php } ?>
 </script>
+
+<?php $this->view('includes/header/bottom') ?>

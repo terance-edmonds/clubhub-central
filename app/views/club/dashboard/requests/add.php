@@ -6,8 +6,9 @@
 
 <?php $this->view('includes/header') ?>
 
-<div id="club-dashboard-add-request" class="container container-sections side-padding club-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/club/dashboard/left', ["menu" => $menu])  ?>
+<div id="club-dashboard-add-request"
+    class="container container-sections side-padding club-dashboard dashboard-container">
+    <?php $this->view('includes/side-bars/club/dashboard/left', ["menu" => $menu]) ?>
 
     <section class="center-section">
         <div class="title-bar">
@@ -28,23 +29,31 @@
                                     <option value="" selected disabled hidden>Choose Member</option>
                                     <option value="1">Freshers</option>
                                 </select>
-                                <?php if (!empty($errors['event'])) : ?>
-                                    <small><?= $errors['event'] ?></small>
+                                <?php if (!empty($errors['event'])): ?>
+                                    <small>
+                                        <?= $errors['event'] ?>
+                                    </small>
                                 <?php endif; ?>
                             </div>
                             <div class="input-wrap">
                                 <label for="subject">Request Subject</label>
-                                <input value="<?= setValue('subject') ?>" id="subject" type="text" name="subject" placeholder="Request Subject" required>
-                                <?php if (!empty($errors['subject'])) : ?>
-                                    <small><?= $errors['subject'] ?></small>
+                                <input value="<?= setValue('subject') ?>" id="subject" type="text" name="subject"
+                                    placeholder="Request Subject" required>
+                                <?php if (!empty($errors['subject'])): ?>
+                                    <small>
+                                        <?= $errors['subject'] ?>
+                                    </small>
                                 <?php endif; ?>
                             </div>
                         </div>
                         <div class="input-wrap">
                             <label for="description">Description</label>
-                            <textarea value="<?= setValue('description') ?>" id="description" name="description" placeholder="Description" required></textarea>
-                            <?php if (!empty($errors['description'])) : ?>
-                                <small><?= $errors['description'] ?></small>
+                            <textarea value="<?= setValue('description') ?>" id="description" name="description"
+                                placeholder="Description" required></textarea>
+                            <?php if (!empty($errors['description'])): ?>
+                                <small>
+                                    <?= $errors['description'] ?>
+                                </small>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -58,7 +67,9 @@
     </section>
 </div>
 
-<?php $this->view('includes/modals/event/register')  ?>
+<?php $this->view('includes/modals/event/register') ?>
 
 <script src="<?= ROOT ?>/assets/js/events/event.js"></script>
 <script src="<?= ROOT ?>/assets/js/form.js"></script>
+
+<?php $this->view('includes/header/bottom') ?>

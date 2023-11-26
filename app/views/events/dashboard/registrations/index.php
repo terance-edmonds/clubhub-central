@@ -9,14 +9,16 @@
 <!-- alerts -->
 <?php $this->view('includes/alerts') ?>
 
-<div id="event-dashboard-registrations" class="container container-sections side-padding event-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/events/dashboard/left', ["menu" => $menu])  ?>
+<div id="event-dashboard-registrations"
+    class="container container-sections side-padding event-dashboard dashboard-container">
+    <?php $this->view('includes/side-bars/events/dashboard/left', ["menu" => $menu]) ?>
 
     <section class="center-section">
         <div class="title-bar">
             <div class="title-wrap">
                 <span class="title">Registrations</span>
-                <button onclick="$(`[popup-name='event-register']`).popup(true)" class="button" data-variant="outlined" data-type="icon" data-size="small">
+                <button onclick="$(`[popup-name='event-register']`).popup(true)" class="button" data-variant="outlined"
+                    data-type="icon" data-size="small">
                     <span>Add New</span>
                     <span class="material-icons-outlined">
                         add
@@ -32,7 +34,8 @@
                                 search
                             </span>
                         </button>
-                        <input type="text" placeholder="Search" name="search" value="<?= setValue('search', '', 'text', 'get') ?>">
+                        <input type="text" placeholder="Search" name="search"
+                            value="<?= setValue('search', '', 'text', 'get') ?>">
                     </div>
                 </div>
             </form>
@@ -45,7 +48,8 @@
                     <span>Open Registrations</span>
 
                     <label class="switch">
-                        <input <?php if (in_array(setValue('open_registrations'), ['1', 'on'])) { ?> checked <?php } ?> onchange="this.form.submit()" type="checkbox" name="open_registrations">
+                        <input <?php if (in_array(setValue('open_registrations'), ['1', 'on'])) { ?> checked <?php } ?>
+                            onchange="this.form.submit()" type="checkbox" name="open_registrations">
                         <span class="slider"></span>
                     </label>
                 </label>
@@ -77,11 +81,18 @@
                     <?php } ?>
                     <?php foreach ($event_registrations_data as $event_registration) { ?>
                         <tr class="table-data">
-                            <td><?= displayValue($event_registration->user_name) ?></td>
-                            <td><?= displayValue($event_registration->user_contact) ?></td>
-                            <td><?= displayValue($event_registration->user_email) ?></td>
                             <td>
-                                <button class="button status-button" data-attended="<?= displayValue($event_registration->attended, 'boolean') ?>">
+                                <?= displayValue($event_registration->user_name) ?>
+                            </td>
+                            <td>
+                                <?= displayValue($event_registration->user_contact) ?>
+                            </td>
+                            <td>
+                                <?= displayValue($event_registration->user_email) ?>
+                            </td>
+                            <td>
+                                <button class="button status-button"
+                                    data-attended="<?= displayValue($event_registration->attended, 'boolean') ?>">
                                     <?php if ($event_registration->attended == '1') { ?>
                                         Attended
                                     <?php } else { ?>
@@ -93,18 +104,23 @@
                                 <div class="buttons">
                                     <form method="post">
                                         <input type="text" hidden name="id" value="<?= $event_registration->id ?>">
-                                        <button title="Send Attendance Mail" type="submit" name="submit" value="send-attendance-mail" class="icon-button">
+                                        <button title="Send Attendance Mail" type="submit" name="submit"
+                                            value="send-attendance-mail" class="icon-button">
                                             <span class="material-icons-outlined">
                                                 forward_to_inbox
                                             </span>
                                         </button>
                                     </form>
-                                    <button title="Edit Details" onclick='onDataPopup("update-event-register", <?= toJson($event_registration, ["id", "user_name", "user_email", "user_contact"]) ?>)' class="icon-button">
+                                    <button title="Edit Details"
+                                        onclick='onDataPopup("update-event-register", <?= toJson($event_registration, ["id", "user_name", "user_email", "user_contact"]) ?>)'
+                                        class="icon-button">
                                         <span class="material-icons-outlined">
                                             edit
                                         </span>
                                     </button>
-                                    <button title="Delete Record" onclick='onDataPopup("delete-event-register", <?= toJson($event_registration, ["id"]) ?>)' class="icon-button cl-red">
+                                    <button title="Delete Record"
+                                        onclick='onDataPopup("delete-event-register", <?= toJson($event_registration, ["id"]) ?>)'
+                                        class="icon-button cl-red">
                                         <span class="material-icons-outlined">
                                             delete
                                         </span>
@@ -138,3 +154,5 @@
         $(`[popup-name='update-event-register']`).popup(true)
     <?php } ?>
 </script>
+
+<?php $this->view('includes/header/bottom') ?>

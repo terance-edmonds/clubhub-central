@@ -40,6 +40,13 @@
                     </div>
                     <span class="text">Notifications</span>
                 </div>
+                <div class="nav-item menu-item">
+                    <div class="icon-wrap">
+                        <span class="icon material-icons-outlined">
+                            menu
+                        </span>
+                    </div>
+                </div>
             </section>
 
         <?php } ?>

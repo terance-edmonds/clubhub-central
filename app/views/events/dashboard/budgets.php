@@ -10,7 +10,7 @@
 <?php $this->view('includes/alerts') ?>
 
 <div id="event-dashboard-budgets" class="container container-sections side-padding event-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/events/dashboard/left', ["menu" => $menu])  ?>
+    <?php $this->view('includes/side-bars/events/dashboard/left', ["menu" => $menu]) ?>
 
     <section class="center-section">
         <div class="title-bar">
@@ -33,7 +33,9 @@
                         <p class="card-title">Income</p>
                     </div>
 
-                    <p class="amount green">LKR <?= displayValue($income_data, 'number') ?></p>
+                    <p class="amount green">LKR
+                        <?= displayValue($income_data, 'number') ?>
+                    </p>
                 </div>
                 <div class="summary-card">
                     <div class="top-bar">
@@ -45,7 +47,9 @@
                         <p class="card-title">Expenses</p>
                     </div>
 
-                    <p class="amount red">LKR <?= displayValue($expense_data, 'number') ?></p>
+                    <p class="amount red">LKR
+                        <?= displayValue($expense_data, 'number') ?>
+                    </p>
                 </div>
                 <div class="summary-card">
                     <div class="top-bar">
@@ -57,7 +61,9 @@
                         <p class="card-title">Net Profit / Loss</p>
                     </div>
 
-                    <p class="amount <?php echo ($net_value < 0) ? 'red' : 'green' ?>">LKR <?= displayValue($net_value, 'number') ?></p>
+                    <p class="amount <?php echo ($net_value < 0) ? 'red' : 'green' ?>">LKR
+                        <?= displayValue($net_value, 'number') ?>
+                    </p>
                 </div>
             </div>
         </div>
@@ -65,8 +71,14 @@
         <div class="content-section">
             <div class="actions-wrap">
                 <div class="action-buttons">
-                    <a class="action-link" data-active="<?php if ($tab == 'income') echo 'true'; ?>" href="<?= ROOT ?>/events/dashboard/budgets?tab=income"><button class="button">Income</button></a>
-                    <a class="action-link" data-active="<?php if ($tab == 'expense') echo 'true'; ?>" href="<?= ROOT ?>/events/dashboard/budgets?tab=expense"><button class="button">Expense</button></a>
+                    <a class="action-link" data-active="<?php if ($tab == 'income')
+                        echo 'true'; ?>"
+                        href="<?= ROOT ?>/events/dashboard/budgets?tab=income"><button
+                            class="button">Income</button></a>
+                    <a class="action-link" data-active="<?php if ($tab == 'expense')
+                        echo 'true'; ?>"
+                        href="<?= ROOT ?>/events/dashboard/budgets?tab=expense"><button
+                            class="button">Expense</button></a>
                 </div>
 
                 <div class="action-search">
@@ -79,7 +91,8 @@
                         </div>
                     </div>
 
-                    <button onclick="$(`[popup-name='add-<?= $tab ?>']`).popup(true)" class="button w-content" data-variant="outlined" data-type="icon" data-size="small">
+                    <button onclick="$(`[popup-name='add-<?= $tab ?>']`).popup(true)" class="button w-content"
+                        data-variant="outlined" data-type="icon" data-size="small">
                         <span>Add New</span>
                         <span class="material-icons-outlined">
                             add
@@ -103,14 +116,24 @@
                         </tr>
                     <?php } ?>
                     <?php foreach ($table_data as $x => $val) {
-                    ?>
+                        ?>
                         <?php $json = json_encode($val); ?>
                         <tr class="table-data table-align">
-                            <td><?= displayValue($val->name) ?></td>
-                            <td><?= displayValue($val->description) ?></td>
-                            <td><?= displayValue($val->amount) ?></td>
-                            <td><?= displayValue($val->third_party) ?></td>
-                            <td><?= displayValue($val->payment_type) ?></td>
+                            <td>
+                                <?= displayValue($val->name) ?>
+                            </td>
+                            <td>
+                                <?= displayValue($val->description) ?>
+                            </td>
+                            <td>
+                                <?= displayValue($val->amount) ?>
+                            </td>
+                            <td>
+                                <?= displayValue($val->third_party) ?>
+                            </td>
+                            <td>
+                                <?= displayValue($val->payment_type) ?>
+                            </td>
                             <td align="center">
                                 <div class="buttons">
                                     <button onclick='onDataPopup("edit-<?= $tab ?>", <?= $json ?>)' class="icon-button">
@@ -118,7 +141,8 @@
                                             edit
                                         </span>
                                     </button>
-                                    <button onclick='onDataPopup("delete-<?= $tab ?>", <?= $json ?>)' class="icon-button cl-red">
+                                    <button onclick='onDataPopup("delete-<?= $tab ?>", <?= $json ?>)'
+                                        class="icon-button cl-red">
                                         <span class="material-icons-outlined">
                                             delete
                                         </span>
@@ -148,10 +172,12 @@
     <?php } ?>
     <?php if (!empty($popups["edit-$tab"])) {
         $json = json_encode($popups["edit-$tab"]);
-    ?>
+        ?>
         onDataPopup("edit-<?= $tab ?>", <?= $json ?>)
     <?php } ?>
 </script>
 
 <script src="<?= ROOT ?>/assets/js/events/event.js"></script>
 <script src="<?= ROOT ?>/assets/js/form.js"></script>
+
+<?php $this->view('includes/header/bottom') ?>

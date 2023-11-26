@@ -9,8 +9,9 @@
 <!-- alerts -->
 <?php $this->view('includes/alerts') ?>
 
-<div id="event-dashboard-registrations-attendance" class="container container-sections side-padding event-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/events/dashboard/left', ["menu" => $menu])  ?>
+<div id="event-dashboard-registrations-attendance"
+    class="container container-sections side-padding event-dashboard dashboard-container">
+    <?php $this->view('includes/side-bars/events/dashboard/left', ["menu" => $menu]) ?>
 
     <section class="center-section">
         <div class="title-bar">
@@ -38,39 +39,52 @@
             <div class="input-wrap">
                 <label for="id">Attendees' Invitation ID</label>
                 <input readonly value="<?= setValue('id') ?>" name="id" id="id" type="text" placeholder="ID" required>
-                <?php if (!empty($errors['id'])) : ?>
-                    <small><?= $errors['id'] ?></small>
+                <?php if (!empty($errors['id'])): ?>
+                    <small>
+                        <?= $errors['id'] ?>
+                    </small>
                 <?php endif; ?>
             </div>
 
             <?php if ($user_found) { ?>
                 <div class="input-wrap">
                     <label for="user_name">Full Name</label>
-                    <input disabled value="<?= setValue('user_name') ?>" name="user_name" id="user_name" type="text" placeholder="Full Name" required>
-                    <?php if (!empty($errors['user_name'])) : ?>
-                        <small><?= $errors['user_name'] ?></small>
+                    <input disabled value="<?= setValue('user_name') ?>" name="user_name" id="user_name" type="text"
+                        placeholder="Full Name" required>
+                    <?php if (!empty($errors['user_name'])): ?>
+                        <small>
+                            <?= $errors['user_name'] ?>
+                        </small>
                     <?php endif; ?>
                 </div>
                 <div class="input-wrap">
                     <label for="user_email">Email Address</label>
-                    <input disabled value="<?= setValue('user_email') ?>" name="user_email" id="user_email" type="email" placeholder="Email Address" required>
-                    <?php if (!empty($errors['user_email'])) : ?>
-                        <small><?= $errors['user_email'] ?></small>
+                    <input disabled value="<?= setValue('user_email') ?>" name="user_email" id="user_email" type="email"
+                        placeholder="Email Address" required>
+                    <?php if (!empty($errors['user_email'])): ?>
+                        <small>
+                            <?= $errors['user_email'] ?>
+                        </small>
                     <?php endif; ?>
                 </div>
                 <div class="input-wrap">
                     <label for="user_contact">Contact Number</label>
-                    <input disabled value="<?= setValue('user_contact') ?>" name="user_contact" id="user_contact" type="text" placeholder="Contact Number" required>
-                    <?php if (!empty($errors['user_contact'])) : ?>
-                        <small><?= $errors['user_contact'] ?></small>
+                    <input disabled value="<?= setValue('user_contact') ?>" name="user_contact" id="user_contact"
+                        type="text" placeholder="Contact Number" required>
+                    <?php if (!empty($errors['user_contact'])): ?>
+                        <small>
+                            <?= $errors['user_contact'] ?>
+                        </small>
                     <?php endif; ?>
                 </div>
             <?php } ?>
 
             <?php if ($user_found) { ?>
-                <button type="submit" name="submit" value="event-attendance-mark" class="button contained w-content">Mark as Attended</button>
+                <button type="submit" name="submit" value="event-attendance-mark" class="button contained w-content">Mark as
+                    Attended</button>
             <?php } else { ?>
-                <button type="submit" name="submit" value="event-attendance-search" class="button contained w-content">Find Details</button>
+                <button type="submit" name="submit" value="event-attendance-search" class="button contained w-content">Find
+                    Details</button>
             <?php } ?>
         </form>
     </section>
@@ -79,3 +93,5 @@
 <script src="<?= ROOT ?>/assets/js/form.js"></script>
 <script src="<?= ROOT ?>/assets/js/libs/instascan.min.js"></script>
 <script src="<?= ROOT ?>/assets/js/events/attendance.js"></script>
+
+<?php $this->view('includes/header/bottom') ?>

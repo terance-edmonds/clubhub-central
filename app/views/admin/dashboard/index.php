@@ -10,7 +10,7 @@
 <?php $this->view('includes/alerts') ?>
 
 <div id="admin-dashboard-clubs" class="container container-sections side-padding admin-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/admin/left', ["menu" => $menu])  ?>
+    <?php $this->view('includes/side-bars/admin/left', ["menu" => $menu]) ?>
 
     <section class="center-section">
         <div class="title-bar">
@@ -53,19 +53,27 @@
                         </tr>
                     <?php } ?>
                     <?php foreach ($table_data as $x => $val) {
-                    ?>
+                        ?>
                         <tr class="table-data">
-                            <td><?= displayValue($val->name) ?></td>
-                            <td><?= displayValue($val->club_in_charge_email) ?></td>
-                            <td><?= displayValue($val->created_datetime, 'datetime') ?></td>
+                            <td>
+                                <?= displayValue($val->name) ?>
+                            </td>
+                            <td>
+                                <?= displayValue($val->club_in_charge_email) ?>
+                            </td>
+                            <td>
+                                <?= displayValue($val->created_datetime, 'datetime') ?>
+                            </td>
                             <td>
                                 <button class="button status-button" data-status="<?= $val->state ?>">
                                     <?= displayValue($val->state, 'start-case') ?>
                                 </button>
                             </td>
                             <td align="center">
-                                <a href="<?php echo ($val->state == 'ACTIVE') ? ROOT . '/club?id=' . $val->id : 'javascript:void(0);' ?>">
-                                    <button <?php if ($val->state === 'DEACTIVE') { ?> disabled <?php } ?> class="icon-button">
+                                <a
+                                    href="<?php echo ($val->state == 'ACTIVE') ? ROOT . '/club?id=' . $val->id : 'javascript:void(0);' ?>">
+                                    <button <?php if ($val->state === 'DEACTIVE') { ?> disabled <?php } ?>
+                                        class="icon-button">
                                         <span class="material-icons-outlined">
                                             visibility
                                         </span>
@@ -95,3 +103,5 @@
         </div>
     </section>
 </div>
+
+<?php $this->view('includes/header/bottom') ?>

@@ -16,6 +16,16 @@ $nav-item-padding: 15px 0;
     background-color: $dark;
     z-index: 10;
 
+    &.bottom {
+        top: auto;
+        bottom: 0;
+        display: none;
+
+        .container-sections {
+            justify-content: center;
+        }
+    }
+
     .container-sections {
         justify-content: space-between;
         gap: 20px;
@@ -80,23 +90,35 @@ $nav-item-padding: 15px 0;
         }
     }
 
-    @media screen and (max-width: 960px) {
-        .container-sections {
-            section {
-                max-width: fit-content;
-            }
+    .menu-item {
+        display: none;
+        cursor: pointer;
+        max-width: 100px;
+    }
 
-            .logo-section {
-                display: none;
-            }
-
-            .center-section {
-                max-width: 100%;
-            }
-        }
-
+    @media screen and (max-width: 1350px) {
         .notification-item {
             display: none;
+        }
+
+        .menu-item {
+            display: flex;
+        }
+    }
+
+    @media screen and (max-width: 960px) {
+        &.bottom {
+            display: flex;
+        }
+
+        &:not(.bottom) {
+            .container-sections {
+                padding: 0 30px;
+
+                .center-section {
+                    display: none;
+                }
+            }
         }
     }
 }
