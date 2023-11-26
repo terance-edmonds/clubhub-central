@@ -37,9 +37,11 @@ class Profile extends Controller
             "tab" => "gallery",
             "left_bar" => $left_bar,
             "right_bar" => $right_bar,
+            "gallery" => []
         ];
         $params = $_GET;
-        if (isset($params["tab"])) $data["tab"] = $params["tab"];
+        if (isset($params["tab"]))
+            $data["tab"] = $params["tab"];
 
         /* post requests */
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -48,10 +50,8 @@ class Profile extends Controller
                 Auth::logout();
 
                 return redirect('login');
-            }
-
-            /* club redirect */
-            if ($_POST['submit'] == 'club-redirect') {
+            } else if ($_POST['submit'] == 'club-redirect') {
+                /* club redirect */
                 $storage = new Storage();
 
                 $storage->set('club_id', $_POST['club_id']);
@@ -59,8 +59,33 @@ class Profile extends Controller
                 $storage->set('club_member_id', $_POST['club_member_id']);
 
                 return redirect('club/dashboard');
+            } else if ($_POST['submit'] == 'upload-image') {
+                if (!empty($_FILES['image']['name'])) {
+                    $user_gallery = new UserGallery();
+                    $file_upload = uploadFile('image');
+
+                    $user_gallery->create([
+                        "user_id" => $auth_user['id'],
+                        "image" => $file_upload['url']
+                    ]);
+
+                    return redirect();
+                } else {
+                    $data["errors"]["image"] = "Failed to upload the image, please try again later";
+                }
+
+            } else if ($_POST['submit'] == 'delete-image') {
+                $user_gallery = new UserGallery();
+                $user_gallery->delete([
+                    "id" => $_POST['id']
+                ]);
+
+                return redirect();
             }
         }
+
+        $user_gallery = new UserGallery();
+        $data['gallery'] = $user_gallery->find(["user_id" => $auth_user['id']]);
 
         $this->view("profile", $data);
     }
@@ -118,7 +143,8 @@ class Profile extends Controller
 
             $data['errors'] = $user->errors;
 
-            if (count($data['errors']) == 0) return redirect();
+            if (count($data['errors']) == 0)
+                return redirect();
         }
 
         /* fetch data and fill the form */
@@ -132,11 +158,16 @@ class Profile extends Controller
         if (!empty($auth_user)) {
             $result = $user->one(['id' => $auth_user["id"]]);
 
-            if ($result->first_name) $_POST['first_name'] = $result->first_name;
-            if ($result->last_name) $_POST['last_name'] = $result->last_name;
-            if ($result->email) $_POST['email'] = $result->email;
-            if ($result->image) $_POST['image'] = $result->image;
-            if ($result->description) $_POST['description'] = $result->description;
+            if ($result->first_name)
+                $_POST['first_name'] = $result->first_name;
+            if ($result->last_name)
+                $_POST['last_name'] = $result->last_name;
+            if ($result->email)
+                $_POST['email'] = $result->email;
+            if ($result->image)
+                $_POST['image'] = $result->image;
+            if ($result->description)
+                $_POST['description'] = $result->description;
         }
     }
 }
