@@ -92,6 +92,7 @@
   gap: 10px;
   width: 100%;
   border: 0;
+  padding-bottom: 0;
 }
 .nav-header .container-sections .notification-section {
   display: -webkit-box;
@@ -143,4 +144,20 @@
   border-radius: 50%;
   top: 0;
   right: 0;
+}
+@media screen and (max-width: 960px) {
+  .nav-header .container-sections section {
+    max-width: -webkit-fit-content;
+    max-width: -moz-fit-content;
+    max-width: fit-content;
+  }
+  .nav-header .container-sections .logo-section {
+    display: none;
+  }
+  .nav-header .container-sections .center-section {
+    max-width: 100%;
+  }
+  .nav-header .notification-item {
+    display: none;
+  }
 }

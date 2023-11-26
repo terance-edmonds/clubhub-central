@@ -133,6 +133,11 @@ a {
 .container-sections.dashboard-container section.center-section {
   max-width: 1020px;
 }
+@media screen and (max-width: 770px) {
+  .container-sections {
+    padding: 0 10px;
+  }
+}
 
 .container {
   width: 100%;

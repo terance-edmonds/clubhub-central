@@ -32,6 +32,7 @@ $nav-item-padding: 15px 0;
             gap: 10px;
             width: 100%;
             border: 0;
+            padding-bottom: 0;
         }
 
         .notification-section {
@@ -76,6 +77,26 @@ $nav-item-padding: 15px 0;
                 top: 0;
                 right: 0;
             }
+        }
+    }
+
+    @media screen and (max-width: 960px) {
+        .container-sections {
+            section {
+                max-width: fit-content;
+            }
+
+            .logo-section {
+                display: none;
+            }
+
+            .center-section {
+                max-width: 100%;
+            }
+        }
+
+        .notification-item {
+            display: none;
         }
     }
 }
