@@ -32,6 +32,27 @@ class Events extends Controller
                 ["table" => "clubs", "as" => "club", "on" => "club_events.club_id = club.id"]
             ]
         );
+        $events = $event->find(
+            [
+                "club_events.state" => "ACTIVE"
+            ],
+            [
+                "club_events.id as id",
+                "club_events.name as name",
+                "club_events.venue as venue",
+                "club_events.image as image",
+                "club_events.description as description",
+                "club_events.start_datetime as start_datetime",
+                "club_events.end_datetime as end_datetime",
+                "club_events.state as state",
+                "club.id as club_id",
+                "club.name as club_name",
+                "club.image as club_image",
+            ],
+            [
+                ["table" => "clubs", "as" => "club", "on" => "club_events.club_id = club.id"]
+            ]
+        );
 
         $left_bar = [
             "calendar_data" => [
@@ -45,7 +66,8 @@ class Events extends Controller
 
         $data = [
             "left_bar" => $left_bar,
-            "right_bar" => $right_bar
+            "right_bar" => $right_bar,
+            "events" => $events
         ];
 
         $this->view("events", $data);
