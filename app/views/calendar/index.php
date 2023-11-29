@@ -35,7 +35,9 @@
         <table class="calendar-table">
             <tr class="calendar-header">
                 <?php foreach ($week_days as $x => $val) { ?>
-                    <th><?= $val ?></th>
+                    <th>
+                        <?= $val ?>
+                    </th>
                 <?php } ?>
             </tr>
             <tbody>
@@ -46,22 +48,30 @@
                             <td class="calendar-cell">
                                 <div class="cell-content">
                                     <div class="top">
-                                        <span><?= $data["day"] ?></span>
+                                        <span>
+                                            <?= $data["day"] ?>
+                                        </span>
                                     </div>
                                     <div class="content">
                                         <?php if (!empty($data["items"])) { ?>
                                             <?php foreach ($data["items"] as $key => $item) { ?>
                                                 <div class="item">
-                                                    <p class="name"><?= $item["name"] ?></p>
+                                                    <p class="name">
+                                                        <?= $item["name"] ?>
+                                                    </p>
                                                     <div class="pop-over">
-                                                        <p class="name"><?= $item["name"] ?></p>
+                                                        <p class="name">
+                                                            <?= $item["name"] ?>
+                                                        </p>
                                                         <div class="info-wrap date">
                                                             <div class="icon-wrap">
                                                                 <span class="material-icons-outlined">
                                                                     today
                                                                 </span>
                                                             </div>
-                                                            <span class="text"><?= displayValue($item["date"], 'date') ?></span>
+                                                            <span class="text">
+                                                                <?= displayValue($item["date"], 'date') ?>
+                                                            </span>
                                                         </div>
                                                         <div class="info-wrap time">
                                                             <div class="icon-wrap">
@@ -69,7 +79,9 @@
                                                                     schedule
                                                                 </span>
                                                             </div>
-                                                            <span class="text"><?= displayValue($item["start_time"], 'time') ?></span>
+                                                            <span class="text">
+                                                                <?= displayValue($item["start_time"], 'time') ?>
+                                                            </span>
                                                         </div>
                                                         <div class="info-wrap location">
                                                             <div class="icon-wrap">
@@ -77,11 +89,13 @@
                                                                     share_location
                                                                 </span>
                                                             </div>
-                                                            <span class="text"><?= displayValue($item["location"]) ?></span>
+                                                            <span class="text">
+                                                                <?= displayValue($item["location"]) ?>
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 </div>
-                                        <?php }
+                                            <?php }
                                         } ?>
                                     </div>
                                 </div>
@@ -93,3 +107,5 @@
         </table>
     </div>
 </div>
+
+<?php $this->view('includes/header/bottom') ?>

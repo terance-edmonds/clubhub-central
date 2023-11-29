@@ -9,14 +9,16 @@
 <!-- alerts -->
 <?php $this->view('includes/alerts') ?>
 
-<div id="event-dashboard-registrations" class="container container-sections side-padding event-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/events/dashboard/left', ["menu" => $menu])  ?>
+<div id="event-dashboard-registrations"
+    class="container container-sections side-padding event-dashboard dashboard-container">
+    <?php $this->view('includes/side-bars/events/dashboard/left', ["menu" => $menu]) ?>
 
     <section class="center-section">
         <div class="title-bar">
             <div class="title-wrap">
                 <span class="title">Agenda</span>
-                <button onclick="$(`[popup-name='add-agenda']`).popup(true)" class="button" data-variant="outlined" data-type="icon" data-size="small">
+                <button onclick="$(`[popup-name='add-agenda']`).popup(true)" class="button" data-variant="outlined"
+                    data-type="icon" data-size="small">
                     <span>Add New</span>
                     <span class="material-icons-outlined">
                         add
@@ -32,7 +34,8 @@
                                 search
                             </span>
                         </button>
-                        <input type="text" placeholder="Search" name="search" value="<?= setValue('search', '', 'text', 'get') ?>">
+                        <input type="text" placeholder="Search" name="search"
+                            value="<?= setValue('search', '', 'text', 'get') ?>">
                     </div>
                 </div>
             </form>
@@ -54,18 +57,30 @@
                         <?php } ?>
                         <?php foreach ($agenda_data as $agenda) { ?>
                             <tr class="table-data">
-                                <td><?= displayValue($agenda->name) ?></td>
-                                <td><?= displayValue($agenda->datetime, 'datetime') ?></td>
-                                <td><?= displayValue($agenda->venue) ?></td>
-                                <td><?= displayValue($agenda->note) ?></td>
+                                <td>
+                                    <?= displayValue($agenda->name) ?>
+                                </td>
+                                <td>
+                                    <?= displayValue($agenda->datetime, 'datetime') ?>
+                                </td>
+                                <td>
+                                    <?= displayValue($agenda->venue) ?>
+                                </td>
+                                <td>
+                                    <?= displayValue($agenda->note) ?>
+                                </td>
                                 <td align="center">
                                     <div class="buttons">
-                                        <button title="Edit Details" onclick='onDataPopup("edit-agenda", <?= toJson($agenda, ["id", "name", "datetime", "venue", "note"]) ?>)' class="icon-button">
+                                        <button title="Edit Details"
+                                            onclick='onDataPopup("edit-agenda", <?= toJson($agenda, ["id", "name", "datetime", "venue", "note"]) ?>)'
+                                            class="icon-button">
                                             <span class="material-icons-outlined">
                                                 edit
                                             </span>
                                         </button>
-                                        <button title="Delete Record" onclick='onDataPopup("delete-agenda", <?= toJson($agenda, ["id"]) ?>)' class="icon-button cl-red">
+                                        <button title="Delete Record"
+                                            onclick='onDataPopup("delete-agenda", <?= toJson($agenda, ["id"]) ?>)'
+                                            class="icon-button cl-red">
                                             <span class="material-icons-outlined">
                                                 delete
                                             </span>
@@ -100,3 +115,5 @@
 
 <script src="<?= ROOT ?>/assets/js/form.js"></script>
 <script src="<?= ROOT ?>/assets/js/events/agenda.js"></script>
+
+<?php $this->view('includes/header/bottom') ?>

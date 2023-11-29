@@ -61,10 +61,15 @@ a {
             }
         }
     }
+
+    @media screen and (max-width: 770px) {
+        padding: 0 10px;
+    }
 }
 
 .container {
     width: 100%;
+    min-height: 100vh;
 }
 
 .full-container {

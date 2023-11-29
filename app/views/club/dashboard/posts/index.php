@@ -7,7 +7,7 @@
 <?php $this->view('includes/header') ?>
 
 <div id="club-dashboard-posts" class="container container-sections side-padding club-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/club/dashboard/left', ["menu" => $menu])  ?>
+    <?php $this->view('includes/side-bars/club/dashboard/left', ["menu" => $menu]) ?>
 
     <section class="center-section">
         <div class="title-bar">
@@ -76,3 +76,5 @@
         </div>
     </section>
 </div>
+
+<?php $this->view('includes/header/bottom') ?>

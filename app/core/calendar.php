@@ -15,8 +15,10 @@ class ModCalendar
 
     function __construct($year, $month)
     {
-        if (!empty($year)) $this->year =  $year;
-        if (!empty($month)) $this->month_number = $month;
+        if (!empty($year))
+            $this->year = $year;
+        if (!empty($month))
+            $this->month_number = $month;
 
         /* set timezone */
         $this->datetime = new DateTime();
@@ -72,6 +74,7 @@ class ModCalendar
 
         foreach ($this->weeks as &$week) {
             foreach ($week as &$item) {
+                /* set events from db */
                 if ($item["day"] == 1) {
                     $item["items"] = [
                         [

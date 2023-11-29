@@ -9,8 +9,9 @@
 <!-- alerts -->
 <?php $this->view('includes/alerts') ?>
 
-<div id="event-dashboard-registrations" class="container container-sections side-padding event-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/events/dashboard/left', ["menu" => $menu])  ?>
+<div id="event-dashboard-registrations"
+    class="container container-sections side-padding event-dashboard dashboard-container">
+    <?php $this->view('includes/side-bars/events/dashboard/left', ["menu" => $menu]) ?>
 
     <section class="center-section">
         <div class="title-bar">
@@ -35,9 +36,15 @@
                     <?php } ?>
                     <?php foreach ($complains_data as $complain) { ?>
                         <tr class="table-data">
-                            <td><?= displayValue($complain->user_name) ?></td>
-                            <td><?= displayValue($complain->user_email) ?></td>
-                            <td><?= displayValue($complain->complain) ?></td>
+                            <td>
+                                <?= displayValue($complain->user_name) ?>
+                            </td>
+                            <td>
+                                <?= displayValue($complain->user_email) ?>
+                            </td>
+                            <td>
+                                <?= displayValue($complain->complain) ?>
+                            </td>
                             <td align="center">
                                 <button title="Delete Record" class="icon-button cl-red">
                                     <span class="material-icons-outlined">
@@ -61,3 +68,5 @@
 <?php $this->view('includes/modals/event/complain/delete') ?>
 
 <script src="<?= ROOT ?>/assets/js/events/event.js"></script>
+
+<?php $this->view('includes/header/bottom') ?>

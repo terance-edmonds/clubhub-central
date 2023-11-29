@@ -71,14 +71,14 @@ class Login extends Controller
                     ]);
 
                     return redirect('home');
-                } else {
-                    return redirect('login');
                 }
             } catch (Throwable $th) {
                 $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to login, please try again later."]];
                 $db->rollback();
             }
         }
+
+        if($_SERVER['REQUEST_METHOD'] == 'POST' && count($data['errors']) == 0) return redirect('login');
 
         $this->view("login", $data);
     }

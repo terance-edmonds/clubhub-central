@@ -8,11 +8,13 @@
 <?php $this->view('includes/header') ?>
 
 <div id="home" class="container container-sections side-padding">
-    <?php $this->view('includes/side-bars/events/left', $left_bar)  ?>
+    <?php $this->view('includes/side-bars/events/left', $left_bar) ?>
     <section class="center-section">
         <div class="cards">
             <?php $this->view('includes/club-post') ?>
         </div>
     </section>
-    <?php $this->view('includes/side-bars/events/right', $right_bar)  ?>
+    <?php $this->view('includes/side-bars/events/right', $right_bar) ?>
 </div>
+
+<?php $this->view('includes/header/bottom') ?>

@@ -7,7 +7,7 @@
 <?php $this->view('includes/header') ?>
 
 <div id="club-dashboard-event" class="container container-sections side-padding club-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/club/dashboard/left', ["menu" => $menu])  ?>
+    <?php $this->view('includes/side-bars/club/dashboard/left', ["menu" => $menu]) ?>
 
     <section class="center-section">
         <div class="title-bar">
@@ -47,13 +47,23 @@
                     </tr>
                     <?php foreach ($events_data as $event) { ?>
                         <tr class="table-data">
-                            <td><?= displayValue($event->name) ?></td>
-                            <td><?= displayValue($event->start_datetime, 'datetime') ?></td>
-                            <td><?= displayValue($event->end_datetime, 'datetime') ?></td>
-                            <td><?= displayValue($event->venue) ?></td>
+                            <td>
+                                <?= displayValue($event->name) ?>
+                            </td>
+                            <td>
+                                <?= displayValue($event->start_datetime, 'datetime') ?>
+                            </td>
+                            <td>
+                                <?= displayValue($event->end_datetime, 'datetime') ?>
+                            </td>
+                            <td>
+                                <?= displayValue($event->venue) ?>
+                            </td>
                             <td align="center">
-                                <a href="<?php echo ($event->state == 'ACTIVE') ? ROOT . '/events/event?id=' . $event->id : 'javascript:void(0);' ?>">
-                                    <button <?php if ($event->state != 'ACTIVE') { ?> disabled <?php } ?> class="icon-button">
+                                <a
+                                    href="<?php echo ($event->state == 'ACTIVE') ? ROOT . '/events/event?id=' . $event->id : 'javascript:void(0);' ?>">
+                                    <button <?php if ($event->state != 'ACTIVE') { ?> disabled <?php } ?>
+                                        class="icon-button">
                                         <span class="material-icons-outlined">
                                             visibility
                                         </span>
@@ -69,7 +79,8 @@
                                 <div class="buttons">
                                     <form method="post">
                                         <input type="text" hidden name="club_event_id" value="<?= $event->id ?>">
-                                        <button <?php if ($event->state != 'ACTIVE') { ?> disabled <?php } ?> name="submit" value="event-redirect" class="icon-button">
+                                        <button <?php if ($event->state != 'ACTIVE') { ?> disabled <?php } ?> name="submit"
+                                            value="event-redirect" class="icon-button">
                                             <span class="material-icons-outlined">
                                                 edit
                                             </span>
@@ -90,5 +101,7 @@
     </section>
 </div>
 
-<?php $this->view('includes/modals/event/register')  ?>
+<?php $this->view('includes/modals/event/register') ?>
 <script src="<?= ROOT ?>/assets/js/events/event.js"></script>
+
+<?php $this->view('includes/header/bottom') ?>

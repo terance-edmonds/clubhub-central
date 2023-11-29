@@ -8,11 +8,13 @@
 <?php $this->view('includes/header') ?>
 
 <div id="events" class="container container-sections side-padding">
-    <?php $this->view('includes/side-bars/events/left', $left_bar)  ?>
+    <?php $this->view('includes/side-bars/events/left', $left_bar) ?>
     <section class="center-section">
         <div class="cards">
-            <?php $this->view('includes/event-post') ?>
+            <?php foreach($events as $event) { $this->view('includes/event-post', ["data" => $event]); } ?>
         </div>
     </section>
-    <?php $this->view('includes/side-bars/events/right', $right_bar)  ?>
+    <?php $this->view('includes/side-bars/events/right', $right_bar) ?>
 </div>
+
+<?php $this->view('includes/header/bottom') ?>

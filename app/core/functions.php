@@ -63,9 +63,9 @@ function setFile($key, $default = '')
     if (!empty($_FILES[$key])) {
         return $_FILES[$key];
     } else
-	if (!empty($default)) {
-        return $default;
-    }
+        if (!empty($default)) {
+            return $default;
+        }
 
     return '';
 }
@@ -73,12 +73,17 @@ function setFile($key, $default = '')
 /* display column value */
 function displayValue($val, $format = 'text')
 {
-    if (empty($val)) $val = '-';
+    if (empty($val))
+        $val = '-';
 
     switch ($format) {
         case 'datetime':
             $moment = new \Moment\Moment($val);
             $val = $moment->format('d/m/Y - h:i A');
+            break;
+        case 'date':
+            $moment = new \Moment\Moment($val);
+            $val = $moment->format('dS F');
             break;
         case 'time':
             $moment = new \Moment\Moment($val);
@@ -93,6 +98,13 @@ function displayValue($val, $format = 'text')
     }
 
     return $val;
+}
+
+function dateFromNow($val)
+{
+    $moment = new \Moment\Moment($val);
+    
+    return $moment->fromNow()->getRelative();
 }
 
 /* random key string */
@@ -125,14 +137,15 @@ function uploadFile($name)
 
         $info = pathinfo($_FILES[$name]['name']);
 
-        $extension =  $info['extension'];
+        $extension = $info['extension'];
 
         $file_name = milliseconds() . "." . $extension;
-        $save_path = $target_dir  . $file_name;
+        $save_path = $target_dir . $file_name;
 
         $result = move_uploaded_file($_FILES['image']['tmp_name'], $save_path);
 
-        if (!$result) return null;
+        if (!$result)
+            return null;
 
         return ["url" => ROOT . $route . $file_name, "name" => $file_name, "result" => $result];
     }
@@ -192,7 +205,7 @@ function getActiveMenu(&$menu, $path)
                 $func = $val["id"];
                 $val["active"] = 'true';
             }
-        } else if ($val["path"] ==  $path) {
+        } else if ($val["path"] == $path) {
             $func = $val["id"];
             $val["active"] = 'true';
         }
@@ -238,16 +251,31 @@ function numberFormat($number = 0, $decimals = 0)
     $str_len = strlen($number);
 
     for ($i = 0; $i < $str_len; $i++) {
-        if ($i == 2 || ($i > 2 && $i % 2 == 0)) $n = $n . $number[$i] . ',';
-        else $n = $n . $number[$i];
+        if ($i == 2 || ($i > 2 && $i % 2 == 0))
+            $n = $n . $number[$i] . ',';
+        else
+            $n = $n . $number[$i];
     }
 
     $number = $n;
     $number = strrev($number);
 
     ($decimals != 0) ? $number = $number . '.' . $decimal_numbers : $number;
-    if (!empty($number[0]) && $number[0] == ',') $number = substr_replace($number, '', 0, 1);
-    if (!empty($number[1]) && $number[1] == ',' && $number[0] == '-') $number = substr_replace($number, '', 1, 1);
+    if (!empty($number[0]) && $number[0] == ',')
+        $number = substr_replace($number, '', 0, 1);
+    if (!empty($number[1]) && $number[1] == ',' && $number[0] == '-')
+        $number = substr_replace($number, '', 1, 1);
 
     return $number;
+}
+
+/* short a number */
+function shortNumber($num = 0)
+{
+    $units = ['', 'K', 'M', 'B', 'T'];
+    for ($i = 0; $num >= 1000; $i++) {
+        $num /= 1000;
+    }
+
+    return round($num, 1) . $units[$i];
 }
