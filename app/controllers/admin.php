@@ -86,7 +86,7 @@ class Admin extends Controller
                     $_SESSION['alerts'] = [["status" => "success", "message" => "Club account created and club in charge email sent successfully"]];
                     $redirect_link = "admin/dashboard";
                 }
-                //var_dump($club->errors);
+
                 $data['errors'] = $club->errors;
             }
 
@@ -95,7 +95,6 @@ class Admin extends Controller
 
             $db->commit();
         } catch (\Throwable $th) {
-            //var_dump($th);
             $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to process the action, please try again later."]];
             $db->rollback();
         }
@@ -107,21 +106,12 @@ class Admin extends Controller
 
     public function events($path, $data)
     {
-        // Instantiating necessary objects
-        $db = new Database();
-        $event = new Event($db);
+        $event = new Event();
 
         try {
-            $db->transaction();
-
-            // Fetch results from the database
             $data["table_data"] = $event->find(["is_deleted" => 0]);
-
-            $db->commit(); // Commit the transaction
         } catch (\Throwable $th) {
-
-            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to fetch events, please try again later."]];
-            $db->rollback(); // Rollback the transaction in case of an exception
+            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to fetch events data, please try again later."]];
         }
 
 
@@ -134,57 +124,16 @@ class Admin extends Controller
         $this->view($path, $data);
     }
 
-    // public function users($path, $data)
-    // {
-    //     $db = new Database();
-    //     $user = new User($db);
-
-    //     try {
-    //         $db->transaction();
-
-    //         // Fetch results from the database
-    //         $data["table_data"] = $user->find(["is_deleted" => 0]);
-
-    //         $db->commit(); // Commit the transaction
-    //     } catch (\Throwable $th) {
-
-    //         $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to fetch user data, please try again later."]];
-    //         $db->rollback(); // Rollback the transaction in case of an exception
-    //     }
-
-
-    //     $this->view($path, $data);
-    // }
-
     public function users($path, $data)
     {
+        $user = new User();
+
         try {
-            $data["table_data"] = $this->fetchUserTableData();
-           
+            $data["table_data"] = $user->find(["is_deleted" => 0]);
+
             $this->view($path, $data);
         } catch (\Throwable $th) {
-           
-            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to fetch user data, please try again later."]];
-        }
-    }
-
-    private function fetchUserTableData()
-    {
-        $db = new Database();
-        $user = new User($db);
-
-        $db->transaction(); 
-        try {
-            // Fetch results from the database
-            $tableData = $user->find(["is_deleted" => 0]);
-
-            $db->commit(); 
-
-            return $tableData;
-        } catch (\Throwable $th) {
-            
-            $db->rollback();
-            throw $th; 
+            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to fetch users data, please try again later."]];
         }
     }
 }

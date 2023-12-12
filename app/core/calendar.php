@@ -72,6 +72,19 @@ class ModCalendar
 
         $this->weeks = array_chunk($days, 7);
 
+        #fetch this month events
+        $event = new Event();
+        $events = $event->find([
+            "start_datetime" => [
+                "data" => $this->year . "-" . $this->month_number . "%",
+                "operator" => "like"
+            ]
+        ], [], [], [
+            "type" => "group",
+        ]);
+
+        // show($events);
+
         foreach ($this->weeks as &$week) {
             foreach ($week as &$item) {
                 /* set events from db */
