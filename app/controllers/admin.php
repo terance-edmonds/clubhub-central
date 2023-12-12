@@ -107,16 +107,84 @@ class Admin extends Controller
 
     public function events($path, $data)
     {
+        // Instantiating necessary objects
+        $db = new Database();
+        $event = new Event($db);
+
+        try {
+            $db->transaction();
+
+            // Fetch results from the database
+            $data["table_data"] = $event->find(["is_deleted" => 0]);
+
+            $db->commit(); // Commit the transaction
+        } catch (\Throwable $th) {
+
+            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to fetch events, please try again later."]];
+            $db->rollback(); // Rollback the transaction in case of an exception
+        }
+
+
         $this->view($path, $data);
     }
+
 
     public function requests($path, $data)
     {
         $this->view($path, $data);
     }
 
+    // public function users($path, $data)
+    // {
+    //     $db = new Database();
+    //     $user = new User($db);
+
+    //     try {
+    //         $db->transaction();
+
+    //         // Fetch results from the database
+    //         $data["table_data"] = $user->find(["is_deleted" => 0]);
+
+    //         $db->commit(); // Commit the transaction
+    //     } catch (\Throwable $th) {
+
+    //         $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to fetch user data, please try again later."]];
+    //         $db->rollback(); // Rollback the transaction in case of an exception
+    //     }
+
+
+    //     $this->view($path, $data);
+    // }
+
     public function users($path, $data)
     {
-        $this->view($path, $data);
+        try {
+            $data["table_data"] = $this->fetchUserTableData();
+           
+            $this->view($path, $data);
+        } catch (\Throwable $th) {
+           
+            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to fetch user data, please try again later."]];
+        }
+    }
+
+    private function fetchUserTableData()
+    {
+        $db = new Database();
+        $user = new User($db);
+
+        $db->transaction(); 
+        try {
+            // Fetch results from the database
+            $tableData = $user->find(["is_deleted" => 0]);
+
+            $db->commit(); 
+
+            return $tableData;
+        } catch (\Throwable $th) {
+            
+            $db->rollback();
+            throw $th; 
+        }
     }
 }
