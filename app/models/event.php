@@ -16,6 +16,11 @@ class Event extends Modal
         "open_registrations",
         "created_datetime",
     ];
+    protected $search_columns = [
+        "name",
+        "description",
+        "venue"
+    ];
 
     public function validateCreateEvent($data)
     {

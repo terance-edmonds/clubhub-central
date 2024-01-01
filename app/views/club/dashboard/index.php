@@ -13,24 +13,30 @@
         <div class="title-bar">
             <div class="title-wrap">
                 <span class="title">Events</span>
-                <a href="<?= ROOT ?>/club/dashboard/events/add">
-                    <button class="button" data-variant="outlined" data-type="icon" data-size="small">
-                        <span>Add Event</span>
-                        <span class="material-icons-outlined">
-                            add
-                        </span>
-                    </button>
-                </a>
+                <?php if ($club_role === 'PRESIDENT' || $club_role === 'CLUB_IN_CHARGE') { ?>
+                    <a href="<?= ROOT ?>/club/dashboard/events/add">
+                        <button class="button" data-variant="outlined" data-type="icon" data-size="small">
+                            <span>Add Event</span>
+                            <span class="material-icons-outlined">
+                                add
+                            </span>
+                        </button>
+                    </a>
+                <?php } ?>
             </div>
 
-            <div class="input-wrap search-input">
-                <div class="input">
-                    <span class="icon material-icons-outlined">
-                        search
-                    </span>
-                    <input type="text" placeholder="Search">
+            <form method="get" class="search-input">
+                <div class="input-wrap">
+                    <div class="input">
+                        <button type="submit" class="icon-button">
+                            <span class="icon material-icons-outlined">
+                                search
+                            </span>
+                        </button>
+                        <input type="text" placeholder="Search" name="search" value="<?= setValue('search', '', 'text', 'get') ?>">
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
 
         <div class="content-section">
@@ -60,10 +66,8 @@
                                 <?= displayValue($event->venue) ?>
                             </td>
                             <td align="center">
-                                <a
-                                    href="<?php echo ($event->state == 'ACTIVE') ? ROOT . '/events/event?id=' . $event->id : 'javascript:void(0);' ?>">
-                                    <button <?php if ($event->state != 'ACTIVE') { ?> disabled <?php } ?>
-                                        class="icon-button">
+                                <a href="<?php echo ($event->state == 'ACTIVE') ? ROOT . '/events/event?id=' . $event->id : 'javascript:void(0);' ?>">
+                                    <button <?php if ($event->state != 'ACTIVE') { ?> disabled <?php } ?> class="icon-button">
                                         <span class="material-icons-outlined">
                                             visibility
                                         </span>
@@ -79,8 +83,7 @@
                                 <div class="buttons">
                                     <form method="post">
                                         <input type="text" hidden name="club_event_id" value="<?= $event->id ?>">
-                                        <button <?php if ($event->state != 'ACTIVE') { ?> disabled <?php } ?> name="submit"
-                                            value="event-redirect" class="icon-button">
+                                        <button <?php if ($event->state != 'ACTIVE') { ?> disabled <?php } ?> name="submit" value="event-redirect" class="icon-button">
                                             <span class="material-icons-outlined">
                                                 edit
                                             </span>

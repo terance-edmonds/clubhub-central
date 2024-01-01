@@ -22,7 +22,7 @@
                 <div class="details">
                     <div class="titles-wrap">
                         <a href="<?= ROOT ?>/user?id=" class="title">Sample Name</a>
-                        <span class="sub-title">Secretory</span>
+                        <span class="sub-title">SECRETARY</span>
                     </div>
                     <span class="material-icons-outlined">
                         chevron_right

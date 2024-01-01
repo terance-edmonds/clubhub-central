@@ -49,10 +49,10 @@ class Club extends Controller
         ];
 
         /* filter menu */
-        if (in_array($club_role, ['CLUB_IN_CHARGE', 'PRESIDENT', 'SECRETORY', 'TREASURER'])) {
+        if (in_array($club_role, ['CLUB_IN_CHARGE', 'PRESIDENT', 'SECRETARY', 'TREASURER'])) {
             array_push($menu, ["id" => "logs", "name" => "Logs", "icon" => "article", "path" => "/club/dashboard/logs", "active" => "false"], ["id" => "members", "name" => "Members", "icon" => "people", "path" => "/club/dashboard/members", "active" => "false"],);
         }
-        if (in_array($club_role, ['CLUB_IN_CHARGE', 'PRESIDENT', 'SECRETORY'])) {
+        if (in_array($club_role, ['CLUB_IN_CHARGE', 'PRESIDENT', 'SECRETARY'])) {
             array_push($menu, ["id" => "reports", "name" => "Reports", "icon" => "description", "path" => ["/club/dashboard/reports", "/club/dashboard/reports/add"], "active" => "false"], ["id" => "meetings", "name" => "Meetings", "icon" => "diversity_2", "path" => "/club/dashboard/meetings", "active" => "false"]);
         }
         if (in_array($club_role, ['CLUB_IN_CHARGE', 'PRESIDENT'])) {
@@ -193,7 +193,7 @@ class Club extends Controller
         }
 
         /* fetch events */
-        $data['events_data'] = $event->find(["club_id" => $club_id]);
+        $data['events_data'] = $event->find(["club_id" => $club_id], [], [], [], isset($_GET['search']) ? $_GET['search'] : '');
 
         $this->view($path, $data);
     }

@@ -18,7 +18,7 @@ class ModCalendar
         if (!empty($year))
             $this->year = $year;
         if (!empty($month))
-            $this->month_number = $month;
+            $this->month_number = sprintf('%02d', $month);
 
         /* set timezone */
         $this->datetime = new DateTime();
@@ -80,24 +80,27 @@ class ModCalendar
                 "operator" => "like"
             ]
         ], [], [], [
-            "type" => "group",
+            "all" => true,
         ]);
-
-        // show($events);
 
         foreach ($this->weeks as &$week) {
             foreach ($week as &$item) {
                 /* set events from db */
-                if ($item["day"] == 1) {
-                    $item["items"] = [
-                        [
-                            "name" => "Fresher's Day",
-                            "date" => "11/10/2023",
-                            "start_time" => "10.00 A.M",
-                            "location" => "UCSC Grounds"
-                        ]
+                $events_on_date =  array_filter($events, function ($event) use ($item) {
+                    $moment = new \Moment\Moment($event->start_datetime);
+                    $date = $moment->format('d');
+
+                    return ((int) $date) == $item["day"];
+                });
+
+                $item["items"] = array_map(function ($record) {
+                    return [
+                        "name" => $record->name,
+                        "date" => $record->start_datetime,
+                        "start_time" => $record->start_datetime,
+                        "location" => $record->venue
                     ];
-                }
+                }, $events_on_date);
             }
         }
 

@@ -55,6 +55,11 @@ class Modal
             $this->offset = $options['offset'];
         }
 
+        if (!empty($options['all']) && $options['all'] == true) {
+            $this->limit = 0;
+            $this->offset = 0;
+        }
+
         $query = "select ";
         /* set attributes */
         if (count($attributes) > 0) {
@@ -112,7 +117,9 @@ class Modal
         }
 
         /* order by */
-        $query .= " order by $this->table.id $this->order limit $this->limit offset $this->offset";
+        $query .= " order by $this->table.id $this->order";
+        if (!empty($this->limit)) $query .= ' limit ' . $this->limit;
+        if (!empty($this->offset)) $query .= ' offset ' . $this->offset;
 
         /* set type */
         if (!empty($options['type'])) {

@@ -54,7 +54,10 @@
                                     </div>
                                     <div class="content">
                                         <?php if (!empty($data["items"])) { ?>
-                                            <?php foreach ($data["items"] as $key => $item) { ?>
+                                            <?php
+                                            $items = array_slice($data["items"], 0, 2);
+                                            foreach ($items as $key => $item) {
+                                            ?>
                                                 <div class="item">
                                                     <p class="name">
                                                         <?= $item["name"] ?>
@@ -95,7 +98,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            <?php }
+                                        <?php }
                                         } ?>
                                     </div>
                                 </div>
