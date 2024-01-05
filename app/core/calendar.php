@@ -10,15 +10,18 @@ class ModCalendar
 
     private $year;
     private $month;
+    private $day;
     private $month_number;
     private $weeks = array();
 
-    function __construct($year, $month)
+    function __construct($year, $month, $day = 1)
     {
         if (!empty($year))
             $this->year = $year;
         if (!empty($month))
             $this->month_number = sprintf('%02d', $month);
+        if (!empty($day))
+            $this->day = $day;
 
         /* set timezone */
         $this->datetime = new DateTime();
@@ -26,18 +29,19 @@ class ModCalendar
         $this->datetime->setTimezone($timezone);
 
         /* set date */
-        $this->datetime->setDate($this->year, $this->month_number, 1);
+        $this->datetime->setDate($this->year, $this->month_number, $this->day);
 
-        $this->setYearMonth();
+        $this->setYearMonthDay();
     }
 
-    private function setYearMonth()
+    private function setYearMonthDay()
     {
         $this->month = $this->datetime->format('F');
         $this->year = $this->datetime->format('Y');
+        $this->day = $this->datetime->format('d');
     }
 
-    private function setPrevNextDates()
+    private function setPrevNextMonths()
     {
         $this->prev_datetime = new DateTime($this->datetime->format('Y-m-d'));
         $this->prev_datetime->modify('-1month');
@@ -46,10 +50,19 @@ class ModCalendar
         $this->next_datetime->modify('+1month');
     }
 
+    private function setPrevNextDay()
+    {
+        $this->prev_datetime = new DateTime($this->datetime->format('Y-m-d'));
+        $this->prev_datetime->modify('-1day');
+
+        $this->next_datetime = new DateTime($this->datetime->format('Y-m-d'));
+        $this->next_datetime->modify('+1day');
+    }
+
     public function create()
     {
-        $this->setYearMonth();
-        $this->setPrevNextDates();
+        $this->setYearMonthDay();
+        $this->setPrevNextMonths();
 
         $days_in_month = $this->datetime->format('t');
         $day_month_starts = $this->datetime->format('N');
@@ -75,6 +88,7 @@ class ModCalendar
         #fetch this month events
         $event = new Event();
         $events = $event->find([
+            "state" => "ACTIVE",
             "start_datetime" => [
                 "data" => $this->year . "-" . $this->month_number . "%",
                 "operator" => "like"
@@ -93,6 +107,7 @@ class ModCalendar
                     return ((int) $date) == $item["day"];
                 });
 
+                $item["date_link"] = "year=" . $this->year . "&month=" . $this->month_number . "&day=" . $item["day"];
                 $item["items"] = array_map(function ($record) {
                     return [
                         "name" => $record->name,
@@ -105,14 +120,44 @@ class ModCalendar
         }
 
         return [
-            "previous_params" => "month=" . $this->prev_datetime->format('m') . "&year=" . $this->prev_datetime->format('Y'),
-            "next_params" => "month=" . $this->next_datetime->format('m') . "&year=" . $this->next_datetime->format('Y'),
+            "previous_params" => "&year=" . $this->prev_datetime->format('Y') . "&month=" . $this->prev_datetime->format('m'),
+            "next_params" => "year=" . $this->next_datetime->format('Y') . "&month=" . $this->next_datetime->format('m'),
             "year" => $this->year,
             "month" => $this->month,
             "month_number" => $this->month_number,
             "weeks" => $this->weeks,
             "week_days" => $this->week_days,
             "week_days_short" => $this->week_days_short
+        ];
+    }
+
+    public function createDay()
+    {
+        $this->setYearMonthDay();
+        $this->setPrevNextDay();
+
+        #fetch this month events
+        $event = new Event();
+        $events = $event->find([
+            "state" => "ACTIVE",
+            "start_datetime" => [
+                "data" => $this->year . "-" . $this->month_number . "-" . $this->day . "%",
+                "operator" => "like"
+            ]
+        ], [], [], [
+            "all" => true,
+            "order_column" => "start_datetime",
+            "order" => "asc"
+        ]);
+
+        return [
+            "previous_params" => "year=" . $this->prev_datetime->format('Y') . "&month=" . $this->prev_datetime->format('m') .  "&day=" . $this->prev_datetime->format('d'),
+            "next_params" => "year=" . $this->next_datetime->format('Y') . "&month=" . $this->next_datetime->format('m') . "&day=" . $this->next_datetime->format('d'),
+            "year" => $this->year,
+            "month" => $this->month,
+            "day" => $this->day,
+            "month_number" => $this->month_number,
+            "items" => $events
         ];
     }
 }

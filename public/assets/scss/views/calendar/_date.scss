@@ -1,0 +1,41 @@
+#calendar-date {
+    width: 100%;
+
+    .center-section {
+        width: 100%;
+    }
+
+    .top-bar {
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .center {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            font-size: $px20;
+            font-weight: 600;
+        }
+
+        .icon-wrap {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            background-color: $secondary_dark;
+            border-radius: 7px;
+            border: 2px solid $gray;
+            cursor: pointer;
+
+            span {
+                color: $gray;
+            }
+        }
+    }
+
+    .calendar-content {
+        width: 100%;
+    }
+}

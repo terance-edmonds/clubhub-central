@@ -204,3 +204,54 @@
   opacity: 100%;
   visibility: visible;
 }
+
+#calendar-date {
+  width: 100%;
+}
+#calendar-date .center-section {
+  width: 100%;
+}
+#calendar-date .top-bar {
+  padding: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+#calendar-date .top-bar .center {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 10px;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  font-size: 1.25em;
+  font-weight: 600;
+}
+#calendar-date .top-bar .icon-wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 10px;
+  background-color: #161616;
+  border-radius: 7px;
+  border: 2px solid #a5a5a5;
+  cursor: pointer;
+}
+#calendar-date .top-bar .icon-wrap span {
+  color: #a5a5a5;
+}
+#calendar-date .calendar-content {
+  width: 100%;
+}

@@ -3,6 +3,7 @@
 class Modal
 {
     public $order = 'desc';
+    public $order_column = 'id';
     public $limit = 10;
     public $offset = 0;
 
@@ -53,6 +54,12 @@ class Modal
         }
         if (!empty($options['offset']) && is_numeric($options['offset'])) {
             $this->offset = $options['offset'];
+        }
+        if (!empty($options['order']) && is_string($options['order'])) {
+            $this->order = $options['order'];
+        }
+        if (!empty($options['order_column']) && is_string($options['order_column'])) {
+            $this->order_column = $options['order_column'];
         }
 
         if (!empty($options['all']) && $options['all'] == true) {
@@ -117,7 +124,7 @@ class Modal
         }
 
         /* order by */
-        $query .= " order by $this->table.id $this->order";
+        $query .= " order by $this->table.$this->order_column $this->order";
         if (!empty($this->limit)) $query .= ' limit ' . $this->limit;
         if (!empty($this->offset)) $query .= ' offset ' . $this->offset;
 
