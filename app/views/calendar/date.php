@@ -41,43 +41,28 @@
                 foreach ($data["items"] as $key => $item) {
                 ?>
                     <div class="item">
-                        <p class="name">
-                            <?= $item->name ?>
-                        </p>
-                        <div class="pop-over">
-                            <p class="name">
-                                <?= $item->name ?>
+                        <div class="date-section">
+                            <p class="date">
+                                <?= dateFormat($item->start_datetime, 'd M') ?>
                             </p>
-                            <div class="info-wrap date">
-                                <div class="icon-wrap">
-                                    <span class="material-icons-outlined">
-                                        today
-                                    </span>
-                                </div>
-                                <span class="text">
-                                    <?= displayValue($item->start_datetime, 'date') ?>
-                                </span>
-                            </div>
-                            <div class="info-wrap time">
-                                <div class="icon-wrap">
-                                    <span class="material-icons-outlined">
-                                        schedule
-                                    </span>
-                                </div>
-                                <span class="text">
-                                    <?= displayValue($item->start_datetime, 'time') ?>
-                                </span>
-                            </div>
-                            <div class="info-wrap location">
-                                <div class="icon-wrap">
-                                    <span class="material-icons-outlined">
-                                        share_location
-                                    </span>
-                                </div>
-                                <span class="text">
-                                    <?= displayValue($item->venue) ?>
-                                </span>
-                            </div>
+                            <p class="time">
+                                <?= displayValue($item->start_datetime, 'time') ?>
+                            </p>
+                        </div>
+
+                        <div class="content-section">
+                            <a href="<?= ROOT ?>/events/event?id=<?= $item->id ?>" class="name"><?= $item->name ?></a>
+                            <p class="date">
+                                <?php
+                                $start_date = dateFormat($item->start_datetime, 'Y-m-d h:i A');
+                                $end_date = dateFormat($item->end_datetime, 'Y-m-d h:i A');
+
+                                echo $start_date . ' - ' . $end_date;
+                                ?>
+                            </p>
+                            <p class="description truncate-text lines-2">
+                                <?= $item->description ?>
+                            </p>
                         </div>
                     </div>
             <?php }

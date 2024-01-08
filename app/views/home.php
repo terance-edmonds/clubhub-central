@@ -13,6 +13,8 @@
         <div class="cards">
             <?php $this->view('includes/club-post') ?>
         </div>
+
+        <?php $this->view('includes/scroll-loader') ?>
     </section>
     <?php $this->view('includes/side-bars/events/right', $right_bar) ?>
 </div>

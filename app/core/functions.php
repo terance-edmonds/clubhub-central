@@ -64,8 +64,8 @@ function setFile($key, $default = '')
         return $_FILES[$key];
     } else
         if (!empty($default)) {
-            return $default;
-        }
+        return $default;
+    }
 
     return '';
 }
@@ -100,11 +100,19 @@ function displayValue($val, $format = 'text')
     return $val;
 }
 
+/* get duration from now */
 function dateFromNow($val)
 {
     $moment = new \Moment\Moment($val);
-    
+
     return $moment->fromNow()->getRelative();
+}
+
+function dateFormat($val, $format)
+{
+    $moment = new \Moment\Moment($val);
+
+    return $moment->format($format);
 }
 
 /* random key string */

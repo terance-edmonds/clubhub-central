@@ -36,6 +36,47 @@
     }
 
     .calendar-content {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
         width: 100%;
+        padding: 20px;
+
+        .item {
+            display: grid;
+            grid-template-columns: 100px auto;
+
+            .date-section {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 10px;
+                border-right: 2px solid $secondary_theme;
+
+                .date {
+                    font-weight: 600;
+                }
+            }
+
+            .content-section {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: 5px;
+                padding: 20px;
+                border-left: 2px solid $secondary_theme;
+
+                .name {
+                    color: $secondary_theme;
+                    font-weight: 500;
+                }
+
+                .date {
+                    font-size: small;
+                    color: $gray;
+                }
+            }
+        }
     }
 }

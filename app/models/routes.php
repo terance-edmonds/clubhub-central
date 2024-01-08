@@ -89,6 +89,16 @@ class Routes
         "events/event" => [
             "ANY"
         ],
+        "events/scroll" => [
+            "MEMBER",
+            "TREASURER",
+            "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+            "SUPER_ADMIN",
+            "ADMIN",
+            "USER"
+        ],
         /* event dashboard routes */
         "events/dashboard" => [
             "MEMBER",

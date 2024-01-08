@@ -46,14 +46,12 @@
                     <tr>
                         <?php foreach ($week as $data) { ?>
                             <td class="calendar-cell">
-                                <div class="cell-content">
-                                    <a href="<?= ROOT ?>/calendar/date?<?= $data["date_link"] ?>">
-                                        <div class="top">
-                                            <span>
-                                                <?= $data["day"] ?>
-                                            </span>
-                                        </div>
-                                    </a>
+                                <a href="<?= ROOT ?>/calendar/date?<?= $data["date_link"] ?>" class="cell-content">
+                                    <div class="top">
+                                        <span>
+                                            <?= $data["day"] ?>
+                                        </span>
+                                    </div>
                                     <div class="content">
                                         <?php if (!empty($data["items"])) { ?>
                                             <?php
@@ -103,7 +101,7 @@
                                         <?php }
                                         } ?>
                                     </div>
-                                </div>
+                                </a>
                             </td>
                         <?php } ?>
                     </tr>
