@@ -50,7 +50,11 @@ $events_count = shortNumber($events_count[0]->count);
 
     <div class="inner-section events-section no-border">
         <p class="title-wrap">
-            Today's Events
+            <?php if (!empty($my_events)) { ?>
+                My Events
+            <?php } else { ?>
+                Today's Events
+            <?php } ?>
         </p>
 
         <div class="cards">

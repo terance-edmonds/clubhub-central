@@ -32,12 +32,15 @@ class Profile extends Controller
             ]
         );
 
+        $menu_side_bar = array_merge($left_bar, $right_bar);
+
         /* set data */
         $data = [
             "tab" => "gallery",
             "left_bar" => $left_bar,
             "right_bar" => $right_bar,
-            "gallery" => []
+            "gallery" => [],
+            "menu_side_bar" => $menu_side_bar
         ];
         $params = $_GET;
         if (isset($params["tab"]))
@@ -73,7 +76,6 @@ class Profile extends Controller
                 } else {
                     $data["errors"]["image"] = "Failed to upload the image, please try again later";
                 }
-
             } else if ($_POST['submit'] == 'delete-image') {
                 $user_gallery = new UserGallery();
                 $user_gallery->delete([

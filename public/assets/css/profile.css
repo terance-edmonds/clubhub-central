@@ -73,6 +73,7 @@
 }
 #profile .center-section {
   width: 100%;
+  padding: 0;
 }
 #profile .center-section .cards {
   padding: 20px;

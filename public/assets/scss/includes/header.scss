@@ -94,6 +94,7 @@ $nav-item-padding: 15px 0;
         display: none;
         cursor: pointer;
         max-width: 100px;
+        user-select: none;
     }
 
     @media screen and (max-width: 1350px) {
@@ -119,6 +120,39 @@ $nav-item-padding: 15px 0;
                     display: none;
                 }
             }
+        }
+    }
+}
+
+.side-menu {
+    display: flex !important;
+    flex-direction: column;
+    gap: 20px;
+    position: fixed;
+    height: 100vh;
+    max-width: 350px;
+    width: 100vw;
+    right: 0;
+    top: 0;
+    background-color: $dark;
+    padding-top: 125px;
+    overflow-y: auto;
+    transition: all 0.5s ease;
+    transform: translateX(360px);
+
+    &[data-active='true'] {
+        transform: translateX(0px);
+    }
+
+    .right-section {
+        display: none;
+    }
+
+    @media screen and (max-width: 920px) {
+        padding-bottom: 125px;
+
+        .right-section {
+            display: flex;
         }
     }
 }

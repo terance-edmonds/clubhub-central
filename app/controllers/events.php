@@ -64,10 +64,13 @@ class Events extends Controller
             "events" => $today_events
         ];
 
+        $menu_side_bar = array_merge($left_bar);
+
         $data = [
             "left_bar" => $left_bar,
             "right_bar" => $right_bar,
-            "events" => $events
+            "events" => $events,
+            "menu_side_bar" => $menu_side_bar
         ];
 
         $this->view("events", $data);

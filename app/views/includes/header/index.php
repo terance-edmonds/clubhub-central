@@ -41,16 +41,16 @@
                     <span class="text">Notifications</span>
                 </div>
                 <div class="nav-item menu-item">
-                    <div class="icon-wrap">
+                    <div onclick="onMenuClick(event)" class="icon-wrap">
                         <span class="icon material-icons-outlined">
                             menu
                         </span>
                     </div>
                 </div>
             </section>
-
         <?php } ?>
     </div>
 </header>
 
-<script src="<?= ROOT ?>/assets/js/header.js"></script>
+<script src="<?= ROOT ?>/assets/js/header/index.js"></script>
+<script src="<?= ROOT ?>/assets/js/header/top.js"></script>

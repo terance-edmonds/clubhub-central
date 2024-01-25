@@ -25,6 +25,7 @@ class User extends Modal
         if (empty($data['email'])) $this->errors['email'] = "Email is required";
 
         if (empty($data['password'])) $this->errors['password'] = "Password is required";
+        if (strlen($data['password']) < 8) $this->errors['password'] = "Password must be at least 8 characters";
         if (empty($data['confirm_password'])) $this->errors['password'] = "Confirm password is required";
         if ($data['password'] !== $data['confirm_password']) {
             $this->errors['password'] = "Passwords does not match";
@@ -66,6 +67,7 @@ class User extends Modal
 
         if (empty($data['current_password'])) $this->errors['current_password'] = "Current password is required";
         if (empty($data['new_password'])) $this->errors['new_password'] = "New password is required";
+        if (strlen($data['new_password']) < 8) $this->errors['new_password'] = "New Password must be at least 8 characters";
         if (empty($data['confirm_new_password'])) $this->errors['confirm_new_password'] = "Confirm new password is required";
         if ($data['new_password'] !== $data['confirm_new_password']) {
             $this->errors['new_password'] = "New Passwords does not match";

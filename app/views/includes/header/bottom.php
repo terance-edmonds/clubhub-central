@@ -29,4 +29,4 @@
     </div>
 </header>
 
-<script src="<?= ROOT ?>/assets/js/header.js"></script>
+<script src="<?= ROOT ?>/assets/js/header/index.js"></script>

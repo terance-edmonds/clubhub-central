@@ -19,4 +19,6 @@
     <?php $this->view('includes/side-bars/events/right', $right_bar) ?>
 </div>
 
+<?php $this->view('includes/header/side-bars/home', $menu_side_bar) ?>
+
 <?php $this->view('includes/header/bottom') ?>

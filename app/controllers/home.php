@@ -41,9 +41,12 @@ class Home extends Controller
             "events" => $today_events
         ];
 
+        $menu_side_bar = array_merge($left_bar);
+
         $data = [
             "left_bar" => $left_bar,
             "right_bar" => $right_bar,
+            "menu_side_bar" => $menu_side_bar,
         ];
 
         /* authenticate */
