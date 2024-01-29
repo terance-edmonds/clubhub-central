@@ -48,7 +48,7 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button type="submit" name="submit" value="update_profile" class="button contained">Create
+                    <button type="submit" name="submit" value="create_post" class="button contained">Create
                         Post</button>
                 </div>
             </form>

@@ -228,6 +228,51 @@ class Club extends Controller
 
     private function posts($path, $data)
     {
+        $storage = new Storage();
+
+        $post = new ClubPost();
+
+        $club_id = $storage->get('club_id');
+
+        if (empty($club_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Club details are not found"]];
+
+        if ($_POST['submit'] == "create_post") {
+
+                if (empty($club_id)) $_SESSION['alerts'] = [["status" => "error", "message" => "Club details are not found"]];
+
+                else {
+                    $form_data['club_id'] = $club_id;
+
+                    if ($post->validateCreatePost($form_data)) {
+                        try {
+                            $post->create($form_data);
+
+                            $_SESSION['alerts'] = [["status" => "success", "message" => "Post details added successfully"]];
+                        } catch (Throwable $th) {
+                            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to add post details"]];
+                        }
+                    }
+
+                    $data['errors'] = $post->errors;
+                }
+            } else {
+                if ($_POST['submit'] == 'upload-image') {
+                    if (!empty($_FILES['image']['name'])) {
+                        $club_gallery = new ClubGallery();
+                        $file_upload = uploadFile('image');
+
+                        $club_gallery->create([
+                            "club_id" => $auth_user['id'],
+                            "image" => $file_upload['url']
+                        ]);
+
+                        return redirect();
+                    } else {
+                        $data["errors"]["image"] = "Failed to upload the image, please try again later";
+                    }
+            }
+        }
+
         $this->view($path, $data);
     }
 
