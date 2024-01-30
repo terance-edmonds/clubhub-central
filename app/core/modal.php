@@ -133,6 +133,9 @@ class Modal
             $type = $options['type'];
         }
 
+        // print_r($query);
+        // die;
+
         $res = $this->db->query($query, $data, $type);
 
         if (is_array($res)) {
