@@ -830,9 +830,6 @@ input[type=checkbox]:checked {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -858,6 +855,7 @@ input[type=checkbox]:checked {
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
+  justify-self: center;
   /* display: none;
   top: 50%;
   left: 50%;
