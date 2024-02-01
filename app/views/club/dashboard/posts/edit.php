@@ -15,7 +15,7 @@
     <section class="center-section">
         <div class="title-bar">
             <div class="title-wrap">
-                <span class="title">New Post</span>
+                <span class="title">Edit Post</span>
             </div>
         </div>
 
@@ -26,6 +26,7 @@
                 <div class="form-section">
                     <p class="form-section-title">General Details</p>
                     <div class="form-section-content">
+                        <input hidden value="<?= setValue('id') ?>" type="text" name="id" required>
                         <div class="input-wrap">
                             <label for="post_name">Post Name</label>
                             <input value="<?= setValue('post_name') ?>" id="post_name" type="text" name="post_name" placeholder="Post Name" required>
@@ -45,22 +46,12 @@
                                 </small>
                             <?php endif; ?>
                         </div>
-
-                        <div class="input-wrap">
-                            <label for="created_datetime">Create On</label>
-                            <input set-default="datetime" readonly value="<?= setValue('created_datetime') ?>" id="created_datetime" type="datetime-local" name="created_datetime" placeholder="Created Date & Time" required>
-                            <?php if (!empty($errors['created_datetime'])) : ?>
-                                <small>
-                                    <?= $errors['created_datetime'] ?>
-                                </small>
-                            <?php endif; ?>
-                        </div>
                     </div>
                 </div>
 
                 <div class="buttons-wrap">
-                    <button type="submit" name="submit" value="create-post" class="button contained">
-                        Create Post
+                    <button type="submit" name="submit" value="edit-post" class="button contained">
+                        Save
                     </button>
                 </div>
             </form>

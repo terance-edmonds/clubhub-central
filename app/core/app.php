@@ -12,6 +12,8 @@
 
     <!-- main styles -->
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/index.css">
+    <!-- pre loader -->
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/pre-loader.css">
 
     <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,6 +25,29 @@
 </head>
 
 <body>
+    <!-- pre loader -->
+    <?php
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    ?>
+        <!-- <div data-active="true" id="pre-loader">
+            <div class="loader-wrapper">
+                <div class="loader">
+                    <div class="roller"></div>
+                    <div class="roller"></div>
+                </div>
+
+                <div id="loader2" class="loader">
+                    <div class="roller"></div>
+                    <div class="roller"></div>
+                </div>
+
+                <div id="loader3" class="loader">
+                    <div class="roller"></div>
+                    <div class="roller"></div>
+                </div>
+            </div>
+        </div> -->
+    <?php } ?>
 
     <?php
 
@@ -92,6 +117,7 @@
 
     <!-- other -->
     <script src="<?= ROOT ?>/assets/js/index.js"></script>
+    <script src="<?= ROOT ?>/assets/js/pre-loader.js"></script>
     <script src="<?= ROOT ?>/assets/js/libs/moment.min.js"></script>
 </body>
 

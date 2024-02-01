@@ -319,10 +319,10 @@ class Events extends Controller
                             $image_uploaded = false;
                             $data["errors"]["image"] = "Failed to upload the image, please try again later";
                         } else {
-                            $form_data['image'] = $file_upload['url'];
+                            $form_data['image'] = $_POST['image'] = $file_upload['url'];
                         }
                     } else if (!empty($form_data['pre_uploaded_image'])) {
-                        $form_data['image'] = $form_data['pre_uploaded_image'];
+                        $form_data['image'] = $_POST['image'] = $form_data['pre_uploaded_image'];
                     }
 
                     if ($image_uploaded && $event->validateUpdateEvent($form_data)) {
@@ -839,8 +839,10 @@ class Events extends Controller
 
                     if ($budget->validateAddIncome($form_data)) {
                         try {
+                            /* create budget record */
                             $result = $budget->create($form_data);
 
+                            /* create budget log */
                             if (!empty($result)) {
                                 $budget_log_data["club_event_budget_id"] = $result->id;
                                 $budget_log->create($budget_log_data);
@@ -985,7 +987,6 @@ class Events extends Controller
             if ($expense_data[0]->total) $data['expense_data'] = $expense_data[0]->total;
             $data['net_value'] = $data['income_data'] - $data['expense_data'];
 
-            /* fetch results */
             $db->commit();
 
             if ($_SERVER['REQUEST_METHOD'] == "POST" && count($data['errors']) == 0) return redirect();

@@ -11,7 +11,9 @@
     <?php $this->view('includes/side-bars/events/left', $left_bar) ?>
     <section class="center-section">
         <div class="cards">
-            <?php $this->view('includes/club-post') ?>
+            <?php foreach ($posts as $post) {
+                $this->view('includes/club-post', ["data" => $post]);
+            } ?>
         </div>
 
         <?php $this->view('includes/scroll-loader') ?>

@@ -44,7 +44,7 @@ class Club extends Controller
 
         $menu = [
             ["id" => "events", "name" => "Events", "icon" => "emoji_events", "path" => ["/club/dashboard", "/club/dashboard/events/add"], "active" => "false"],
-            ["id" => "posts", "name" => "Posts", "icon" => "history_edu", "path" => ["/club/dashboard/posts", "/club/dashboard/posts/add"], "active" => "false"],
+            ["id" => "posts", "name" => "Posts", "icon" => "history_edu", "path" => ["/club/dashboard/posts", "/club/dashboard/posts/add", "/club/dashboard/posts/edit"], "active" => "false"],
             ["id" => "community", "name" => "Community Chat", "icon" => "mark_unread_chat_alt", "path" => "/club/dashboard/community", "active" => "false"],
         ];
 
@@ -183,8 +183,8 @@ class Club extends Controller
                     "club_members.id as id",
                     "user_id",
                     "club_id",
-                    "user.first_name as first_name",
-                    "user.last_name as last_name",
+                    "user.first_name",
+                    "user.last_name",
                 ],
                 [
                     ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"]
@@ -228,6 +228,194 @@ class Club extends Controller
 
     private function posts($path, $data)
     {
+
+        $db = new Database();
+        $post = new ClubPost($db);
+        $post_log = new ClubPostLogs($db);
+
+        $storage = new Storage();
+        $club_id = $storage->get('club_id');
+        $club_member_id = $storage->get('club_member_id');
+        $user_id = Auth::getId();
+
+        $image_uploaded = true;
+        $redirect = 'club/dashboard/posts';
+
+        if (empty($club_id)) $_SESSION['alerts'] = [["status" => "error", "message" => "Club details are not found"]];
+
+        try {
+            $db->transaction();
+
+            if ($_SERVER['REQUEST_METHOD'] == "POST") {
+                $form_data = $_POST;
+                $form_data['club_id'] = $club_id;
+                $form_data['user_id'] = $user_id;
+
+                $post_log_data = [
+                    "club_id" => $club_id,
+                    "user_id" => $user_id,
+                    "club_member_id" => $club_member_id,
+                    "club_post_id" => "",
+                    "description" => ""
+                ];
+
+                if ($form_data['submit'] == 'post-redirect') {
+                    $storage = new Storage();
+                    $storage->set('club_post_id',  $form_data['club_post_id']);
+
+                    return redirect('club/dashboard/posts/edit');
+                } else if ($_POST['submit'] == "create-post") {
+                    /* save uploaded image */
+                    if (!empty($_FILES['image']['name'])) {
+                        $file_upload = uploadFile('image');
+
+                        if (empty($file_upload)) {
+                            $image_uploaded = false;
+                            $data["errors"]["image"] = "Failed to upload the image, please try again later";
+                        } else {
+                            $form_data['image'] = $_POST['image'] = $file_upload['url'];
+                        }
+                    } else if (!empty($form_data['pre_uploaded_image'])) {
+                        $form_data['image'] = $_POST['image'] = $form_data['pre_uploaded_image'];
+                    }
+
+                    if ($image_uploaded && $post->validateCreatePost($form_data)) {
+                        try {
+                            $post_log_data['description'] = "Uploaded a new post to club profile";
+
+                            /* create post record */
+                            $result = $post->create([
+                                "user_id" => $user_id,
+                                "club_id" => $club_id,
+                                "post_name" => $form_data['post_name'],
+                                "description" => $form_data['description'],
+                                "created_datetime" => $form_data['created_datetime'],
+                                "image" => $form_data['image']
+                            ]);
+
+                            /* create log for action */
+                            if (!empty($result)) {
+                                $post_log_data["club_post_id"] = $result->id;
+                                $post_log->create($post_log_data);
+                            }
+
+                            $_SESSION['alerts'] = [["status" => "success", "message" => "Post details added successfully"]];
+
+                            $redirect = 'club/dashboard/posts';
+                        } catch (\Throwable $th) {
+                            throw new Error("Failed to upload club post");
+                        }
+                    }
+                } else if ($_POST['submit'] == "edit-post") {
+                    try {
+                        /* save uploaded image */
+                        if (!empty($_FILES['image']['name'])) {
+                            $file_upload = uploadFile('image');
+
+                            if (empty($file_upload)) {
+                                $image_uploaded = false;
+                                $data["errors"]["image"] = "Failed to upload the image, please try again later";
+                            } else {
+                                $form_data['image'] = $_POST['image'] = $file_upload['url'];
+                            }
+                        } else if (!empty($form_data['pre_uploaded_image'])) {
+                            $form_data['image'] = $_POST['image'] = $form_data['pre_uploaded_image'];
+                        }
+
+                        $post_log_data['description'] = "Updated club post";
+
+                        /* update post record */
+                        $result = $post->update([
+                            "id" => $form_data["id"]
+                        ], [
+                            "post_name" => $form_data['post_name'],
+                            "description" => $form_data['description'],
+                            "image" => $form_data['image']
+                        ]);
+
+                        /* create log for action */
+                        $post_log_data["club_post_id"] = $form_data["id"];
+                        $post_log->create($post_log_data);
+
+                        $_SESSION['alerts'] = [["status" => "success", "message" => "Post details updated successfully"]];
+
+                        $redirect = 'club/dashboard/posts';
+                    } catch (\Throwable $th) {
+                        throw new Error("Failed to update club post");
+                    }
+                } else if ($_POST['submit'] == "delete-club-post") {
+                    try {
+                        $post_log_data['description'] = "Deleted club post";
+
+                        /* delete post record */
+                        $post->update(["id" => $form_data['id']], ["is_deleted" => 1]);
+
+                        /* create log for action */
+                        $post_log_data["club_post_id"] = $form_data["id"];
+                        $post_log->create($post_log_data);
+
+                        $redirect = 'club/dashboard/posts';
+
+                        $_SESSION['alerts'] = [["status" => "success", "message" => "Post details deleted successfully"]];
+                    } catch (Throwable $th) {
+                        throw new Error("Failed to delete club post");
+                    }
+                }
+            }
+
+            /* fetch post details */
+            if ($path == 'club/dashboard/posts/edit') {
+                $post_id = $storage->get('club_post_id');
+
+                if (empty($post_id)) return redirect('club/dashboard/posts');
+
+                $result = $post->one(
+                    ["id" => $post_id],
+                );
+
+                $_POST['id'] = $result->id;
+                $_POST['post_name'] = $result->post_name;
+                $_POST['description'] = $result->description;
+                $_POST['image'] = $result->image;
+            } else {
+                /* fetch club posts */
+                $posts_data = $post->find(
+                    ["club_id" => $club_id, "club_posts.is_deleted" => 0],
+                    [
+                        "club_posts.id",
+                        "club_posts.post_name",
+                        "club_posts.description",
+                        "club_posts.image",
+                        "club_posts.created_datetime",
+                        "user.first_name",
+                        "user.last_name",
+                        "club.id as club_id",
+                        "club.name as club_name",
+                        "club.image as club_image",
+                    ],
+                    [
+                        ["table" => "users", "as" => "user", "on" => "club_posts.user_id = user.id"],
+                        ["table" => "clubs", "as" => "club", "on" => "club_posts.club_id = club.id"]
+                    ],
+                    [],
+                    isset($_GET['search']) ? $_GET['search'] : ''
+                );
+                $data['posts_data'] = $posts_data;
+            }
+
+            $data['errors'] = $post->errors;
+
+            $db->commit();
+
+            if ($_SERVER['REQUEST_METHOD'] == "POST" &&  count($data['errors']) == 0) return redirect($redirect);
+        } catch (\Throwable $th) {
+            $db->rollback();
+            show($th);
+            $_SESSION['alerts'] = [["status" => "error", "message" => $th->getMessage() || "Failed to process the action, please try again later."]];
+            return redirect($redirect);
+        }
+
+
         $this->view($path, $data);
     }
 
