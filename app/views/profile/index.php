@@ -18,7 +18,15 @@
         </div>
         <?php if ($tab == 'club-posts') { ?>
             <div class="cards">
-                <?php $this->view('includes/club-post') ?>
+                <?php
+                if (count($posts) == 0) {
+                    echo "No Club Posts Yet.";
+                } else {
+                    foreach ($posts as $post) {
+                        $this->view('includes/club-post', ["data" => $post]);
+                    }
+                }
+                ?>
             </div>
         <?php } else { ?>
             <div class="gallery">

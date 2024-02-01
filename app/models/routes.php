@@ -258,6 +258,9 @@ class Routes
         "admin/dashboard" => [
             "SUPER_ADMIN"
         ],
+        "admin/dashboard/club/add" => [
+            "SUPER_ADMIN"
+        ],
         "admin/dashboard/events" => [
             "SUPER_ADMIN"
         ],
