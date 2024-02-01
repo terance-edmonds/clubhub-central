@@ -36,6 +36,9 @@ class Admin extends Controller
         $db = new Database();
         $club = new Clubs($db);
         $user = new User($db);
+
+        // die("LOL");
+
         $user_invitation = new UserInvitation($db);
         $mail = new Mail();
         $redirect_link = null;
@@ -107,33 +110,92 @@ class Admin extends Controller
     public function events($path, $data)
     {
         $event = new Event();
+        $storage = new Storage();
 
-        try {
-            $data["table_data"] = $event->find(["is_deleted" => 0]);
-        } catch (\Throwable $th) {
-            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to fetch events data, please try again later."]];
-        }
+        $data['total_count'] = 0;
+        $data['limit'] = 10;
+        $data['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
+
+
+        /* fetch data */
+        $data['events_data'] = $event->find(
+            [],
+            [
+                "club_events.id as id",
+                "club_events.name as name",
+                "club_events.venue as venue",
+                "club_events.image as image",
+                "club_events.start_datetime as start_datetime",
+                "club_events.end_datetime as end_datetime",
+                "club_events.state as state",
+                "club.id as club_id",
+                "club.name as club_name"
+            ],
+            [
+                ["table" => "clubs", "as" => "club", "on" => "club_events.club_id = club.id"]
+            ]
+        );
 
 
         $this->view($path, $data);
     }
 
+    public function requests($path, $data){
 
-    public function requests($path, $data)
-    {
-        $this->view($path, $data);
+        $request = new EventRegistration();
+        $storage = new Storage();
+
+        $data['total_count'] = 0;
+        $data['limit'] = 10;
+        $data['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
+
+        $data['requests_data'] = $request->find(
+            [],
+            [
+                "club_events.id as id",
+                "club_events.name as name",
+                "club_events.venue as venue",
+                "club_events.image as image",
+                "club_events.start_datetime as start_datetime",
+                "club_events.end_datetime as end_datetime",
+                "club_events.state as state",
+                "club_event_registrations.id as request_id"
+
+            ],
+            [
+                ["table" => "club_event_registrations", "as" => "club_event_registration", "on" => "club_event.club_event_registration_id = club_event_registration.id = "]
+            ]
+            
+        );
     }
 
-    public function users($path, $data)
-    {
+ 
+    public function users($path, $data){
         $user = new User();
+        $storage = new Storage();
 
-        try {
-            $data["table_data"] = $user->find(["is_deleted" => 0]);
+        $data['total_count'] = 0;
+        $data['limit'] = 10;
+        $data['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
 
-            $this->view($path, $data);
-        } catch (\Throwable $th) {
-            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to fetch users data, please try again later."]];
-        }
+        $data['users_data'] = $user->find(
+
+            [],
+            [
+                "users.id as id",
+                "users.first_name as first_name",
+                "users.email as email",
+                "users.role as role",
+                "users.image as image",
+                "users.is_deleted as is_deleted",
+                "users.is_blacklisted as is_blacklisted",
+                "users.verified as verified"
+            ],
+            []
+        );
+        $this->view($path, $data);
     }
+
+
+
 }

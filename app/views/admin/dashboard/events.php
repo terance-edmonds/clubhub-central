@@ -37,106 +37,58 @@
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
-                    <tr class="table-data">
-                        <td>Freshers' Day</td>
-                        <td>IEEE</td>
-                        <td>11/04/23 - 10.00 AM</td>
-                        <td>UCSC Ground</td>
-                        <td align="center">
-                            <button class="icon-button">
-                                <span class="material-icons-outlined">
-                                    visibility
-                                </span>
-                            </button>
-                        </td>
-                        <td>
-                            <button class="button status-button" data-status="PENDING">
-                                Pending
-                            </button>
-                        </td>
-                        <td align="center">
-                            <div class="buttons">
-                                <a href="<?= ROOT ?>/events/dashboard">
-                                    <button class="icon-button">
-                                        <span class="material-icons-outlined">
-                                            edit
-                                        </span>
-                                    </button>
-                                </a>
-                                <button class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        delete
-                                    </span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="table-data">
-                        <td>Freshers' Day</td>
-                        <td>LEO</td>
-                        <td>11/04/23 - 10.00 AM</td>
-                        <td>UCSC Ground</td>
-                        <td align="center">
-                            <button class="icon-button">
-                                <span class="material-icons-outlined">
-                                    visibility
-                                </span>
-                            </button>
-                        </td>
-                        <td>
-                            <button class="button status-button" data-status="APPROVED">
-                                Approved
-                            </button>
-                        </td>
-                        <td align="center">
-                            <div class="buttons">
+
+                    <?php if (count($events_data) == 0) { ?>
+                        <tr>
+                            <td colspan="7">No Records.</td>
+                        </tr>
+                    <?php } ?>
+
+                    <?php foreach ($events_data as $event) { ?>
+                        <tr class="table-data">
+                            <td>
+                                <?= displayValue($event->name) ?>
+                            </td>
+                            <td>
+                                <?= displayValue($event->club_name) ?>
+                            </td>
+                            <td>
+                                <?= displayValue($event->start_datetime) ?>
+                            </td>
+                            <td>
+                                <?= displayValue($event->venue) ?>
+                            </td>
+                            <td align="center">
                                 <button class="icon-button">
                                     <span class="material-icons-outlined">
-                                        edit
+                                        visibility
                                     </span>
                                 </button>
-                                <button class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        delete
-                                    </span>
+                            </td>
+                            <td>
+                                <button class="button status-button" data-status="PENDING">
+                                    Pending
                                 </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="table-data">
-                        <td>Freshers' Day</td>
-                        <td>Pahasara</td>
-                        <td>11/04/23 - 10.00 AM</td>
-                        <td>UCSC Ground</td>
-                        <td align="center">
-                            <button class="icon-button">
-                                <span class="material-icons-outlined">
-                                    visibility
-                                </span>
-                            </button>
-                        </td>
-                        <td>
-                            <button class="button status-button" data-status="REJECTED">
-                                Rejected
-                            </button>
-                        </td>
-                        <td align="center">
-                            <div class="buttons">
-                                <a href="<?= ROOT ?>/events/dashboard">
-                                    <button class="icon-button">
+                            </td>
+                            <td align="center">
+                                <div class="buttons">
+                                    <a href="<?= ROOT ?>/events/dashboard">
+                                        <button class="icon-button">
+                                            <span class="material-icons-outlined">
+                                                edit
+                                            </span>
+                                        </button>
+                                    </a>
+                                    <button class="icon-button cl-red">
                                         <span class="material-icons-outlined">
-                                            edit
+                                            delete
                                         </span>
                                     </button>
-                                </a>
-                                <button class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        delete
-                                    </span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php } ?>
+
                 </table>
             </div>
         </div>
