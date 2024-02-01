@@ -144,7 +144,7 @@ class Modal
         return [];
     }
 
-    public function one($data, $attributes = [], $include = [],)
+    public function one($data, $attributes = [], $include = [])
     {
         $keys = array_keys($data);
         $type = 'object';
