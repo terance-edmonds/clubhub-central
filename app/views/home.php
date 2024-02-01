@@ -11,9 +11,15 @@
     <?php $this->view('includes/side-bars/events/left', $left_bar) ?>
     <section class="center-section">
         <div class="cards">
-            <?php foreach ($posts as $post) {
-                $this->view('includes/club-post', ["data" => $post]);
-            } ?>
+            <?php
+            if (count($posts) == 0) {
+                echo "No Club Posts Found.";
+            } else {
+                foreach ($posts as $post) {
+                    $this->view('includes/club-post', ["data" => $post]);
+                }
+            }
+            ?>
         </div>
 
         <?php $this->view('includes/scroll-loader') ?>

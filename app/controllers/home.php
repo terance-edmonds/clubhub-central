@@ -63,6 +63,8 @@ class Home extends Controller
                 ["table" => "users", "as" => "user", "on" => "club_posts.user_id = user.id"],
                 ["table" => "clubs", "as" => "club", "on" => "club_posts.club_id = club.id"]
             ],
+            [],
+            isset($_GET['feed_search']) ? $_GET['feed_search'] : ''
         );
 
         $data = [

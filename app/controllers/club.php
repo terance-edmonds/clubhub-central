@@ -176,7 +176,7 @@ class Club extends Controller
         }
 
         /* fetch club members */
-        if ($path == 'club/dashboard/event/add') {
+        if ($path == 'club/dashboard/events/add') {
             $data['club_members_data'] = $club_member->find(
                 ["club_id" => $club_id, "state" => "ACCEPTED"],
                 [
@@ -410,7 +410,7 @@ class Club extends Controller
             if ($_SERVER['REQUEST_METHOD'] == "POST" &&  count($data['errors']) == 0) return redirect($redirect);
         } catch (\Throwable $th) {
             $db->rollback();
-            show($th);
+
             $_SESSION['alerts'] = [["status" => "error", "message" => $th->getMessage() || "Failed to process the action, please try again later."]];
             return redirect($redirect);
         }

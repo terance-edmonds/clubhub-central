@@ -1,16 +1,20 @@
 <section class="side-bar">
     <div class="inner-section no-border">
-        <div class="input-wrap">
-            <div class="input">
-                <span class="icon material-icons-outlined">
-                    search
-                </span>
-                <input type="text" placeholder="Search">
+        <form method="get" class="search-input">
+            <div class="input-wrap">
+                <div class="input">
+                    <button type="submit" class="icon-button">
+                        <span class="icon material-icons-outlined">
+                            search
+                        </span>
+                    </button>
+                    <input type="text" placeholder="Search" name="feed_search" value="<?= setValue('feed_search', '', 'text', 'get') ?>">
+                </div>
             </div>
-        </div>
+        </form>
     </div>
 
-    <div class="inner-section">
+    <!-- <div class="inner-section">
         <div class="title-wrap">
             <p class="title">Event Filter</p>
             <span class="icon material-icons-outlined">
@@ -26,7 +30,7 @@
                 Musical
             </div>
         </div>
-    </div>
+    </div> -->
 
     <div class="inner-section">
         <div class="title-wrap">

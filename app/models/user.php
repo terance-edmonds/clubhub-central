@@ -14,6 +14,33 @@ class User extends Modal
         "is_verified",
         "description"
     ];
+    protected $search_columns = [
+        "first_name",
+        "last_name",
+        "email"
+    ];
+
+    public function validateLogin($data)
+    {
+        $this->errors = [];
+        $pattern = '/^[a-zA-Z0-9._%+-]+@stu\.ucsc\.cmb\.ac\.lk$/';
+
+        /* check email format preg_match($pattern, $email) */
+        if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+            $this->errors['email'] = "Email is not valid";
+        } else if (!preg_match($pattern, $data['email'])) {
+            $this->errors['email'] = "Email is not allowed ( allowed only emails in '@stu.ucsc.cmb.ac.lk' format )";
+            /* check if the email is in valid format */
+        }
+
+        if (empty($data['password'])) $this->errors['password'] = "Password is required";
+
+        if (empty($this->errors)) {
+            return true;
+        }
+
+        return false;
+    }
 
     public function validateRegister($data)
     {
@@ -31,11 +58,14 @@ class User extends Modal
             $this->errors['password'] = "Passwords does not match";
         }
 
-        // check email format preg_match($pattern, $email)
-        /* check if email exists */
+        /* check email format preg_match($pattern, $email) */
         if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $this->errors['email'] = "Email is not valid";
+        } else if (!preg_match($pattern, $data['email'])) {
+            $this->errors['email'] = "Email is not allowed ( allowed only emails in '@stu.ucsc.cmb.ac.lk' format )";
+            /* check if the email is in valid format */
         } else if ($this->one(['email' => $data['email']])) {
+            /* check if email exists */
             $this->errors['email'] = "Email already exists";
         }
 

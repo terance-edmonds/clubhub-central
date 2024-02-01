@@ -140,7 +140,8 @@ class Admin extends Controller
         $this->view($path, $data);
     }
 
-    public function requests($path, $data){
+    public function requests($path, $data)
+    {
 
         $request = new EventRegistration();
         $storage = new Storage();
@@ -165,37 +166,36 @@ class Admin extends Controller
             [
                 ["table" => "club_event_registrations", "as" => "club_event_registration", "on" => "club_event.club_event_registration_id = club_event_registration.id = "]
             ]
-            
+
         );
     }
 
- 
-    public function users($path, $data){
+
+    public function users($path, $data)
+    {
         $user = new User();
-        $storage = new Storage();
 
         $data['total_count'] = 0;
         $data['limit'] = 10;
         $data['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
 
+        /* pagination */
+        $total_count = $user->find([
+            "is_deleted" => 0
+        ], ["count(*) as count"], [], [], isset($_GET['search']) ? $_GET['search'] : '');
+        if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+        /* fetch data */
         $data['users_data'] = $user->find(
-
+            ["is_deleted" => 0],
+            [],
             [],
             [
-                "users.id as id",
-                "users.first_name as first_name",
-                "users.email as email",
-                "users.role as role",
-                "users.image as image",
-                "users.is_deleted as is_deleted",
-                "users.is_blacklisted as is_blacklisted",
-                "users.verified as verified"
+                "limit" => $data['limit'],
+                "offset" => ($data['page'] - 1) * $data['limit'],
             ],
-            []
+            isset($_GET['search']) ? $_GET['search'] : ''
         );
+
         $this->view($path, $data);
     }
-
-
-
 }

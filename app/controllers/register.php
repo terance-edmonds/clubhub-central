@@ -82,6 +82,7 @@ class Register extends Controller
         $user_invitation = new UserInvitation($db);
         $club_member = new ClubMember($db);
         $club = new Clubs($db);
+        $mail = new Mail();
 
         $token = $_GET["token"];
 
@@ -90,6 +91,7 @@ class Register extends Controller
             $result = $user_invitation->one(["invitation_code" => $token, "is_valid" => 1]);
 
             if (!empty($result)) {
+                $user_data = $user->one(["id" => $result->user_id]);
 
                 /* update user state and invitation states */
                 $user->update(["id" => $result->user_id], ["is_verified" => 1]);
@@ -109,6 +111,20 @@ class Register extends Controller
                 }
 
                 $data["is_verified"] = True;
+
+                /* send registered mail */
+                $mail->send([
+                    "to" => [
+                        "mail" => $user_data['email'],
+                        "name" => $user_data['first_name'] . " " . $user_data['last_name'],
+                    ],
+                    "subject" => "Email Verification",
+                    "body" => $mail->template("user-registered", [
+                        "from_email" => MAIL_USER,
+                        "from_name" => MAIL_USERNAME,
+                        "clubhub_central_link" => ROOT
+                    ])
+                ]);
             }
 
             $db->commit();
