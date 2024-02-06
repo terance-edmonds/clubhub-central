@@ -248,9 +248,9 @@ class Modal
         $this->db->query($query, $data);
     }
 
-    public function delete($data)
+    public function delete($where)
     {
-        $keys = array_keys($data);
+        $keys = array_keys($where);
 
         $query = "delete from " . $this->table . " where ";
 
@@ -260,7 +260,7 @@ class Modal
 
         $query = trim($query, "&& ");
 
-        $this->db->query($query, $data);
+        $this->db->query($query, $where);
 
         return true;
     }

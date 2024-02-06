@@ -6,9 +6,8 @@
 
 <?php $this->view('includes/header') ?>
 
-<div id="club-dashboard-add-meeting"
-    class="container container-sections side-padding club-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/club/dashboard/left', ["menu" => $menu]) ?>
+<div id="club-dashboard-add-meeting" class="container container-sections side-padding club-dashboard dashboard-container">
+    <?php $this->view('includes/side-bars/club/dashboard/left', $left_bar) ?>
 
     <section class="center-section">
         <div class="title-bar">
@@ -25,9 +24,8 @@
                         <div class="multi-wrap">
                             <div class="input-wrap">
                                 <label for="name">Meeting Name</label>
-                                <input value="<?= setValue('name') ?>" id="name" type="text" name="name"
-                                    placeholder="Meeting Name" required>
-                                <?php if (!empty($errors['name'])): ?>
+                                <input value="<?= setValue('name') ?>" id="name" type="text" name="name" placeholder="Meeting Name" required>
+                                <?php if (!empty($errors['name'])) : ?>
                                     <small>
                                         <?= $errors['name'] ?>
                                     </small>
@@ -35,9 +33,8 @@
                             </div>
                             <div class="input-wrap">
                                 <label for="date">Date</label>
-                                <input value="<?= setValue('date') ?>" id="date" type="date" name="date"
-                                    placeholder="Meeting Date" required>
-                                <?php if (!empty($errors['date'])): ?>
+                                <input value="<?= setValue('date') ?>" id="date" type="date" name="date" placeholder="Meeting Date" required>
+                                <?php if (!empty($errors['date'])) : ?>
                                     <small>
                                         <?= $errors['date'] ?>
                                     </small>
@@ -47,9 +44,8 @@
                         <div class="multi-wrap">
                             <div class="input-wrap">
                                 <label for="start_time">Start Time</label>
-                                <input value="<?= setValue('start_time') ?>" id="start_time" type="time"
-                                    name="start_time" placeholder="Start Time" required>
-                                <?php if (!empty($errors['start_time'])): ?>
+                                <input value="<?= setValue('start_time') ?>" id="start_time" type="time" name="start_time" placeholder="Start Time" required>
+                                <?php if (!empty($errors['start_time'])) : ?>
                                     <small>
                                         <?= $errors['start_time'] ?>
                                     </small>
@@ -57,9 +53,8 @@
                             </div>
                             <div class="input-wrap">
                                 <label for="end_time">End Time</label>
-                                <input value="<?= setValue('end_time') ?>" id="end_time" type="time" name="end_time"
-                                    placeholder="End Time" required>
-                                <?php if (!empty($errors['end_time'])): ?>
+                                <input value="<?= setValue('end_time') ?>" id="end_time" type="time" name="end_time" placeholder="End Time" required>
+                                <?php if (!empty($errors['end_time'])) : ?>
                                     <small>
                                         <?= $errors['end_time'] ?>
                                     </small>
@@ -74,7 +69,7 @@
                                     <option value="1">Terance</option>
                                     <option value="2">Raguram</option>
                                 </select>
-                                <?php if (!empty($errors['member_select'])): ?>
+                                <?php if (!empty($errors['member_select'])) : ?>
                                     <small>
                                         <?= $errors['member_select'] ?>
                                     </small>
@@ -87,9 +82,8 @@
 
                         <div class="input-wrap">
                             <label for="description">Description</label>
-                            <textarea value="<?= setValue('description') ?>" id="description" name="description"
-                                placeholder="Description" required></textarea>
-                            <?php if (!empty($errors['description'])): ?>
+                            <textarea value="<?= setValue('description') ?>" id="description" name="description" placeholder="Description" required></textarea>
+                            <?php if (!empty($errors['description'])) : ?>
                                 <small>
                                     <?= $errors['description'] ?>
                                 </small>

@@ -8,13 +8,13 @@
 
 <?php $this->view('includes/alerts') ?>
 
-<div id="event-dashboard-event-add" class="container container-sections side-padding event-dashboard dashboard-container">
+<div id="event-dashboard-event-edit" class="container container-sections side-padding event-dashboard dashboard-container">
     <?php $this->view('includes/side-bars/club/dashboard/left', $left_bar) ?>
 
     <section class="center-section no-padding">
         <div class="title-bar set-padding">
             <div class="title-wrap">
-                <span class="title">Create Event</span>
+                <span class="title">Edit Event</span>
             </div>
         </div>
 
@@ -77,13 +77,48 @@
 
                     <div class="input-wrap">
                         <label for="created_datetime">Create On</label>
-                        <input set-default="datetime" readonly value="<?= setValue('created_datetime') ?>" id="created_datetime" type="datetime-local" name="created_datetime" placeholder="Created Date & Time" required>
+                        <input readonly value="<?= setValue('created_datetime') ?>" id="created_datetime" type="datetime-local" name="created_datetime" placeholder="Created Date & Time" required>
                         <?php if (!empty($errors['created_datetime'])) : ?>
                             <small>
                                 <?= $errors['created_datetime'] ?>
                             </small>
                         <?php endif; ?>
                     </div>
+                </div>
+
+                <div class="form-section budgets">
+                    <div id="event-budgets-section" class="form-section-title-wrap">
+                        <p class="form-section-title">Budget Details</p>
+                    </div>
+
+                    <?php if (!empty($_POST['budgets'])) { ?>
+                        <?php foreach ($_POST['budgets'] as $key => $budget) { ?>
+                            <div id="<?= $key ?>" class="form-section-content budget-form-section">
+                                <div class="multi-wrap">
+                                    <div class="input-wrap">
+                                        <label for="<?= $key ?>-name">Budget Name</label>
+                                        <input readonly value="<?= setValue("budgets[$key][name]") ?>" id="<?= $key ?>-name" type="text" name="budgets[<?= $key ?>][name]" placeholder="Budget Name" required>
+                                        <?php if (!empty($errors["budgets[$key][name]"])) : ?>
+                                            <small>
+                                                <?= $errors["budgets[$key][name]"] ?>
+                                            </small>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="input-wrap">
+                                        <label for="<?= $key ?>-budget">Budget</label>
+                                        <input readonly value="<?= setValue("budgets[$key][amount]") ?>" id="<?= $key ?>-budget" type="number" name="budgets[<?= $key ?>][amount]" placeholder="Budget" min="0" required>
+                                        <?php if (!empty($errors["budgets[$key][amount]"])) : ?>
+                                            <small>
+                                                <?= $errors["budgets[$key][amount]"] ?>
+                                            </small>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php } ?>
+                    <?php } else { ?>
+                        <p>No Budget Records Yet.</p>
+                    <?php } ?>
                 </div>
 
                 <div class="form-section groups">
@@ -180,7 +215,7 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button type="submit" name="submit" value="create_event" class="button contained">Request Budget Analysis</button>
+                    <button type="submit" name="submit" value="create_event" class="button contained">Save</button>
                 </div>
             </form>
         </div>

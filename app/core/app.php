@@ -63,7 +63,10 @@
 
             /* route authentication */
             $authorized = Auth::authenticate($_GET);
-            if (!$authorized) $filename = 'not-found';
+            if (!$authorized) {
+                $filename = 'not-found';
+                $method = 'index';
+            };
 
             unset($arr[0]); // remove the first item of the array
             if (!empty($arr[1])) unset($arr[1]); // remove the second item of the array

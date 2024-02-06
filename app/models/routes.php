@@ -187,6 +187,20 @@ class Routes
             "PRESIDENT",
             "CLUB_IN_CHARGE",
         ],
+        "club/dashboard/events/edit" => [
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+        ],
+        "club/dashboard/budgets" => [
+            "PRESIDENT",
+            "TREASURER",
+            "CLUB_IN_CHARGE",
+        ],
+        "club/dashboard/budgets/edit" => [
+            "PRESIDENT",
+            "TREASURER",
+            "CLUB_IN_CHARGE",
+        ],
         "club/dashboard/members" => [
             "SECRETARY",
             "PRESIDENT",
@@ -212,9 +226,11 @@ class Routes
         ],
         "club/dashboard/requests" => [
             "CLUB_IN_CHARGE",
+            "PRESIDENT",
         ],
         "club/dashboard/requests/add" => [
             "CLUB_IN_CHARGE",
+            "PRESIDENT",
         ],
         "club/dashboard/posts" => [
             "MEMBER",
