@@ -6,6 +6,8 @@
 
 <?php $this->view('includes/header') ?>
 
+<?php $this->view('includes/alerts') ?>
+
 <div id="club-dashboard-event" class="container container-sections side-padding club-dashboard dashboard-container">
     <?php $this->view('includes/side-bars/club/dashboard/left', $left_bar) ?>
 
@@ -81,7 +83,7 @@
                                 </a>
                             </td>
                             <td>
-                                <button class="button status-button" data-status="<?= $event->state ?>">
+                                <button <?php if ($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') { ?> onclick='onDataPopup("event-status", <?= toJson($event, ["id", "state"]) ?>)' <?php } ?> class="button status-button <?= ($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') ? 'pointer-cursor' : '' ?>" data-status="<?= $event->state ?>">
                                     <?= displayValue($event->state, 'start-case') ?>
                                 </button>
                             </td>
@@ -113,12 +115,29 @@
                         </tr>
                     <?php } ?>
                 </table>
+                <?php $this->view('includes/pagination', [
+                    "total_count" => $total_count,
+                    "limit" => $limit,
+                    "page" => $page
+                ]) ?>
             </div>
         </div>
     </section>
 </div>
 
 <?php $this->view('includes/modals/event/register') ?>
-<script src="<?= ROOT ?>/assets/js/events/event.js"></script>
+
+<?php if ($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') {
+    $this->view('includes/modals/club/events/status');
+?>
+    <script>
+        <?php if (!empty($popups["event-status"])) { ?>
+            $(`[popup-name='event-status']`).popup(true)
+        <?php } ?>
+    </script>
+<?php } ?>
 
 <?php $this->view('includes/header/bottom') ?>
+
+<script src="<?= ROOT ?>/assets/js/events/event.js"></script>
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

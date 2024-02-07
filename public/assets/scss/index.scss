@@ -130,6 +130,10 @@ a {
     }
 }
 
+.pointer-cursor {
+    cursor: pointer !important;
+}
+
 @import './animations';
 @import './alerts';
 

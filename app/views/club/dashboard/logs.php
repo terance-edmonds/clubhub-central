@@ -1,4 +1,5 @@
 <head>
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/cards.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/side-bar.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/dashboard.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/club-dashboard.css">
@@ -36,30 +37,44 @@
                 <div class="table-wrap">
                     <table>
                         <tr class="table-header">
-                            <th>User name</th>
+                            <th>Users' name</th>
                             <th>Email</th>
-                            <th>Post ID</th>
+                            <th>Post Name</th>
                             <th>Action</th>
                             <th>View</th>
-                            <th>Date & Time</th>
+                            <th>Created Date & Time</th>
+                            <th>Updated Date & Time</th>
                         </tr>
-                        <tr class="table-data">
-                            <td>John</td>
-                            <td>john@mailinator.com</td>
-                            <td align="center">1</td>
-                            <td>Updated a post</td>
-                            <td align="center">
-                                <button class="icon-button">
-                                    <span class="material-icons-outlined">
-                                        visibility
-                                    </span>
-                                </button>
-                            </td>
-                            <td>
-                                11/04/23 - 10.00 AM
-                            </td>
-                        </tr>
-
+                        <?php foreach ($table_data as $x => $val) {
+                        ?>
+                            <tr class="table-data">
+                                <td>
+                                    <?= displayValue($val->first_name) ?> <?= displayValue($val->last_name) ?>
+                                </td>
+                                <td>
+                                    <?= displayValue($val->email) ?>
+                                </td>
+                                <td>
+                                    <?= displayValue($val->post_name) ?>
+                                </td>
+                                <td>
+                                    <?= displayValue($val->log_description) ?>
+                                </td>
+                                <td align="center">
+                                    <button onclick='onViewPost(<?= toJson($val, ["post_name", "club_name", "club_image", "image", "description", "club_id", "created_datetime"]) ?>)' class="icon-button">
+                                        <span class="material-icons-outlined">
+                                            visibility
+                                        </span>
+                                    </button>
+                                </td>
+                                <td>
+                                    <?= displayValue($val->created_at, 'datetime') ?>
+                                </td>
+                                <td>
+                                    <?= displayValue($val->updated_at, 'datetime') ?>
+                                </td>
+                            </tr>
+                        <?php } ?>
                     </table>
                 </div>
             </div>
@@ -74,27 +89,54 @@
                 <div class="table-wrap">
                     <table>
                         <tr class="table-header">
-                            <th>User name</th>
+                            <th>Users' name</th>
                             <th>Email</th>
-                            <th>Budget ID</th>
+                            <th>Event Name</th>
+                            <th>Budget Name</th>
+                            <th>Budget Type</th>
                             <th>Action</th>
-                            <th>Date & Time</th>
+                            <th>Created Date & Time</th>
+                            <th>Updated Date & Time</th>
                         </tr>
-                        <tr class="table-data">
-                            <td>John</td>
-                            <td>john@mailinator.com</td>
-                            <td align="center">1</td>
-                            <td>Updated a budget</td>
-                            <td>
-                                11/04/23 - 10.00 AM
-                            </td>
-                        </tr>
-
+                        <?php foreach ($table_data as $x => $val) {
+                        ?>
+                            <tr class="table-data">
+                                <td>
+                                    <?= displayValue($val->first_name) ?> <?= displayValue($val->last_name) ?>
+                                </td>
+                                <td>
+                                    <?= displayValue($val->email) ?>
+                                </td>
+                                <td>
+                                    <?= displayValue($val->event_name) ?>
+                                </td>
+                                <td>
+                                    <?= displayValue($val->budget_name) ?>
+                                </td>
+                                <td align="center">
+                                    <?= displayValue($val->type) ?>
+                                </td>
+                                <td>
+                                    <?= displayValue($val->description) ?>
+                                </td>
+                                <td>
+                                    <?= displayValue($val->created_at, 'datetime') ?>
+                                </td>
+                                <td>
+                                    <?= displayValue($val->updated_at, 'datetime') ?>
+                                </td>
+                            </tr>
+                        <?php } ?>
                     </table>
                 </div>
             </div>
         <?php } ?>
     </section>
 </div>
+
+<?php $this->view('includes/modals/club/post') ?>
+
+<!-- club post view -->
+<script src="<?= ROOT ?>/assets/js/club/dashboard/view-post.js"></script>
 
 <?php $this->view('includes/header/bottom') ?>

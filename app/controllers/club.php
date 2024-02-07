@@ -24,7 +24,8 @@ class Club extends Controller
             return redirect('not-found');
         }
 
-        if (!empty($params["tab"])) $data["tab"] = $params["tab"];
+        $tabs = ['club-posts', 'events'];
+        $data["tab"] = getActiveTab($tabs, $_GET);
 
         $today_events = $event->find(
             [
@@ -227,11 +228,11 @@ class Club extends Controller
 
             if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 $form_data = $_POST;
+                $group_errors = [];
 
                 if ($form_data['submit'] == 'create_event') {
                     $form_data['club_id'] = $club_id;
 
-                    $group_errors = [];
                     if ($event->validateCreateEvent($form_data)) {
                         try {
                             $event_result = $event->create([
@@ -288,6 +289,13 @@ class Club extends Controller
                         $_SESSION['alerts'] = [["status" => "success", "message" => "Created an event successfully"]];
                         $redirect_link = 'club/dashboard';
                     }
+                } else if ($_POST['submit'] == 'event-state') {
+                    $event->update(["id" => $form_data['id']], [
+                        "state" => $form_data['state']
+                    ]);
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Event status updated successfully"]];
+                    $redirect_link = 'club/dashboard';
                 } else if ($_POST['submit'] == 'event-redirect') {
                     $storage = new Storage();
                     $storage->set('club_event_id', $_POST['club_event_id']);
@@ -774,6 +782,65 @@ class Club extends Controller
     {
         $tabs = ['posts', 'budgets'];
         $data["tab"] = getActiveTab($tabs, $_GET);
+
+        $storage = new Storage();
+        $budget_log = new BudgetLogs();
+        $post_log = new ClubPostLogs();
+
+        $club_id = $storage->get('club_id');
+
+        $table_data = [];
+        if ($data['tab'] == 'posts') {
+            $table_data = $post_log->find(
+                ["club_post_logs.club_id" => $club_id],
+                [
+                    "club_post_logs.id",
+                    "club_post_logs.club_post_id",
+                    "club_post_logs.description as log_description",
+                    "club_post_logs.created_at",
+                    "club_post_logs.updated_at",
+                    "user.email",
+                    "user.first_name",
+                    "user.last_name",
+                    "post.post_name",
+                    "post.description as description",
+                    "post.image as image",
+                    "post.club_id as club_id",
+                    "post.created_datetime as created_datetime",
+                    "club.name as club_name",
+                    "club.image as club_image",
+                ],
+                [
+                    ["table" => "club_posts", "as" => "post", "on" => "club_post_logs.club_post_id = post.id"],
+                    ["table" => "users", "as" => "user", "on" => "club_post_logs.user_id = user.id"],
+                    ["table" => "clubs", "as" => "club", "on" => "club_post_logs.club_id = club.id"],
+                ]
+            );
+        } else if ($data['tab'] == 'budgets') {
+            $table_data = $budget_log->find(
+                ["club_event_budget_logs.club_id" => $club_id],
+                [
+                    "club_event_budget_logs.id",
+                    "club_event_budget_logs.club_event_budget_id",
+                    "club_event_budget_logs.description",
+                    "club_event_budget_logs.type",
+                    "club_event_budget_logs.created_at",
+                    "club_event_budget_logs.updated_at",
+                    "user.email",
+                    "user.first_name",
+                    "user.last_name",
+                    "event.name as event_name",
+                    "budget.name as budget_name",
+                ],
+                [
+                    ["table" => "club_event_budgets", "as" => "budget", "on" => "club_event_budget_logs.club_event_budget_id = budget.id"],
+                    ["table" => "club_events", "as" => "event", "on" => "club_event_budget_logs.club_event_id = event.id"],
+                    ["table" => "users", "as" => "user", "on" => "club_event_budget_logs.user_id = user.id"],
+                ]
+            );
+        }
+
+        $data['table_data'] = $table_data;
 
         $this->view($path, $data);
     }
