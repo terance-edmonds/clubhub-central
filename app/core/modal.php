@@ -120,7 +120,24 @@ class Modal
 
         /* search query */
         if (!empty($search)) {
-            $query .= " && match(" . implode(',', $this->search_columns) . ") against ('" . $search . '*' . "' IN BOOLEAN MODE)";
+            $condition = '&&';
+
+            if (!empty($options['search']) && is_array($options['search'])) {
+                $query .= " && ( ";
+
+                foreach ($options['search'] as $search_key) {
+                    $query .= $search_key . " like '%" . $search . "%' || ";
+                }
+
+                $query = trim($query, "|| ");
+                $query .= ' )';
+
+                $condition = '||';
+            }
+
+            if (!empty($this->search_columns)) {
+                $query .= " " . $condition . " match(" . implode(',', $this->search_columns) . ") against ('" . $search . '*' . "' IN BOOLEAN MODE)";
+            }
         }
 
         /* order by */

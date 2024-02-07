@@ -789,8 +789,13 @@ class Club extends Controller
 
         $club_id = $storage->get('club_id');
 
+        $data['total_count'] = 0;
+        $data['limit'] = 10;
+        $data['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
         $table_data = [];
+
         if ($data['tab'] == 'posts') {
+            /* fetch data */
             $table_data = $post_log->find(
                 ["club_post_logs.club_id" => $club_id],
                 [
@@ -814,9 +819,21 @@ class Club extends Controller
                     ["table" => "club_posts", "as" => "post", "on" => "club_post_logs.club_post_id = post.id"],
                     ["table" => "users", "as" => "user", "on" => "club_post_logs.user_id = user.id"],
                     ["table" => "clubs", "as" => "club", "on" => "club_post_logs.club_id = club.id"],
-                ]
+                ],
+                [
+                    "limit" => $data['limit'],
+                    "offset" => ($data['page'] - 1) * $data['limit'],
+                ],
+                isset($_GET['search']) ? $_GET['search'] : ''
             );
+
+            /* pagination */
+            $total_count = $post_log->find([
+                "club_id" => $club_id,
+            ], ["count(*) as count"], [], [], isset($_GET['search']) ? $_GET['search'] : '');
+            if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
         } else if ($data['tab'] == 'budgets') {
+            /* fetch data */
             $table_data = $budget_log->find(
                 ["club_event_budget_logs.club_id" => $club_id],
                 [
@@ -836,8 +853,20 @@ class Club extends Controller
                     ["table" => "club_event_budgets", "as" => "budget", "on" => "club_event_budget_logs.club_event_budget_id = budget.id"],
                     ["table" => "club_events", "as" => "event", "on" => "club_event_budget_logs.club_event_id = event.id"],
                     ["table" => "users", "as" => "user", "on" => "club_event_budget_logs.user_id = user.id"],
-                ]
+                ],
+                [
+                    "limit" => $data['limit'],
+                    "offset" => ($data['page'] - 1) * $data['limit'],
+                    "search" =>  ["user.email", "user.first_name", "user.last_name", "budget.name"]
+                ],
+                isset($_GET['search']) ? $_GET['search'] : ''
             );
+
+            /* pagination */
+            $total_count = $budget_log->find([
+                "club_id" => $club_id,
+            ], ["count(*) as count"], [], [], isset($_GET['search']) ? $_GET['search'] : '');
+            if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
         }
 
         $data['table_data'] = $table_data;

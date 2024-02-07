@@ -16,14 +16,19 @@
                 <span class="title">Logs</span>
             </div>
 
-            <div class="input-wrap search-input">
-                <div class="input">
-                    <span class="icon material-icons-outlined">
-                        search
-                    </span>
-                    <input type="text" placeholder="Search">
+            <form method="get" class="search-input">
+                <div class="input-wrap">
+                    <div class="input">
+                        <button type="submit" class="icon-button">
+                            <span class="icon material-icons-outlined">
+                                search
+                            </span>
+                        </button>
+                        <input type="text" hidden name="tab" value="<?= setValue('tab', 'posts', 'text', 'get') ?>">
+                        <input type="text" placeholder="Search" name="search" value="<?= setValue('search', '', 'text', 'get') ?>">
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
 
         <?php if ($tab == 'posts') { ?>
@@ -76,6 +81,11 @@
                             </tr>
                         <?php } ?>
                     </table>
+                    <?php $this->view('includes/pagination', [
+                        "total_count" => $total_count,
+                        "limit" => $limit,
+                        "page" => $page
+                    ]) ?>
                 </div>
             </div>
         <?php } else if ($tab == 'budgets') { ?>
@@ -128,6 +138,11 @@
                             </tr>
                         <?php } ?>
                     </table>
+                    <?php $this->view('includes/pagination', [
+                        "total_count" => $total_count,
+                        "limit" => $limit,
+                        "page" => $page
+                    ]) ?>
                 </div>
             </div>
         <?php } ?>
