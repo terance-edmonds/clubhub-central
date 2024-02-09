@@ -10,8 +10,11 @@
             </p>
         </div>
     </div>
-    <p class="description truncate-text lines-2">
-        <?= $data->description ?>
-    </p>
+    <div class="description-wrap">
+        <p class="description truncate-text lines-2">
+            <?= $data->description ?>
+        </p>
+        <span onclick="onReadMore(event)" class="read-more-text">Read More</span>
+    </div>
     <img loading="lazy" src="<?= $data->image ?>" alt="Post Image" class="post-image">
 </div>

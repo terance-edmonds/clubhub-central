@@ -25,7 +25,7 @@
                             <div class="input-wrap">
                                 <label for="event">Choose Event</label>
                                 <select name="event" id="event" required>
-                                    <option value="" selected disabled hidden>Choose Member</option>
+                                    <option value="" selected disabled hidden>Choose Event</option>
                                     <option value="1">Freshers</option>
                                 </select>
                                 <?php if (!empty($errors['event'])) : ?>
@@ -65,8 +65,8 @@
 </div>
 
 <?php $this->view('includes/modals/event/register') ?>
+<?php $this->view('includes/header/side-bars/club-dashboard', $menu_side_bar) ?>
+<?php $this->view('includes/header/bottom') ?>
 
 <script src="<?= ROOT ?>/assets/js/events/event.js"></script>
 <script src="<?= ROOT ?>/assets/js/form.js"></script>
-
-<?php $this->view('includes/header/bottom') ?>

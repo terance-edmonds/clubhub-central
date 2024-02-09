@@ -11,3 +11,5 @@ qr-codes
 .env.local
 .env.development
 .env.production
+
+.map.css

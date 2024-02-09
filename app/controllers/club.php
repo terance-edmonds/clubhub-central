@@ -195,9 +195,12 @@ class Club extends Controller
             "menu" => $menu,
         ];
 
+        $menu_side_bar = $left_bar;
+
         $data = [
             "left_bar" => $left_bar,
-            "club_role" => $club_role
+            "club_role" => $club_role,
+            "menu_side_bar" => $menu_side_bar
         ];
 
         $this->$func($path, $data);

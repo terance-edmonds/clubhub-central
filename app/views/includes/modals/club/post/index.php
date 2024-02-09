@@ -22,3 +22,5 @@
         </div>
     </div>
 </div>
+
+<script src="<?= ROOT ?>/assets/js/cards.js"></script>

@@ -91,14 +91,6 @@
                                 <div class="buttons">
                                     <form method="post">
                                         <input type="text" hidden name="club_event_id" value="<?= $event->id ?>">
-                                        <button title="Edit Details" <?php if ($event->state != 'ACTIVE') { ?> disabled <?php } ?> name="submit" value="event-redirect" class="icon-button">
-                                            <span class="material-icons-outlined">
-                                                edit
-                                            </span>
-                                        </button>
-                                    </form>
-                                    <form method="post">
-                                        <input type="text" hidden name="club_event_id" value="<?= $event->id ?>">
                                         <button title="Event dashboard" <?php if ($event->state != 'ACTIVE') { ?> disabled <?php } ?> name="submit" value="event-dashboard-redirect" class="icon-button">
                                             <span class="material-icons-outlined">
                                                 dashboard
@@ -136,6 +128,8 @@
         <?php } ?>
     </script>
 <?php } ?>
+
+<?php $this->view('includes/header/side-bars/club-dashboard', $menu_side_bar) ?>
 
 <?php $this->view('includes/header/bottom') ?>
 

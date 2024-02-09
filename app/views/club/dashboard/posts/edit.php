@@ -61,4 +61,5 @@
 
 <script src="<?= ROOT ?>/assets/js/form.js"></script>
 
+<?php $this->view('includes/header/side-bars/club-dashboard', $menu_side_bar) ?>
 <?php $this->view('includes/header/bottom') ?>
