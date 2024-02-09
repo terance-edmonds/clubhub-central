@@ -9,7 +9,7 @@
 <?php $this->view('includes/alerts') ?>
 
 <div id="event-dashboard-event-edit" class="container container-sections side-padding event-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/events/dashboard/left', ["menu" => $menu]) ?>
+    <?php $this->view('includes/side-bars/events/dashboard/left', $left_bar) ?>
 
     <section class="center-section no-padding">
         <div class="title-bar set-padding">
@@ -283,4 +283,4 @@
 <script src="<?= ROOT ?>/assets/js/events/edit-event.js"></script>
 <script src="<?= ROOT ?>/assets/js/form.js"></script>
 
-<?php $this->view('includes/header/bottom') ?>
+<?php $this->view('includes/header/side-bars/event-dashboard', $menu_side_bar) ?>

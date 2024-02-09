@@ -145,6 +145,5 @@
 
 <?php $this->view('includes/header/side-bars/club-dashboard', $menu_side_bar) ?>
 <?php $this->view('includes/modals/event/register') ?>
-<?php $this->view('includes/header/bottom') ?>
 
 <script src="<?= ROOT ?>/assets/js/events/event.js"></script>

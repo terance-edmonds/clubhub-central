@@ -151,7 +151,6 @@
 
 <?php $this->view('includes/header/side-bars/club-dashboard', $menu_side_bar) ?>
 <?php $this->view('includes/modals/club/post') ?>
-<?php $this->view('includes/header/bottom') ?>
 
 <!-- club post view -->
 <script src="<?= ROOT ?>/assets/js/club/dashboard/view-post.js"></script>

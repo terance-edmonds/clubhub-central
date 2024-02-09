@@ -9,16 +9,14 @@
 <!-- alerts -->
 <?php $this->view('includes/alerts') ?>
 
-<div id="event-dashboard-registrations"
-    class="container container-sections side-padding event-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/events/dashboard/left', ["menu" => $menu]) ?>
+<div id="event-dashboard-registrations" class="container container-sections side-padding event-dashboard dashboard-container">
+    <?php $this->view('includes/side-bars/events/dashboard/left', $left_bar) ?>
 
     <section class="center-section">
         <div class="title-bar">
             <div class="title-wrap">
                 <span class="title">Agenda</span>
-                <button onclick="$(`[popup-name='add-agenda']`).popup(true)" class="button" data-variant="outlined"
-                    data-type="icon" data-size="small">
+                <button onclick="$(`[popup-name='add-agenda']`).popup(true)" class="button" data-variant="outlined" data-type="icon" data-size="small">
                     <span>Add New</span>
                     <span class="material-icons-outlined">
                         add
@@ -34,8 +32,7 @@
                                 search
                             </span>
                         </button>
-                        <input type="text" placeholder="Search" name="search"
-                            value="<?= setValue('search', '', 'text', 'get') ?>">
+                        <input type="text" placeholder="Search" name="search" value="<?= setValue('search', '', 'text', 'get') ?>">
                     </div>
                 </div>
             </form>
@@ -71,16 +68,12 @@
                                 </td>
                                 <td align="center">
                                     <div class="buttons">
-                                        <button title="Edit Details"
-                                            onclick='onDataPopup("edit-agenda", <?= toJson($agenda, ["id", "name", "datetime", "venue", "note"]) ?>)'
-                                            class="icon-button">
+                                        <button title="Edit Details" onclick='onDataPopup("edit-agenda", <?= toJson($agenda, ["id", "name", "datetime", "venue", "note"]) ?>)' class="icon-button">
                                             <span class="material-icons-outlined">
                                                 edit
                                             </span>
                                         </button>
-                                        <button title="Delete Record"
-                                            onclick='onDataPopup("delete-agenda", <?= toJson($agenda, ["id"]) ?>)'
-                                            class="icon-button cl-red">
+                                        <button title="Delete Record" onclick='onDataPopup("delete-agenda", <?= toJson($agenda, ["id"]) ?>)' class="icon-button cl-red">
                                             <span class="material-icons-outlined">
                                                 delete
                                             </span>
@@ -104,6 +97,8 @@
 <?php $this->view('includes/modals/event/agenda/edit') ?>
 <?php $this->view('includes/modals/event/agenda/delete') ?>
 
+<?php $this->view('includes/header/side-bars/event-dashboard', $menu_side_bar) ?>
+
 <script>
     <?php if (!empty($popups["add-agenda"])) { ?>
         $(`[popup-name='add-agenda']`).popup(true)
@@ -115,5 +110,3 @@
 
 <script src="<?= ROOT ?>/assets/js/form.js"></script>
 <script src="<?= ROOT ?>/assets/js/events/agenda.js"></script>
-
-<?php $this->view('includes/header/bottom') ?>

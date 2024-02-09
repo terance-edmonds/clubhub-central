@@ -262,11 +262,18 @@ class Events extends Controller
         /* update the active menu item */
         $func = getActiveMenu($menu, $path);
 
+        $left_bar = [
+            "menu" => $menu
+        ];
+
+        $menu_side_bar = $left_bar;
+
         $data = [
             "popups" => [],
             "alerts" => [],
             "errors" => [],
-            "menu" => $menu
+            "left_bar" => $left_bar,
+            "menu_side_bar" => $menu_side_bar
         ];
 
         $this->$func($path, $data);

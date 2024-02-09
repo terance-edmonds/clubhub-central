@@ -299,7 +299,6 @@
 </div>
 
 <?php $this->view('includes/header/side-bars/club-dashboard', $menu_side_bar) ?>
-<?php $this->view('includes/header/bottom') ?>
 
 <script src="<?= ROOT ?>/assets/js/events/edit-event.js"></script>
 <script src="<?= ROOT ?>/assets/js/form.js"></script>

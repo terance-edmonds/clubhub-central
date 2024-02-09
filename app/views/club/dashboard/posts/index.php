@@ -101,8 +101,6 @@
     </section>
 </div>
 
-<?php $this->view('includes/header/bottom') ?>
-
 <?php $this->view('includes/modals/club/post') ?>
 <?php $this->view('includes/modals/club/post/delete') ?>
 

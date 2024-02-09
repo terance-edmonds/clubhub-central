@@ -76,7 +76,6 @@
     </section>
 </div>
 
-<?php $this->view('includes/header/bottom') ?>
 <?php $this->view('includes/header/side-bars/club-dashboard', $menu_side_bar) ?>
 
 <script src="<?= ROOT ?>/assets/js/form.js"></script>

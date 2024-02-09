@@ -9,9 +9,8 @@
 <!-- alerts -->
 <?php $this->view('includes/alerts') ?>
 
-<div id="event-dashboard-registrations"
-    class="container container-sections side-padding event-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/events/dashboard/left', ["menu" => $menu]) ?>
+<div id="event-dashboard-registrations" class="container container-sections side-padding event-dashboard dashboard-container">
+    <?php $this->view('includes/side-bars/events/dashboard/left', $left_bar) ?>
 
     <section class="center-section">
         <div class="title-bar">
@@ -27,9 +26,8 @@
                     <div class="form-section-content">
                         <div class="input-wrap">
                             <label for="to">To</label>
-                            <input value="<?= setValue('to') ?>" id="to" type="text" name="to"
-                                placeholder="example@example.com, example1@example.com" required>
-                            <?php if (!empty($errors['to'])): ?>
+                            <input value="<?= setValue('to') ?>" id="to" type="text" name="to" placeholder="example@example.com, example1@example.com" required>
+                            <?php if (!empty($errors['to'])) : ?>
                                 <small>
                                     <?= $errors['to'] ?>
                                 </small>
@@ -37,9 +35,8 @@
                         </div>
                         <div class="input-wrap">
                             <label for="subject">Subject</label>
-                            <input value="<?= setValue('subject') ?>" id="subject" type="text" name="subject"
-                                placeholder="Subject" required>
-                            <?php if (!empty($errors['subject'])): ?>
+                            <input value="<?= setValue('subject') ?>" id="subject" type="text" name="subject" placeholder="Subject" required>
+                            <?php if (!empty($errors['subject'])) : ?>
                                 <small>
                                     <?= $errors['subject'] ?>
                                 </small>
@@ -47,9 +44,8 @@
                         </div>
                         <div class="input-wrap">
                             <label for="description">Description</label>
-                            <textarea id="description" type="text" name="description" placeholder="Description"
-                                required><?= setValue('description') ?></textarea>
-                            <?php if (!empty($errors['description'])): ?>
+                            <textarea id="description" type="text" name="description" placeholder="Description" required><?= setValue('description') ?></textarea>
+                            <?php if (!empty($errors['description'])) : ?>
                                 <small>
                                     <?= $errors['description'] ?>
                                 </small>
@@ -67,7 +63,7 @@
     </section>
 </div>
 
+<?php $this->view('includes/header/side-bars/event-dashboard', $menu_side_bar) ?>
+
 <script src="<?= ROOT ?>/assets/js/events/event.js"></script>
 <script src="<?= ROOT ?>/assets/js/form.js"></script>
-
-<?php $this->view('includes/header/bottom') ?>
