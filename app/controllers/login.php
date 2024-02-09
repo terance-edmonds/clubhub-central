@@ -19,6 +19,9 @@ class Login extends Controller
             $db->transaction();
 
             try {
+                /* validate the form data */
+                // if($user->validateLogin($data)) {}
+
                 $result = $user->one(['email' => $_POST['email']]);
 
                 if ($result) {
@@ -78,7 +81,7 @@ class Login extends Controller
             }
         }
 
-        if($_SERVER['REQUEST_METHOD'] == 'POST' && count($data['errors']) == 0) return redirect('login');
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($data['errors']) == 0) return redirect('login');
 
         $this->view("login", $data);
     }

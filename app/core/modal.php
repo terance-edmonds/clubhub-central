@@ -120,7 +120,7 @@ class Modal
 
         /* search query */
         if (!empty($search)) {
-            $query .= " && match(" . implode(',', $this->search_columns) . ") against ('" . $search . "')";
+            $query .= " && match(" . implode(',', $this->search_columns) . ") against ('" . $search . '*' . "' IN BOOLEAN MODE)";
         }
 
         /* order by */
@@ -135,7 +135,6 @@ class Modal
 
         // print_r($query);
         // die;
-
         $res = $this->db->query($query, $data, $type);
 
         if (is_array($res)) {
@@ -145,7 +144,7 @@ class Modal
         return [];
     }
 
-    public function one($data, $attributes = [], $include = [],)
+    public function one($data, $attributes = [], $include = [])
     {
         $keys = array_keys($data);
         $type = 'object';

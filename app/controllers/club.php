@@ -6,25 +6,136 @@ class Club extends Controller
 {
     public function index()
     {
-        $left_bar = [
-            "calendar_data" => [
-                "current_path" => "/"
-            ]
-        ];
-        $right_bar = [
-            "clubs" => []
-        ];
+        $club = new Clubs();
+        $post = new ClubPost();
+        $club_member = new ClubMember();
+        $event = new Event();
+        $moment = new \Moment\Moment();
 
         $data = [
             "tab" => "club-posts",
-            "club_id" => "",
-            "left_bar" => $left_bar,
-            "right_bar" => $right_bar
+            "club_id" => ""
         ];
         $params = $_GET;
 
         if (isset($params["id"])) $data["club_id"] = $params["id"];
         if (isset($params["tab"])) $data["tab"] = $params["tab"];
+
+        $today_events = $event->find(
+            [
+                "club_id" => $data['club_id'],
+                "start_datetime" => [
+                    "data" => $moment->format('Y-m-d') . "%",
+                    "operator" => "like"
+                ],
+                "club_events.state" => "ACTIVE"
+            ],
+            [
+                "club_events.id as id",
+                "club_events.name as name",
+                "club_events.venue as venue",
+                "club_events.image as image",
+                "club_events.start_datetime as start_datetime",
+                "club_events.end_datetime as end_datetime",
+                "club_events.state as state",
+                "club.id as club_id",
+                "club.name as club_name"
+            ],
+            [
+                ["table" => "clubs", "as" => "club", "on" => "club_events.club_id = club.id"]
+            ]
+        );
+
+        $club_data = $club->one(["id" => $data["club_id"]], ["clubs.id", "clubs.name", "clubs.description", "clubs.image"]);
+        $left_bar = [
+            "club" =>  [
+                "id" => $club_data->id,
+                "name" => $club_data->name,
+                "description" => $club_data->description,
+                "image" => $club_data->image,
+            ],
+            "calendar_data" => [
+                "current_path" => "/"
+            ]
+        ];
+
+        $club_member_options = [
+            [
+                "club_members.id",
+                "club_members.user_id",
+                "club_members.role",
+                "user.first_name",
+                "user.last_name",
+                "user.image",
+            ], [
+                ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"]
+            ]
+        ];
+
+        $president = $club_member->one(["club_members.club_id" => $data['club_id'], "club_members.role" => "PRESIDENT"], ...$club_member_options);
+        $secretary = $club_member->one(["club_members.club_id" => $data['club_id'], "club_members.role" => "SECRETARY"], ...$club_member_options);
+        $treasurer = $club_member->one(["club_members.club_id" => $data['club_id'], "club_members.role" => "TREASURER"], ...$club_member_options);
+        $right_bar = [
+            "clubs" => [],
+            "events" => $today_events,
+            "president" => $president,
+            "secretary" => $secretary,
+            "treasurer" => $treasurer,
+        ];
+
+        $data['left_bar'] = $left_bar;
+        $data['right_bar'] = $right_bar;
+
+        /* fetch club posts */
+        if ($data['tab'] === 'club-posts') {
+            $posts = $post->find(
+                ["club_posts.club_id" => $data["club_id"], "club_posts.is_deleted" => 0],
+                [
+                    "club_posts.id",
+                    "club_posts.post_name",
+                    "club_posts.description",
+                    "club_posts.image",
+                    "club_posts.created_datetime",
+                    "user.first_name",
+                    "user.last_name",
+                    "club.id as club_id",
+                    "club.name as club_name",
+                    "club.image as club_image",
+                ],
+                [
+                    ["table" => "users", "as" => "user", "on" => "club_posts.user_id = user.id"],
+                    ["table" => "clubs", "as" => "club", "on" => "club_posts.club_id = club.id"]
+                ],
+            );
+
+            $data['posts'] = $posts;
+        } else if ($data['tab'] === 'events') {
+            $events = $event->find(
+                [
+                    "club_events.club_id" => $data['club_id'],
+                    "club_events.state" => "ACTIVE"
+                ],
+                [
+                    "club_events.id as id",
+                    "club_events.name as name",
+                    "club_events.venue as venue",
+                    "club_events.image as image",
+                    "club_events.description as description",
+                    "club_events.start_datetime as start_datetime",
+                    "club_events.end_datetime as end_datetime",
+                    "club_events.state as state",
+                    "club.id as club_id",
+                    "club.name as club_name",
+                    "club.image as club_image",
+                ],
+                [
+                    ["table" => "clubs", "as" => "club", "on" => "club_events.club_id = club.id"]
+                ]
+            );
+
+            $data['events'] = $events;
+        }
+
 
         $this->view("club", $data);
     }
@@ -176,7 +287,7 @@ class Club extends Controller
         }
 
         /* fetch club members */
-        if ($path == 'club/dashboard/event/add') {
+        if ($path == 'club/dashboard/events/add') {
             $data['club_members_data'] = $club_member->find(
                 ["club_id" => $club_id, "state" => "ACCEPTED"],
                 [
@@ -410,7 +521,7 @@ class Club extends Controller
             if ($_SERVER['REQUEST_METHOD'] == "POST" &&  count($data['errors']) == 0) return redirect($redirect);
         } catch (\Throwable $th) {
             $db->rollback();
-            show($th);
+
             $_SESSION['alerts'] = [["status" => "error", "message" => $th->getMessage() || "Failed to process the action, please try again later."]];
             return redirect($redirect);
         }

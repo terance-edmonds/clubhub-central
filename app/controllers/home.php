@@ -44,7 +44,7 @@ class Home extends Controller
 
         $menu_side_bar = array_merge($left_bar);
 
-        /* fetch posts */
+        /* fetch club posts */
         $posts_data = $post->find(
             ["club_posts.is_deleted" => 0],
             [
@@ -63,6 +63,8 @@ class Home extends Controller
                 ["table" => "users", "as" => "user", "on" => "club_posts.user_id = user.id"],
                 ["table" => "clubs", "as" => "club", "on" => "club_posts.club_id = club.id"]
             ],
+            [],
+            isset($_GET['feed_search']) ? $_GET['feed_search'] : ''
         );
 
         $data = [

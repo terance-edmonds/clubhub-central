@@ -711,7 +711,10 @@ class Events extends Controller
         ], ["count(*) as count"], [], [], isset($_GET['packages_search']) ? $_GET['packages_search'] : '');
         if (!empty($packages_total_count[0]->count)) $data['total_packages_count'] = $packages_total_count[0]->count;
         /* data */
-        $data["packages_data"] = $package->find(["club_id" => $club_id, "club_event_id" => $club_event_id], [], [], [], isset($_GET['packages_search']) ? $_GET['packages_search'] : '');
+        $data["packages_data"] = $package->find(["club_id" => $club_id, "club_event_id" => $club_event_id], [], [], [
+            "limit" => $data['packages_limit'],
+            "offset" => ($data['packages_page'] - 1) * $data['packages_limit'],
+        ], isset($_GET['packages_search']) ? $_GET['packages_search'] : '');
 
         /* fetch sponsors data */
         /* pagination */
@@ -721,7 +724,10 @@ class Events extends Controller
         ], ["count(*) as count"], [], [], isset($_GET['sponsors_search']) ? $_GET['sponsors_search'] : '');
         if (!empty($sponsors_total_count[0]->count)) $data['total_sponsors_count'] = $sponsors_total_count[0]->count;
         /* data */
-        $data["sponsors_data"] = $sponsor->find(["club_id" => $club_id, "club_event_id" => $club_event_id], [], [], [], isset($_GET['sponsors_search']) ? $_GET['sponsors_search'] : '');
+        $data["sponsors_data"] = $sponsor->find(["club_id" => $club_id, "club_event_id" => $club_event_id], [], [], [
+            "limit" => $data['sponsors_limit'],
+            "offset" => ($data['sponsors_page'] - 1) * $data['sponsors_limit'],
+        ], isset($_GET['sponsors_search']) ? $_GET['sponsors_search'] : '');
 
         $this->view($path, $data);
     }
@@ -975,7 +981,10 @@ class Events extends Controller
             if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
 
             /* data */
-            $data["table_data"] = $budget->find(["club_id" => $club_id, "club_event_id" => $club_event_id, "is_deleted" => 0, "type" => upperCase($data['tab'])], [], [], [], isset($_GET['search']) ? $_GET['search'] : '');
+            $data["table_data"] = $budget->find(["club_id" => $club_id, "club_event_id" => $club_event_id, "is_deleted" => 0, "type" => upperCase($data['tab'])], [], [], [
+                "limit" => $data['limit'],
+                "offset" => ($data['page'] - 1) * $data['limit'],
+            ], isset($_GET['search']) ? $_GET['search'] : '');
 
             /* calculate the income/expenses/profile/loss */
             $data['income_data'] = 0;
@@ -1078,7 +1087,10 @@ class Events extends Controller
         if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
 
         /* data */
-        $data['agenda_data'] = $agenda->find(["club_id" => $club_id, "club_event_id" => $club_event_id], [], [], [], isset($_GET['search']) ? $_GET['search'] : '');
+        $data['agenda_data'] = $agenda->find(["club_id" => $club_id, "club_event_id" => $club_event_id], [], [], [
+            "limit" => $data['limit'],
+            "offset" => ($data['page'] - 1) * $data['limit'],
+        ], isset($_GET['search']) ? $_GET['search'] : '');
 
         $this->view($path, $data);
     }

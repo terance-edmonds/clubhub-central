@@ -12,9 +12,13 @@
     <?php $this->view('includes/side-bars/events/left', $left_bar) ?>
     <section class="center-section">
         <div id="event-cards" class="cards">
-            <?php foreach ($events as $event) {
-                $this->view('includes/event-post', ["data" => $event]);
-            } ?>
+            <?php if (count($events) == 0) {
+                echo "No Event Posts Found";
+            } else {
+                foreach ($events as $event) {
+                    $this->view('includes/event-post', ["data" => $event]);
+                }
+            }  ?>
         </div>
 
         <?php $this->view('includes/scroll-loader') ?>
