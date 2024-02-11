@@ -32,4 +32,18 @@ $.fn.extend({
 
 $(document).ready(() => {
     console.log('clubhub central');
+
+    /* select2 option */
+    /* $('select').each(function () {
+        let placeholder = 'Select Option';
+        const el = $(this);
+        const label = el.parent().find('label');
+
+        if (label) placeholder = label.text();
+
+        el.select2({
+            placeholder: placeholder,
+            allowClear: true
+        });
+    }); */
 });

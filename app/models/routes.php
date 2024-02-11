@@ -270,6 +270,10 @@ class Routes
             "PRESIDENT",
             "CLUB_IN_CHARGE",
         ],
+        "club/dashboard/election/add" => [
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+        ],
         /* super admin routes */
         "admin/dashboard" => [
             "SUPER_ADMIN"

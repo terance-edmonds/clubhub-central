@@ -22,6 +22,9 @@
 
     <!-- font-icons -->
     <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
+
+    <!-- select2 -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> -->
 </head>
 
 <body>
@@ -122,6 +125,9 @@
     <script src="<?= ROOT ?>/assets/js/index.js"></script>
     <script src="<?= ROOT ?>/assets/js/pre-loader.js"></script>
     <script src="<?= ROOT ?>/assets/js/libs/moment.min.js"></script>
+
+    <!-- select2 -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
 </body>
 
 </html>
