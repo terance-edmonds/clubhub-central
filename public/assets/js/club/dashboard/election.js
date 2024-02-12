@@ -2,6 +2,7 @@ const onAddUser = (e, type) => {
     const option_value = $(`#${type}`).val();
     const name = $(`#${type} option[value="${option_value}"]`).text();
     const values = option_value.split(',');
+    const group_id = new Date().getTime().toString();
 
     /* reset select */
     $(`#${type} option:first`).prop('selected', true);
@@ -16,6 +17,7 @@ const onAddUser = (e, type) => {
     const element = clone
         .html()
         .replaceAll('{{type}}', type)
+        .replaceAll('{{group_id}}', group_id)
         .replaceAll(`{{user_name}}`, name)
         .replaceAll(`{{user_user_id}}`, values[1])
         .replaceAll(`{{user_id}}`, values[0]);

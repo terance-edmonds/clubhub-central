@@ -878,6 +878,62 @@ class Club extends Controller
     }
     private function election($path, $data)
     {
+        $db = new Database();
+        $club_member = new ClubMember($db);
+        $club_election = new ClubElection($db);
+        $club_election_candidates = new ClubElectionCandidates($db);
+        $club_election_voters = new ClubElectionVoters($db);
+
+        $storage = new Storage();
+        $club_id = $storage->get('club_id');
+
+        $auth_user = Auth::getId();
+
+        try {
+            $db->transaction();
+
+            if ($_SERVER['REQUEST_METHOD'] == "POST") {
+                $form_data = $_POST;
+                show($form_data);
+                if ($form_data['submit'] == 'create_election') {
+                    $form_data['club_id'] = $club_id;
+
+                    if ($club_election->validateCreate($form_data)) {
+                        /* $club_election_result = $club_election->create([
+                            "club_id" => $form_data['club_id'],
+                            "title" => $form_data['title'],
+                            "description" => $form_data['description'],
+                            "start_datetime" => $form_data['start_datetime'],
+                            "end_datetime" => $form_data['end_datetime'],
+                        ]); */
+                    }
+                }
+            }
+
+            if ($path == 'club/dashboard/election/add') {
+                $data['vote_members_data']  = $data['candidate_members_data'] = $club_member->find(
+                    ["club_id" => $club_id, "state" => "ACCEPTED"],
+                    [
+                        "club_members.id as id",
+                        "user_id",
+                        "club_id",
+                        "user.first_name",
+                        "user.last_name",
+                    ],
+                    [
+                        ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"]
+                    ]
+                );
+            }
+
+            $db->commit();
+
+            // if ($_SERVER['REQUEST_METHOD'] == "POST" &&  count($data['errors']) == 0) return redirect();
+        } catch (\Throwable $th) {
+            $db->rollback();
+            $_SESSION['alerts'] = [["status" => "error", "message" => $th->getMessage() || "Failed to process the action, please try again later."]];
+        }
+
         $this->view($path, $data);
     }
 }

@@ -30,9 +30,31 @@
                                 </small>
                             <?php endif; ?>
                         </div>
+
+                        <div class="multi-wrap">
+                            <div class="input-wrap">
+                                <label for="start_datetime">Start Date & Time</label>
+                                <input set-default="datetime" value="<?= setValue('start_datetime') ?>" id="start_datetime" type="datetime-local" name="start_datetime" placeholder="Start Date & Time" required>
+                                <?php if (!empty($errors['start_datetime'])) : ?>
+                                    <small>
+                                        <?= $errors['start_datetime'] ?>
+                                    </small>
+                                <?php endif; ?>
+                            </div>
+                            <div class="input-wrap">
+                                <label for="end_datetime">End Date & Time</label>
+                                <input set-default="datetime" value="<?= setValue('end_datetime') ?>" id="end_datetime" type="datetime-local" name="end_datetime" placeholder="End Date & Time" required>
+                                <?php if (!empty($errors['end_datetime'])) : ?>
+                                    <small>
+                                        <?= $errors['end_datetime'] ?>
+                                    </small>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+
                         <div class="input-wrap">
                             <label for="description">Description</label>
-                            <textarea value="<?= setValue('description') ?>" id="description" name="description" placeholder="Description" required></textarea>
+                            <textarea id="description" name="description" placeholder="Description" required><?= setValue('description') ?></textarea>
                             <?php if (!empty($errors['description'])) : ?>
                                 <small>
                                     <?= $errors['description'] ?>
@@ -54,7 +76,12 @@
                             <label for="candidate">Choose Candidate</label>
                             <select onchange="onAddUser(event, 'candidate')" name="candidate" id="candidate" value="">
                                 <option value="" selected disabled hidden>Choose Candidate</option>
-                                <option value="1">Freshers</option>
+                                <?php foreach ($candidate_members_data as $club_member) { ?>
+                                    <option value="<?= $club_member->id ?>,<?= $club_member->user_id ?>">
+                                        <?= $club_member->first_name ?>
+                                        <?= $club_member->last_name ?>
+                                    </option>
+                                <?php } ?>
                             </select>
                             <?php if (!empty($errors['candidate'])) : ?>
                                 <small>
@@ -63,7 +90,9 @@
                             <?php endif; ?>
                         </div>
 
-                        <div id="candidate-users" class="selected-users"></div>
+                        <div id="candidate-users" class="selected-users">
+                            <!-- //TODO: load from post request -->
+                        </div>
                     </div>
                 </div>
                 <div class="form-section">
@@ -73,7 +102,12 @@
                             <label for="voter">Choose Voter</label>
                             <select onchange="onAddUser(event, 'voter')" name="voter" id="voter" value="">
                                 <option value="" selected disabled hidden>Choose Voter</option>
-                                <option value="1">Freshers</option>
+                                <?php foreach ($vote_members_data as $club_member) { ?>
+                                    <option value="<?= $club_member->id ?>,<?= $club_member->user_id ?>">
+                                        <?= $club_member->first_name ?>
+                                        <?= $club_member->last_name ?>
+                                    </option>
+                                <?php } ?>
                             </select>
                             <?php if (!empty($errors['voter'])) : ?>
                                 <small>
@@ -96,9 +130,9 @@
     <div class="checkbox-wrap user-template">
         <label class="checkbox-label">
             {{user_name}}
-            <input hidden type="checkbox" checked name="{{type}}[id]" value="{{user_id}}">
-            <input hidden type="checkbox" checked name="{{type}}[user_id]" value="{{user_user_id}}">
-            <input hidden type="checkbox" checked name="{{type}}[name]" value="{{user_name}}">
+            <input hidden type="checkbox" checked name="{{type}}[{{group_id}}][id]" value="{{user_id}}">
+            <input hidden type="checkbox" checked name="{{type}}[{{group_id}}][user_id]" value="{{user_user_id}}">
+            <input hidden type="checkbox" checked name="{{type}}[{{group_id}}][name]" value="{{user_name}}">
         </label>
         <span onclick="onRemoveUser(event)" class="material-icons-outlined">
             clear
