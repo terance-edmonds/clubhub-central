@@ -32,7 +32,7 @@
     <?php
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     ?>
-        <!-- <div data-active="true" id="pre-loader">
+        <div data-active="true" id="pre-loader">
             <div class="loader-wrapper">
                 <div class="loader">
                     <div class="roller"></div>
@@ -49,7 +49,7 @@
                     <div class="roller"></div>
                 </div>
             </div>
-        </div> -->
+        </div>
     <?php } ?>
 
     <?php
