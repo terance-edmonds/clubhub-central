@@ -178,7 +178,7 @@ class Club extends Controller
             array_push($menu, ["id" => "reports", "name" => "Reports", "icon" => "description", "path" => ["/club/dashboard/reports", "/club/dashboard/reports/add"], "active" => "false"], ["id" => "meetings", "name" => "Meetings", "icon" => "diversity_2", "path" => "/club/dashboard/meetings", "active" => "false"]);
         }
         if (in_array($club_role, ['CLUB_IN_CHARGE', 'PRESIDENT'])) {
-            array_push($menu, ["id" => "election", "name" => "Election", "icon" => "how_to_vote", "path" => ["/club/dashboard/election", "/club/dashboard/election/add"], "active" => "false"], ["id" => "requests", "name" => "Requests", "icon" => "crisis_alert", "path" => ["/club/dashboard/requests", "/club/dashboard/requests/add"], "active" => "false"]);
+            array_push($menu, ["id" => "election", "name" => "Election", "icon" => "how_to_vote", "path" => ["/club/dashboard/election", "/club/dashboard/election/add", "/club/dashboard/election/edit"], "active" => "false"], ["id" => "requests", "name" => "Requests", "icon" => "crisis_alert", "path" => ["/club/dashboard/requests", "/club/dashboard/requests/add"], "active" => "false"]);
         }
 
         /* update the active menu item */
@@ -887,30 +887,118 @@ class Club extends Controller
         $storage = new Storage();
         $club_id = $storage->get('club_id');
 
-        $auth_user = Auth::getId();
+        $data['total_count'] = 0;
+        $data['limit'] = 10;
+        $data['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
 
         try {
             $db->transaction();
+            $data['errors'] = [];
 
             if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 $form_data = $_POST;
-                show($form_data);
-                if ($form_data['submit'] == 'create_election') {
+
+                if ($form_data['submit'] == 'create-election') {
                     $form_data['club_id'] = $club_id;
 
                     if ($club_election->validateCreate($form_data)) {
-                        /* $club_election_result = $club_election->create([
+                        /* create election */
+                        $club_election_result = $club_election->create([
                             "club_id" => $form_data['club_id'],
                             "title" => $form_data['title'],
                             "description" => $form_data['description'],
                             "start_datetime" => $form_data['start_datetime'],
                             "end_datetime" => $form_data['end_datetime'],
-                        ]); */
+                        ]);
+
+                        /* add candidates */
+                        if (!empty($form_data['candidate']) && is_array($form_data['candidate'])) {
+                            foreach ($form_data['candidate'] as $candidate) {
+                                $club_election_candidates->create([
+                                    "club_id" => $form_data['club_id'],
+                                    "user_id" => $candidate['user_id'],
+                                    "club_member_id" => $candidate['id'],
+                                    "election_id" => $club_election_result->id
+                                ]);
+                            }
+                        }
+
+                        /* add voters */
+                        if (!empty($form_data['voter']) && is_array($form_data['voter'])) {
+                            foreach ($form_data['voter'] as $voter) {
+                                $club_election_voters->create([
+                                    "club_id" => $form_data['club_id'],
+                                    "user_id" => $voter['user_id'],
+                                    "club_member_id" => $voter['id'],
+                                    "election_id" => $club_election_result->id
+                                ]);
+                            }
+                        }
                     }
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Election created successfully"]];
+                } else if ($form_data['submit'] == 'edit-election') {
+                    $form_data['club_id'] = $club_id;
+
+                    if ($club_election->validateUpdate($form_data)) {
+                        /* delete all candidates and voters related to the election */
+                        $club_election_candidates->delete(["election_id" => $form_data['id']]);
+                        $club_election_voters->delete(["election_id" => $form_data['id']]);
+
+                        /* create election */
+                        $club_election_result = $club_election->update(
+                            [
+                                "id" => $form_data['id']
+                            ],
+                            [
+                                "club_id" => $form_data['club_id'],
+                                "title" => $form_data['title'],
+                                "description" => $form_data['description'],
+                                "start_datetime" => $form_data['start_datetime'],
+                                "end_datetime" => $form_data['end_datetime'],
+                            ]
+                        );
+
+                        /* add candidates */
+                        if (!empty($form_data['candidate']) && is_array($form_data['candidate'])) {
+                            foreach ($form_data['candidate'] as $candidate) {
+                                $club_election_candidates->create([
+                                    "club_id" => $form_data['club_id'],
+                                    "user_id" => $candidate['user_id'],
+                                    "club_member_id" => $candidate['id'],
+                                    "election_id" => $form_data['id']
+                                ]);
+                            }
+                        }
+
+                        /* add voters */
+                        if (!empty($form_data['voter']) && is_array($form_data['voter'])) {
+                            foreach ($form_data['voter'] as $voter) {
+                                $club_election_voters->create([
+                                    "club_id" => $form_data['club_id'],
+                                    "user_id" => $voter['user_id'],
+                                    "club_member_id" => $voter['id'],
+                                    "election_id" => $form_data['id']
+                                ]);
+                            }
+                        }
+                    }
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Election updated successfully"]];
+                } else if ($_POST['submit'] == "delete-election") {
+                    $club_election->update(["id" => $form_data['id']], ["is_deleted" => 1]);
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Election deleted successfully"]];
+                } else if ($form_data['submit'] = 'election-state') {
+                    $club_election->update(["id" => $form_data["id"]], [
+                        "state" => $form_data['state']
+                    ]);
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Election status updated successfully"]];
                 }
             }
 
-            if ($path == 'club/dashboard/election/add') {
+            if ($path == 'club/dashboard/election/add' || $path == 'club/dashboard/election/edit') {
                 $data['vote_members_data']  = $data['candidate_members_data'] = $club_member->find(
                     ["club_id" => $club_id, "state" => "ACCEPTED"],
                     [
@@ -926,9 +1014,67 @@ class Club extends Controller
                 );
             }
 
+            /* fetch election data for the form */
+
+            if ($path == 'club/dashboard/election/edit') {
+                if (empty($_GET['id'])) {
+                    return redirect('not-found');
+                }
+
+                $election_data = $club_election->one(
+                    ["club_id" => $club_id, "id" => $_GET['id']]
+                );
+
+                $_POST['id'] = $election_data->id;
+                $_POST['title'] = $election_data->title;
+                $_POST['description'] = $election_data->description;
+                $_POST['start_datetime'] = $election_data->start_datetime;
+                $_POST['end_datetime'] = $election_data->end_datetime;
+
+                /* election candidates */
+                $_POST['candidate'] = $club_election_candidates->find([
+                    "election_id" => $_GET['id']
+                ], [
+                    "club_election_candidates.id",
+                    "club_election_candidates.user_id",
+                    "club_election_candidates.club_id",
+                    "concat(user.first_name,' ', user.last_name) as name",
+                ], [
+                    ["table" => "users", "as" => "user", "on" => "club_election_candidates.user_id = user.id"]
+                ], ["type" => "array"]);
+
+                /* election voters */
+                $_POST['voter'] = $club_election_voters->find([
+                    "election_id" => $_GET['id']
+                ], [
+                    "club_election_voters.id",
+                    "club_election_voters.user_id",
+                    "club_election_voters.club_id",
+                    "concat(user.first_name,' ', user.last_name) as name",
+                ], [
+                    ["table" => "users", "as" => "user", "on" => "club_election_voters.user_id = user.id"]
+                ], ["type" => "array"]);
+            }
+
+            /* count */
+            $total_count = $club_election->find([
+                "club_id" => $club_id,
+                "is_deleted" => 0,
+            ], ["count(*) as count"], [], [], isset($_GET['search']) ? $_GET['search'] : '');
+            if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+
+            /* data */
+            $data['election_data'] = $club_election->find([
+                "club_id" => $club_id,
+                "is_deleted" => 0,
+            ], [], [], [
+                "limit" => $data['limit'],
+                "offset" => ($data['page'] - 1) * $data['limit'],
+            ], isset($_GET['search']) ? $_GET['search'] : '');
+
             $db->commit();
 
-            // if ($_SERVER['REQUEST_METHOD'] == "POST" &&  count($data['errors']) == 0) return redirect();
+            if ($_SERVER['REQUEST_METHOD'] == "POST" &&  count($data['errors']) == 0) return redirect('club/dashboard/election');
         } catch (\Throwable $th) {
             $db->rollback();
             $_SESSION['alerts'] = [["status" => "error", "message" => $th->getMessage() || "Failed to process the action, please try again later."]];

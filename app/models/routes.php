@@ -270,7 +270,7 @@ class Routes
             "PRESIDENT",
             "CLUB_IN_CHARGE",
         ],
-        "club/dashboard/election/add" => [
+        "club/dashboard/election/edit" => [
             "PRESIDENT",
             "CLUB_IN_CHARGE",
         ],

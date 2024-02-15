@@ -11,7 +11,7 @@ use Endroid\QrCode\Writer\PngWriter;
 
 function show($data)
 {
-    print_r("<pre>");
+    print_r("<pre style='max-width: 100%' >");
     print_r($data);
     print_r("</pre>");
 }

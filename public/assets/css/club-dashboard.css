@@ -252,21 +252,25 @@
 }
 
 #club-dashboard-election .table-wrap .status-button {
+  color: #edff7d;
+  background-color: #303021;
   cursor: default;
 }
-#club-dashboard-election .table-wrap .status-button[data-status=PUBLISHED] {
+#club-dashboard-election .table-wrap .status-button[data-status=OPEN] {
   color: #7dff7a;
   background-color: #213021;
 }
-#club-dashboard-election .table-wrap .status-button[data-status=PENDING] {
+#club-dashboard-election .table-wrap .status-button[data-status=CLOSED] {
   color: #ff4646;
   background-color: #392a2d;
 }
 
-#club-dashboard-add-election .user-template {
+#club-dashboard-add-election .user-template,
+#club-dashboard-edit-election .user-template {
   display: none;
 }
-#club-dashboard-add-election .selected-users {
+#club-dashboard-add-election .selected-users,
+#club-dashboard-edit-election .selected-users {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -274,7 +278,8 @@
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
 }
-#club-dashboard-add-election .selected-users .checkbox-wrap {
+#club-dashboard-add-election .selected-users .checkbox-wrap,
+#club-dashboard-edit-election .selected-users .checkbox-wrap {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -290,10 +295,13 @@
   transition: all 0.4s ease;
 }
 #club-dashboard-add-election .selected-users .checkbox-wrap label,
-#club-dashboard-add-election .selected-users .checkbox-wrap .material-icons-outlined {
+#club-dashboard-add-election .selected-users .checkbox-wrap .material-icons-outlined,
+#club-dashboard-edit-election .selected-users .checkbox-wrap label,
+#club-dashboard-edit-election .selected-users .checkbox-wrap .material-icons-outlined {
   font-size: 0.875em;
 }
-#club-dashboard-add-election .selected-users .checkbox-wrap .material-icons-outlined {
+#club-dashboard-add-election .selected-users .checkbox-wrap .material-icons-outlined,
+#club-dashboard-edit-election .selected-users .checkbox-wrap .material-icons-outlined {
   position: absolute;
   opacity: 0;
   right: 0;
@@ -304,7 +312,8 @@
   -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-#club-dashboard-add-election .selected-users .checkbox-wrap:hover .material-icons-outlined {
+#club-dashboard-add-election .selected-users .checkbox-wrap:hover .material-icons-outlined,
+#club-dashboard-edit-election .selected-users .checkbox-wrap:hover .material-icons-outlined {
   position: relative;
   opacity: 1;
 }

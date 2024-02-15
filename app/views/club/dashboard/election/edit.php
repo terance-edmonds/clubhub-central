@@ -8,18 +8,19 @@
 
 <?php $this->view('includes/alerts') ?>
 
-<div id="club-dashboard-add-election" class="container container-sections side-padding club-dashboard dashboard-container">
+<div id="club-dashboard-edit-election" class="container container-sections side-padding club-dashboard dashboard-container">
     <?php $this->view('includes/side-bars/club/dashboard/left', $left_bar) ?>
 
     <section class="center-section">
         <div class="title-bar">
             <div class="title-wrap">
-                <span class="title">New Election</span>
+                <span class="title">Edit Election</span>
             </div>
         </div>
 
         <div class="content-section">
             <form class="form" method="post">
+                <input type="text" hidden name="id" value="<?= setValue('id') ?>">
                 <div class="form-section">
                     <p class="form-section-title">Details</p>
                     <div class="form-section-content">
@@ -153,7 +154,7 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button type="submit" name="submit" value="create-election" class="button contained">Create Election</button>
+                    <button type="submit" name="submit" value="edit-election" class="button contained">Update Election</button>
                 </div>
             </form>
         </div>
