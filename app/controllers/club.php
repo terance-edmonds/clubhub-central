@@ -1025,6 +1025,11 @@ class Club extends Controller
                     ["club_id" => $club_id, "id" => $_GET['id']]
                 );
 
+                /* if the election is opened or closed do not let them edit */
+                if ($election_data->state !== 'PENDING') {
+                    return redirect('not-found');
+                }
+
                 $_POST['id'] = $election_data->id;
                 $_POST['title'] = $election_data->title;
                 $_POST['description'] = $election_data->description;

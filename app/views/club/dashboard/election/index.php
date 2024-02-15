@@ -71,13 +71,15 @@
                             </td>
                             <td align="center">
                                 <div class="buttons">
-                                    <a href="<?= ROOT ?>/club/dashboard/election/edit?id=<?= $election->id ?>">
-                                        <button class="icon-button">
-                                            <span class="material-icons-outlined">
-                                                edit
-                                            </span>
-                                        </button>
-                                    </a>
+                                    <?php if ($election->state === 'PENDING') { ?>
+                                        <a href="<?= ROOT ?>/club/dashboard/election/edit?id=<?= $election->id ?>">
+                                            <button class="icon-button">
+                                                <span class="material-icons-outlined">
+                                                    edit
+                                                </span>
+                                            </button>
+                                        </a>
+                                    <?php } ?>
                                     <?php if ($club_role == 'CLUB_IN_CHARGE') {  ?>
                                         <button onclick='onDataPopup("delete-election", <?= toJson($election, ["id"]) ?>)' class="icon-button cl-red">
                                             <span class="material-icons-outlined">
