@@ -887,6 +887,9 @@ class Club extends Controller
         $storage = new Storage();
         $club_id = $storage->get('club_id');
 
+        $tabs = ['votes', 'elections'];
+        $data["tab"] = getActiveTab($tabs, $_GET);
+
         $data['total_count'] = 0;
         $data['limit'] = 10;
         $data['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;

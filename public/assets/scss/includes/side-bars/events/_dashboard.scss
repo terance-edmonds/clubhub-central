@@ -133,3 +133,9 @@
         }
     }
 }
+
+@media screen and (max-width: 1350px) {
+    .event-dashboard-side-bar {
+        display: none;
+    }
+}
