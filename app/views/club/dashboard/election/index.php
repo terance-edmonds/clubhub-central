@@ -15,7 +15,7 @@
         <div class="title-bar">
             <div class="title-wrap">
                 <span class="title">Elections</span>
-                <?php if ($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') { ?>
+                <?php if (($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') && $tab == 'election') { ?>
                     <a href="<?= ROOT ?>/club/dashboard/election/add">
                         <button class="button" data-variant="outlined" data-type="icon" data-size="small">
                             <span>New Election</span>
@@ -72,13 +72,20 @@
                                 <td><?= displayValue($election->end_datetime, 'datetime') ?></td>
                                 <td><?= displayValue($election->description) ?></td>
                                 <td align="center">
-                                    <button class="icon-button">
+                                    <button title="View results" class="icon-button">
                                         <span class="material-icons-outlined">
                                             visibility
                                         </span>
                                     </button>
                                 </td>
                                 <td align="center">
+                                    <a href="<?= ROOT ?>/club/dashboard/election/vote?election=<?= $election->id ?>">
+                                        <button title="Vote on election" class="icon-button">
+                                            <span class="material-icons-outlined">
+                                                how_to_vote
+                                            </span>
+                                        </button>
+                                    </a>
                                 </td>
                             </tr>
                         <?php } ?>
@@ -157,6 +164,7 @@
     $this->view('includes/modals/club/election/status');
     $this->view('includes/modals/club/election/delete');
 ?>
+    <!-- on error -->
     <script>
         <?php if (!empty($popups["election-status"])) { ?>
             $(`[popup-name='election-status']`).popup(true)
@@ -165,7 +173,5 @@
 <?php } ?>
 
 <?php $this->view('includes/header/side-bars/club-dashboard', $menu_side_bar) ?>
-<?php $this->view('includes/modals/event/register') ?>
 
 <script src="<?= ROOT ?>/assets/js/form.js"></script>
-<script src="<?= ROOT ?>/assets/js/events/event.js"></script>

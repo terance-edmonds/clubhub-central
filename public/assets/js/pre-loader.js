@@ -1,3 +1,3 @@
 $(document).ready(function () {
-    if ($('#pre-loader')) $('#pre-loader').fadeOut(100);
+    if ($('#pre-loader')) $('#pre-loader').fadeOut(200);
 });

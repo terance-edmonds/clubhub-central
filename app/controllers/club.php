@@ -171,6 +171,9 @@ class Club extends Controller
         if (in_array($club_role, ['CLUB_IN_CHARGE', 'PRESIDENT', 'TREASURER'])) {
             array_splice($menu, 1, 0, [["id" => "budgets", "name" => "Event Budgets", "icon" => "savings", "path" => ["/club/dashboard/budgets", "/club/dashboard/budgets/edit"], "active" => "false"]]);
         }
+        if (in_array($club_role, ['MEMBER', 'SECRETARY', 'TREASURER'])) {
+            array_push($menu, ["id" => "election", "name" => "Election", "icon" => "how_to_vote", "path" => ["/club/dashboard/election", "/club/dashboard/election/vote", "/club/dashboard/election/result"], "active" => "false"]);
+        }
         if (in_array($club_role, ['CLUB_IN_CHARGE', 'PRESIDENT', 'SECRETARY', 'TREASURER'])) {
             array_push($menu, ["id" => "logs", "name" => "Logs", "icon" => "article", "path" => "/club/dashboard/logs", "active" => "false"], ["id" => "members", "name" => "Members", "icon" => "people", "path" => "/club/dashboard/members", "active" => "false"],);
         }
@@ -178,7 +181,7 @@ class Club extends Controller
             array_push($menu, ["id" => "reports", "name" => "Reports", "icon" => "description", "path" => ["/club/dashboard/reports", "/club/dashboard/reports/add"], "active" => "false"], ["id" => "meetings", "name" => "Meetings", "icon" => "diversity_2", "path" => "/club/dashboard/meetings", "active" => "false"]);
         }
         if (in_array($club_role, ['CLUB_IN_CHARGE', 'PRESIDENT'])) {
-            array_push($menu, ["id" => "election", "name" => "Election", "icon" => "how_to_vote", "path" => ["/club/dashboard/election", "/club/dashboard/election/add", "/club/dashboard/election/edit"], "active" => "false"], ["id" => "requests", "name" => "Requests", "icon" => "crisis_alert", "path" => ["/club/dashboard/requests", "/club/dashboard/requests/add"], "active" => "false"]);
+            array_push($menu, ["id" => "election", "name" => "Election", "icon" => "how_to_vote", "path" => ["/club/dashboard/election", "/club/dashboard/election/add", "/club/dashboard/election/edit", "/club/dashboard/election/vote", "/club/dashboard/election/result"], "active" => "false"], ["id" => "requests", "name" => "Requests", "icon" => "crisis_alert", "path" => ["/club/dashboard/requests", "/club/dashboard/requests/add"], "active" => "false"]);
         }
 
         /* update the active menu item */
@@ -883,9 +886,11 @@ class Club extends Controller
         $club_election = new ClubElection($db);
         $club_election_candidates = new ClubElectionCandidates($db);
         $club_election_voters = new ClubElectionVoters($db);
+        $club_election_vote = new ClubElectionVotes($db);
 
         $storage = new Storage();
         $club_id = $storage->get('club_id');
+        $redirect_on_success = true;
 
         $tabs = ['votes', 'elections'];
         $data["tab"] = getActiveTab($tabs, $_GET);
@@ -992,12 +997,35 @@ class Club extends Controller
                     $club_election->update(["id" => $form_data['id']], ["is_deleted" => 1]);
 
                     $_SESSION['alerts'] = [["status" => "success", "message" => "Election deleted successfully"]];
-                } else if ($form_data['submit'] = 'election-state') {
+                } else if ($form_data['submit'] == 'election-state') {
                     $club_election->update(["id" => $form_data["id"]], [
                         "state" => $form_data['state']
                     ]);
 
                     $_SESSION['alerts'] = [["status" => "success", "message" => "Election status updated successfully"]];
+                } else if ($form_data['submit'] == 'election-vote') {
+                    $user_id = Auth::getId();
+                    if (empty($_GET["election"])) return redirect('not-found');
+
+                    $election_voter = $club_election_voters->one(["user_id" => $user_id, "election_id" => $_GET['election']]);
+                    if (empty($election_voter)) return redirect('not-found');
+
+                    /* updated election voter state */
+                    $club_election_voters->update([
+                        "id" => $election_voter->id
+                    ], [
+                        "did_vote" => 1
+                    ]);
+
+                    // TODO: add selected vote results to the table
+                    $club_election_vote->create([
+                        "club_id" => $form_data['club_id'],
+                        "voter_id" => $form_data['voter_id'],
+                        "selected_candidate_id" => $form_data['candidate_id'],
+                        "description" => empty($form_data['description']) ? '' : $form_data['description'],
+                    ]);
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Election voted successfully"]];
                 }
             }
 
@@ -1016,9 +1044,7 @@ class Club extends Controller
                     ]
                 );
             }
-
             /* fetch election data for the form */
-
             if ($path == 'club/dashboard/election/edit') {
                 if (empty($_GET['id'])) {
                     return redirect('not-found');
@@ -1063,6 +1089,31 @@ class Club extends Controller
                     ["table" => "users", "as" => "user", "on" => "club_election_voters.user_id = user.id"]
                 ], ["type" => "array"]);
             }
+            /* election vote data */
+            if ($path == 'club/dashboard/election/vote') {
+                $user_id = Auth::getId();
+                if (empty($_GET["election"])) return redirect('not-found');
+
+                $election_voter = $club_election_voters->one(["user_id" => $user_id, "election_id" => $_GET['election']]);
+                if (empty($election_voter)) return redirect('not-found');
+
+                $data['candidate_members_data'] = $club_election_candidates->find(
+                    ["club_id" => $club_id, "election_id" => $_GET["election"]],
+                    [
+                        "club_election_candidates.id as id",
+                        "club_election_candidates.club_member_id as club_member_id",
+                        "club_election_candidates.user_id",
+                        "club_election_candidates.club_id",
+                        "user.first_name",
+                        "user.last_name",
+                    ],
+                    [
+                        ["table" => "users", "as" => "user", "on" => "club_election_candidates.user_id = user.id"]
+                    ]
+                );
+
+                $redirect_on_success = false;
+            }
 
             /* count */
             $total_count = $club_election->find([
@@ -1082,7 +1133,7 @@ class Club extends Controller
 
             $db->commit();
 
-            if ($_SERVER['REQUEST_METHOD'] == "POST" &&  count($data['errors']) == 0) return redirect('club/dashboard/election');
+            if ($redirect_on_success && $_SERVER['REQUEST_METHOD'] == "POST" &&  count($data['errors']) == 0) return redirect('club/dashboard/election');
         } catch (\Throwable $th) {
             $db->rollback();
             $_SESSION['alerts'] = [["status" => "error", "message" => $th->getMessage() || "Failed to process the action, please try again later."]];

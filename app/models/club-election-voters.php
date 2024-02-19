@@ -8,6 +8,7 @@ class ClubElectionVoters extends Modal
         "user_id",
         "election_id",
         "club_member_id",
+        "did_vote"
     ];
 
     public function validateCreate($data)
