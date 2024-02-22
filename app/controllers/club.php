@@ -906,9 +906,9 @@ class Club extends Controller
             if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 $form_data = $_POST;
 
-                if ($form_data['submit'] == 'create-election') {
-                    $form_data['club_id'] = $club_id;
+                $form_data['club_id'] = $club_id;
 
+                if ($form_data['submit'] == 'create-election') {
                     if ($club_election->validateCreate($form_data)) {
                         /* create election */
                         $club_election_result = $club_election->create([
@@ -946,8 +946,6 @@ class Club extends Controller
 
                     $_SESSION['alerts'] = [["status" => "success", "message" => "Election created successfully"]];
                 } else if ($form_data['submit'] == 'edit-election') {
-                    $form_data['club_id'] = $club_id;
-
                     if ($club_election->validateUpdate($form_data)) {
                         /* delete all candidates and voters related to the election */
                         $club_election_candidates->delete(["election_id" => $form_data['id']]);
@@ -1003,27 +1001,54 @@ class Club extends Controller
                     ]);
 
                     $_SESSION['alerts'] = [["status" => "success", "message" => "Election status updated successfully"]];
-                } else if ($form_data['submit'] == 'election-vote') {
+                } else if ($form_data['submit'] == 'vote-election') {
                     $user_id = Auth::getId();
                     if (empty($_GET["election"])) return redirect('not-found');
 
                     $election_voter = $club_election_voters->one(["user_id" => $user_id, "election_id" => $_GET['election']]);
                     if (empty($election_voter)) return redirect('not-found');
 
-                    /* updated election voter state */
-                    $club_election_voters->update([
-                        "id" => $election_voter->id
-                    ], [
-                        "did_vote" => 1
-                    ]);
 
-                    // TODO: add selected vote results to the table
-                    $club_election_vote->create([
-                        "club_id" => $form_data['club_id'],
-                        "voter_id" => $form_data['voter_id'],
-                        "selected_candidate_id" => $form_data['candidate_id'],
-                        "description" => empty($form_data['description']) ? '' : $form_data['description'],
-                    ]);
+                    if ($club_election_vote->validateCreate($form_data)) {
+                        /* updated election voter state */
+                        $club_election_voters->update([
+                            "id" => $election_voter->id
+                        ], [
+                            "did_vote" => 1
+                        ]);
+
+                        /* add president vote */
+                        $club_election_vote->create([
+                            "role" => "PRESIDENT",
+                            "club_id" => $form_data['club_id'],
+                            "club_election_id" => $form_data['club_election_id'],
+                            "voter_id" => $election_voter->id,
+                            "selected_candidate_id" => $form_data['president'],
+                            "description" => empty($form_data['president_description']) ? '' : $form_data['president_description'],
+                        ]);
+                        /* add secretory vote */
+                        $club_election_vote->create([
+                            "role" => "SECRETORY",
+                            "club_id" => $form_data['club_id'],
+                            "club_election_id" => $form_data['club_election_id'],
+                            "voter_id" => $election_voter->id,
+                            "selected_candidate_id" => $form_data['secretory'],
+                            "description" => empty($form_data['secretory_description']) ? '' : $form_data['secretory_description'],
+                        ]);
+                        /* add treasurer vote */
+                        $club_election_vote->create([
+                            "role" => "TREASURER",
+                            "club_id" => $form_data['club_id'],
+                            "club_election_id" => $form_data['club_election_id'],
+                            "voter_id" => $election_voter->id,
+                            "selected_candidate_id" => $form_data['treasurer'],
+                            "description" => empty($form_data['treasurer_description']) ? '' : $form_data['treasurer_description'],
+                        ]);
+                    }
+
+                    $data["errors"] = $club_election_vote->errors;
+
+                    $redirect_on_success = false;
 
                     $_SESSION['alerts'] = [["status" => "success", "message" => "Election voted successfully"]];
                 }
@@ -1094,6 +1119,11 @@ class Club extends Controller
                 $user_id = Auth::getId();
                 if (empty($_GET["election"])) return redirect('not-found');
 
+                /* get election details */
+                $election_id = $_GET["election"];
+                $data['election'] = $club_election->one(["id" => $election_id]);
+
+                /* get election voter details */
                 $election_voter = $club_election_voters->one(["user_id" => $user_id, "election_id" => $_GET['election']]);
                 if (empty($election_voter)) return redirect('not-found');
 
@@ -1115,21 +1145,54 @@ class Club extends Controller
                 $redirect_on_success = false;
             }
 
-            /* count */
-            $total_count = $club_election->find([
-                "club_id" => $club_id,
-                "is_deleted" => 0,
-            ], ["count(*) as count"], [], [], isset($_GET['search']) ? $_GET['search'] : '');
-            if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+            /* data fetching */
+            if ($path == 'club/dashboard/election' && $data['tab'] == 'votes') {
+                $user_id = Auth::getId();
 
-            /* data */
-            $data['election_data'] = $club_election->find([
-                "club_id" => $club_id,
-                "is_deleted" => 0,
-            ], [], [], [
-                "limit" => $data['limit'],
-                "offset" => ($data['page'] - 1) * $data['limit'],
-            ], isset($_GET['search']) ? $_GET['search'] : '');
+                /* count */
+                $total_count = $club_election->find([
+                    "club_elections.club_id" => $club_id,
+                    "club_elections.is_deleted" => 0,
+                    "voter.user_id" => $user_id
+                ], ["count(*) as count"], [
+                    ["table" => "club_election_voters", "as" => "voter", "on" => "club_elections.id = voter.election_id"]
+                ], [], isset($_GET['search']) ? $_GET['search'] : '');
+                if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+
+                /* data */
+                $data['election_data'] = $club_election->find([
+                    "club_elections.club_id" => $club_id,
+                    "club_elections.is_deleted" => 0,
+                    "voter.user_id" => $user_id
+                ], [
+                    "club_elections.id",
+                    "club_elections.title",
+                    "club_elections.start_datetime",
+                    "club_elections.end_datetime",
+                    "club_elections.description",
+                ], [
+                    ["table" => "club_election_voters", "as" => "voter", "on" => "club_elections.id = voter.election_id"]
+                ], [
+                    "limit" => $data['limit'],
+                    "offset" => ($data['page'] - 1) * $data['limit'],
+                ], isset($_GET['search']) ? $_GET['search'] : '');
+            } else {
+                /* count */
+                $total_count = $club_election->find([
+                    "club_id" => $club_id,
+                    "is_deleted" => 0,
+                ], ["count(*) as count"], [], [], isset($_GET['search']) ? $_GET['search'] : '');
+                if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+
+                /* data */
+                $data['election_data'] = $club_election->find([
+                    "club_id" => $club_id,
+                    "is_deleted" => 0,
+                ], [], [], [
+                    "limit" => $data['limit'],
+                    "offset" => ($data['page'] - 1) * $data['limit'],
+                ], isset($_GET['search']) ? $_GET['search'] : '');
+            }
 
             $db->commit();
 

@@ -356,6 +356,16 @@
   opacity: 1;
 }
 
+#club-dashboard-election-vote .center-section .title-wrap.column {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+}
+
 #club-dashboard-budget-edit .form {
   padding-top: 20px;
 }
