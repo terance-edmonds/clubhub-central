@@ -66,6 +66,17 @@
             font-size: $px14;
             color: $secondary_white;
         }
+
+        .read-more-text {
+            font-size: $px14;
+            color: $gray;
+            cursor: pointer;
+            transition: all 0.3s ease;
+
+            &:hover {
+                opacity: 0.8;
+            }
+        }
     }
 
     .event-post {
@@ -132,6 +143,17 @@
         .description {
             font-size: $px14;
             color: $secondary_white;
+        }
+
+        .read-more-text {
+            font-size: $px14;
+            color: $gray;
+            cursor: pointer;
+            transition: all 0.3s ease;
+
+            &:hover {
+                opacity: 0.8;
+            }
         }
 
         .details-wrap {

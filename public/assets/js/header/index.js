@@ -6,7 +6,7 @@
 
     if (!pathname) pathname = 'home';
     for (const key of nav_items) {
-        const el = $(`#nav-${key}`);
+        const el = $(`.nav-${key}`);
         if (el) el.attr('data-active', pathname == key);
     }
 })();

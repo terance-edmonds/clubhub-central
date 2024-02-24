@@ -1,10 +1,10 @@
 <?php
-$side_bar_user = new User();
+$_users = new User();
 $side_bar_auth_user_id = Auth::getId();
-$side_bar_user = $side_bar_user->one(["id" => $side_bar_auth_user_id]);
+$side_bar_user = $_users->one(["id" => $side_bar_auth_user_id]);
 ?>
 
-<section class="side-bar club-dashboard-side-bar left">
+<div id="nav-menu" class="side-menu side-bar club-dashboard-side-bar left">
     <div class="inner-section no-border profile-section">
         <img src="<?php echo (!empty($side_bar_user->image)) ? $side_bar_user->image : ROOT . '/assets/images/other/empty-profile.jpg' ?>" alt="Profile Image" class="image">
 
@@ -45,4 +45,4 @@ $side_bar_user = $side_bar_user->one(["id" => $side_bar_auth_user_id]);
             <?php } ?>
         </div>
     </div>
-</section>
+</div>

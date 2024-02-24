@@ -31,3 +31,4 @@
 <?php $this->view('includes/header/bottom') ?>
 
 <script src="<?= ROOT ?>/assets/js/events/events.js"></script>
+<script src="<?= ROOT ?>/assets/js/cards.js"></script>

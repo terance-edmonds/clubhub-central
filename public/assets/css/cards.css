@@ -152,6 +152,16 @@
   font-size: 0.875em;
   color: #e7e7e7;
 }
+.cards .club-post .read-more-text {
+  font-size: 0.875em;
+  color: #a5a5a5;
+  cursor: pointer;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.cards .club-post .read-more-text:hover {
+  opacity: 0.8;
+}
 .cards .event-post {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -229,6 +239,16 @@
 .cards .event-post .description {
   font-size: 0.875em;
   color: #e7e7e7;
+}
+.cards .event-post .read-more-text {
+  font-size: 0.875em;
+  color: #a5a5a5;
+  cursor: pointer;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.cards .event-post .read-more-text:hover {
+  opacity: 0.8;
 }
 .cards .event-post .details-wrap {
   display: grid;

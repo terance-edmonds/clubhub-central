@@ -61,7 +61,8 @@
 <?php $this->view("includes/modals/profile/upload-image") ?>
 <?php $this->view("includes/modals/profile/delete-image") ?>
 
+<?php $this->view('includes/header/bottom') ?>
+
 <script src="<?= ROOT ?>/assets/js/form.js"></script>
 <script src="<?= ROOT ?>/assets/js/common.js"></script>
-
-<?php $this->view('includes/header/bottom') ?>
+<script src="<?= ROOT ?>/assets/js/cards.js"></script>

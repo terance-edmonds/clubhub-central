@@ -14,12 +14,13 @@ $nav-item-padding: 15px 0;
     left: 0;
     right: 0;
     background-color: $dark;
-    z-index: 10;
+    z-index: 12;
 
     &.bottom {
         top: auto;
         bottom: 0;
         display: none;
+        z-index: 10;
 
         .container-sections {
             justify-content: center;
@@ -139,6 +140,7 @@ $nav-item-padding: 15px 0;
     overflow-y: auto;
     transition: all 0.5s ease;
     transform: translateX(360px);
+    z-index: 11;
 
     &[data-active='true'] {
         transform: translateX(0px);

@@ -78,22 +78,18 @@
   width: fit-content;
 }
 
-#club-dashboard-event .table-wrap .status-button,
-#club-dashboard-requests .table-wrap .status-button {
+#club-dashboard-event .table-wrap .status-button {
   cursor: default;
 }
-#club-dashboard-event .table-wrap .status-button[data-status=PROCESSING],
-#club-dashboard-requests .table-wrap .status-button[data-status=PROCESSING] {
+#club-dashboard-event .table-wrap .status-button[data-status=PROCESSING] {
   color: #edff7d;
   background-color: #303021;
 }
-#club-dashboard-event .table-wrap .status-button[data-status=ACTIVE],
-#club-dashboard-requests .table-wrap .status-button[data-status=ACTIVE] {
+#club-dashboard-event .table-wrap .status-button[data-status=ACTIVE] {
   color: #7dff7a;
   background-color: #213021;
 }
-#club-dashboard-event .table-wrap .status-button[data-status=DEACTIVE],
-#club-dashboard-requests .table-wrap .status-button[data-status=DEACTIVE] {
+#club-dashboard-event .table-wrap .status-button[data-status=DEACTIVE] {
   color: #ff4646;
   background-color: #392a2d;
 }
@@ -263,6 +259,161 @@
   background-color: #213021;
 }
 #club-dashboard-election .table-wrap .status-button[data-status=PENDING] {
+  color: #ff4646;
+  background-color: #392a2d;
+}
+
+#club-dashboard-budget-edit .form {
+  padding-top: 20px;
+}
+#club-dashboard-budget-edit .center-section {
+  gap: 0;
+}
+#club-dashboard-budget-edit .budget-template,
+#club-dashboard-budget-edit .budget-member-template {
+  display: none;
+}
+#club-dashboard-budget-edit .budget-members {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 15px;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+#club-dashboard-budget-edit .budget-members .checkbox-wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 5px;
+  border: 2px solid #2d2d2d;
+  padding: 5px 10px;
+  border-radius: 20px;
+  position: relative;
+  -webkit-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+}
+#club-dashboard-budget-edit .budget-members .checkbox-wrap label,
+#club-dashboard-budget-edit .budget-members .checkbox-wrap .material-icons-outlined {
+  font-size: 0.875em;
+}
+#club-dashboard-budget-edit .budget-members .checkbox-wrap .material-icons-outlined {
+  position: absolute;
+  opacity: 0;
+  right: 0;
+  margin-top: 3px;
+  cursor: pointer;
+  color: #ff0000;
+  z-index: 8;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+#club-dashboard-budget-edit .budget-members .checkbox-wrap:hover .material-icons-outlined {
+  position: relative;
+  opacity: 1;
+}
+#club-dashboard-budget-edit .sub-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 10px;
+}
+#club-dashboard-budget-edit .sub-section .checkboxes-wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  gap: 15px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+#club-dashboard-budget-edit .sub-section .checkboxes-wrap label {
+  cursor: pointer;
+}
+#club-dashboard-budget-edit .budgets .form-section-content {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #2d2d2d;
+}
+#club-dashboard-budget-edit .budgets .form-section-content:last-child {
+  border-bottom: 0;
+}
+#club-dashboard-budget-edit .budgets .form-section-buttons-wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+#club-dashboard-budget-edit .budgets .created-budgets {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 20px;
+}
+#club-dashboard-budget-edit .budgets .created-budgets .created-budget {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 20px;
+  border-top: 1px solid #2d2d2d;
+  padding-top: 10px;
+}
+#club-dashboard-budget-edit .budgets .created-budgets .created-budget .budget-content-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 10px;
+}
+#club-dashboard-budget-edit .buttons-wrap {
+  padding: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+#club-dashboard-budget-edit .buttons-wrap .button {
+  max-width: -webkit-fit-content;
+  max-width: -moz-fit-content;
+  max-width: fit-content;
+}
+
+#club-dashboard-requests .table-wrap .status-button {
+  cursor: default;
+}
+#club-dashboard-requests .table-wrap .status-button[data-status=PENDING] {
+  color: #edff7d;
+  background-color: #303021;
+}
+#club-dashboard-requests .table-wrap .status-button[data-status=APPROVED] {
+  color: #7dff7a;
+  background-color: #213021;
+}
+#club-dashboard-requests .table-wrap .status-button[data-status=REJECTED] {
   color: #ff4646;
   background-color: #392a2d;
 }

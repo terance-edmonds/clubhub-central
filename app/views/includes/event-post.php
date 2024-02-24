@@ -17,9 +17,12 @@
     <a href="<?= ROOT ?>/events/event?id=<?= $data->id ?>" class="title">
         <?= $data->name ?>
     </a>
-    <p class="description truncate-text lines-2">
-        <?= $data->description ?>
-    </p>
+    <div class="description-wrap">
+        <p class="description truncate-text lines-2">
+            <?= $data->description ?>
+        </p>
+        <span onclick="onReadMore(event)" class="read-more-text">Read More</span>
+    </div>
     <div class="details-wrap">
         <div class="detail-wrap">
             <div class="icon">

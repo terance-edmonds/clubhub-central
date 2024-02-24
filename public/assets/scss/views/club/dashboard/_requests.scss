@@ -1,17 +1,17 @@
-#club-dashboard-event {
+#club-dashboard-requests {
     .table-wrap {
         .status-button {
             cursor: default;
 
-            &[data-status='PROCESSING'] {
+            &[data-status='PENDING'] {
                 color: $yellow;
                 background-color: $yellow-light;
             }
-            &[data-status='ACTIVE'] {
+            &[data-status='APPROVED'] {
                 color: $green;
                 background-color: $green-light;
             }
-            &[data-status='DEACTIVE'] {
+            &[data-status='REJECTED'] {
                 color: $red-2;
                 background-color: $red-2-light;
             }

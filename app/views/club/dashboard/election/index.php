@@ -7,7 +7,7 @@
 <?php $this->view('includes/header') ?>
 
 <div id="club-dashboard-election" class="container container-sections side-padding club-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/club/dashboard/left', ["menu" => $menu]) ?>
+    <?php $this->view('includes/side-bars/club/dashboard/left', $left_bar) ?>
 
     <section class="center-section">
         <div class="title-bar">
@@ -116,7 +116,7 @@
     </section>
 </div>
 
+<?php $this->view('includes/header/side-bars/club-dashboard', $menu_side_bar) ?>
 <?php $this->view('includes/modals/event/register') ?>
-<script src="<?= ROOT ?>/assets/js/events/event.js"></script>
 
-<?php $this->view('includes/header/bottom') ?>
+<script src="<?= ROOT ?>/assets/js/events/event.js"></script>

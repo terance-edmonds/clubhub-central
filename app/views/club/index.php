@@ -66,6 +66,7 @@
     <?php $this->view('includes/side-bars/club/right', $right_bar) ?>
 </div>
 
-<script src="<?= ROOT ?>/assets/js/common.js"></script>
-
 <?php $this->view('includes/header/bottom') ?>
+
+<script src="<?= ROOT ?>/assets/js/common.js"></script>
+<script src="<?= ROOT ?>/assets/js/cards.js"></script>

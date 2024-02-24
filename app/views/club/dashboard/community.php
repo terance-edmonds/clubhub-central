@@ -7,7 +7,7 @@
 <?php $this->view('includes/header') ?>
 
 <div id="club-dashboard-community" class="container container-sections side-padding club-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/club/dashboard/left', ["menu" => $menu]) ?>
+    <?php $this->view('includes/side-bars/club/dashboard/left', $left_bar) ?>
 
     <section class="center-section">
         <div class="title-bar">
@@ -33,9 +33,8 @@
             <form class="chat-form" action="" method="post">
                 <div class="input-wrap">
                     <label for="name">Add a Comment</label>
-                    <input value="<?= setValue('name') ?>" id="name" type="text" name="name" placeholder="Comment.."
-                        required>
-                    <?php if (!empty($errors['name'])): ?>
+                    <input value="<?= setValue('name') ?>" id="name" type="text" name="name" placeholder="Comment.." required>
+                    <?php if (!empty($errors['name'])) : ?>
                         <small>
                             <?= $errors['name'] ?>
                         </small>
@@ -51,6 +50,6 @@
     </section>
 </div>
 
-<script src="<?= ROOT ?>/assets/js/form.js"></script>
+<?php $this->view('includes/header/side-bars/club-dashboard', $menu_side_bar) ?>
 
-<?php $this->view('includes/header/bottom') ?>
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

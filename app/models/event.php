@@ -15,6 +15,7 @@ class Event extends Modal
         "state",
         "open_registrations",
         "created_datetime",
+        "is_budgets_verified"
     ];
     protected $search_columns = [
         "name",

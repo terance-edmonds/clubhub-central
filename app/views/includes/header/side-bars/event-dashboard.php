@@ -1,10 +1,16 @@
 <?php
 $side_bar_user = new User();
+$side_bar_club = new Clubs();
+$storage = new Storage();
+
 $side_bar_auth_user_id = Auth::getId();
+$side_bar_club_id = $storage->get('club_id');
+
 $side_bar_user = $side_bar_user->one(["id" => $side_bar_auth_user_id]);
+$side_bar_club = $side_bar_club->one(["id" => $side_bar_club_id]);
 ?>
 
-<section class="side-bar club-dashboard-side-bar left">
+<div id="nav-menu" class="side-menu side-bar event-dashboard-side-bar left">
     <div class="inner-section no-border profile-section">
         <img src="<?php echo (!empty($side_bar_user->image)) ? $side_bar_user->image : ROOT . '/assets/images/other/empty-profile.jpg' ?>" alt="Profile Image" class="image">
 
@@ -16,12 +22,9 @@ $side_bar_user = $side_bar_user->one(["id" => $side_bar_auth_user_id]);
 
     <div class="inner-section menu-section no-border">
         <div class="title-card">
-            <img loading="lazy" src="<?= $club["image"] ?>" alt="Club Logo" class="club-logo">
+            <img loading="lazy" src="<?php echo (!empty($side_bar_club->image)) ? $side_bar_club->image : ROOT . '/assets/images/logo/logo.png' ?>" alt="Club Logo" class="club-logo">
             <div class="details">
-                <a href="<?= ROOT ?>/club?id=<?= $club["id"] ?>" class="title"><?= $club["name"] ?></a>
-                <span class="material-icons-outlined">
-                    chevron_right
-                </span>
+                <a href="<?= ROOT ?>/club?id=<?= $side_bar_club->id ?>" class="title"><?= $side_bar_club->name ?> Dashboard</a>
             </div>
         </div>
 
@@ -45,4 +48,4 @@ $side_bar_user = $side_bar_user->one(["id" => $side_bar_auth_user_id]);
             <?php } ?>
         </div>
     </div>
-</section>
+</div>

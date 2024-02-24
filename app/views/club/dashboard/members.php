@@ -7,7 +7,7 @@
 <?php $this->view('includes/header') ?>
 
 <div id="club-dashboard-members" class="container container-sections side-padding club-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/club/dashboard/left', ["menu" => $menu]) ?>
+    <?php $this->view('includes/side-bars/club/dashboard/left', $left_bar) ?>
 
     <section class="center-section">
         <div class="title-bar">
@@ -28,15 +28,11 @@
         <div class="content-section">
             <div class="action-buttons">
                 <a class="action-link" data-active="<?php if ($tab == 'accepted')
-                    echo 'true'; ?>"
-                    href="<?= ROOT ?>/club/dashboard/members?tab=accepted"><button class="button">Accepted</button></a>
+                                                        echo 'true'; ?>" href="<?= ROOT ?>/club/dashboard/members?tab=accepted"><button class="button">Accepted</button></a>
                 <a class="action-link" data-active="<?php if ($tab == 'rejected')
-                    echo 'true'; ?>"
-                    href="<?= ROOT ?>/club/dashboard/members?tab=rejected"><button class="button">Rejected</button></a>
+                                                        echo 'true'; ?>" href="<?= ROOT ?>/club/dashboard/members?tab=rejected"><button class="button">Rejected</button></a>
                 <a class="action-link" data-active="<?php if ($tab == 'requested')
-                    echo 'true'; ?>"
-                    href="<?= ROOT ?>/club/dashboard/members?tab=requested"><button
-                        class="button">Requested</button></a>
+                                                        echo 'true'; ?>" href="<?= ROOT ?>/club/dashboard/members?tab=requested"><button class="button">Requested</button></a>
             </div>
             <div class="table-wrap">
                 <table>
@@ -76,7 +72,7 @@
     </section>
 </div>
 
+<?php $this->view('includes/header/side-bars/club-dashboard', $menu_side_bar) ?>
 <?php $this->view('includes/modals/event/register') ?>
-<script src="<?= ROOT ?>/assets/js/events/event.js"></script>
 
-<?php $this->view('includes/header/bottom') ?>
+<script src="<?= ROOT ?>/assets/js/events/event.js"></script>

@@ -8,7 +8,7 @@
 <?php $this->view('includes/alerts') ?>
 
 <div id="event-dashboard-sponsors" class="container container-sections side-padding event-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/events/dashboard/left', ["menu" => $menu])  ?>
+    <?php $this->view('includes/side-bars/events/dashboard/left', $left_bar)  ?>
 
     <section class="center-section">
         <div class="title-bar">
@@ -166,6 +166,8 @@
 <?php $this->view('includes/modals/event/sponsor') ?>
 <?php $this->view('includes/modals/event/sponsor/edit') ?>
 <?php $this->view('includes/modals/event/sponsor/delete') ?>
+
+<?php $this->view('includes/header/side-bars/event-dashboard', $menu_side_bar) ?>
 
 <script>
     <?php if (!empty($popups["add-package"])) { ?>
