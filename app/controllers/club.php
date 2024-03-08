@@ -570,6 +570,36 @@ class Club extends Controller
 
     private function meetings($path, $data)
     {
+        $db = new Database();
+        $meeting = new ClubMeeting($db);
+        $storage = new Storage();
+        $club_id = $storage->get('club_id');
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $form_data = $_POST;
+
+            if ($_POST['submit'] == 'create-event-agenda') {
+                if ($meeting->validateAddMeeting($form_data)) {
+                    try {
+                        $meeting->create([
+                            "club_id" => $club_id,
+                            "name" => $form_data['name'],
+                            "date" => $form_data['date'],
+                            "start_time" => $form_data['start_time'],
+                            "end_time" => $form_data['end_time'],
+                        ]);
+
+                        $_SESSION['alerts'] = [["status" => "success", "message" => "Meeting details added successfully"]];
+                    } catch (\Throwable $th) {
+                        $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to add Meeting details"]];
+                    }
+
+                    return redirect();
+                } else {
+                    $data['popups']["add-mee"] = true;
+                }
+            }
+        }
         $this->view($path, $data);
     }
 
