@@ -77,7 +77,7 @@
                                 <td><?= displayValue($election->end_datetime, 'datetime') ?></td>
                                 <td><?= displayValue($election->description) ?></td>
                                 <td align="center">
-                                    <a href="<?= ROOT ?>/club/dashboard/election/result?election=<?= $election->id ?>">
+                                    <a href="<?= ROOT ?>/club/dashboard/election/result?club_id=<?= $election->club_id ?>&election_id=<?= $election->id ?>">
                                         <button title="View results" class="icon-button">
                                             <span class="material-icons-outlined">
                                                 visibility
@@ -87,7 +87,7 @@
                                 </td>
                                 <td align="center">
                                     <a href="<?= ROOT ?>/club/dashboard/election/vote?election=<?= $election->id ?>">
-                                        <button <?php if ($election->did_vote) { ?> disabled <?php } ?> title="Vote on election" class="icon-button">
+                                        <button title="Vote on election" class="icon-button">
                                             <span class="material-icons-outlined">
                                                 how_to_vote
                                             </span>
@@ -127,11 +127,13 @@
                                 <td><?= displayValue($election->end_datetime, 'datetime') ?></td>
                                 <td><?= displayValue($election->description) ?></td>
                                 <td align="center">
-                                    <button class="icon-button">
-                                        <span class="material-icons-outlined">
-                                            visibility
-                                        </span>
-                                    </button>
+                                    <a href="<?= ROOT ?>/club/dashboard/election/result?club_id=<?= $election->club_id ?>&election_id=<?= $election->id ?>">
+                                        <button class="icon-button">
+                                            <span class="material-icons-outlined">
+                                                visibility
+                                            </span>
+                                        </button>
+                                    </a>
                                 </td>
                                 <td>
                                     <button <?php if ($club_role == 'CLUB_IN_CHARGE') { ?> onclick='onDataPopup("election-status", <?= toJson($election, ["id", "state"]) ?>)' <?php } ?> class="button status-button <?= ($club_role == 'CLUB_IN_CHARGE') ? 'pointer-cursor' : '' ?>" data-status="<?= $election->state ?>">

@@ -1,6 +1,6 @@
 const onAddUser = (e, type) => {
     const option_value = $(`#${type}`).val();
-    const other_type = type == 'voter' ? 'candidate' : type;
+    const other_type = type == 'voter' ? 'candidate' : 'voter';
     const name = $(`#${type} option[value="${option_value}"]`).text();
     const values = option_value.split(',');
     const group_id = new Date().getTime().toString();
@@ -9,14 +9,19 @@ const onAddUser = (e, type) => {
     $(`#${type} option:first`).prop('selected', true);
 
     /* check if member already added on the given type */
-    const exists = $(`#${type}-users`).find(`:checkbox[value="${values[0]}"]`);
+    const exists = $(`#${type}-users`)
+        .find(`:checkbox[name="*[id]"]`)
+        .find(`:checkbox[value="${values[0]}"]`);
     if (exists.length) {
         showError(type, 'User already added');
         return;
     }
 
     /* check if the member is already added on the other type */
-    const other_exists = $(`#${other_type}-users`).find(`:checkbox[value="${values[0]}"]`);
+    const other_exists = $(`#${other_type}-users`)
+        .find(`:checkbox[name="*[id]"]`)
+        .find(`:checkbox[value="${values[0]}"]`);
+    console.log(other_exists[0]);
     if (other_exists.length) {
         showError(type, 'Each user can be added only to one category');
         return;

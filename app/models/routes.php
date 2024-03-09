@@ -16,6 +16,12 @@ class Routes
         "login" => [
             "ANY"
         ],
+        "password" => [
+            "ANY"
+        ],
+        "password/reset" => [
+            "ANY"
+        ],
         "register" => [
             "ANY"
         ],

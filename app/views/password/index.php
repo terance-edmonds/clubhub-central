@@ -16,6 +16,8 @@
     </section>
     <section class="section right">
         <form class="form" method="post">
+            <h1>Forgot Password</h1>
+            <p class="desc">Please enter your email address. You will receive a link to create a new password.</p>
             <div class="input-wrap">
                 <label for="email">Email Address</label>
                 <input value="<?= setValue('email') ?>" id="email" type="email" name="email" placeholder="Email Address" required>
@@ -23,19 +25,11 @@
                     <small><?= $errors['email'] ?></small>
                 <?php endif; ?>
             </div>
-            <div class="input-wrap">
-                <label for="password">Password</label>
-                <input value="<?= setValue('password') ?>" id="password" type="password" name="password" placeholder="Password" required>
-                <?php if (!empty($errors['password'])) : ?>
-                    <small><?= $errors['password'] ?></small>
-                <?php endif; ?>
-            </div>
-            <a href="<?= ROOT ?>/password" class="cl-theme f-14">Forgot Password?</a>
 
-            <button type="submit" class="button contained">Login</button>
+            <button type="submit" class="button contained">Request Reset Link</button>
 
             <div class="bottom-text">
-                Don't have an account? <a href="<?= ROOT ?>/register" class="cl-theme">Register here</a>
+                Already have an account? <a href="<?= ROOT ?>/login" class="cl-theme">Login here</a>
             </div>
         </form>
     </section>

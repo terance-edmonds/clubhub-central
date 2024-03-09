@@ -1170,6 +1170,7 @@ class Club extends Controller
                         "club_elections.start_datetime",
                         "club_elections.end_datetime",
                         "club_elections.description",
+                        "club_elections.club_id",
                         "voter.did_vote"
                     ], [
                         ["table" => "club_election_voters", "as" => "voter", "on" => "club_elections.id = voter.election_id"]
@@ -1207,6 +1208,9 @@ class Club extends Controller
                     $data['election_id'] = $_GET['election_id'];
 
                     $data['election'] = $club_election->one(['id' => $data['election_id']], ["title", "description"]);
+                    if (empty($data['election'])) {
+                        return redirect('club/dashboard/election');
+                    }
 
                     $data['election_results'] = $club_election_candidates->find([
                         "club_election_candidates.club_id" => $data['club_id'],
