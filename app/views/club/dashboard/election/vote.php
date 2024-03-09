@@ -40,8 +40,8 @@
                     <?php endif; ?>
                 </div>
                 <div class="input-wrap">
-                    <label for="secretory">Secretory</label>
-                    <select name="secretory" id="secretory">
+                    <label for="secretary">Secretary</label>
+                    <select name="secretary" id="secretary">
                         <option value="" selected disabled hidden>Choose Candidate</option>
                         <?php foreach ($candidate_members_data as $club_member) { ?>
                             <option value="<?= $club_member->id ?>">
@@ -50,9 +50,9 @@
                             </option>
                         <?php } ?>
                     </select>
-                    <?php if (!empty($errors['secretory'])) : ?>
+                    <?php if (!empty($errors['secretary'])) : ?>
                         <small>
-                            <?= $errors['secretory'] ?>
+                            <?= $errors['secretary'] ?>
                         </small>
                     <?php endif; ?>
                 </div>

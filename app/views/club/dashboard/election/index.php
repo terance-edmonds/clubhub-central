@@ -15,7 +15,7 @@
         <div class="title-bar">
             <div class="title-wrap">
                 <span class="title">Elections</span>
-                <?php if (($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') && $tab == 'election') { ?>
+                <?php if (($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') && $tab == 'elections') { ?>
                     <a href="<?= ROOT ?>/club/dashboard/election/add">
                         <button class="button" data-variant="outlined" data-type="icon" data-size="small">
                             <span>New Election</span>
@@ -65,6 +65,11 @@
                             <th>View</th>
                             <th>Actions</th>
                         </tr>
+                        <?php if (count($election_data) == 0) { ?>
+                            <tr>
+                                <td colspan="6">No Records.</td>
+                            </tr>
+                        <?php } ?>
                         <?php foreach ($election_data as $election) { ?>
                             <tr class="table-data">
                                 <td><?= displayValue($election->title) ?></td>
@@ -72,15 +77,17 @@
                                 <td><?= displayValue($election->end_datetime, 'datetime') ?></td>
                                 <td><?= displayValue($election->description) ?></td>
                                 <td align="center">
-                                    <button title="View results" class="icon-button">
-                                        <span class="material-icons-outlined">
-                                            visibility
-                                        </span>
-                                    </button>
+                                    <a href="<?= ROOT ?>/club/dashboard/election/result?election=<?= $election->id ?>">
+                                        <button title="View results" class="icon-button">
+                                            <span class="material-icons-outlined">
+                                                visibility
+                                            </span>
+                                        </button>
+                                    </a>
                                 </td>
                                 <td align="center">
                                     <a href="<?= ROOT ?>/club/dashboard/election/vote?election=<?= $election->id ?>">
-                                        <button title="Vote on election" class="icon-button">
+                                        <button <?php if ($election->did_vote) { ?> disabled <?php } ?> title="Vote on election" class="icon-button">
                                             <span class="material-icons-outlined">
                                                 how_to_vote
                                             </span>
@@ -108,6 +115,11 @@
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
+                        <?php if (count($election_data) == 0) { ?>
+                            <tr>
+                                <td colspan="7">No Records.</td>
+                            </tr>
+                        <?php } ?>
                         <?php foreach ($election_data as $election) { ?>
                             <tr class="table-data">
                                 <td><?= displayValue($election->title) ?></td>

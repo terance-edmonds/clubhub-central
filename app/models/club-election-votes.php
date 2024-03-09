@@ -21,20 +21,20 @@ class ClubElectionVotes extends Modal
         if (empty($data['club_election_id'])) $this->errors['club_election_id'] = "Election ID is required";
 
         if (
-            $data['president'] == $data['secretory'] ||
+            $data['president'] == $data['secretary'] ||
             $data['president'] == $data['treasurer']
         ) {
             $this->errors['president'] = "Each candidate is eligible to be voted only for one designation";
         }
         if (
-            $data['secretory'] == $data['president'] ||
-            $data['secretory'] == $data['treasurer']
+            $data['secretary'] == $data['president'] ||
+            $data['secretary'] == $data['treasurer']
         ) {
-            $this->errors['secretory'] = "Each candidate is eligible to be voted only for one designation";
+            $this->errors['secretary'] = "Each candidate is eligible to be voted only for one designation";
         }
         if (
-            $data['treasurer'] == $data['secretory'] ||
-            $data['treasurer'] == $data['treasurer']
+            $data['treasurer'] == $data['secretary'] ||
+            $data['treasurer'] == $data['president']
         ) {
             $this->errors['treasurer'] = "Each candidate is eligible to be voted only for one designation";
         }

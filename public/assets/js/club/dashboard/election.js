@@ -1,5 +1,6 @@
 const onAddUser = (e, type) => {
     const option_value = $(`#${type}`).val();
+    const other_type = type == 'voter' ? 'candidate' : type;
     const name = $(`#${type} option[value="${option_value}"]`).text();
     const values = option_value.split(',');
     const group_id = new Date().getTime().toString();
@@ -7,9 +8,19 @@ const onAddUser = (e, type) => {
     /* reset select */
     $(`#${type} option:first`).prop('selected', true);
 
-    /* check if member already added */
+    /* check if member already added on the given type */
     const exists = $(`#${type}-users`).find(`:checkbox[value="${values[0]}"]`);
-    if (exists.length) return;
+    if (exists.length) {
+        showError(type, 'User already added');
+        return;
+    }
+
+    /* check if the member is already added on the other type */
+    const other_exists = $(`#${other_type}-users`).find(`:checkbox[value="${values[0]}"]`);
+    if (other_exists.length) {
+        showError(type, 'Each user can be added only to one category');
+        return;
+    }
 
     /* add new group member */
     const user = $(`.user-template`);
@@ -23,6 +34,13 @@ const onAddUser = (e, type) => {
         .replaceAll(`{{user_id}}`, values[0]);
 
     clone.html(element).removeClass('user-template').appendTo(`#${type}-users`);
+};
+
+const showError = (type, message) => {
+    $(`#${type}-error`).text(message).fadeIn();
+    setTimeout(() => {
+        $(`#${type}-error`).text('').fadeOut();
+    }, 3000);
 };
 
 const onRemoveUser = (e) => {

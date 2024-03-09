@@ -47,6 +47,7 @@ class Modal
     {
         $keys = array_keys($data);
         $type = 'object';
+        $join = 'left';
 
         /* set options */
         if (!empty($options['limit']) && is_numeric($options['limit'])) {
@@ -66,6 +67,9 @@ class Modal
             $this->limit = 0;
             $this->offset = 0;
         }
+        if (!empty($options['join'])) {
+            $join = $options['join'];
+        }
 
         $query = "select ";
         /* set attributes */
@@ -81,10 +85,10 @@ class Modal
         /* set table */
         $query .= " from " . $this->table;
 
-        /* left join */
+        /* join */
         if (count($include) > 0) {
             foreach ($include as $item) {
-                $query .= " left join " . $item['table'] . " as " . $item['as'] . " on " . $item['on'];
+                $query .= " " . $join . " join " . $item['table'] . " as " . $item['as'] . " on " . $item['on'];
             }
         }
 

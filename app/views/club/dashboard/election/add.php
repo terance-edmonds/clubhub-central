@@ -85,6 +85,7 @@
                                     </option>
                                 <?php } ?>
                             </select>
+                            <small id="candidate-error"></small>
                             <?php if (!empty($errors['candidate'])) : ?>
                                 <small>
                                     <?= $errors['candidate'] ?>
@@ -125,6 +126,7 @@
                                     </option>
                                 <?php } ?>
                             </select>
+                            <small id="voter-error"></small>
                             <?php if (!empty($errors['voter'])) : ?>
                                 <small>
                                     <?= $errors['voter'] ?>
