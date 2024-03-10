@@ -141,6 +141,12 @@ class Routes
             "PRESIDENT",
             "CLUB_IN_CHARGE",
         ],
+        "events/dashboard/estimates" => [
+            "TREASURER",
+            "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+        ],
         "events/dashboard/budgets" => [
             "MEMBER",
             "TREASURER",
@@ -195,16 +201,6 @@ class Routes
         ],
         "club/dashboard/events/edit" => [
             "PRESIDENT",
-            "CLUB_IN_CHARGE",
-        ],
-        "club/dashboard/budgets" => [
-            "PRESIDENT",
-            "TREASURER",
-            "CLUB_IN_CHARGE",
-        ],
-        "club/dashboard/budgets/edit" => [
-            "PRESIDENT",
-            "TREASURER",
             "CLUB_IN_CHARGE",
         ],
         "club/dashboard/members" => [

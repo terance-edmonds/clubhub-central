@@ -83,7 +83,7 @@
                                 </a>
                             </td>
                             <td>
-                                <button <?php if ($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') { ?> onclick='onDataPopup("event-status", <?= toJson($event, ["id", "state"]) ?>)' <?php } ?> class="button status-button <?= ($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') ? 'pointer-cursor' : '' ?>" data-status="<?= $event->state ?>">
+                                <button <?php if (!$event->is_budgets_verified) { ?> disabled <?php } ?> <?php if ($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') { ?> onclick='onDataPopup("event-status", <?= toJson($event, ["id", "state"]) ?>)' <?php } ?> class="button status-button <?= (($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') && $event->is_budgets_verified) ? 'pointer-cursor' : '' ?>" data-status="<?= $event->state ?>">
                                     <?= displayValue($event->state, 'start-case') ?>
                                 </button>
                             </td>
@@ -91,13 +91,13 @@
                                 <div class="buttons">
                                     <form method="post">
                                         <input type="text" hidden name="club_event_id" value="<?= $event->id ?>">
-                                        <button title="Event dashboard" <?php if ($event->state != 'ACTIVE') { ?> disabled <?php } ?> name="submit" value="event-dashboard-redirect" class="icon-button">
+                                        <button title="Event dashboard" name="submit" value="event-dashboard-redirect" class="icon-button">
                                             <span class="material-icons-outlined">
                                                 dashboard
                                             </span>
                                         </button>
                                     </form>
-                                    <button title="Delete Event" class="icon-button cl-red">
+                                    <button onclick='onDataPopup("delete-event", <?= toJson($event, ["id"]) ?>)' title="Delete Event" class="icon-button cl-red">
                                         <span class="material-icons-outlined">
                                             delete
                                         </span>
@@ -118,6 +118,7 @@
 </div>
 
 <?php $this->view('includes/modals/event/register') ?>
+<?php $this->view('includes/modals/club/events/delete') ?>
 
 <?php if ($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') {
     $this->view('includes/modals/club/events/status');

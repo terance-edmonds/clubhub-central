@@ -168,9 +168,6 @@ class Club extends Controller
         ];
 
         /* filter menu */
-        if (in_array($club_role, ['CLUB_IN_CHARGE', 'PRESIDENT', 'TREASURER'])) {
-            array_splice($menu, 1, 0, [["id" => "budgets", "name" => "Event Budgets", "icon" => "savings", "path" => ["/club/dashboard/budgets", "/club/dashboard/budgets/edit"], "active" => "false"]]);
-        }
         if (in_array($club_role, ['MEMBER', 'SECRETARY', 'TREASURER'])) {
             array_push($menu, ["id" => "election", "name" => "Election", "icon" => "how_to_vote", "path" => ["/club/dashboard/election", "/club/dashboard/election/vote", "/club/dashboard/election/result"], "active" => "false"]);
         }
@@ -214,7 +211,6 @@ class Club extends Controller
         $db = new Database();
         $club_member = new ClubMember();
         $event = new Event($db);
-        $event_budgets = new BudgetLimits($db);
         $event_group = new EventGroup($db);
         $event_group_member = new EventGroupMember($db);
 
@@ -312,6 +308,12 @@ class Club extends Controller
                     $storage->set('club_event_id', $_POST['club_event_id']);
 
                     return redirect('events/dashboard');
+                } else if ($_POST['submit'] == 'delete-event') {
+                    $event->update(["id" => $form_data['id']], [
+                        "is_deleted" => 1
+                    ]);
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Event deleted successfully"]];
                 }
 
                 $data['errors'] = $event->errors;
@@ -322,7 +324,7 @@ class Club extends Controller
 
             $db->commit();
 
-            if ($_SERVER['REQUEST_METHOD'] == "POST") return redirect($redirect_link);
+            if ($_SERVER['REQUEST_METHOD'] == "POST" && count($data['errors']) == 0) return redirect($redirect_link);
         } catch (\Throwable $th) {
             $db->rollback();
             $_SESSION['alerts'] = [["status" => "error", "message" => $th->getMessage() || "Failed to process the action, please try again later."]];
@@ -361,9 +363,8 @@ class Club extends Controller
             $_POST['created_datetime'] = $event_data->created_datetime;
 
             /* set event budget limits */
-            $event_budget_data = $event_budgets->find(
-                ["club_event_id" => $club_event_id],
-            );
+            // TODO: set the event budgets
+            $event_budget_data = [];
             foreach ($event_budget_data as $budget_id => $budget) {
                 $_POST['budgets'][$budget_id] = [
                     "id" => $budget->id,
@@ -424,141 +425,16 @@ class Club extends Controller
 
         /* pagination */
         $total_count = $event->find([
-            "club_id" => $club_id
+            "club_id" => $club_id,
+            "is_deleted" => 0,
         ], ["count(*) as count"], [], [], isset($_GET['search']) ? $_GET['search'] : '');
         if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
 
         /* fetch events */
-        $data['events_data'] = $event->find(["club_id" => $club_id], [], [], [
+        $data['events_data'] = $event->find(["club_id" => $club_id, "is_deleted" => 0], [], [], [
             "limit" => $data['limit'],
             "offset" => ($data['page'] - 1) * $data['limit'],
         ], isset($_GET['search']) ? $_GET['search'] : '');
-
-        $this->view($path, $data);
-    }
-
-    private function budgets($path, $data)
-    {
-        $db = new Database();
-        $event = new Event($db);
-        $budget_limits = new BudgetLimits($db);
-
-        $storage = new Storage();
-        $club_id = $storage->get('club_id');
-        $club_event_id = $storage->get('club_event_id');
-
-        $data['total_count'] = 0;
-        $data['limit'] = 10;
-        $data['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
-
-        $redirect_link = null;
-
-        if (empty($club_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Club details are not found"]];
-
-        try {
-            $db->transaction();
-
-            if ($_SERVER['REQUEST_METHOD'] == "POST") {
-                $form_data = $_POST;
-
-                $budget_errors = [];
-
-                if ($form_data['submit'] == 'update_budget') {
-                    $form_data['club_id'] = $club_id;
-                    $form_data['club_event_id'] = $club_event_id;
-                    $budget_limits->delete(["club_event_id" => $club_event_id, "club_id" => $club_id]);
-
-                    foreach ($form_data['budgets'] as $key => $budget) {
-                        if ($budget_limits->validateAddBudget($budget)) {
-                            try {
-                                $budget_limits->create([
-                                    "name" => $budget['name'],
-                                    "club_id" => $form_data['club_id'],
-                                    "club_event_id" => $form_data['club_event_id'],
-                                    "amount" => $budget['amount'],
-                                    "description" => isset($budget['description']) ? $budget['description'] : '',
-
-                                ]);
-                            } catch (\Throwable $th) {
-                                throw new Error("Failed to create a budget: " . $budget['name']);
-                            }
-                        }
-
-                        if (count($budget_limits->errors) > 0) {
-                            $budget_errors[$key] = $budget_limits->errors;
-                        } else {
-                            $event->update([
-                                "id" => $club_event_id
-                            ], [
-                                "is_budgets_verified" => 1
-                            ]);
-
-                            $_SESSION['alerts'] = [["status" => "success", "message" => "Updated event budgets successfully"]];
-                            $redirect_link = 'club/dashboard/budgets';
-                        }
-                    }
-                } else if ($_POST['submit'] == 'budget-redirect') {
-                    $storage = new Storage();
-                    $storage->set('club_event_id', $_POST['club_event_id']);
-
-                    return redirect('club/dashboard/budgets/edit');
-                }
-
-                $data['errors'] = $event->errors;
-                if (count($budget_errors) > 0) {
-                    $data['errors']['budgets'] = $budget_errors;
-                }
-            }
-
-            $db->commit();
-
-            if ($_SERVER['REQUEST_METHOD'] == "POST") return redirect($redirect_link);
-        } catch (\Throwable $th) {
-            $db->rollback();
-            $_SESSION['alerts'] = [["status" => "error", "message" => $th->getMessage() || "Failed to process the action, please try again later."]];
-        }
-
-        /* fetch club members */
-        if ($path == 'club/dashboard/budgets/edit') {
-            /* set event data */
-            $data['event_data'] = $event->one(
-                ["id" => $club_event_id],
-                [
-                    "id",
-                    "name",
-                    "venue",
-                    "start_datetime",
-                    "end_datetime",
-                    "description",
-                ]
-            );
-
-            /* set event budget limits */
-            $event_budget_data = $budget_limits->find(
-                ["club_event_id" => $club_event_id],
-            );
-            foreach ($event_budget_data as $budget_id => $budget) {
-                $_POST['budgets'][$budget_id] = [
-                    "id" => $budget->id,
-                    "name" => $budget->name,
-                    "amount" => $budget->amount,
-                    "description" => $budget->description,
-                ];
-            }
-        } else {
-            /* pagination */
-            $total_count = $event->find([
-                "club_id" => $club_id,
-            ], ["count(*) as count"], [], [], isset($_GET['search']) ? $_GET['search'] : '');
-            if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
-
-            /* fetch events */
-            $data['events_data'] = $event->find(["club_id" => $club_id], [], [], [
-                "limit" => $data['limit'],
-                "offset" => ($data['page'] - 1) * $data['limit'],
-            ], isset($_GET['search']) ? $_GET['search'] : '');
-        }
-
 
         $this->view($path, $data);
     }

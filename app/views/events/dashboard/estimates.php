@@ -15,8 +15,19 @@
     <section class="center-section">
         <div class="title-bar">
             <div class="title-wrap">
-                <span class="title">Income / Expenses</span>
+                <span class="title">Budgets</span>
             </div>
+
+            <?php if ($club_role === 'PRESIDENT' || $club_role === 'CLUB_IN_CHARGE') { ?>
+                <form method="post">
+                    <button <?php if ($event->is_budgets_verified) { ?> disabled <?php } ?> title="Verify event budgets" type="submit" name="submit" value="verify-budgets" class="button" data-variant="contained" data-type="icon" data-size="small">
+                        <span><?= $event->is_budgets_verified ? 'Budgets Verified' : 'Verify Budgets' ?></span>
+                        <span class="material-icons-outlined">
+                            task_alt
+                        </span>
+                    </button>
+                </form>
+            <?php } ?>
         </div>
 
         <div class="summary-section">
@@ -51,20 +62,6 @@
                         <?= displayValue($expense_data, 'number') ?>
                     </p>
                 </div>
-                <div class="summary-card">
-                    <div class="top-bar">
-                        <div class="icon-wrap">
-                            <span class="material-icons-outlined">
-                                currency_exchange
-                            </span>
-                        </div>
-                        <p class="card-title">Net Profit / Loss</p>
-                    </div>
-
-                    <p class="amount <?php echo ($net_value < 0) ? 'red' : 'green' ?>">LKR
-                        <?= displayValue($net_value, 'number') ?>
-                    </p>
-                </div>
             </div>
         </div>
 
@@ -72,9 +69,9 @@
             <div class="actions-wrap">
                 <div class="action-buttons">
                     <a class="action-link" data-active="<?php if ($tab == 'income')
-                                                            echo 'true'; ?>" href="<?= ROOT ?>/events/dashboard/budgets?tab=income"><button class="button">Income</button></a>
+                                                            echo 'true'; ?>" href="<?= ROOT ?>/events/dashboard/estimates?tab=income"><button class="button">Income</button></a>
                     <a class="action-link" data-active="<?php if ($tab == 'expense')
-                                                            echo 'true'; ?>" href="<?= ROOT ?>/events/dashboard/budgets?tab=expense"><button class="button">Expense</button></a>
+                                                            echo 'true'; ?>" href="<?= ROOT ?>/events/dashboard/estimates?tab=expense"><button class="button">Expense</button></a>
                 </div>
 
                 <div class="action-search">
@@ -98,7 +95,7 @@
             <div class="table-wrap">
                 <table>
                     <tr class="table-header">
-                        <th>Transaction Name</th>
+                        <th>Name</th>
                         <th>Description</th>
                         <th>Amount (LKR)</th>
                         <th>From</th>
