@@ -7,4 +7,66 @@
             }
         }
     }
+
+    .actions-wrap {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin-bottom: 25px;
+
+        .action-buttons {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+
+            .button {
+                background-color: transparent;
+                color: #fff;
+                border: 1px solid $theme;
+                max-width: fit-content;
+            }
+
+            .action-link {
+                &[data-active='true'] {
+                    .button {
+                        background-color: $secondary_theme;
+                        color: $dark;
+                    }
+                }
+            }
+        }
+    }
+
+    .candidates {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        row-gap: 30px;
+        min-height: 400px;
+        margin-top: 20px;
+
+        .candidate {
+            cursor: pointer;
+            text-align: center;
+
+            .image {
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 7px solid $gray;
+                transition: all 0.3s ease;
+            }
+
+            input {
+                &:checked {
+                    ~ .image {
+                        border-color: $theme;
+                    }
+                }
+            }
+        }
+    }
 }

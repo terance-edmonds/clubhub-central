@@ -26,7 +26,6 @@ class ClubElection extends Modal
         if (empty($data['title'])) $this->errors['title'] = "Title is required";
         if (empty($data['start_datetime'])) $this->errors['start_datetime'] = "Start date & time is required";
         if (empty($data['end_datetime'])) $this->errors['end_datetime'] = "End date & time is required";
-        if (empty($data['candidate']) || count($data['candidate']) < 3) $this->errors['candidate'] = "Minimum of three candidates are/ required";
         if (empty($data['voter']) || count($data['voter']) == 0) $this->errors['voter'] = "At least one voter is required";
 
         if (empty($this->errors)) {
@@ -45,7 +44,6 @@ class ClubElection extends Modal
         if (empty($data['title'])) $this->errors['title'] = "Title is required";
         if (empty($data['start_datetime'])) $this->errors['start_datetime'] = "Start date & time is required";
         if (empty($data['end_datetime'])) $this->errors['end_datetime'] = "End date & time is required";
-        if (empty($data['candidate']) || count($data['candidate']) == 0) $this->errors['candidate'] = "At least one candidate is required";
         if (empty($data['voter']) || count($data['voter']) == 0) $this->errors['voter'] = "At least one voter is required";
 
         if (empty($this->errors)) {

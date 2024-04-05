@@ -66,17 +66,17 @@
                     </div>
                 </div>
                 <div class="form-section">
-                    <p class="form-section-title">Candidates</p>
+                    <p class="form-section-title">President Candidates</p>
                     <div class="form-section-content">
                         <div class="checkbox-filters">
                             <label class="checkbox-label">
-                                <input type="checkbox" name="event_attendance" value="event_attendance">
+                                <input type="checkbox" name="president_event_attendance" value="president_event_attendance">
                                 80% Event Attendance
                             </label>
                         </div>
                         <div class="input-wrap">
-                            <label for="candidate">Choose Candidate</label>
-                            <select onchange="onAddUser(event, 'candidate')" name="candidate" id="candidate" value="">
+                            <label for="president_candidate">Choose Candidate</label>
+                            <select onchange="onAddUser(event, 'president_candidate')" name="president_candidate" id="president_candidate" value="">
                                 <option value="" selected disabled hidden>Choose Candidate</option>
                                 <?php foreach ($candidate_members_data as $club_member) { ?>
                                     <option value="<?= $club_member->id ?>,<?= $club_member->user_id ?>">
@@ -85,23 +85,23 @@
                                     </option>
                                 <?php } ?>
                             </select>
-                            <small id="candidate-error"></small>
-                            <?php if (!empty($errors['candidate'])) : ?>
+                            <small id="president_candidate-error"></small>
+                            <?php if (!empty($errors['president_candidate'])) : ?>
                                 <small>
-                                    <?= $errors['candidate'] ?>
+                                    <?= $errors['president_candidate'] ?>
                                 </small>
                             <?php endif; ?>
                         </div>
 
-                        <div id="candidate-users" class="selected-users">
-                            <?php if (!empty($_POST['candidate'])) { ?>
-                                <?php foreach ($_POST['candidate'] as $key => $group) { ?>
+                        <div id="president_candidate-users" class="selected-users">
+                            <?php if (!empty($_POST['president_candidate'])) { ?>
+                                <?php foreach ($_POST['president_candidate'] as $key => $group) { ?>
                                     <div class="checkbox-wrap user-template">
                                         <label class="checkbox-label">
                                             <?= $group['name'] ?>
-                                            <input hidden type="checkbox" checked name="candidate[<?= $key ?>][id]" value="<?= $group['id'] ?>">
-                                            <input hidden type="checkbox" checked name="candidate[<?= $key ?>][user_id]" value="<?= $group['user_id'] ?>">
-                                            <input hidden type="checkbox" checked name="candidate[<?= $key ?>][name]" value="<?= $group['name'] ?>">
+                                            <input hidden type="checkbox" checked name="president_candidate[<?= $key ?>][id]" value="<?= $group['id'] ?>">
+                                            <input hidden type="checkbox" checked name="president_candidate[<?= $key ?>][user_id]" value="<?= $group['user_id'] ?>">
+                                            <input hidden type="checkbox" checked name="president_candidate[<?= $key ?>][name]" value="<?= $group['name'] ?>">
                                         </label>
                                         <span onclick="onRemoveUser(event)" class="material-icons-outlined">
                                             clear
@@ -112,6 +112,103 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="form-section">
+                    <p class="form-section-title">Secretary Candidates</p>
+                    <div class="form-section-content">
+                        <div class="checkbox-filters">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="secretary_event_attendance" value="secretary_event_attendance">
+                                80% Event Attendance
+                            </label>
+                        </div>
+                        <div class="input-wrap">
+                            <label for="secretary_candidate">Choose Candidate</label>
+                            <select onchange="onAddUser(event, 'secretary_candidate')" name="secretary_candidate" id="secretary_candidate" value="">
+                                <option value="" selected disabled hidden>Choose Candidate</option>
+                                <?php foreach ($candidate_members_data as $club_member) { ?>
+                                    <option value="<?= $club_member->id ?>,<?= $club_member->user_id ?>">
+                                        <?= $club_member->first_name ?>
+                                        <?= $club_member->last_name ?>
+                                    </option>
+                                <?php } ?>
+                            </select>
+                            <small id="secretary_candidate-error"></small>
+                            <?php if (!empty($errors['secretary_candidate'])) : ?>
+                                <small>
+                                    <?= $errors['secretary_candidate'] ?>
+                                </small>
+                            <?php endif; ?>
+                        </div>
+
+                        <div id="secretary_candidate-users" class="selected-users">
+                            <?php if (!empty($_POST['secretary_candidate'])) { ?>
+                                <?php foreach ($_POST['secretary_candidate'] as $key => $group) { ?>
+                                    <div class="checkbox-wrap user-template">
+                                        <label class="checkbox-label">
+                                            <?= $group['name'] ?>
+                                            <input hidden type="checkbox" checked name="secretary_candidate[<?= $key ?>][id]" value="<?= $group['id'] ?>">
+                                            <input hidden type="checkbox" checked name="secretary_candidate[<?= $key ?>][user_id]" value="<?= $group['user_id'] ?>">
+                                            <input hidden type="checkbox" checked name="secretary_candidate[<?= $key ?>][name]" value="<?= $group['name'] ?>">
+                                        </label>
+                                        <span onclick="onRemoveUser(event)" class="material-icons-outlined">
+                                            clear
+                                        </span>
+                                    </div>
+                            <?php }
+                            } ?>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <p class="form-section-title">Treasure Candidates</p>
+                    <div class="form-section-content">
+                        <div class="checkbox-filters">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="treasurer_event_attendance" value="treasurer_event_attendance">
+                                80% Event Attendance
+                            </label>
+                        </div>
+                        <div class="input-wrap">
+                            <label for="treasurer_candidate">Choose Candidate</label>
+                            <select onchange="onAddUser(event, 'treasurer_candidate')" name="treasurer_candidate" id="treasurer_candidate" value="">
+                                <option value="" selected disabled hidden>Choose Candidate</option>
+                                <?php foreach ($candidate_members_data as $club_member) { ?>
+                                    <option value="<?= $club_member->id ?>,<?= $club_member->user_id ?>">
+                                        <?= $club_member->first_name ?>
+                                        <?= $club_member->last_name ?>
+                                    </option>
+                                <?php } ?>
+                            </select>
+                            <small id="treasurer_candidate-error"></small>
+                            <?php if (!empty($errors['treasurer_candidate'])) : ?>
+                                <small>
+                                    <?= $errors['treasurer_candidate'] ?>
+                                </small>
+                            <?php endif; ?>
+                        </div>
+
+                        <div id="treasurer_candidate-users" class="selected-users">
+                            <?php if (!empty($_POST['treasurer_candidate'])) { ?>
+                                <?php foreach ($_POST['treasurer_candidate'] as $key => $group) { ?>
+                                    <div class="checkbox-wrap user-template">
+                                        <label class="checkbox-label">
+                                            <?= $group['name'] ?>
+                                            <input hidden type="checkbox" checked name="treasurer_candidate[<?= $key ?>][id]" value="<?= $group['id'] ?>">
+                                            <input hidden type="checkbox" checked name="treasurer_candidate[<?= $key ?>][user_id]" value="<?= $group['user_id'] ?>">
+                                            <input hidden type="checkbox" checked name="treasurer_candidate[<?= $key ?>][name]" value="<?= $group['name'] ?>">
+                                        </label>
+                                        <span onclick="onRemoveUser(event)" class="material-icons-outlined">
+                                            clear
+                                        </span>
+                                    </div>
+                            <?php }
+                            } ?>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="form-section">
                     <p class="form-section-title">Voters</p>
                     <div class="form-section-content">
