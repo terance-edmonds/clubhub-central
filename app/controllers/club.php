@@ -164,7 +164,7 @@ class Club extends Controller
         $menu = [
             ["id" => "events", "name" => "Events", "icon" => "emoji_events", "path" => ["/club/dashboard", "/club/dashboard/events/add",  "/club/dashboard/events/edit"], "active" => "false"],
             ["id" => "posts", "name" => "Posts", "icon" => "history_edu", "path" => ["/club/dashboard/posts", "/club/dashboard/posts/add", "/club/dashboard/posts/edit"], "active" => "false"],
-            ["id" => "community", "name" => "Community Chat", "icon" => "mark_unread_chat_alt", "path" => "/club/dashboard/community", "active" => "false"],
+            ["id" => "community", "name" => "Community Chat", "icon" => "mark_unread_chat_alt", "path" => ["/club/dashboard/community", "/club/dashboard/community/scroll"], "active" => "false"],
         ];
 
         /* filter menu */
@@ -454,6 +454,57 @@ class Club extends Controller
 
     private function community($path, $data)
     {
+        $community_chat = new ClubCommunityChat();
+        $storage = new Storage();
+        $auth_user = Auth::user();
+        $page = 1;
+        $limit = 15;
+
+        if (!empty($_GET['page']) && is_numeric($_GET['page']))
+            $page = $_GET['page'];
+
+        $club_id = $storage->get('club_id');
+        $club_member_id = $storage->get('club_member_id');
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $form_data = $_POST;
+
+            $form_data['sender_user_id'] = $auth_user['id'];
+            $form_data['sender_club_member_id'] = $club_member_id;
+            $form_data['club_id'] = $club_id;
+
+            if ($community_chat->validateCreateMessage($form_data)) {
+                try {
+                    $community_chat->create($form_data);
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Message sent successfully"]];
+                } catch (\Throwable $th) {
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Message sent failed"]];
+                }
+            }
+
+            $data['errors'] = $community_chat->errors;
+        }
+
+        /* get messages related to club */
+        $data['messages'] = $community_chat->find(
+            ["club_community_chat.club_id" => $club_id],
+            [
+                "club_community_chat.id",
+                "club_community_chat.message",
+                "club_community_chat.created_datetime",
+                "concat(user.first_name,' ', user.last_name) as name",
+            ],
+            [
+                ["table" => "users", "as" => "user", "on" => "club_community_chat.sender_user_id = user.id"]
+            ],
+            [
+                "limit" => $limit,
+                "offset" => ($page - 1) * $limit
+            ]
+        );
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST" && count($data['errors']) == 0) return redirect();
+
         $this->view($path, $data);
     }
 

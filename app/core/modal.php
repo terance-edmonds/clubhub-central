@@ -20,7 +20,7 @@ class Modal
         $this->order_column = $this->table . '.id';
     }
 
-    public function create($data, $select_key = '')
+    public function create($data)
     {
         if (!empty($this->allowed_columns)) {
             foreach ($data as $key => $value) {
@@ -37,7 +37,6 @@ class Modal
 
         $result = $this->db->query($query, $data);
 
-        // if (!empty($select_key)) return $this->one([$select_key => $data[$select_key]]);
         if (empty($result)) $result = null;
 
         if (!empty($result[0])) $result = $result[0];

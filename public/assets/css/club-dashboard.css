@@ -181,22 +181,38 @@
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  -webkit-box-direction: reverse;
+      -ms-flex-direction: column-reverse;
+          flex-direction: column-reverse;
   gap: 15px;
 }
 #club-dashboard-community .chat-box .text-wrap {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  width: 100%;
-}
-#club-dashboard-community .chat-box .text-wrap .text {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 3px;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
   background-color: #94d1be;
-  color: #09090b;
   border-radius: 8px;
   padding: 5px 10px;
+  min-width: 200px;
+}
+#club-dashboard-community .chat-box .text-wrap .text {
+  color: #09090b;
+}
+#club-dashboard-community .chat-box .text-wrap .name {
+  color: #09090b;
+}
+#club-dashboard-community .chat-box .text-wrap .datetime {
+  font-size: x-small;
+  color: #161616;
+  text-align: right;
 }
 #club-dashboard-community .chat-form {
   display: -webkit-box;
@@ -221,7 +237,74 @@
   width: -moz-fit-content;
   width: fit-content;
 }
+#club-dashboard-community .chat-scroll-loader-wrap {
+  display: none;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+#club-dashboard-community .chat-scroll-loader-wrap[data-active=true] {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+#club-dashboard-community .chat-scroll-loader-wrap .scroll-loader,
+#club-dashboard-community .chat-scroll-loader-wrap .scroll-loader div {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+#club-dashboard-community .chat-scroll-loader-wrap .scroll-loader {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+#club-dashboard-community .chat-scroll-loader-wrap .scroll-loader div {
+  display: inline-block;
+  position: absolute;
+  left: 4px;
+  width: 8px;
+  background: #69e4be;
+  -webkit-animation: box-animation 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+          animation: box-animation 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+}
+#club-dashboard-community .chat-scroll-loader-wrap .scroll-loader div:nth-child(1) {
+  left: 4px;
+  -webkit-animation-delay: -0.24s;
+          animation-delay: -0.24s;
+}
+#club-dashboard-community .chat-scroll-loader-wrap .scroll-loader div:nth-child(2) {
+  left: 16px;
+  -webkit-animation-delay: -0.12s;
+          animation-delay: -0.12s;
+}
+#club-dashboard-community .chat-scroll-loader-wrap .scroll-loader div:nth-child(3) {
+  left: 28px;
+  -webkit-animation-delay: 0s;
+          animation-delay: 0s;
+}
 
+@-webkit-keyframes box-animation {
+  0% {
+    top: 8px;
+    height: 64px;
+  }
+  50%, 100% {
+    top: 24px;
+    height: 32px;
+  }
+}
+
+@keyframes box-animation {
+  0% {
+    top: 8px;
+    height: 64px;
+  }
+  50%, 100% {
+    top: 24px;
+    height: 32px;
+  }
+}
 #club-dashboard-add-post .image-upload {
   max-width: 560px;
   min-height: 560px;
