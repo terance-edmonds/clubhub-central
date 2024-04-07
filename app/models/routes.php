@@ -213,6 +213,11 @@ class Routes
             "PRESIDENT",
             "CLUB_IN_CHARGE",
         ],
+        "club/dashboard/meetings/add" => [
+            "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+        ],
         "club/dashboard/reports" => [
             "SECRETARY",
             "SECRETARY",
@@ -283,6 +288,13 @@ class Routes
             "CLUB_IN_CHARGE",
         ],
         "club/dashboard/election/vote" => [
+            "MEMBER",
+            "TREASURER",
+            "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+        ],
+        "club/dashboard/election/details" => [
             "MEMBER",
             "TREASURER",
             "SECRETARY",

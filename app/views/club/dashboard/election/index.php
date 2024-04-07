@@ -62,7 +62,9 @@
                             <th>Start Date & Time</th>
                             <th>End Date & Time</th>
                             <th>Description</th>
-                            <th>View</th>
+                            <th>Details</th>
+                            <th>Results</th>
+                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                         <?php if (count($election_data) == 0) { ?>
@@ -77,8 +79,8 @@
                                 <td><?= displayValue($election->end_datetime, 'datetime') ?></td>
                                 <td><?= displayValue($election->description) ?></td>
                                 <td align="center">
-                                    <a href="<?= ROOT ?>/club/dashboard/election/result?club_id=<?= $election->club_id ?>&election_id=<?= $election->id ?>">
-                                        <button title="View results" class="icon-button">
+                                    <a href="<?= ROOT ?>/club/dashboard/election/details?election_id=<?= $election->id ?>">
+                                        <button <?php if ($election->state === 'PENDING') { ?> disabled <?php } ?> class="icon-button">
                                             <span class="material-icons-outlined">
                                                 visibility
                                             </span>
@@ -86,8 +88,22 @@
                                     </a>
                                 </td>
                                 <td align="center">
+                                    <a href="<?= ROOT ?>/club/dashboard/election/result?club_id=<?= $election->club_id ?>&election_id=<?= $election->id ?>">
+                                        <button <?php if ($election->state !== 'OPEN' && $election->state !== 'CLOSED') { ?> disabled <?php } ?> title="View results" class="icon-button">
+                                            <span class="material-icons-outlined">
+                                                visibility
+                                            </span>
+                                        </button>
+                                    </a>
+                                </td>
+                                <td>
+                                    <button class="button status-button" data-status="<?= $election->state ?>">
+                                        <?= displayValue($election->state, 'start-case') ?>
+                                    </button>
+                                </td>
+                                <td align="center">
                                     <a href="<?= ROOT ?>/club/dashboard/election/vote?election=<?= $election->id ?>">
-                                        <button title="Vote on election" class="icon-button">
+                                        <button <?php if ($election->state !== 'OPEN') { ?> disabled <?php } ?> title="Vote on election" class="icon-button">
                                             <span class="material-icons-outlined">
                                                 how_to_vote
                                             </span>
@@ -111,7 +127,8 @@
                             <th>Start Date & Time</th>
                             <th>End Date & Time</th>
                             <th>Description</th>
-                            <th>View</th>
+                            <th>Details</th>
+                            <th>Results</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -127,8 +144,17 @@
                                 <td><?= displayValue($election->end_datetime, 'datetime') ?></td>
                                 <td><?= displayValue($election->description) ?></td>
                                 <td align="center">
-                                    <a href="<?= ROOT ?>/club/dashboard/election/result?club_id=<?= $election->club_id ?>&election_id=<?= $election->id ?>">
+                                    <a href="<?= ROOT ?>/club/dashboard/election/details?election_id=<?= $election->id ?>">
                                         <button class="icon-button">
+                                            <span class="material-icons-outlined">
+                                                visibility
+                                            </span>
+                                        </button>
+                                    </a>
+                                </td>
+                                <td align="center">
+                                    <a href="<?= ROOT ?>/club/dashboard/election/result?club_id=<?= $election->club_id ?>&election_id=<?= $election->id ?>">
+                                        <button <?php if ($election->state !== 'OPEN' && $election->state !== 'CLOSED') { ?> disabled <?php } ?> class="icon-button">
                                             <span class="material-icons-outlined">
                                                 visibility
                                             </span>

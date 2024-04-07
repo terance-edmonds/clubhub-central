@@ -169,7 +169,7 @@ class Club extends Controller
 
         /* filter menu */
         if (in_array($club_role, ['MEMBER', 'SECRETARY', 'TREASURER'])) {
-            array_push($menu, ["id" => "election", "name" => "Election", "icon" => "how_to_vote", "path" => ["/club/dashboard/election", "/club/dashboard/election/vote", "/club/dashboard/election/result"], "active" => "false"]);
+            array_push($menu, ["id" => "election", "name" => "Election", "icon" => "how_to_vote", "path" => ["/club/dashboard/election", "/club/dashboard/election/vote", "/club/dashboard/election/result", "/club/dashboard/election/details"], "active" => "false"]);
         }
         if (in_array($club_role, ['CLUB_IN_CHARGE', 'PRESIDENT', 'SECRETARY', 'TREASURER'])) {
             array_push($menu, ["id" => "logs", "name" => "Logs", "icon" => "article", "path" => "/club/dashboard/logs", "active" => "false"], ["id" => "members", "name" => "Members", "icon" => "people", "path" => "/club/dashboard/members", "active" => "false"],);
@@ -178,7 +178,7 @@ class Club extends Controller
             array_push($menu, ["id" => "reports", "name" => "Reports", "icon" => "description", "path" => ["/club/dashboard/reports", "/club/dashboard/reports/add"], "active" => "false"], ["id" => "meetings", "name" => "Meetings", "icon" => "diversity_2", "path" => "/club/dashboard/meetings", "active" => "false"]);
         }
         if (in_array($club_role, ['CLUB_IN_CHARGE', 'PRESIDENT'])) {
-            array_push($menu, ["id" => "election", "name" => "Election", "icon" => "how_to_vote", "path" => ["/club/dashboard/election", "/club/dashboard/election/add", "/club/dashboard/election/edit", "/club/dashboard/election/vote", "/club/dashboard/election/result"], "active" => "false"], ["id" => "requests", "name" => "Requests", "icon" => "crisis_alert", "path" => ["/club/dashboard/requests", "/club/dashboard/requests/add"], "active" => "false"]);
+            array_push($menu, ["id" => "election", "name" => "Election", "icon" => "how_to_vote", "path" => ["/club/dashboard/election", "/club/dashboard/election/add", "/club/dashboard/election/edit", "/club/dashboard/election/vote", "/club/dashboard/election/result", "/club/dashboard/election/details"], "active" => "false"], ["id" => "requests", "name" => "Requests", "icon" => "crisis_alert", "path" => ["/club/dashboard/requests", "/club/dashboard/requests/add"], "active" => "false"]);
         }
 
         /* update the active menu item */
@@ -1086,6 +1086,35 @@ class Club extends Controller
                     $redirect_on_success = false;
                 }
 
+                if ($path == 'club/dashboard/election/details') {
+                    $tabs = ['president', 'secretary', 'treasurer'];
+                    $data["tab"] = getActiveTab($tabs, $_GET);
+
+                    $user_id = Auth::getId();
+                    if (empty($_GET["election_id"])) return redirect('not-found');
+
+                    /* get election details */
+                    $data['election_id'] = $_GET["election_id"];
+                    $data['election'] = $club_election->one(["id" => $data['election_id']]);
+                    if (empty($data['election'])) return redirect('not-found');
+
+                    $data['candidate_members_data'] = $club_election_candidates->find(
+                        ["club_id" => $club_id, "election_id" => $data["election_id"], "club_election_candidates.role" => strtoupper($data['tab'])],
+                        [
+                            "club_election_candidates.id as id",
+                            "club_election_candidates.club_member_id as club_member_id",
+                            "club_election_candidates.user_id",
+                            "club_election_candidates.club_id",
+                            "user.first_name",
+                            "user.last_name",
+                            "user.image",
+                        ],
+                        [
+                            ["table" => "users", "as" => "user", "on" => "club_election_candidates.user_id = user.id"]
+                        ]
+                    );
+                }
+
                 /* data fetching */
                 if ($path == 'club/dashboard/election' && $data['tab'] == 'votes') {
                     $user_id = Auth::getId();
@@ -1094,7 +1123,6 @@ class Club extends Controller
                     $total_count = $club_election->find([
                         "club_elections.club_id" => $club_id,
                         "club_elections.is_deleted" => 0,
-                        "club_elections.state" => "OPEN",
                         "voter.user_id" => $user_id
                     ], ["count(*) as count"], [
                         ["table" => "club_election_voters", "as" => "voter", "on" => "club_elections.id = voter.election_id"]
@@ -1105,11 +1133,11 @@ class Club extends Controller
                     $data['election_data'] = $club_election->find([
                         "club_elections.club_id" => $club_id,
                         "club_elections.is_deleted" => 0,
-                        "club_elections.state" => "OPEN",
-                        "voter.user_id" => $user_id
+                        "voter.user_id" => $user_id,
                     ], [
                         "club_elections.id",
                         "club_elections.title",
+                        "club_elections.state",
                         "club_elections.start_datetime",
                         "club_elections.end_datetime",
                         "club_elections.description",
