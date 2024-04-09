@@ -6,9 +6,8 @@
 
 <?php $this->view('includes/header') ?>
 
-<div id="club-dashboard-add-report"
-    class="container container-sections side-padding club-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/club/dashboard/left', ["menu" => $menu]) ?>
+<div id="club-dashboard-add-report" class="container container-sections side-padding club-dashboard dashboard-container">
+    <?php $this->view('includes/side-bars/club/dashboard/left', $left_bar) ?>
 
     <section class="center-section">
         <div class="title-bar">
@@ -25,9 +24,8 @@
                         <div class="multi-wrap">
                             <div class="input-wrap">
                                 <label for="name">Report Name</label>
-                                <input value="<?= setValue('name') ?>" id="name" type="text" name="name"
-                                    placeholder="Report Name" required>
-                                <?php if (!empty($errors['name'])): ?>
+                                <input value="<?= setValue('name') ?>" id="name" type="text" name="name" placeholder="Report Name" required>
+                                <?php if (!empty($errors['name'])) : ?>
                                     <small>
                                         <?= $errors['name'] ?>
                                     </small>
@@ -40,7 +38,7 @@
                                     <option value="users">Users</option>
                                     <option value="events">Events</option>
                                 </select>
-                                <?php if (!empty($errors['type'])): ?>
+                                <?php if (!empty($errors['type'])) : ?>
                                     <small>
                                         <?= $errors['type'] ?>
                                     </small>
@@ -50,10 +48,8 @@
                         <div class="multi-wrap">
                             <div class="input-wrap">
                                 <label for="start_datetime">Start Date & Time</label>
-                                <input value="<?= setValue('start_datetime') ?>" id="start_datetime"
-                                    type="datetime-local" name="start_datetime" placeholder="Start Date & Time"
-                                    required>
-                                <?php if (!empty($errors['start_datetime'])): ?>
+                                <input value="<?= setValue('start_datetime') ?>" id="start_datetime" type="datetime-local" name="start_datetime" placeholder="Start Date & Time" required>
+                                <?php if (!empty($errors['start_datetime'])) : ?>
                                     <small>
                                         <?= $errors['start_datetime'] ?>
                                     </small>
@@ -61,9 +57,8 @@
                             </div>
                             <div class="input-wrap">
                                 <label for="end_datetime">End Date & Time</label>
-                                <input value="<?= setValue('end_datetime') ?>" id="end_datetime" type="datetime-local"
-                                    name="end_datetime" placeholder="End Date & Time" required>
-                                <?php if (!empty($errors['end_datetime'])): ?>
+                                <input value="<?= setValue('end_datetime') ?>" id="end_datetime" type="datetime-local" name="end_datetime" placeholder="End Date & Time" required>
+                                <?php if (!empty($errors['end_datetime'])) : ?>
                                     <small>
                                         <?= $errors['end_datetime'] ?>
                                     </small>
@@ -81,6 +76,6 @@
     </section>
 </div>
 
-<script src="<?= ROOT ?>/assets/js/form.js"></script>
+<?php $this->view('includes/header/side-bars/club-dashboard', $menu_side_bar) ?>
 
-<?php $this->view('includes/header/bottom') ?>
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

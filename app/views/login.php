@@ -30,7 +30,7 @@
                     <small><?= $errors['password'] ?></small>
                 <?php endif; ?>
             </div>
-            <a href="/forgot-password" class="cl-theme f-14">Forgot Password?</a>
+            <a href="<?= ROOT ?>/password" class="cl-theme f-14">Forgot Password?</a>
 
             <button type="submit" class="button contained">Login</button>
 

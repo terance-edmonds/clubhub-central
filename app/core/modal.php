@@ -3,12 +3,12 @@
 class Modal
 {
     public $order = 'desc';
-    public $order_column = 'id';
     public $limit = 10;
     public $offset = 0;
-
     public $errors = [];
+
     protected $table = "";
+    public $order_column = "";
     protected $allowed_columns = [];
     protected $search_columns = [];
     protected $db = null;
@@ -16,6 +16,8 @@ class Modal
     function __construct($db = new Database())
     {
         $this->db = $db;
+        /* set the default order column */
+        $this->order_column = $this->table . '.id';
     }
 
     public function create($data, $select_key = '')
@@ -47,6 +49,7 @@ class Modal
     {
         $keys = array_keys($data);
         $type = 'object';
+        $join = 'left';
 
         /* set options */
         if (!empty($options['limit']) && is_numeric($options['limit'])) {
@@ -66,6 +69,9 @@ class Modal
             $this->limit = 0;
             $this->offset = 0;
         }
+        if (!empty($options['join'])) {
+            $join = $options['join'];
+        }
 
         $query = "select ";
         /* set attributes */
@@ -81,10 +87,10 @@ class Modal
         /* set table */
         $query .= " from " . $this->table;
 
-        /* left join */
+        /* join */
         if (count($include) > 0) {
             foreach ($include as $item) {
-                $query .= " left join " . $item['table'] . " as " . $item['as'] . " on " . $item['on'];
+                $query .= " " . $join . " join " . $item['table'] . " as " . $item['as'] . " on " . $item['on'];
             }
         }
 
@@ -120,11 +126,28 @@ class Modal
 
         /* search query */
         if (!empty($search)) {
-            $query .= " && match(" . implode(',', $this->search_columns) . ") against ('" . $search . "')";
+            $condition = '&&';
+
+            if (!empty($options['search']) && is_array($options['search'])) {
+                $query .= " && ( ";
+
+                foreach ($options['search'] as $search_key) {
+                    $query .= $search_key . " like '%" . $search . "%' || ";
+                }
+
+                $query = trim($query, "|| ");
+                $query .= ' )';
+
+                $condition = '||';
+            }
+
+            if (!empty($this->search_columns)) {
+                $query .= " " . $condition . " match(" . implode(',', $this->search_columns) . ") against ('" . $search . '*' . "' IN BOOLEAN MODE)";
+            }
         }
 
         /* order by */
-        $query .= " order by $this->table.$this->order_column $this->order";
+        $query .= " order by $this->order_column $this->order";
         if (!empty($this->limit)) $query .= ' limit ' . $this->limit;
         if (!empty($this->offset)) $query .= ' offset ' . $this->offset;
 
@@ -133,6 +156,8 @@ class Modal
             $type = $options['type'];
         }
 
+        // print_r($query);
+        // die;
         $res = $this->db->query($query, $data, $type);
 
         if (is_array($res)) {
@@ -142,7 +167,7 @@ class Modal
         return [];
     }
 
-    public function one($data, $attributes = [], $include = [],)
+    public function one($data, $attributes = [], $include = [])
     {
         $keys = array_keys($data);
         $type = 'object';
@@ -246,9 +271,9 @@ class Modal
         $this->db->query($query, $data);
     }
 
-    public function delete($data)
+    public function delete($where)
     {
-        $keys = array_keys($data);
+        $keys = array_keys($where);
 
         $query = "delete from " . $this->table . " where ";
 
@@ -258,7 +283,7 @@ class Modal
 
         $query = trim($query, "&& ");
 
-        $this->db->query($query, $data);
+        $this->db->query($query, $where);
 
         return true;
     }

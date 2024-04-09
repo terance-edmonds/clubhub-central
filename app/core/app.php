@@ -12,6 +12,8 @@
 
     <!-- main styles -->
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/index.css">
+    <!-- pre loader -->
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/pre-loader.css">
 
     <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,9 +22,22 @@
 
     <!-- font-icons -->
     <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
+
+    <!-- select2 -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> -->
 </head>
 
 <body>
+    <!-- pre loader -->
+    <?php
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    ?>
+        <div data-active="true" id="pre-loader">
+            <div class="loader-wrapper">
+                <div class="loader"></div>
+            </div>
+        </div>
+    <?php } ?>
 
     <?php
 
@@ -38,7 +53,10 @@
 
             /* route authentication */
             $authorized = Auth::authenticate($_GET);
-            if (!$authorized) $filename = 'not-found';
+            if (!$authorized) {
+                $filename = 'not-found';
+                $method = 'index';
+            };
 
             unset($arr[0]); // remove the first item of the array
             if (!empty($arr[1])) unset($arr[1]); // remove the second item of the array
@@ -92,7 +110,11 @@
 
     <!-- other -->
     <script src="<?= ROOT ?>/assets/js/index.js"></script>
+    <script src="<?= ROOT ?>/assets/js/pre-loader.js"></script>
     <script src="<?= ROOT ?>/assets/js/libs/moment.min.js"></script>
+
+    <!-- select2 -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
 </body>
 
 </html>

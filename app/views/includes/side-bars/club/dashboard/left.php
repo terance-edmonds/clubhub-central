@@ -16,9 +16,9 @@ $side_bar_user = $side_bar_user->one(["id" => $side_bar_auth_user_id]);
 
     <div class="inner-section menu-section no-border">
         <div class="title-card">
-            <img loading="lazy" src="https://picsum.photos/110/110" alt="Club Logo" class="club-logo">
+            <img loading="lazy" src="<?= $club["image"] ?>" alt="Club Logo" class="club-logo">
             <div class="details">
-                <a href="<?= ROOT ?>/club?id=" class="title">IEEE Dashboard</a>
+                <a href="<?= ROOT ?>/club?id=<?= $club["id"] ?>" class="title"><?= $club["name"] ?></a>
                 <span class="material-icons-outlined">
                     chevron_right
                 </span>

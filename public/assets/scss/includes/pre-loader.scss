@@ -1,0 +1,53 @@
+@import '../colors';
+
+$loader-duration: 1.2s;
+$loader-iteration-count: infinite;
+$loader-direction: normal;
+
+#pre-loader {
+    display: none;
+    position: fixed;
+    background-color: $dark;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+
+    &[data-active='true'] {
+        display: flex;
+    }
+
+    .loader {
+        width: 50px;
+        aspect-ratio: 1;
+        display: grid;
+        border: 4px solid #0000;
+        border-radius: 50%;
+        border-right-color: $theme;
+        animation: rotation-animation 1s infinite linear;
+
+        &::before,
+        &::after {
+            content: '';
+            grid-area: 1/1;
+            margin: 2px;
+            border: inherit;
+            border-radius: 50%;
+            animation: rotation-animation 2s infinite;
+        }
+
+        &::after {
+            margin: 8px;
+            animation-duration: 3s;
+        }
+    }
+}
+
+@keyframes rotation-animation {
+    100% {
+        transform: rotate(1turn);
+    }
+}

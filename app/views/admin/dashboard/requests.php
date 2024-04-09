@@ -6,8 +6,7 @@
 
 <?php $this->view('includes/header') ?>
 
-<div id="admin-dashboard-requests"
-    class="container container-sections side-padding admin-dashboard dashboard-container">
+<div id="admin-dashboard-requests" class="container container-sections side-padding admin-dashboard dashboard-container">
     <?php $this->view('includes/side-bars/admin/left', ["menu" => $menu]) ?>
 
     <section class="center-section">
@@ -37,99 +36,60 @@
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
-                    <tr class="table-data">
-                        <td>Freshers' Day</td>
-                        <td>11/04/23 - 10.00 AM</td>
-                        <td>UCSC Ground</td>
-                        <td align="center">
-                            <button class="icon-button">
-                                <span class="material-icons-outlined">
-                                    visibility
-                                </span>
-                            </button>
-                        </td>
-                        <td>
-                            <button class="button status-button" data-status="PENDING">
-                                Pending
-                            </button>
-                        </td>
-                        <td align="center">
-                            <div class="buttons">
-                                <button class="icon-button cl-green">
+
+                    <?php if (count($requests_data) == 0) { ?>
+                        <tr>
+                            <td colspan="6">No Records.</td>
+                        </tr>
+                    <?php } ?>
+                    
+                        
+                    <?php foreach ($requests_data as $request) { ?>
+                        <tr class="table-data">
+                            <td>
+                                <?= displayValue($request->name) ?>
+                            </td>
+
+                            <td>
+                                <?= displayValue($request->start_datetime) ?>
+                            </td>
+
+                            <td>
+                                <?= displayValue($request->venue) ?>
+                            </td>
+
+                            <td align="center">
+                                <button class="icon-button">
                                     <span class="material-icons-outlined">
-                                        check
+                                        visibility
                                     </span>
                                 </button>
-                                <button class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        close
-                                    </span>
+                            </td>
+
+                            <td>
+                                <button class="button status-button" data-status="PENDING">
+                                    Pending
                                 </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="table-data">
-                        <td>Freshers' Day</td>
-                        <td>11/04/23 - 10.00 AM</td>
-                        <td>UCSC Ground</td>
-                        <td align="center">
-                            <button class="icon-button">
-                                <span class="material-icons-outlined">
-                                    visibility
-                                </span>
-                            </button>
-                        </td>
-                        <td>
-                            <button class="button status-button" data-status="APPROVED">
-                                Approved
-                            </button>
-                        </td>
-                        <td align="center">
-                            <div class="buttons">
-                                <button class="icon-button cl-green">
-                                    <span class="material-icons-outlined">
-                                        check
-                                    </span>
-                                </button>
-                                <button class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        close
-                                    </span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="table-data">
-                        <td>Freshers' Day</td>
-                        <td>11/04/23 - 10.00 AM</td>
-                        <td>UCSC Ground</td>
-                        <td align="center">
-                            <button class="icon-button">
-                                <span class="material-icons-outlined">
-                                    visibility
-                                </span>
-                            </button>
-                        </td>
-                        <td>
-                            <button class="button status-button" data-status="REJECTED">
-                                Rejected
-                            </button>
-                        </td>
-                        <td align="center">
-                            <div class="buttons">
-                                <button class="icon-button cl-green">
-                                    <span class="material-icons-outlined">
-                                        check
-                                    </span>
-                                </button>
-                                <button class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        close
-                                    </span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                            </td>
+                            
+                            <td align="center">
+                                <div class="buttons">
+                                    <button class="icon-button cl-green">
+                                        <span class="material-icons-outlined">
+                                            check
+                                        </span>
+                                    </button>
+                                    <button class="icon-button cl-red">
+                                        <span class="material-icons-outlined">
+                                            close
+                                        </span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php } ?>
+
+
                 </table>
             </div>
         </div>

@@ -16,6 +16,12 @@ class Routes
         "login" => [
             "ANY"
         ],
+        "password" => [
+            "ANY"
+        ],
+        "password/reset" => [
+            "ANY"
+        ],
         "register" => [
             "ANY"
         ],
@@ -135,6 +141,12 @@ class Routes
             "PRESIDENT",
             "CLUB_IN_CHARGE",
         ],
+        "events/dashboard/estimates" => [
+            "TREASURER",
+            "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+        ],
         "events/dashboard/budgets" => [
             "MEMBER",
             "TREASURER",
@@ -187,6 +199,10 @@ class Routes
             "PRESIDENT",
             "CLUB_IN_CHARGE",
         ],
+        "club/dashboard/events/edit" => [
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+        ],
         "club/dashboard/members" => [
             "SECRETARY",
             "PRESIDENT",
@@ -223,9 +239,11 @@ class Routes
         ],
         "club/dashboard/requests" => [
             "CLUB_IN_CHARGE",
+            "PRESIDENT",
         ],
         "club/dashboard/requests/add" => [
             "CLUB_IN_CHARGE",
+            "PRESIDENT",
         ],
         "club/dashboard/posts" => [
             "MEMBER",
@@ -235,6 +253,13 @@ class Routes
             "CLUB_IN_CHARGE",
         ],
         "club/dashboard/posts/add" => [
+            "MEMBER",
+            "TREASURER",
+            "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+        ],
+        "club/dashboard/posts/edit" => [
             "MEMBER",
             "TREASURER",
             "SECRETARY",
@@ -254,12 +279,33 @@ class Routes
             "PRESIDENT",
             "CLUB_IN_CHARGE",
         ],
+        "club/dashboard/election/result" => [
+            "MEMBER",
+            "TREASURER",
+            "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+        ],
+        "club/dashboard/election/vote" => [
+            "MEMBER",
+            "TREASURER",
+            "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+        ],
         "club/dashboard/election/add" => [
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+        ],
+        "club/dashboard/election/edit" => [
             "PRESIDENT",
             "CLUB_IN_CHARGE",
         ],
         /* super admin routes */
         "admin/dashboard" => [
+            "SUPER_ADMIN"
+        ],
+        "admin/dashboard/club/add" => [
             "SUPER_ADMIN"
         ],
         "admin/dashboard/events" => [

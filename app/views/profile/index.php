@@ -18,7 +18,15 @@
         </div>
         <?php if ($tab == 'club-posts') { ?>
             <div class="cards">
-                <?php $this->view('includes/club-post') ?>
+                <?php
+                if (count($posts) == 0) {
+                    echo "No Club Posts Yet.";
+                } else {
+                    foreach ($posts as $post) {
+                        $this->view('includes/club-post', ["data" => $post]);
+                    }
+                }
+                ?>
             </div>
         <?php } else { ?>
             <div class="gallery">
@@ -53,7 +61,8 @@
 <?php $this->view("includes/modals/profile/upload-image") ?>
 <?php $this->view("includes/modals/profile/delete-image") ?>
 
+<?php $this->view('includes/header/bottom') ?>
+
 <script src="<?= ROOT ?>/assets/js/form.js"></script>
 <script src="<?= ROOT ?>/assets/js/common.js"></script>
-
-<?php $this->view('includes/header/bottom') ?>
+<script src="<?= ROOT ?>/assets/js/cards.js"></script>

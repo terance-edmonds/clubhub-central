@@ -1,4 +1,5 @@
 <head>
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/cards.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/side-bar.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/dashboard.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/club-dashboard.css">
@@ -6,8 +7,11 @@
 
 <?php $this->view('includes/header') ?>
 
+<!-- alerts -->
+<?php $this->view('includes/alerts') ?>
+
 <div id="club-dashboard-posts" class="container container-sections side-padding club-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/club/dashboard/left', ["menu" => $menu]) ?>
+    <?php $this->view('includes/side-bars/club/dashboard/left', $left_bar) ?>
 
     <section class="center-section">
         <div class="title-bar">
@@ -23,14 +27,18 @@
                 </a>
             </div>
 
-            <div class="input-wrap search-input">
-                <div class="input">
-                    <span class="icon material-icons-outlined">
-                        search
-                    </span>
-                    <input type="text" placeholder="Search">
+            <form method="get" class="search-input">
+                <div class="input-wrap">
+                    <div class="input">
+                        <button type="submit" class="icon-button">
+                            <span class="icon material-icons-outlined">
+                                search
+                            </span>
+                        </button>
+                        <input type="text" placeholder="Search" name="search" value="<?= setValue('search', '', 'text', 'get') ?>">
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
 
         <div class="content-section">
@@ -44,37 +52,61 @@
                         <th>View</th>
                         <th>Actions</th>
                     </tr>
-                    <tr class="table-data">
-                        <td>Freshers' Day</td>
-                        <td>11/04/23 - 10.00 AM</td>
-                        <td>Lorem ipsum dolor sit amet consectetur adipisicing.</td>
-                        <td>Terance</td>
-                        <td align="center">
-                            <button class="icon-button">
-                                <span class="material-icons-outlined">
-                                    visibility
-                                </span>
-                            </button>
-                        </td>
-                        <td align="center">
-                            <div class="buttons">
-                                <button class="icon-button">
+                    <?php if (count($posts_data) == 0) { ?>
+                        <tr>
+                            <td colspan="6">No Records.</td>
+                        </tr>
+                    <?php } ?>
+                    <?php foreach ($posts_data as $x => $post_data) {
+                    ?>
+                        <tr class="table-data">
+                            <td><?= displayValue($post_data->post_name) ?></td>
+                            <td><?= displayValue($post_data->created_datetime, 'datetime') ?></td>
+                            <td>
+                                <p class="description truncate-text lines-2">
+                                    <?= displayValue($post_data->description) ?>
+                                </p>
+                            </td>
+                            <td><?= displayValue($post_data->first_name) ?> <?= displayValue($post_data->last_name) ?></td>
+                            <td align="center">
+                                <button onclick='onViewPost(<?= toJson($post_data, ["id", "post_name", "club_name", "club_image", "image", "description", "club_id", "created_datetime"]) ?>)' class="icon-button">
                                     <span class="material-icons-outlined">
-                                        edit
+                                        visibility
                                     </span>
                                 </button>
-                                <button class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        delete
-                                    </span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                            </td>
+                            <td align="center">
+                                <div class="buttons">
+                                    <form method="post">
+                                        <input type="text" hidden name="club_post_id" value="<?= $post_data->id ?>">
+                                        <button name="submit" value="post-redirect" class="icon-button">
+                                            <span class="material-icons-outlined">
+                                                edit
+                                            </span>
+                                        </button>
+                                    </form>
+                                    <button class="icon-button cl-red">
+                                        <span onclick='onDataPopup("delete-club-post", <?= toJson($post_data, ["id"]) ?>)' class="material-icons-outlined">
+                                            delete
+                                        </span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php } ?>
+
                 </table>
             </div>
         </div>
     </section>
 </div>
 
-<?php $this->view('includes/header/bottom') ?>
+<?php $this->view('includes/modals/club/post') ?>
+<?php $this->view('includes/modals/club/post/delete') ?>
+
+<?php $this->view('includes/header/side-bars/club-dashboard', $menu_side_bar) ?>
+
+<!-- club post view -->
+<script src="<?= ROOT ?>/assets/js/club/dashboard/view-post.js"></script>
+
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

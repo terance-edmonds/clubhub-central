@@ -1,0 +1,55 @@
+#club-dashboard-election {
+    .actions-wrap {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin-bottom: 25px;
+
+        .action-buttons {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+
+            .button {
+                background-color: transparent;
+                color: #fff;
+                border: 1px solid $theme;
+                max-width: fit-content;
+            }
+
+            .action-link {
+                &[data-active='true'] {
+                    .button {
+                        background-color: $secondary_theme;
+                        color: $dark;
+                    }
+                }
+            }
+        }
+    }
+
+    .table-wrap {
+        .status-button {
+            color: $yellow;
+            background-color: $yellow-light;
+            cursor: default;
+
+            &[data-status='OPEN'] {
+                color: $green;
+                background-color: $green-light;
+            }
+
+            &[data-status='CLOSED'] {
+                color: $red-2;
+                background-color: $red-2-light;
+            }
+        }
+    }
+}
+
+@import './add';
+@import './vote';
+@import './result';

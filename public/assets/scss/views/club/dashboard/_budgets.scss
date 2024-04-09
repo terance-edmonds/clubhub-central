@@ -1,0 +1,117 @@
+#club-dashboard-budget-edit {
+    .form {
+        padding-top: 20px;
+    }
+
+    .center-section {
+        gap: 0;
+    }
+
+    .budget-template,
+    .budget-member-template {
+        display: none;
+    }
+
+    .budget-members {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+
+        .checkbox-wrap {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border: 2px solid $border;
+            padding: 5px 10px;
+            border-radius: 20px;
+            position: relative;
+            transition: all 0.4s ease;
+
+            label,
+            .material-icons-outlined {
+                font-size: $px14;
+            }
+
+            .material-icons-outlined {
+                position: absolute;
+                opacity: 0;
+                right: 0;
+                margin-top: 3px;
+                cursor: pointer;
+                color: $red;
+                z-index: 8;
+                transition: all 0.3s ease;
+            }
+
+            &:hover {
+                .material-icons-outlined {
+                    position: relative;
+                    opacity: 1;
+                }
+            }
+        }
+    }
+
+    .sub-section {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .checkboxes-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            user-select: none;
+
+            label {
+                cursor: pointer;
+            }
+        }
+    }
+
+    .budgets {
+        .form-section-content {
+            padding-bottom: 20px;
+            border-bottom: 1px solid $border;
+
+            &:last-child {
+                border-bottom: 0;
+            }
+        }
+
+        .form-section-buttons-wrap {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .created-budgets {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+
+            .created-budget {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                border-top: 1px solid $border;
+                padding-top: 10px;
+
+                .budget-content-section {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                }
+            }
+        }
+    }
+
+    .buttons-wrap {
+        padding: 20px;
+        display: flex;
+        justify-content: flex-end;
+
+        .button {
+            max-width: fit-content;
+        }
+    }
+}

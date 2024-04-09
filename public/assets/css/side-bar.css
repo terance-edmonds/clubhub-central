@@ -733,6 +733,11 @@
   overflow: hidden;
 }
 
+@media screen and (max-width: 1350px) {
+  .club-dashboard-side-bar {
+    display: none;
+  }
+}
 .event-side-bar .profile-section {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1023,6 +1028,11 @@
   overflow: hidden;
 }
 
+@media screen and (max-width: 1350px) {
+  .event-dashboard-side-bar {
+    display: none;
+  }
+}
 .admin-dashboard-side-bar .profile-section {
   display: -webkit-box;
   display: -ms-flexbox;

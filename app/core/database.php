@@ -7,7 +7,9 @@ class Database
     public function connect()
     {
         $str = DB_DRIVER . ":host=" . DB_HOST . ";dbname=" . DB_NAME;
-        $this->con = new PDO($str, DB_USER, DB_PASS);
+        $this->con = new PDO($str, DB_USER, DB_PASS, array(
+            PDO::ATTR_PERSISTENT => true
+        ));
     }
 
     public function query($query, $data = [], $type = 'object')

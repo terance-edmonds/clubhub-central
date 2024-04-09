@@ -15,14 +15,18 @@
                 <span class="title">Users</span>
             </div>
 
-            <div class="input-wrap search-input">
-                <div class="input">
-                    <span class="icon material-icons-outlined">
-                        search
-                    </span>
-                    <input type="text" placeholder="Search">
+            <form method="get" class="search-input">
+                <div class="input-wrap">
+                    <div class="input">
+                        <button type="submit" class="icon-button">
+                            <span class="icon material-icons-outlined">
+                                search
+                            </span>
+                        </button>
+                        <input type="text" placeholder="Search" name="search" value="<?= setValue('search', '', 'text', 'get') ?>">
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
 
         <div class="content-section">
@@ -35,75 +39,64 @@
                         <th>Verified</th>
                         <th>Actions</th>
                     </tr>
-                    <tr class="table-data">
-                        <td>John</td>
-                        <td>john@mailinator.com</td>
-                        <td align="center">
-                            <button class="icon-button">
-                                <span class="material-icons-outlined">
-                                    visibility
-                                </span>
-                            </button>
-                        </td>
-                        <td align="center">
-                            <span class="material-icons cl-green">
-                                check_circle_outline
-                            </span>
-                        </td>
-                        <td align="center">
-                            <div class="buttons">
-                                <a href="<?= ROOT ?>/events/dashboard">
-                                    <button class="icon-button">
-                                        <span class="material-icons-outlined">
-                                            edit
-                                        </span>
-                                    </button>
-                                </a>
-                                <button class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        delete
-                                    </span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="table-data">
-                        <td>John</td>
-                        <td>john@mailinator.com</td>
-                        <td align="center">
-                            <button class="icon-button">
-                                <span class="material-icons-outlined">
-                                    visibility
-                                </span>
-                            </button>
-                        </td>
-                        <td align="center">
-                            <span class="material-icons cl-red">
-                                highlight_off
-                            </span>
-                        </td>
-                        <td align="center">
-                            <div class="buttons">
+
+                    <?php if (count($users_data) == 0) { ?>
+                        <tr>
+                            <td colspan="5">No Records.</td>
+                        </tr>
+                    <?php } ?>
+
+                    <?php foreach ($users_data as $user) { ?>
+                        <tr class="table-data">
+                            <td><?= displayValue($user->first_name) ?> <?= displayValue($user->last_name) ?></td>
+                            <td><?= displayValue($user->email) ?></td>
+                            <td align="center">
                                 <button class="icon-button">
                                     <span class="material-icons-outlined">
-                                        edit
+                                        visibility
                                     </span>
                                 </button>
-                                <button class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        delete
+                            </td>
+                            <td align="center">
+                                <?php if ($user->is_verified) { ?>
+                                    <span class="material-icons cl-green">
+                                        check_circle_outline
                                     </span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                                <?php } else { ?>
+                                    <span class="material-icons-outlined cl-red">
+                                        cancel
+                                    </span>
+                                <?php } ?>
+                            </td>
+                            <td align="center">
+                                <div class="buttons">
+                                    <a href="<?= ROOT ?>/users/dashboard">
+                                        <button class="icon-button">
+                                            <span class="material-icons-outlined">
+                                                edit
+                                            </span>
+                                        </button>
+                                    </a>
+                                    <button class="icon-button cl-red">
+                                        <span class="material-icons-outlined">
+                                            delete
+                                        </span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php } ?>
                 </table>
+                <?php $this->view('includes/pagination', [
+                    "total_count" => $total_count,
+                    "limit" => $limit,
+                    "page" => $page
+                ]) ?>
             </div>
         </div>
     </section>
 </div>
 
-<?php $this->view('includes/modals/event/register') ?>
-<script src="<?= ROOT ?>/assets/js/events/event.js"></script>
-
 <?php $this->view('includes/header/bottom') ?>
+
+<script src="<?= ROOT ?>/assets/js/users/user.js"></script>

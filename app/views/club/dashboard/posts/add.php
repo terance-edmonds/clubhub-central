@@ -6,8 +6,11 @@
 
 <?php $this->view('includes/header') ?>
 
+<!-- alerts -->
+<?php $this->view('includes/alerts') ?>
+
 <div id="club-dashboard-add-post" class="container container-sections side-padding club-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/club/dashboard/left', ["menu" => $menu]) ?>
+    <?php $this->view('includes/side-bars/club/dashboard/left', $left_bar) ?>
 
     <section class="center-section">
         <div class="title-bar">
@@ -24,23 +27,31 @@
                     <p class="form-section-title">General Details</p>
                     <div class="form-section-content">
                         <div class="input-wrap">
-                            <label for="name">Post Name</label>
-                            <input value="<?= setValue('name') ?>" id="name" type="text" name="name"
-                                placeholder="First Name" required>
-                            <?php if (!empty($errors['name'])): ?>
+                            <label for="post_name">Post Name</label>
+                            <input value="<?= setValue('post_name') ?>" id="post_name" type="text" name="post_name" placeholder="Post Name" required>
+                            <?php if (!empty($errors['post_name'])) : ?>
                                 <small>
-                                    <?= $errors['name'] ?>
+                                    <?= $errors['post_name'] ?>
                                 </small>
                             <?php endif; ?>
                         </div>
 
                         <div class="input-wrap">
                             <label for="description">Description</label>
-                            <textarea value="<?= setValue('description') ?>" id="description" name="description"
-                                placeholder="Description" required></textarea>
-                            <?php if (!empty($errors['description'])): ?>
+                            <textarea id="description" name="description" placeholder="Description" required><?= setValue('description') ?></textarea>
+                            <?php if (!empty($errors['description'])) : ?>
                                 <small>
                                     <?= $errors['description'] ?>
+                                </small>
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="input-wrap">
+                            <label for="created_datetime">Create On</label>
+                            <input set-default="datetime" readonly value="<?= setValue('created_datetime') ?>" id="created_datetime" type="datetime-local" name="created_datetime" placeholder="Created Date & Time" required>
+                            <?php if (!empty($errors['created_datetime'])) : ?>
+                                <small>
+                                    <?= $errors['created_datetime'] ?>
                                 </small>
                             <?php endif; ?>
                         </div>
@@ -48,14 +59,15 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button type="submit" name="submit" value="create_post" class="button contained">Create
-                        Post</button>
+                    <button type="submit" name="submit" value="create-post" class="button contained">
+                        Create Post
+                    </button>
                 </div>
             </form>
         </div>
     </section>
 </div>
 
-<script src="<?= ROOT ?>/assets/js/form.js"></script>
+<?php $this->view('includes/header/side-bars/club-dashboard', $menu_side_bar) ?>
 
-<?php $this->view('includes/header/bottom') ?>
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

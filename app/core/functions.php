@@ -11,7 +11,7 @@ use Endroid\QrCode\Writer\PngWriter;
 
 function show($data)
 {
-    print_r("<pre>");
+    print_r("<pre style='max-width: 100%' >");
     print_r($data);
     print_r("</pre>");
 }
@@ -103,7 +103,7 @@ function displayValue($val, $format = 'text')
 /* get duration from now */
 function dateFromNow($val)
 {
-    $moment = new \Moment\Moment($val);
+    $moment = new \Moment\Moment($val, 'Asia/Colombo');
 
     return $moment->fromNow()->getRelative();
 }
