@@ -37,8 +37,6 @@ class Admin extends Controller
         $club = new Clubs($db);
         $user = new User($db);
 
-        // die("LOL");
-
         $user_invitation = new UserInvitation($db);
         $mail = new Mail();
         $redirect_link = null;
@@ -143,7 +141,7 @@ class Admin extends Controller
     public function requests($path, $data)
     {
 
-        $request = new EventRegistration();
+        /*   $request = new EventRegistration();
         $storage = new Storage();
 
         $data['total_count'] = 0;
@@ -160,14 +158,15 @@ class Admin extends Controller
                 "club_events.start_datetime as start_datetime",
                 "club_events.end_datetime as end_datetime",
                 "club_events.state as state",
-                "club_event_registrations.id as request_id"
+                "club_event_registration.id as request_id"
 
             ],
             [
-                ["table" => "club_event_registrations", "as" => "club_event_registration", "on" => "club_event.club_event_registration_id = club_event_registration.id = "]
+                ["table" => "club_events", "as" => "club_event", "on" => "club_events.id = requ.id"],
+                ["table" => "club_event_registrations", "as" => "club_event_registration", "on" => "club_event.club_event_registration_id = club_event_registration.id"]
             ]
 
-        );
+        ); */
     }
 
 

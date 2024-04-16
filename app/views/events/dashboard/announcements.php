@@ -2,6 +2,7 @@
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/side-bar.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/dashboard.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/event-dashboard.css">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/data-loader.css">
 </head>
 
 <?php $this->view('includes/header') ?>
@@ -9,7 +10,7 @@
 <!-- alerts -->
 <?php $this->view('includes/alerts') ?>
 
-<div id="event-dashboard-registrations" class="container container-sections side-padding event-dashboard dashboard-container">
+<div id="event-dashboard-announcements" class="container container-sections side-padding event-dashboard dashboard-container">
     <?php $this->view('includes/side-bars/events/dashboard/left', $left_bar) ?>
 
     <section class="center-section">
@@ -25,13 +26,18 @@
                     <p class="form-section-title">General Details</p>
                     <div class="form-section-content">
                         <div class="input-wrap">
-                            <label for="to">To</label>
-                            <input value="<?= setValue('to') ?>" id="to" type="text" name="to" placeholder="example@example.com, example1@example.com" required>
-                            <?php if (!empty($errors['to'])) : ?>
-                                <small>
-                                    <?= $errors['to'] ?>
-                                </small>
-                            <?php endif; ?>
+                            <div class="multi-wrap flex-between">
+                                <label for="to">To</label>
+
+                                <button type="button" onclick="onSelectUsersPopup(true)" class="button contained w-content" class="button" data-variant="outlined" data-type="icon" data-size="small">
+                                    <span>Select Users</span>
+                                    <span class="material-icons-outlined">
+                                        add
+                                    </span>
+                                </button>
+                            </div>
+
+                            <div id="selected_members" class="selected-members"></div>
                         </div>
                         <div class="input-wrap">
                             <label for="subject">Subject</label>
@@ -55,15 +61,28 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button type="submit" name="submit" value="update_profile" class="button contained">Send
+                    <button type="submit" name="submit" value="send-email" class="button contained">Send
                         Email</button>
                 </div>
             </form>
         </div>
     </section>
+
+    <div class="checkbox-wrap selected-member-template">
+        <label class="checkbox-label">
+            {{selected_member_email}}
+            <input hidden type="checkbox" checked name="selected_member[{{selected_member_email}}]" value="{{selected_member_id}}">
+        </label>
+        <span onclick="onRemoveMember(event)" class="material-icons-outlined">
+            clear
+        </span>
+    </div>
 </div>
+
 
 <?php $this->view('includes/header/side-bars/event-dashboard', $menu_side_bar) ?>
 
-<script src="<?= ROOT ?>/assets/js/events/event.js"></script>
+<?php $this->view('includes/modals/event/users', $select_users) ?>
+
+<script src="<?= ROOT ?>/assets/js/events/announcements.js"></script>
 <script src="<?= ROOT ?>/assets/js/form.js"></script>
