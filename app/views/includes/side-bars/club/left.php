@@ -8,7 +8,7 @@
                 <p class="desc"><?= $club["description"] ?></p>
             </div>
         </div>
-        <button class="button">Apply Membership</button>
+        <button onclick="$(`[popup-name='apply-membership']`).popup(true)" class="button">Apply Membership</button>
     </div>
 
     <div class="inner-section">
