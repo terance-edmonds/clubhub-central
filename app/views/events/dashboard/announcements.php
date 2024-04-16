@@ -26,14 +26,16 @@
                     <p class="form-section-title">General Details</p>
                     <div class="form-section-content">
                         <div class="input-wrap">
-                            <label for="to">To</label>
+                            <div class="multi-wrap flex-between">
+                                <label for="to">To</label>
 
-                            <button type="button" onclick="$(`[popup-name='select-event-users']`).popup(true)" class="button contained" class="button" data-variant="outlined" data-type="icon" data-size="small">
-                                <span>Select Users</span>
-                                <span class="material-icons-outlined">
-                                    add
-                                </span>
-                            </button>
+                                <button type="button" onclick="onSelectUsersPopup(true)" class="button contained w-content" class="button" data-variant="outlined" data-type="icon" data-size="small">
+                                    <span>Select Users</span>
+                                    <span class="material-icons-outlined">
+                                        add
+                                    </span>
+                                </button>
+                            </div>
 
                             <div id="selected_members" class="selected-members"></div>
                         </div>
@@ -59,7 +61,7 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button type="submit" name="submit" value="update_profile" class="button contained">Send
+                    <button type="submit" name="submit" value="send-email" class="button contained">Send
                         Email</button>
                 </div>
             </form>
@@ -68,8 +70,8 @@
 
     <div class="checkbox-wrap selected-member-template">
         <label class="checkbox-label">
-            {{selected_member_name}}
-            <input hidden type="checkbox" checked name="selected_member" value="{{selected_member_id}}">
+            {{selected_member_email}}
+            <input hidden type="checkbox" checked name="selected_member[{{selected_member_email}}]" value="{{selected_member_id}}">
         </label>
         <span onclick="onRemoveMember(event)" class="material-icons-outlined">
             clear
@@ -82,6 +84,5 @@
 
 <?php $this->view('includes/modals/event/users', $select_users) ?>
 
-<script src="<?= ROOT ?>/assets/js/events/event.js"></script>
-<script src="<?= ROOT ?>/assets/js/events/users.js"></script>
+<script src="<?= ROOT ?>/assets/js/events/announcements.js"></script>
 <script src="<?= ROOT ?>/assets/js/form.js"></script>

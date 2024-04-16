@@ -286,4 +286,9 @@ class Modal
 
         return true;
     }
+
+    public function query($query, $data, $type = 'object')
+    {
+        return $this->db->query($query, $data, $type);
+    }
 }

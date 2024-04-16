@@ -479,6 +479,11 @@ input[type=checkbox]:checked {
           align-items: center;
   width: 100%;
 }
+.multi-wrap.flex-between {
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
 @media screen and (max-width: 800px) {
   .multi-wrap {
     -webkit-box-orient: vertical;

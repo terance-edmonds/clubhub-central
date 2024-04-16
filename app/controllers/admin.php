@@ -37,8 +37,6 @@ class Admin extends Controller
         $club = new Clubs($db);
         $user = new User($db);
 
-        // die("LOL");
-
         $user_invitation = new UserInvitation($db);
         $mail = new Mail();
         $redirect_link = null;

@@ -259,7 +259,7 @@ class Events extends Controller
             ["id" => "sponsors", "name" => "Sponsors", "icon" => "diversity_3", "path" => "/events/dashboard/sponsors", "active" => "false"],
             ["id" => "budgets", "name" => "Income / Expenses", "icon" => "monetization_on", "path" => "/events/dashboard/budgets", "active" => "false"],
             ["id" => "agenda", "name" => "Agenda", "icon" => "view_agenda", "path" => "/events/dashboard/agenda", "active" => "false"],
-            ["id" => "announcements", "name" => "Announcement", "icon" => "campaign", "path" => ["/events/dashboard/announcements", "/events/dashboard/announcements/data"], "active" => "false"],
+            ["id" => "announcements", "name" => "Announcement", "icon" => "campaign", "path" => "/events/dashboard/announcements", "active" => "false"],
             ["id" => "complains", "name" => "Complaints", "icon" => "inbox", "path" => "/events/dashboard/complains", "active" => "false"]
         ];
 
@@ -1288,12 +1288,52 @@ class Events extends Controller
     {
         $event_registration = new EventRegistration();
         $storage = new Storage();
+        $event = new Event();
+        $mail = new Mail();
+
         $club_id = $storage->get('club_id');
         $club_event_id = $storage->get('club_event_id');
+
+        if (empty($club_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Club details are not found"]];
+        if (empty($club_event_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Event details are not found"]];
+
+        /* fetch event details */
+        $event = $event->one(["id" => $club_event_id], ["id", "name"]);
 
         $data['select_users']['total_count'] = 0;
         $data['select_users']['limit'] = 10;
         $data['select_users']['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $form_data = $_POST;
+
+            if ($_POST['submit'] == "send-email") {
+                $ids = array_values($form_data['selected_member']);
+                show($ids);
+
+                $selected = $event_registration->query("select user_name as name, user_email as mail from club_event_registrations where id in (" . trim(str_repeat('?,', count($ids)), ',') . ")", $ids, 'array');
+
+                try {
+                    $mail->send([
+                        "to" => $selected,
+                        "subject" => "Event Announcement",
+                        "body" => $mail->template("club-event-announcement", [
+                            "from_email" => MAIL_USER,
+                            "from_name" => MAIL_USERNAME,
+                            "subject" => $form_data['subject'],
+                            "description" => $form_data['description'],
+                            "event_name" => $event->name
+                        ])
+                    ]);
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Announcement emails sent successfully"]];
+                } catch (Throwable $th) {
+                    $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to send email announcements"]];
+                }
+
+                return redirect();
+            }
+        }
 
         $total_count = $event_registration->find([
             "club_id" => $club_id,
@@ -1309,6 +1349,13 @@ class Events extends Controller
             "limit" => $data['select_users']['limit'],
             "offset" => ($data['select_users']['page'] - 1) * $data['select_users']['limit'],
         ], isset($_GET['search']) ? $_GET['search'] : '');
+
+        /* if the view requires only specific data view */
+        if (isset($_GET['data'])) {
+            if ($_GET['data'] == 'users_data') {
+                $path = 'includes/modals/event/users/data';
+            }
+        }
 
         $this->view($path, $data);
     }
