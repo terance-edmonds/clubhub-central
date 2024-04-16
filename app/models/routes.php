@@ -168,6 +168,13 @@ class Routes
             "PRESIDENT",
             "CLUB_IN_CHARGE",
         ],
+        "events/dashboard/announcements/data" => [
+            "MEMBER",
+            "TREASURER",
+            "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+        ],
         "events/dashboard/complains" => [
             "MEMBER",
             "TREASURER",

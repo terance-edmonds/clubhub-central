@@ -259,7 +259,7 @@ class Events extends Controller
             ["id" => "sponsors", "name" => "Sponsors", "icon" => "diversity_3", "path" => "/events/dashboard/sponsors", "active" => "false"],
             ["id" => "budgets", "name" => "Income / Expenses", "icon" => "monetization_on", "path" => "/events/dashboard/budgets", "active" => "false"],
             ["id" => "agenda", "name" => "Agenda", "icon" => "view_agenda", "path" => "/events/dashboard/agenda", "active" => "false"],
-            ["id" => "announcements", "name" => "Announcement", "icon" => "campaign", "path" => "/events/dashboard/announcements", "active" => "false"],
+            ["id" => "announcements", "name" => "Announcement", "icon" => "campaign", "path" => ["/events/dashboard/announcements", "/events/dashboard/announcements/data"], "active" => "false"],
             ["id" => "complains", "name" => "Complaints", "icon" => "inbox", "path" => "/events/dashboard/complains", "active" => "false"]
         ];
 
@@ -1286,6 +1286,30 @@ class Events extends Controller
 
     private function announcements($path, $data)
     {
+        $event_registration = new EventRegistration();
+        $storage = new Storage();
+        $club_id = $storage->get('club_id');
+        $club_event_id = $storage->get('club_event_id');
+
+        $data['select_users']['total_count'] = 0;
+        $data['select_users']['limit'] = 10;
+        $data['select_users']['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
+
+        $total_count = $event_registration->find([
+            "club_id" => $club_id,
+            "club_event_id" => $club_event_id,
+        ], ["count(*) as count"], [], [], isset($_GET['search']) ? $_GET['search'] : '');
+        if (!empty($total_count[0]->count)) $data['select_users']['total_count'] = $total_count[0]->count;
+
+        /* data */
+        $data['select_users']['table_data'] = $event_registration->find([
+            "club_id" => $club_id,
+            "club_event_id" => $club_event_id,
+        ], [], [], [
+            "limit" => $data['select_users']['limit'],
+            "offset" => ($data['select_users']['page'] - 1) * $data['select_users']['limit'],
+        ], isset($_GET['search']) ? $_GET['search'] : '');
+
         $this->view($path, $data);
     }
 

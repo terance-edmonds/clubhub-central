@@ -684,6 +684,9 @@ input[type=checkbox]:checked {
       -ms-flex-pack: justify;
           justify-content: space-between;
 }
+.table-wrap.w-max {
+  max-width: 100%;
+}
 .table-wrap table {
   width: 100%;
   min-width: 880px;
@@ -732,6 +735,10 @@ input[type=checkbox]:checked {
   -webkit-box-pack: end;
       -ms-flex-pack: end;
           justify-content: flex-end;
+}
+.table-wrap .checkbox-col {
+  min-width: 30px;
+  width: 50px;
 }
 .table-wrap .pagination {
   list-style-type: none;

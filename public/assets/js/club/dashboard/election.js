@@ -21,7 +21,7 @@ const onAddUser = (e, type) => {
     const other_exists = $(`#${other_type}-users`)
         .find(`:checkbox[name="*[id]"]`)
         .find(`:checkbox[value="${values[0]}"]`);
-    console.log(other_exists[0]);
+
     if (other_exists.length) {
         showError(type, 'Each user can be added only to one category');
         return;
