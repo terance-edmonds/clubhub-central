@@ -31,14 +31,33 @@
             </section>
 
             <section class="notification-section">
-                <div class="nav-item notification-item">
-                    <div class="icon-wrap">
-                        <div class="active"></div>
-                        <span class="icon material-icons-outlined">
-                            notifications
-                        </span>
+                <div class="nav-item notification-wrap">
+                    <div onclick="onNotificationsClick(event)" class="nav-item notification-icon-wrap">
+                        <div class="icon-wrap">
+                            <div class="active"></div>
+                            <span class="icon material-icons-outlined">
+                                notifications
+                            </span>
+                        </div>
+                        <span class="text">Notifications</span>
                     </div>
-                    <span class="text">Notifications</span>
+
+                    <div class="notification-list">
+                        <div class="notification-item empty">
+                            <p class="title">No Notifications.</p>
+                        </div>
+                        <div class="notification-item" data-unread="true">
+                            <p class="title">Notification Title</p>
+                            <p class="description truncate-text">Lorem ipsum dolor, sit amet consectetur adipisicing. Lorem ipsum dolor, sit amet consectetur adipisicing</p>
+                            <div class="buttons">
+                                <button type="button" class="icon-button cl-red remove-group-btn">
+                                    <span class="material-icons-outlined">
+                                        delete
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="nav-item menu-item">
                     <div onclick="onMenuClick(event)" class="icon-wrap">

@@ -44,11 +44,77 @@ $nav-item-padding: 15px 0;
             width: 100%;
             border: 0;
             padding-bottom: 0;
+            padding-top: 0;
         }
 
         .notification-section {
+            position: relative;
             display: flex;
             justify-content: flex-end;
+
+            .notification-icon-wrap {
+                padding: 0;
+
+                .icon-wrap {
+                    position: relative;
+                    .active {
+                        position: absolute;
+                        width: $notification-size;
+                        height: $notification-size;
+                        background-color: $theme;
+                        border-radius: 50%;
+                        top: 0;
+                        right: 0;
+                    }
+                }
+            }
+
+            .notification-list {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                margin-top: 5px;
+                margin-right: 15px;
+                right: 0px;
+                width: 400px;
+                min-height: 70px;
+                background-color: $border;
+                border-radius: 7px;
+                box-shadow: 0 3px 5px rgba(255, 255, 255, 0.2);
+
+                .notification-item {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+                    justify-content: center;
+                    padding: 5px 10px;
+                    min-height: 70px;
+                    border-bottom: 1px solid #6a6a6a;
+                    transition: all 0.4s ease;
+
+                    &[data-unread='true'] {
+                        background-color: rgba(255, 255, 255, 0.1);
+                    }
+
+                    .title {
+                        font-weight: 600;
+                    }
+
+                    .description {
+                        font-size: 14px;
+                    }
+
+                    .buttons {
+                        display: none;
+                        justify-content: flex-end;
+                    }
+
+                    &:last-child {
+                        border-bottom-color: transparent;
+                    }
+                }
+            }
         }
     }
 
@@ -72,21 +138,6 @@ $nav-item-padding: 15px 0;
         @media screen and (max-width: 960px) {
             .text {
                 display: none;
-            }
-        }
-    }
-
-    .notification-item {
-        .icon-wrap {
-            position: relative;
-            .active {
-                position: absolute;
-                width: $notification-size;
-                height: $notification-size;
-                background-color: $theme;
-                border-radius: 50%;
-                top: 0;
-                right: 0;
             }
         }
     }
