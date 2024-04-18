@@ -329,5 +329,36 @@ class Routes
         "admin/dashboard/users" => [
             "SUPER_ADMIN"
         ],
+        /* notification routes */
+        "notification" => [
+            "MEMBER",
+            "TREASURER",
+            "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+            "SUPER_ADMIN",
+            "ADMIN",
+            "USER"
+        ],
+        "notification/read" => [
+            "MEMBER",
+            "TREASURER",
+            "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+            "SUPER_ADMIN",
+            "ADMIN",
+            "USER"
+        ],
+        "notification/delete" => [
+            "MEMBER",
+            "TREASURER",
+            "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+            "SUPER_ADMIN",
+            "ADMIN",
+            "USER"
+        ],
     ];
 }

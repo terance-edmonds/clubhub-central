@@ -15,6 +15,7 @@ $green: #7dff7a;
 $green-light: #213021;
 $red-2: #ff4646;
 $red-2-light: #392a2d;
+$blue: #33abff;
 
 /* font colors */
 .cl-theme {
@@ -31,6 +32,9 @@ $red-2-light: #392a2d;
 }
 .cl-red {
     color: $red;
+}
+.cl-blue {
+    color: $blue;
 }
 .cl-orange {
     color: $orange;

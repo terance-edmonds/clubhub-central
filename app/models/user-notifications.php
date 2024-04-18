@@ -1,13 +1,12 @@
 <?php
 
-class User extends Modal
+class UserNotifications extends Modal
 {
     protected $table = "user_notifications";
     protected $allowed_columns = [
-        "user_id",
-        "for_all_users",
         "title",
-        "description"
+        "description",
+        "link"
     ];
 
     public function validateCreate($data)

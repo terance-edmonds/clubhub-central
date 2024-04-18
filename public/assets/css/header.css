@@ -19,6 +19,10 @@
   color: #ff0000;
 }
 
+.cl-blue {
+  color: #33abff;
+}
+
 .cl-orange {
   color: #ff8800;
 }
@@ -177,6 +181,7 @@
 }
 .nav-header .container-sections .notification-section .notification-list .notification-item .buttons {
   display: none;
+  gap: 10px;
   -webkit-box-pack: end;
       -ms-flex-pack: end;
           justify-content: flex-end;

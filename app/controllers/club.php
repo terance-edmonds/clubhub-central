@@ -213,6 +213,8 @@ class Club extends Controller
         $event = new Event($db);
         $event_group = new EventGroup($db);
         $event_group_member = new EventGroupMember($db);
+        $notification = new UserNotifications($db);
+        $notification_state = new UserNotificationsState($db);
 
         $storage = new Storage();
         $club_id = $storage->get('club_id');
@@ -250,6 +252,7 @@ class Club extends Controller
                             throw new Error("Failed to create an event");
                         }
 
+                        $members = array();
                         foreach ($form_data['groups'] as $key => $group) {
                             $permissions = $group['permissions'];
 
@@ -277,10 +280,32 @@ class Club extends Controller
                                             "user_id" => $member['user_id'],
                                             "club_member_id" => $member['id'],
                                         ]);
+
+                                        array_push($members, $member['user_id']);
                                     } catch (\Throwable $th) {
                                         throw new Error("Failed to add member to event " . $group['name'] . " group");
                                     }
                                 }
+                            }
+
+                            /* create notifications */
+                            $notification_result = $notification->create([
+                                "title" => 'New Event',
+                                "description" => '"' . $form_data['name'] . '" event has been created',
+                                // "link" => ROOT . '/events/event?id=' . $event_result->id
+                            ]);
+
+                            /* get club administrators */
+                            $roles = ['PRESIDENT', 'SECRETARY', 'TREASURER', 'CLUB_IN_CHARGE'];
+                            $club_administrators_ids = $club_member->query("select user_id from club_members where club_id = ? && role in (" . trim(str_repeat('?,', count($roles)), ',') . ")", array_merge([$club_id], $roles), 'array');
+                            $club_administrators_ids = array_column($club_administrators_ids, 'user_id');
+
+                            $user_ids = array_unique(array_merge($members, $club_administrators_ids));
+                            foreach ($user_ids as $user_id) {
+                                $notification_state->create([
+                                    "user_id" => $user_id,
+                                    "notification_id" => $notification_result->id,
+                                ]);
                             }
 
                             if (count($event_group->errors) > 0) {

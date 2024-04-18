@@ -36,6 +36,8 @@ class Admin extends Controller
         $db = new Database();
         $club = new Clubs($db);
         $user = new User($db);
+        $notification = new UserNotifications($db);
+        $notification_state = new UserNotificationsState($db);
 
         $user_invitation = new UserInvitation($db);
         $mail = new Mail();
@@ -82,6 +84,17 @@ class Admin extends Controller
                             "club_name" => $form_data["name"],
                             "invitation_link" => ROOT . "/" . $link_path . "?token=" . $user_invitation_data["invitation_code"]
                         ])
+                    ]);
+
+                    /* set notification */
+                    $notification_result = $notification->create([
+                        "title" => $form_data['name']  . ' Club',
+                        "description" => '"' . $form_data['name'] . '" is inviting you to be the club in charge. Please check your mail box for the invitation.',
+                    ]);
+
+                    $notification_state->create([
+                        "user_id" => $user_invitation_data["user_id"],
+                        "notification_id" => $notification_result->id,
                     ]);
 
                     $_SESSION['alerts'] = [["status" => "success", "message" => "Club account created and club in charge email sent successfully"]];
