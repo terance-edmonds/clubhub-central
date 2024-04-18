@@ -218,6 +218,7 @@ class Club extends Controller
 
         $storage = new Storage();
         $club_id = $storage->get('club_id');
+        $club_role = $storage->get('club_role');
 
         $data['total_count'] = 0;
         $data['limit'] = 10;
@@ -449,17 +450,48 @@ class Club extends Controller
         }
 
         /* pagination */
-        $total_count = $event->find([
-            "club_id" => $club_id,
-            "is_deleted" => 0,
-        ], ["count(*) as count"], [], [], isset($_GET['search']) ? $_GET['search'] : '');
+        $user_id = Auth::getId();
+        $where = [
+            "club_events.club_id" => $club_id,
+            "club_events.is_deleted" => 0,
+        ];
+        $includes = [];
+
+        if ($club_role == 'MEMBER') {
+            $where['member.user_id'] = $user_id;
+            $includes = [
+                ["table" => "club_event_group_members", "as" => "member", "on" => "member.club_event_id = club_events.id"],
+            ];
+        }
+
+        $total_count = $event->find($where, ["count(*) as count"], $includes, isset($_GET['search']) ? $_GET['search'] : '');
         if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
 
         /* fetch events */
-        $data['events_data'] = $event->find(["club_id" => $club_id, "is_deleted" => 0], [], [], [
-            "limit" => $data['limit'],
-            "offset" => ($data['page'] - 1) * $data['limit'],
-        ], isset($_GET['search']) ? $_GET['search'] : '');
+        $data['events_data'] = $event->find(
+            $where,
+            [
+                "club_events.id",
+                "club_events.club_id",
+                "club_events.name",
+                "club_events.description",
+                "club_events.venue",
+                "club_events.start_datetime",
+                "club_events.end_datetime",
+                "club_events.is_public",
+                "club_events.image",
+                "club_events.state",
+                "club_events.open_registrations",
+                "club_events.created_datetime",
+                "club_events.is_budgets_verified"
+            ],
+            $includes,
+            [
+                "limit" => $data['limit'],
+                "offset" => ($data['page'] - 1) * $data['limit'],
+            ],
+            isset($_GET['search']) ? $_GET['search'] : ''
+        );
 
         $this->view($path, $data);
     }
@@ -839,6 +871,8 @@ class Club extends Controller
         $club_election_candidates = new ClubElectionCandidates($db);
         $club_election_voters = new ClubElectionVoters($db);
         $club_election_vote = new ClubElectionVotes($db);
+        $notification = new UserNotifications($db);
+        $notification_state = new UserNotificationsState($db);
 
         $storage = new Storage();
         $club_id = $storage->get('club_id');
@@ -873,6 +907,7 @@ class Club extends Controller
 
                         /* add candidates according to role */
                         $roles = ['president', 'secretary', 'treasurer'];
+                        $candidate_members = array();
                         foreach ($roles as $role) {
                             if (!empty($form_data[$role . '_candidate']) && is_array($form_data[$role . '_candidate'])) {
                                 foreach ($form_data[$role . '_candidate'] as $candidate) {
@@ -883,11 +918,13 @@ class Club extends Controller
                                         "election_id" => $club_election_result->id,
                                         "role" => strtoupper($role)
                                     ]);
+
+                                    array_push($candidate_members, $candidate['user_id']);
                                 }
                             }
                         }
 
-                        /* add voters */
+                        $vote_members = array();
                         if (!empty($form_data['voter']) && is_array($form_data['voter'])) {
                             foreach ($form_data['voter'] as $voter) {
                                 $club_election_voters->create([
@@ -896,9 +933,58 @@ class Club extends Controller
                                     "club_member_id" => $voter['id'],
                                     "election_id" => $club_election_result->id
                                 ]);
+
+                                array_push($vote_members, $voter['user_id']);
                             }
                         }
+
+                        /* club administrators notification */
+                        $roles = ['PRESIDENT', 'SECRETARY', 'TREASURER', 'CLUB_IN_CHARGE'];
+                        $club_administrators_ids = $club_member->query("select user_id from club_members where club_id = ? && role in (" . trim(str_repeat('?,', count($roles)), ',') . ")", array_merge([$club_id], $roles), 'array');
+                        $admin_users = array_column($club_administrators_ids, 'user_id');
+
+                        $admin_notification_result = $notification->create([
+                            "title" => 'New Election',
+                            "description" => '"' . $form_data['title'] . '" election has been created.',
+                        ]);
+
+                        foreach ($admin_users as $user_id) {
+                            $notification_state->create([
+                                "user_id" => $user_id,
+                                "notification_id" => $admin_notification_result->id,
+                            ]);
+                        }
+
+                        /* candidate election notifications */
+                        $candidate_notification_result = $notification->create([
+                            "title" => 'Election Candidate',
+                            "description" => 'You have been selected as a candidate for the "' . $form_data['title'] . '" election.',
+                        ]);
+
+                        $candidate_users = array_unique($candidate_members);
+                        foreach ($candidate_users as $user_id) {
+                            $notification_state->create([
+                                "user_id" => $user_id,
+                                "notification_id" => $candidate_notification_result->id,
+                            ]);
+                        }
+
+                        /* vote election notifications */
+                        $vote_notification_result = $notification->create([
+                            "title" => 'Election Vote',
+                            "description" => 'You have been selected as a voter for the "' . $form_data['title'] . '" election.',
+                        ]);
+
+                        $vote_users = array_unique($vote_members);
+                        foreach ($vote_users as $user_id) {
+                            $notification_state->create([
+                                "user_id" => $user_id,
+                                "notification_id" => $vote_notification_result->id,
+                            ]);
+                        }
                     }
+
+                    $data['errors'] = $club_election->errors;
 
                     $_SESSION['alerts'] = [["status" => "success", "message" => "Election created successfully"]];
                 } else if ($form_data['submit'] == 'edit-election') {
@@ -923,6 +1009,7 @@ class Club extends Controller
 
                         /* add candidates according to role */
                         $roles = ['president', 'secretary', 'treasurer'];
+                        $candidate_members = array();
                         foreach ($roles as $role) {
                             if (!empty($form_data[$role . '_candidate']) && is_array($form_data[$role . '_candidate'])) {
                                 foreach ($form_data[$role . '_candidate'] as $candidate) {
@@ -933,11 +1020,14 @@ class Club extends Controller
                                         "election_id" => $form_data['id'],
                                         "role" => strtoupper($role)
                                     ]);
+
+                                    array_push($candidate_members, $candidate['user_id']);
                                 }
                             }
                         }
 
                         /* add voters */
+                        $vote_members = array();
                         if (!empty($form_data['voter']) && is_array($form_data['voter'])) {
                             foreach ($form_data['voter'] as $voter) {
                                 $club_election_voters->create([
@@ -946,9 +1036,13 @@ class Club extends Controller
                                     "club_member_id" => $voter['id'],
                                     "election_id" => $form_data['id']
                                 ]);
+
+                                array_push($vote_members, $voter['user_id']);
                             }
                         }
                     }
+
+                    $data['errors'] = $club_election->errors;
 
                     $_SESSION['alerts'] = [["status" => "success", "message" => "Election updated successfully"]];
                 } else if ($_POST['submit'] == "delete-election") {
@@ -1011,222 +1105,220 @@ class Club extends Controller
                         $data["errors"] = $club_election_vote->errors;
                     }
                 }
-            } else {
-                if ($path == 'club/dashboard/election/add' || $path == 'club/dashboard/election/edit') {
-                    $data['vote_members_data']  = $data['candidate_members_data'] = $club_member->find(
-                        ["club_id" => $club_id, "state" => "ACCEPTED"],
-                        [
-                            "club_members.id as id",
-                            "user_id",
-                            "club_id",
-                            "user.first_name",
-                            "user.last_name",
-                        ],
-                        [
-                            ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"]
-                        ]
-                    );
+            }
+            if ($path == 'club/dashboard/election/add' || $path == 'club/dashboard/election/edit') {
+                $data['vote_members_data']  = $data['candidate_members_data'] = $club_member->find(
+                    ["club_id" => $club_id, "state" => "ACCEPTED"],
+                    [
+                        "club_members.id as id",
+                        "user_id",
+                        "club_id",
+                        "user.first_name",
+                        "user.last_name",
+                    ],
+                    [
+                        ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"]
+                    ]
+                );
+            }
+
+            /* fetch election data for the form */
+            if ($path == 'club/dashboard/election/edit') {
+                if (empty($_GET['id'])) {
+                    return redirect('not-found');
                 }
 
-                /* fetch election data for the form */
-                if ($path == 'club/dashboard/election/edit') {
-                    if (empty($_GET['id'])) {
-                        return redirect('not-found');
-                    }
+                /* if the election is opened or closed do not let them edit */
+                $election_data = $club_election->one(
+                    ["club_id" => $club_id, "id" => $_GET['id'], "state" => "PENDING"]
+                );
 
-                    /* if the election is opened or closed do not let them edit */
-                    $election_data = $club_election->one(
-                        ["club_id" => $club_id, "id" => $_GET['id'], "state" => "PENDING"]
-                    );
+                $_POST['id'] = $election_data->id;
+                $_POST['title'] = $election_data->title;
+                $_POST['description'] = $election_data->description;
+                $_POST['start_datetime'] = $election_data->start_datetime;
+                $_POST['end_datetime'] = $election_data->end_datetime;
 
-                    $_POST['id'] = $election_data->id;
-                    $_POST['title'] = $election_data->title;
-                    $_POST['description'] = $election_data->description;
-                    $_POST['start_datetime'] = $election_data->start_datetime;
-                    $_POST['end_datetime'] = $election_data->end_datetime;
-
-                    /* election candidates */
-                    $roles = ['president', 'secretary', 'treasurer'];
-                    foreach ($roles as $role) {
-                        $_POST[$role . '_candidate'] = $club_election_candidates->find([
-                            "election_id" => $_GET['id'],
-                            "club_election_candidates.role" => strtoupper($role)
-                        ], [
-                            "club_election_candidates.club_member_id as id",
-                            "club_election_candidates.user_id",
-                            "club_election_candidates.club_id",
-                            "concat(user.first_name,' ', user.last_name) as name",
-                        ], [
-                            ["table" => "users", "as" => "user", "on" => "club_election_candidates.user_id = user.id"]
-                        ], ["type" => "array"]);
-                    }
-
-
-                    /* election voters */
-                    $_POST['voter'] = $club_election_voters->find([
-                        "election_id" => $_GET['id']
+                /* election candidates */
+                $roles = ['president', 'secretary', 'treasurer'];
+                foreach ($roles as $role) {
+                    $_POST[$role . '_candidate'] = $club_election_candidates->find([
+                        "election_id" => $_GET['id'],
+                        "club_election_candidates.role" => strtoupper($role)
                     ], [
-                        "club_election_voters.club_member_id as id",
-                        "club_election_voters.user_id",
-                        "club_election_voters.club_id",
+                        "club_election_candidates.club_member_id as id",
+                        "club_election_candidates.user_id",
+                        "club_election_candidates.club_id",
                         "concat(user.first_name,' ', user.last_name) as name",
                     ], [
-                        ["table" => "users", "as" => "user", "on" => "club_election_voters.user_id = user.id"]
+                        ["table" => "users", "as" => "user", "on" => "club_election_candidates.user_id = user.id"]
                     ], ["type" => "array"]);
                 }
 
-                /* election vote data */
-                if ($path == 'club/dashboard/election/vote') {
-                    $tabs = ['president', 'secretary', 'treasurer'];
-                    $data["tab"] = getActiveTab($tabs, $_GET);
 
-                    $user_id = Auth::getId();
-                    if (empty($_GET["election"])) return redirect('not-found');
+                /* election voters */
+                $_POST['voter'] = $club_election_voters->find([
+                    "election_id" => $_GET['id']
+                ], [
+                    "club_election_voters.club_member_id as id",
+                    "club_election_voters.user_id",
+                    "club_election_voters.club_id",
+                    "concat(user.first_name,' ', user.last_name) as name",
+                ], [
+                    ["table" => "users", "as" => "user", "on" => "club_election_voters.user_id = user.id"]
+                ], ["type" => "array"]);
+            }
 
-                    /* get election details */
-                    $data['election_id'] = $_GET["election"];
-                    $data['election'] = $club_election->one(["id" => $data['election_id'], "state" => "OPEN"]);
-                    if (empty($data['election'])) return redirect('not-found');
+            /* election vote data */
+            if ($path == 'club/dashboard/election/vote') {
+                $tabs = ['president', 'secretary', 'treasurer'];
+                $data["tab"] = getActiveTab($tabs, $_GET);
 
-                    /* get election voter details */
-                    $election_voter = $club_election_voters->one(["user_id" => $user_id, "election_id" => $_GET['election']]);
-                    if (empty($election_voter)) return redirect('not-found');
+                $user_id = Auth::getId();
+                if (empty($_GET["election"])) return redirect('not-found');
 
-                    $data['candidate_members_data'] = $club_election_candidates->find(
-                        ["club_id" => $club_id, "election_id" => $_GET["election"], "club_election_candidates.role" => strtoupper($data['tab'])],
-                        [
-                            "club_election_candidates.id as id",
-                            "club_election_candidates.club_member_id as club_member_id",
-                            "club_election_candidates.user_id",
-                            "club_election_candidates.club_id",
-                            "user.first_name",
-                            "user.last_name",
-                            "user.image",
-                        ],
-                        [
-                            ["table" => "users", "as" => "user", "on" => "club_election_candidates.user_id = user.id"]
-                        ]
-                    );
+                /* get election details */
+                $data['election_id'] = $_GET["election"];
+                $data['election'] = $club_election->one(["id" => $data['election_id'], "state" => "OPEN"]);
+                if (empty($data['election'])) return redirect('not-found');
 
-                    $redirect_on_success = false;
-                }
+                /* get election voter details */
+                $election_voter = $club_election_voters->one(["user_id" => $user_id, "election_id" => $_GET['election']]);
+                if (empty($election_voter)) return redirect('not-found');
 
-                if ($path == 'club/dashboard/election/details') {
-                    $tabs = ['president', 'secretary', 'treasurer'];
-                    $data["tab"] = getActiveTab($tabs, $_GET);
-
-                    $user_id = Auth::getId();
-                    if (empty($_GET["election_id"])) return redirect('not-found');
-
-                    /* get election details */
-                    $data['election_id'] = $_GET["election_id"];
-                    $data['election'] = $club_election->one(["id" => $data['election_id']]);
-                    if (empty($data['election'])) return redirect('not-found');
-
-                    $data['candidate_members_data'] = $club_election_candidates->find(
-                        ["club_id" => $club_id, "election_id" => $data["election_id"], "club_election_candidates.role" => strtoupper($data['tab'])],
-                        [
-                            "club_election_candidates.id as id",
-                            "club_election_candidates.club_member_id as club_member_id",
-                            "club_election_candidates.user_id",
-                            "club_election_candidates.club_id",
-                            "user.first_name",
-                            "user.last_name",
-                            "user.image",
-                        ],
-                        [
-                            ["table" => "users", "as" => "user", "on" => "club_election_candidates.user_id = user.id"]
-                        ]
-                    );
-                }
-
-                /* data fetching */
-                if ($path == 'club/dashboard/election' && $data['tab'] == 'votes') {
-                    $user_id = Auth::getId();
-
-                    /* count */
-                    $total_count = $club_election->find([
-                        "club_elections.club_id" => $club_id,
-                        "club_elections.is_deleted" => 0,
-                        "voter.user_id" => $user_id
-                    ], ["count(*) as count"], [
-                        ["table" => "club_election_voters", "as" => "voter", "on" => "club_elections.id = voter.election_id"]
-                    ], [], isset($_GET['search']) ? $_GET['search'] : '');
-                    if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
-
-                    /* data */
-                    $data['election_data'] = $club_election->find([
-                        "club_elections.club_id" => $club_id,
-                        "club_elections.is_deleted" => 0,
-                        "voter.user_id" => $user_id,
-                    ], [
-                        "club_elections.id",
-                        "club_elections.title",
-                        "club_elections.state",
-                        "club_elections.start_datetime",
-                        "club_elections.end_datetime",
-                        "club_elections.description",
-                        "club_elections.club_id",
-                        "voter.did_vote"
-                    ], [
-                        ["table" => "club_election_voters", "as" => "voter", "on" => "club_elections.id = voter.election_id"]
-                    ], [
-                        "limit" => $data['limit'],
-                        "offset" => ($data['page'] - 1) * $data['limit'],
-                    ], isset($_GET['search']) ? $_GET['search'] : '');
-                } else if ($path == 'club/dashboard/election' && $data['tab'] == 'elections') {
-                    /* count */
-                    $total_count = $club_election->find([
-                        "club_id" => $club_id,
-                        "is_deleted" => 0,
-                    ], ["count(*) as count"], [], [], isset($_GET['search']) ? $_GET['search'] : '');
-                    if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
-
-                    /* data */
-                    $data['election_data'] = $club_election->find([
-                        "club_id" => $club_id,
-                        "is_deleted" => 0,
-                    ], [], [], [
-                        "limit" => $data['limit'],
-                        "offset" => ($data['page'] - 1) * $data['limit'],
-                    ], isset($_GET['search']) ? $_GET['search'] : '');
-                }
-
-                if ($path == 'club/dashboard/election/result') {
-                    if (empty($_GET['club_id']) || empty($_GET['election_id'])) {
-                        return redirect('club/dashboard/election');
-                    }
-
-                    $tabs = ['president', 'secretary', 'treasurer'];
-                    $data["tab"] = getActiveTab($tabs, $_GET);
-
-                    $data['club_id'] = $_GET['club_id'];
-                    $data['election_id'] = $_GET['election_id'];
-
-                    $data['election'] = $club_election->one(['id' => $data['election_id']], ["title", "description"]);
-                    if (empty($data['election'])) {
-                        return redirect('club/dashboard/election');
-                    }
-
-                    $data['election_results'] = $club_election_candidates->find([
-                        "club_election_candidates.club_id" => $data['club_id'],
-                        "club_election_candidates.election_id" =>  $data['election_id'],
-                    ], [
+                $data['candidate_members_data'] = $club_election_candidates->find(
+                    ["club_id" => $club_id, "election_id" => $_GET["election"], "club_election_candidates.role" => strtoupper($data['tab'])],
+                    [
                         "club_election_candidates.id as id",
+                        "club_election_candidates.club_member_id as club_member_id",
+                        "club_election_candidates.user_id",
+                        "club_election_candidates.club_id",
                         "user.first_name",
                         "user.last_name",
                         "user.image",
-                        "(select count(*) from club_election_votes votes where votes.selected_candidate_id = club_election_candidates.id and votes.role = '" . strtoupper($data['tab']) . "') as votes",
-                        "(select count(*) from club_election_votes votes where votes.selected_candidate_id = club_election_candidates.id and votes.role = '" . strtoupper($data['tab']) . "') /
-                         (select count(*) from club_election_voters votes where votes.election_id = '" .  $data['election_id'] . "') * 100 as vote_percentage",
-                    ], [
-                        ["table" => "users", "as" => "user", "on" => "club_election_candidates.user_id = user.id"],
-                    ], [
-                        "order_column" => "votes"
-                    ]);
-                }
+                    ],
+                    [
+                        ["table" => "users", "as" => "user", "on" => "club_election_candidates.user_id = user.id"]
+                    ]
+                );
+
+                $redirect_on_success = false;
             }
 
+            if ($path == 'club/dashboard/election/details') {
+                $tabs = ['president', 'secretary', 'treasurer'];
+                $data["tab"] = getActiveTab($tabs, $_GET);
+
+                $user_id = Auth::getId();
+                if (empty($_GET["election_id"])) return redirect('not-found');
+
+                /* get election details */
+                $data['election_id'] = $_GET["election_id"];
+                $data['election'] = $club_election->one(["id" => $data['election_id']]);
+                if (empty($data['election'])) return redirect('not-found');
+
+                $data['candidate_members_data'] = $club_election_candidates->find(
+                    ["club_id" => $club_id, "election_id" => $data["election_id"], "club_election_candidates.role" => strtoupper($data['tab'])],
+                    [
+                        "club_election_candidates.id as id",
+                        "club_election_candidates.club_member_id as club_member_id",
+                        "club_election_candidates.user_id",
+                        "club_election_candidates.club_id",
+                        "user.first_name",
+                        "user.last_name",
+                        "user.image",
+                    ],
+                    [
+                        ["table" => "users", "as" => "user", "on" => "club_election_candidates.user_id = user.id"]
+                    ]
+                );
+            }
+
+            /* data fetching */
+            if ($path == 'club/dashboard/election' && $data['tab'] == 'votes') {
+                $user_id = Auth::getId();
+
+                /* count */
+                $total_count = $club_election->find([
+                    "club_elections.club_id" => $club_id,
+                    "club_elections.is_deleted" => 0,
+                    "voter.user_id" => $user_id
+                ], ["count(*) as count"], [
+                    ["table" => "club_election_voters", "as" => "voter", "on" => "club_elections.id = voter.election_id"]
+                ], [], isset($_GET['search']) ? $_GET['search'] : '');
+                if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+
+                /* data */
+                $data['election_data'] = $club_election->find([
+                    "club_elections.club_id" => $club_id,
+                    "club_elections.is_deleted" => 0,
+                    "voter.user_id" => $user_id,
+                ], [
+                    "club_elections.id",
+                    "club_elections.title",
+                    "club_elections.state",
+                    "club_elections.start_datetime",
+                    "club_elections.end_datetime",
+                    "club_elections.description",
+                    "club_elections.club_id",
+                    "voter.did_vote"
+                ], [
+                    ["table" => "club_election_voters", "as" => "voter", "on" => "club_elections.id = voter.election_id"]
+                ], [
+                    "limit" => $data['limit'],
+                    "offset" => ($data['page'] - 1) * $data['limit'],
+                ], isset($_GET['search']) ? $_GET['search'] : '');
+            } else if ($path == 'club/dashboard/election' && $data['tab'] == 'elections') {
+                /* count */
+                $total_count = $club_election->find([
+                    "club_id" => $club_id,
+                    "is_deleted" => 0,
+                ], ["count(*) as count"], [], [], isset($_GET['search']) ? $_GET['search'] : '');
+                if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+
+                /* data */
+                $data['election_data'] = $club_election->find([
+                    "club_id" => $club_id,
+                    "is_deleted" => 0,
+                ], [], [], [
+                    "limit" => $data['limit'],
+                    "offset" => ($data['page'] - 1) * $data['limit'],
+                ], isset($_GET['search']) ? $_GET['search'] : '');
+            }
+
+            if ($path == 'club/dashboard/election/result') {
+                if (empty($_GET['club_id']) || empty($_GET['election_id'])) {
+                    return redirect('club/dashboard/election');
+                }
+
+                $tabs = ['president', 'secretary', 'treasurer'];
+                $data["tab"] = getActiveTab($tabs, $_GET);
+
+                $data['club_id'] = $_GET['club_id'];
+                $data['election_id'] = $_GET['election_id'];
+
+                $data['election'] = $club_election->one(['id' => $data['election_id']], ["title", "description"]);
+                if (empty($data['election'])) {
+                    return redirect('club/dashboard/election');
+                }
+
+                $data['election_results'] = $club_election_candidates->find([
+                    "club_election_candidates.club_id" => $data['club_id'],
+                    "club_election_candidates.election_id" =>  $data['election_id'],
+                ], [
+                    "club_election_candidates.id as id",
+                    "user.first_name",
+                    "user.last_name",
+                    "user.image",
+                    "(select count(*) from club_election_votes votes where votes.selected_candidate_id = club_election_candidates.id and votes.role = '" . strtoupper($data['tab']) . "') as votes",
+                    "(select count(*) from club_election_votes votes where votes.selected_candidate_id = club_election_candidates.id and votes.role = '" . strtoupper($data['tab']) . "') /
+                         (select count(*) from club_election_voters votes where votes.election_id = '" .  $data['election_id'] . "') * 100 as vote_percentage",
+                ], [
+                    ["table" => "users", "as" => "user", "on" => "club_election_candidates.user_id = user.id"],
+                ], [
+                    "order_column" => "votes"
+                ]);
+            }
 
             $db->commit();
 

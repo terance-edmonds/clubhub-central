@@ -240,9 +240,11 @@ class Events extends Controller
 
         $storage = new Storage();
         $event = new Event();
+        $event_group = new EventGroup();
         $club_id = $storage->get('club_id');
         $club_role = $storage->get('club_role');
         $club_event_id = $storage->get('club_event_id');
+        $user_id = Auth::getId();
 
         if (empty($club_id) || empty($club_event_id)) {
             return redirect('not-found');
@@ -252,20 +254,77 @@ class Events extends Controller
             return redirect('not-found');
         }
 
+        $permissions = [];
+        if (in_array($club_role, ['CLUB_IN_CHARGE', 'PRESIDENT', 'SECRETARY', 'TREASURER'])) {
+            $permissions = [
+                'budget_permission' => 1,
+                'details_permission' => 1,
+                'registration_permission' => 1,
+                'sponsor_permission' => 1
+            ];
+        } else {
+            $event_member_permissions = $event_group->find([
+                "club_event_groups.club_id" => $club_id,
+                "club_event_groups.club_event_id" => $club_event_id,
+                "group_members.user_id" => $user_id
+            ], [], [
+                ["table" => "club_event_group_members", "as" => "group_members", "on" => "group_members.club_event_group_id = club_event_groups.id"],
+            ], ["all" => true,  "type" => "array"]);
+
+            /* get columns with name permission */
+            $permission_types =  array(
+                'budget_permission',
+                'details_permission',
+                'registration_permission',
+                'sponsor_permission'
+            );
+
+            foreach ($permission_types as $permission) {
+                /* extract the permission column from each sub-array */
+                $values = array_column($event_member_permissions, $permission);
+                /* get the maximum permission value for this category */
+                $max = max($values);
+                $permissions[$permission] = $max;
+            }
+        }
+
         /* use outlined icons */
         $menu = [
-            ["id" => "events", "name" => "Event Details", "icon" => "info", "path" => "/events/dashboard", "active" => "false"],
-            ["id" => "registrations", "name" => "Registrations", "icon" => "app_registration", "path" => ["/events/dashboard/registrations", "/events/dashboard/registrations/attendance"], "active" => "false"],
-            ["id" => "sponsors", "name" => "Sponsors", "icon" => "diversity_3", "path" => "/events/dashboard/sponsors", "active" => "false"],
-            ["id" => "budgets", "name" => "Income / Expenses", "icon" => "monetization_on", "path" => "/events/dashboard/budgets", "active" => "false"],
-            ["id" => "agenda", "name" => "Agenda", "icon" => "view_agenda", "path" => "/events/dashboard/agenda", "active" => "false"],
-            ["id" => "announcements", "name" => "Announcement", "icon" => "campaign", "path" => "/events/dashboard/announcements", "active" => "false"],
-            ["id" => "complains", "name" => "Complaints", "icon" => "inbox", "path" => "/events/dashboard/complains", "active" => "false"]
+            ["id" => "preview", "name" => "Preview", "icon" => "preview", "path" => "/events/dashboard", "active" => "false"],
         ];
 
         /* add estimated budgets section */
         if (in_array($club_role, ['CLUB_IN_CHARGE', 'PRESIDENT', 'SECRETARY', 'TREASURER'])) {
-            array_splice($menu, 1, 0, [["id" => "estimates", "name" => "Budgets", "icon" => "price_check", "path" => "/events/dashboard/estimates", "active" => "false"],]);
+            array_splice($menu, 2, 0, [["id" => "estimates", "name" => "Budgets", "icon" => "price_check", "path" => "/events/dashboard/estimates", "active" => "false"]]);
+        }
+
+        /* handle group permission */
+        if ($permissions['registration_permission']) {
+            array_push(
+                $menu,
+                ["id" => "registrations", "name" => "Registrations", "icon" => "app_registration", "path" => ["/events/dashboard/registrations", "/events/dashboard/registrations/attendance"], "active" => "false"],
+            );
+        }
+        if ($permissions['sponsor_permission']) {
+            array_push(
+                $menu,
+                ["id" => "sponsors", "name" => "Sponsors", "icon" => "diversity_3", "path" => "/events/dashboard/sponsors", "active" => "false"],
+            );
+        }
+        if ($permissions['budget_permission']) {
+            array_push(
+                $menu,
+                ["id" => "budgets", "name" => "Income / Expenses", "icon" => "monetization_on", "path" => "/events/dashboard/budgets", "active" => "false"]
+            );
+        }
+        if ($permissions['details_permission']) {
+            array_splice($menu, 1, 0, [["id" => "details", "name" => "Event Details", "icon" => "info", "path" => "/events/dashboard/details", "active" => "false"]]);
+            array_push(
+                $menu,
+                ["id" => "agenda", "name" => "Agenda", "icon" => "view_agenda", "path" => "/events/dashboard/agenda", "active" => "false"],
+                ["id" => "announcements", "name" => "Announcement", "icon" => "campaign", "path" => "/events/dashboard/announcements", "active" => "false"],
+                ["id" => "complains", "name" => "Complaints", "icon" => "inbox", "path" => "/events/dashboard/complains", "active" => "false"]
+            );
         }
 
         /* update the active menu item */
@@ -288,7 +347,30 @@ class Events extends Controller
         $this->$func($path, $data);
     }
 
-    private function events($path, $data)
+    private function preview($path, $data)
+    {
+        $moment = new \Moment\Moment();
+        $event = new Event();
+        $storage = new Storage();
+        $club_id = $storage->get('club_id');
+        $club_event_id = $storage->get('club_event_id');
+
+        $event_data = $event->one(["id" => $club_event_id, "club_id" => $club_id]);
+        $data['event_data'] = [
+            "name" => $event_data->name,
+            "description" => $event_data->description,
+            "is_public" => $event_data->is_public,
+            "open_registrations" => $event_data->open_registrations,
+            "image" => $event_data->image,
+            "start_date" => $moment->format('dS F'),
+            "start_time" => $moment->format('h:i A'),
+            "venue" => $event_data->venue,
+        ];
+
+        $this->view($path, $data);
+    }
+
+    private function details($path, $data)
     {
         $db = new Database();
         $club_member = new ClubMember();

@@ -66,6 +66,12 @@
                     </div>
                 </div>
                 <div class="form-section">
+                    <?php if (!empty($errors['message'])) : ?>
+                        <small class="cl-red">
+                            <?= $errors['message'] ?>
+                        </small>
+                    <?php endif; ?>
+
                     <p class="form-section-title">President Candidates</p>
                     <div class="form-section-content">
                         <div class="checkbox-filters">
