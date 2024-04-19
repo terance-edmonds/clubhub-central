@@ -59,8 +59,7 @@ $('.notification-item').on('click', function () {
         })
             .then((res) => res.text())
             .then((data) => {
-                console.log(data);
-                //
+                // console.log(data);
             })
             .catch((err) => {
                 console.error(err);
@@ -115,6 +114,14 @@ $('.notification-item').on('click', function () {
 
 const onNotificationsClick = (e) => {
     const el = $('.notification-icon-wrap');
+
+    if ($(`div[data-unread="true"]`).length > 0) {
+        if ($('.notification-icon-wrap').find('.icon-wrap').find('.active').length == 0) {
+            $('.notification-icon-wrap').find('.icon-wrap').append('<div class="active"></div>');
+        }
+    } else {
+        $('.notification-icon-wrap').find('.icon-wrap').find('.active').remove();
+    }
 
     if (el.hasClass('active')) {
         $('.notification-list').fadeOut();

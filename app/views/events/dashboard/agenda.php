@@ -42,7 +42,8 @@
                     <table>
                         <tr class="table-header">
                             <th>Name</th>
-                            <th>Date & Time</th>
+                            <th>Start Date & Time</th>
+                            <th>End Date & Time</th>
                             <th>Location</th>
                             <th>Note</th>
                             <th>Actions</th>
@@ -58,7 +59,10 @@
                                     <?= displayValue($agenda->name) ?>
                                 </td>
                                 <td>
-                                    <?= displayValue($agenda->datetime, 'datetime') ?>
+                                    <?= displayValue($agenda->start_datetime, 'datetime') ?>
+                                </td>
+                                <td>
+                                    <?= displayValue($agenda->end_datetime, 'datetime') ?>
                                 </td>
                                 <td>
                                     <?= displayValue($agenda->venue) ?>
@@ -68,7 +72,7 @@
                                 </td>
                                 <td align="center">
                                     <div class="buttons">
-                                        <button title="Edit Details" onclick='onDataPopup("edit-agenda", <?= toJson($agenda, ["id", "name", "datetime", "venue", "note"]) ?>)' class="icon-button">
+                                        <button title="Edit Details" onclick='onDataPopup("edit-agenda", <?= toJson($agenda, ["id", "name", "start_datetime", "end_datetime", "venue", "note"]) ?>); onStartEndDatesChange("edit")' class="icon-button">
                                             <span class="material-icons-outlined">
                                                 edit
                                             </span>

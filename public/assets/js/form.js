@@ -5,6 +5,10 @@ const onDataPopup = (name, data = {}) => {
         const input = popup.find(`[name="${key}"]`);
         if (input) {
             input.val(data[key]);
+
+            if (input.filter('[set-min]').length > 0) {
+                input.attr('set-min', data[key]);
+            }
         }
     }
 

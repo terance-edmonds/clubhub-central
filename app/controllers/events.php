@@ -1303,7 +1303,8 @@ class Events extends Controller
                             "name" => $form_data['name'],
                             "venue" => $form_data['venue'],
                             "note" => $form_data['note'],
-                            "datetime" => $form_data['datetime'],
+                            "start_datetime" => $form_data['start_datetime'],
+                            "end_datetime" => $form_data['end_datetime'],
                         ]);
 
                         $_SESSION['alerts'] = [["status" => "success", "message" => "Agenda details added successfully"]];
@@ -1322,7 +1323,8 @@ class Events extends Controller
                             "name" => $form_data['name'],
                             "venue" => $form_data['venue'],
                             "note" => $form_data['note'],
-                            "datetime" => $form_data['datetime'],
+                            "start_datetime" => $form_data['start_datetime'],
+                            "end_datetime" => $form_data['end_datetime'],
                         ]);
 
                         $_SESSION['alerts'] = [["status" => "success", "message" => "Agenda details updated successfully"]];

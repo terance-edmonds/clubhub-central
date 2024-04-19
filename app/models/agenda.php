@@ -9,7 +9,8 @@ class Agenda extends Modal
         "name",
         "note",
         "venue",
-        "datetime",
+        "start_datetime",
+        "end_datetime",
     ];
     protected $search_columns = [
         "name",
@@ -23,7 +24,8 @@ class Agenda extends Modal
 
         if (empty($data['name'])) $this->errors['name'] = "Name is required";
         if (empty($data['venue'])) $this->errors['venue'] = "Venue is required";
-        if (empty($data['datetime'])) $this->errors['datetime'] = "Date & time is required";
+        if (empty($data['start_datetime'])) $this->errors['start_datetime'] = "Start date & time is required";
+        if (empty($data['end_datetime'])) $this->errors['end_datetime'] = "End date & time is required";
 
         if (empty($this->errors)) {
             return true;

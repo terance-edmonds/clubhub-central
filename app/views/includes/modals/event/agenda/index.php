@@ -18,10 +18,17 @@
                     <?php endif; ?>
                 </div>
                 <div class="input-wrap">
-                    <label for="datetime">Date & Time</label>
-                    <input set-min="<?= setValue('datetime') ?>" set-default="datetime" value="<?= setValue('datetime', '', 'datetime') ?>" id="datetime" name="datetime" type="datetime-local" placeholder="Date & Time" required>
-                    <?php if (!empty($errors['datetime'])) : ?>
-                        <small><?= $errors['datetime'] ?></small>
+                    <label for="add_start_datetime">Start Date & Time</label>
+                    <input set-min="<?= setValue('start_datetime') ?>" set-default="datetime" value="<?= setValue('start_datetime', '', 'datetime') ?>" id="add_start_datetime" name="start_datetime" type="datetime-local" placeholder="Start Date & Time" required>
+                    <?php if (!empty($errors['start_datetime'])) : ?>
+                        <small><?= $errors['start_datetime'] ?></small>
+                    <?php endif; ?>
+                </div>
+                <div class="input-wrap">
+                    <label for="add_end_datetime">End Date & Time</label>
+                    <input set-min="<?= setValue('end_datetime') ?>" set-default="datetime" value="<?= setValue('end_datetime', '', 'datetime') ?>" id="add_end_datetime" name="end_datetime" type="datetime-local" placeholder="End Date & Time" required>
+                    <?php if (!empty($errors['end_datetime'])) : ?>
+                        <small><?= $errors['end_datetime'] ?></small>
                     <?php endif; ?>
                 </div>
                 <div class="input-wrap">
