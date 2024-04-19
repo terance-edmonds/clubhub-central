@@ -10,19 +10,19 @@
 
         <?php if (Auth::logged()) { ?>
             <section class="center-section">
-                <a id="nav-home" href="<?= ROOT ?>/" class="nav-item" data-active="true">
+                <a id="nav-home" href="<?= ROOT ?>/" class="nav-item nav-home" data-active="true">
                     <span class="icon material-icons">
                         local_fire_department
                     </span>
                     <span class="text">Feed</span>
                 </a>
-                <a id="nav-events" href="<?= ROOT ?>/events" class="nav-item">
+                <a id="nav-events" href="<?= ROOT ?>/events" class="nav-item nav-events">
                     <span class="icon material-icons">
                         calendar_month
                     </span>
                     <span class="text">Events</span>
                 </a>
-                <a id="nav-profile" href="<?= ROOT ?>/profile" class="nav-item">
+                <a id="nav-profile" href="<?= ROOT ?>/profile" class="nav-item nav-profile">
                     <span class="icon material-icons-outlined">
                         account_circle
                     </span>

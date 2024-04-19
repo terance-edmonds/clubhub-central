@@ -6,6 +6,8 @@
 
 <?php $this->view('includes/header') ?>
 
+<?php $this->view('includes/alerts') ?>
+
 <div id="club-dashboard-election" class="container container-sections side-padding club-dashboard dashboard-container">
     <?php $this->view('includes/side-bars/club/dashboard/left', $left_bar) ?>
 
@@ -13,110 +15,177 @@
         <div class="title-bar">
             <div class="title-wrap">
                 <span class="title">Elections</span>
-                <a href="<?= ROOT ?>/club/dashboard/election/add">
-                    <button class="button" data-variant="outlined" data-type="icon" data-size="small">
-                        <span>New Election</span>
-                        <span class="material-icons-outlined">
-                            add
-                        </span>
-                    </button>
-                </a>
+                <?php if (($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') && $tab == 'elections') { ?>
+                    <a href="<?= ROOT ?>/club/dashboard/election/add">
+                        <button class="button" data-variant="outlined" data-type="icon" data-size="small">
+                            <span>New Election</span>
+                            <span class="material-icons-outlined">
+                                add
+                            </span>
+                        </button>
+                    </a>
+                <?php } ?>
             </div>
 
-            <div class="input-wrap search-input">
-                <div class="input">
-                    <span class="icon material-icons-outlined">
-                        search
-                    </span>
-                    <input type="text" placeholder="Search Elections">
+            <form method="get" class="search-input">
+                <input type="text" hidden name="tab" value="<?= setValue('tab', '', 'text', 'get') ?>">
+                <div class="input-wrap">
+                    <div class="input">
+                        <button type="submit" class="icon-button">
+                            <span class="icon material-icons-outlined">
+                                search
+                            </span>
+                        </button>
+                        <input type="text" placeholder="Search" name="search" value="<?= setValue('search', '', 'text', 'get') ?>">
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
 
         <div class="content-section">
-            <div class="table-wrap">
-                <table>
-                    <tr class="table-header">
-                        <th>Name</th>
-                        <th>Candidates</th>
-                        <th>Votes</th>
-                        <th>View</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                    <tr class="table-data">
-                        <td>Election1</td>
-                        <td>10</td>
-                        <td>16</td>
-                        <td align="center">
-                            <button class="icon-button">
-                                <span class="material-icons-outlined">
-                                    visibility
-                                </span>
-                            </button>
-                        </td>
-                        <td>
-                            <button class="button status-button" data-status="PUBLISHED">
-                                Published
-                            </button>
-                        </td>
-                        <td align="center">
-                            <div class="buttons">
-                                <a href="<?= ROOT ?>/events/dashboard">
-                                    <button class="icon-button">
-                                        <span class="material-icons-outlined">
-                                            edit
-                                        </span>
+            <?php if ($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') { ?>
+                <div class="actions-wrap">
+                    <div class="action-buttons">
+                        <a class="action-link" data-active="<?php if ($tab == 'votes')
+                                                                echo 'true'; ?>" href="<?= ROOT ?>/club/dashboard/election?tab=votes"><button class="button">Election Votes</button></a>
+                        <a class="action-link" data-active="<?php if ($tab == 'elections')
+                                                                echo 'true'; ?>" href="<?= ROOT ?>/club/dashboard/election?tab=elections"><button class="button">Club Elections</button></a>
+                    </div>
+                </div>
+            <?php } ?>
+
+            <?php if ($tab === 'votes') { ?>
+                <div class="table-wrap">
+                    <table>
+                        <tr class="table-header">
+                            <th>Title</th>
+                            <th>Start Date & Time</th>
+                            <th>End Date & Time</th>
+                            <th>Description</th>
+                            <th>View</th>
+                            <th>Actions</th>
+                        </tr>
+                        <?php if (count($election_data) == 0) { ?>
+                            <tr>
+                                <td colspan="6">No Records.</td>
+                            </tr>
+                        <?php } ?>
+                        <?php foreach ($election_data as $election) { ?>
+                            <tr class="table-data">
+                                <td><?= displayValue($election->title) ?></td>
+                                <td><?= displayValue($election->start_datetime, 'datetime') ?></td>
+                                <td><?= displayValue($election->end_datetime, 'datetime') ?></td>
+                                <td><?= displayValue($election->description) ?></td>
+                                <td align="center">
+                                    <a href="<?= ROOT ?>/club/dashboard/election/result?club_id=<?= $election->club_id ?>&election_id=<?= $election->id ?>">
+                                        <button title="View results" class="icon-button">
+                                            <span class="material-icons-outlined">
+                                                visibility
+                                            </span>
+                                        </button>
+                                    </a>
+                                </td>
+                                <td align="center">
+                                    <a href="<?= ROOT ?>/club/dashboard/election/vote?election=<?= $election->id ?>">
+                                        <button title="Vote on election" class="icon-button">
+                                            <span class="material-icons-outlined">
+                                                how_to_vote
+                                            </span>
+                                        </button>
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    </table>
+                    <?php $this->view('includes/pagination', [
+                        "total_count" => $total_count,
+                        "limit" => $limit,
+                        "page" => $page
+                    ]) ?>
+                </div>
+            <?php } else if ($tab === 'elections') { ?>
+                <div class="table-wrap">
+                    <table>
+                        <tr class="table-header">
+                            <th>Title</th>
+                            <th>Start Date & Time</th>
+                            <th>End Date & Time</th>
+                            <th>Description</th>
+                            <th>View</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                        <?php if (count($election_data) == 0) { ?>
+                            <tr>
+                                <td colspan="7">No Records.</td>
+                            </tr>
+                        <?php } ?>
+                        <?php foreach ($election_data as $election) { ?>
+                            <tr class="table-data">
+                                <td><?= displayValue($election->title) ?></td>
+                                <td><?= displayValue($election->start_datetime, 'datetime') ?></td>
+                                <td><?= displayValue($election->end_datetime, 'datetime') ?></td>
+                                <td><?= displayValue($election->description) ?></td>
+                                <td align="center">
+                                    <a href="<?= ROOT ?>/club/dashboard/election/result?club_id=<?= $election->club_id ?>&election_id=<?= $election->id ?>">
+                                        <button class="icon-button">
+                                            <span class="material-icons-outlined">
+                                                visibility
+                                            </span>
+                                        </button>
+                                    </a>
+                                </td>
+                                <td>
+                                    <button <?php if ($club_role == 'CLUB_IN_CHARGE') { ?> onclick='onDataPopup("election-status", <?= toJson($election, ["id", "state"]) ?>)' <?php } ?> class="button status-button <?= ($club_role == 'CLUB_IN_CHARGE') ? 'pointer-cursor' : '' ?>" data-status="<?= $election->state ?>">
+                                        <?= displayValue($election->state, 'start-case') ?>
                                     </button>
-                                </a>
-                                <button class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        delete
-                                    </span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="table-data">
-                        <td>Election2</td>
-                        <td>10</td>
-                        <td>20</td>
-                        <td align="center">
-                            <button class="icon-button">
-                                <span class="material-icons-outlined">
-                                    visibility
-                                </span>
-                            </button>
-                        </td>
-                        <td>
-                            <button class="button status-button" data-status="PENDING">
-                                Pending
-                            </button>
-                        </td>
-                        <td align="center">
-                            <div class="buttons">
-                                <a href="<?= ROOT ?>/events/dashboard">
-                                    <button class="icon-button">
-                                        <span class="material-icons-outlined">
-                                            edit
-                                        </span>
-                                    </button>
-                                </a>
-                                <button class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        delete
-                                    </span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+                                </td>
+                                <td align="center">
+                                    <div class="buttons">
+                                        <?php if ($election->state === 'PENDING') { ?>
+                                            <a href="<?= ROOT ?>/club/dashboard/election/edit?id=<?= $election->id ?>">
+                                                <button class="icon-button">
+                                                    <span class="material-icons-outlined">
+                                                        edit
+                                                    </span>
+                                                </button>
+                                            </a>
+                                        <?php } ?>
+                                        <?php if ($club_role == 'CLUB_IN_CHARGE') {  ?>
+                                            <button onclick='onDataPopup("delete-election", <?= toJson($election, ["id"]) ?>)' class="icon-button cl-red">
+                                                <span class="material-icons-outlined">
+                                                    delete
+                                                </span>
+                                            </button>
+                                        <?php } ?>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    </table>
+                    <?php $this->view('includes/pagination', [
+                        "total_count" => $total_count,
+                        "limit" => $limit,
+                        "page" => $page
+                    ]) ?>
+                </div>
+            <?php } ?>
         </div>
     </section>
 </div>
 
-<?php $this->view('includes/header/side-bars/club-dashboard', $menu_side_bar) ?>
-<?php $this->view('includes/modals/event/register') ?>
+<?php if ($club_role == 'CLUB_IN_CHARGE') {
+    $this->view('includes/modals/club/election/status');
+    $this->view('includes/modals/club/election/delete');
+?>
+    <!-- on error -->
+    <script>
+        <?php if (!empty($popups["election-status"])) { ?>
+            $(`[popup-name='election-status']`).popup(true)
+        <?php } ?>
+    </script>
+<?php } ?>
 
-<script src="<?= ROOT ?>/assets/js/events/event.js"></script>
+<?php $this->view('includes/header/side-bars/club-dashboard', $menu_side_bar) ?>
+
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

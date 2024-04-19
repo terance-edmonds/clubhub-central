@@ -168,8 +168,8 @@ class Club extends Controller
         ];
 
         /* filter menu */
-        if (in_array($club_role, ['CLUB_IN_CHARGE', 'PRESIDENT', 'TREASURER'])) {
-            array_splice($menu, 1, 0, [["id" => "budgets", "name" => "Event Budgets", "icon" => "savings", "path" => ["/club/dashboard/budgets", "/club/dashboard/budgets/edit"], "active" => "false"]]);
+        if (in_array($club_role, ['MEMBER', 'SECRETARY', 'TREASURER'])) {
+            array_push($menu, ["id" => "election", "name" => "Election", "icon" => "how_to_vote", "path" => ["/club/dashboard/election", "/club/dashboard/election/vote", "/club/dashboard/election/result"], "active" => "false"]);
         }
         if (in_array($club_role, ['CLUB_IN_CHARGE', 'PRESIDENT', 'SECRETARY', 'TREASURER'])) {
             array_push($menu, ["id" => "logs", "name" => "Logs", "icon" => "article", "path" => "/club/dashboard/logs", "active" => "false"], ["id" => "members", "name" => "Members", "icon" => "people", "path" => "/club/dashboard/members", "active" => "false"],);
@@ -178,7 +178,7 @@ class Club extends Controller
             array_push($menu, ["id" => "reports", "name" => "Reports", "icon" => "description", "path" => ["/club/dashboard/reports", "/club/dashboard/reports/add"], "active" => "false"], ["id" => "meetings", "name" => "Meetings", "icon" => "diversity_2", "path" => "/club/dashboard/meetings", "active" => "false"]);
         }
         if (in_array($club_role, ['CLUB_IN_CHARGE', 'PRESIDENT'])) {
-            array_push($menu, ["id" => "election", "name" => "Election", "icon" => "how_to_vote", "path" => ["/club/dashboard/election", "/club/dashboard/election/add"], "active" => "false"], ["id" => "requests", "name" => "Requests", "icon" => "crisis_alert", "path" => ["/club/dashboard/requests", "/club/dashboard/requests/add"], "active" => "false"]);
+            array_push($menu, ["id" => "election", "name" => "Election", "icon" => "how_to_vote", "path" => ["/club/dashboard/election", "/club/dashboard/election/add", "/club/dashboard/election/edit", "/club/dashboard/election/vote", "/club/dashboard/election/result"], "active" => "false"], ["id" => "requests", "name" => "Requests", "icon" => "crisis_alert", "path" => ["/club/dashboard/requests", "/club/dashboard/requests/add"], "active" => "false"]);
         }
 
         /* update the active menu item */
@@ -211,7 +211,6 @@ class Club extends Controller
         $db = new Database();
         $club_member = new ClubMember();
         $event = new Event($db);
-        $event_budgets = new BudgetLimits($db);
         $event_group = new EventGroup($db);
         $event_group_member = new EventGroupMember($db);
 
@@ -309,6 +308,12 @@ class Club extends Controller
                     $storage->set('club_event_id', $_POST['club_event_id']);
 
                     return redirect('events/dashboard');
+                } else if ($_POST['submit'] == 'delete-event') {
+                    $event->update(["id" => $form_data['id']], [
+                        "is_deleted" => 1
+                    ]);
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Event deleted successfully"]];
                 }
 
                 $data['errors'] = $event->errors;
@@ -319,7 +324,7 @@ class Club extends Controller
 
             $db->commit();
 
-            if ($_SERVER['REQUEST_METHOD'] == "POST") return redirect($redirect_link);
+            if ($_SERVER['REQUEST_METHOD'] == "POST" && count($data['errors']) == 0) return redirect($redirect_link);
         } catch (\Throwable $th) {
             $db->rollback();
             $_SESSION['alerts'] = [["status" => "error", "message" => $th->getMessage() || "Failed to process the action, please try again later."]];
@@ -358,9 +363,8 @@ class Club extends Controller
             $_POST['created_datetime'] = $event_data->created_datetime;
 
             /* set event budget limits */
-            $event_budget_data = $event_budgets->find(
-                ["club_event_id" => $club_event_id],
-            );
+            // TODO: set the event budgets
+            $event_budget_data = [];
             foreach ($event_budget_data as $budget_id => $budget) {
                 $_POST['budgets'][$budget_id] = [
                     "id" => $budget->id,
@@ -421,141 +425,16 @@ class Club extends Controller
 
         /* pagination */
         $total_count = $event->find([
-            "club_id" => $club_id
+            "club_id" => $club_id,
+            "is_deleted" => 0,
         ], ["count(*) as count"], [], [], isset($_GET['search']) ? $_GET['search'] : '');
         if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
 
         /* fetch events */
-        $data['events_data'] = $event->find(["club_id" => $club_id], [], [], [
+        $data['events_data'] = $event->find(["club_id" => $club_id, "is_deleted" => 0], [], [], [
             "limit" => $data['limit'],
             "offset" => ($data['page'] - 1) * $data['limit'],
         ], isset($_GET['search']) ? $_GET['search'] : '');
-
-        $this->view($path, $data);
-    }
-
-    private function budgets($path, $data)
-    {
-        $db = new Database();
-        $event = new Event($db);
-        $budget_limits = new BudgetLimits($db);
-
-        $storage = new Storage();
-        $club_id = $storage->get('club_id');
-        $club_event_id = $storage->get('club_event_id');
-
-        $data['total_count'] = 0;
-        $data['limit'] = 10;
-        $data['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
-
-        $redirect_link = null;
-
-        if (empty($club_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Club details are not found"]];
-
-        try {
-            $db->transaction();
-
-            if ($_SERVER['REQUEST_METHOD'] == "POST") {
-                $form_data = $_POST;
-
-                $budget_errors = [];
-
-                if ($form_data['submit'] == 'update_budget') {
-                    $form_data['club_id'] = $club_id;
-                    $form_data['club_event_id'] = $club_event_id;
-                    $budget_limits->delete(["club_event_id" => $club_event_id, "club_id" => $club_id]);
-
-                    foreach ($form_data['budgets'] as $key => $budget) {
-                        if ($budget_limits->validateAddBudget($budget)) {
-                            try {
-                                $budget_limits->create([
-                                    "name" => $budget['name'],
-                                    "club_id" => $form_data['club_id'],
-                                    "club_event_id" => $form_data['club_event_id'],
-                                    "amount" => $budget['amount'],
-                                    "description" => isset($budget['description']) ? $budget['description'] : '',
-
-                                ]);
-                            } catch (\Throwable $th) {
-                                throw new Error("Failed to create a budget: " . $budget['name']);
-                            }
-                        }
-
-                        if (count($budget_limits->errors) > 0) {
-                            $budget_errors[$key] = $budget_limits->errors;
-                        } else {
-                            $event->update([
-                                "id" => $club_event_id
-                            ], [
-                                "is_budgets_verified" => 1
-                            ]);
-
-                            $_SESSION['alerts'] = [["status" => "success", "message" => "Updated event budgets successfully"]];
-                            $redirect_link = 'club/dashboard/budgets';
-                        }
-                    }
-                } else if ($_POST['submit'] == 'budget-redirect') {
-                    $storage = new Storage();
-                    $storage->set('club_event_id', $_POST['club_event_id']);
-
-                    return redirect('club/dashboard/budgets/edit');
-                }
-
-                $data['errors'] = $event->errors;
-                if (count($budget_errors) > 0) {
-                    $data['errors']['budgets'] = $budget_errors;
-                }
-            }
-
-            $db->commit();
-
-            if ($_SERVER['REQUEST_METHOD'] == "POST") return redirect($redirect_link);
-        } catch (\Throwable $th) {
-            $db->rollback();
-            $_SESSION['alerts'] = [["status" => "error", "message" => $th->getMessage() || "Failed to process the action, please try again later."]];
-        }
-
-        /* fetch club members */
-        if ($path == 'club/dashboard/budgets/edit') {
-            /* set event data */
-            $data['event_data'] = $event->one(
-                ["id" => $club_event_id],
-                [
-                    "id",
-                    "name",
-                    "venue",
-                    "start_datetime",
-                    "end_datetime",
-                    "description",
-                ]
-            );
-
-            /* set event budget limits */
-            $event_budget_data = $budget_limits->find(
-                ["club_event_id" => $club_event_id],
-            );
-            foreach ($event_budget_data as $budget_id => $budget) {
-                $_POST['budgets'][$budget_id] = [
-                    "id" => $budget->id,
-                    "name" => $budget->name,
-                    "amount" => $budget->amount,
-                    "description" => $budget->description,
-                ];
-            }
-        } else {
-            /* pagination */
-            $total_count = $event->find([
-                "club_id" => $club_id,
-            ], ["count(*) as count"], [], [], isset($_GET['search']) ? $_GET['search'] : '');
-            if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
-
-            /* fetch events */
-            $data['events_data'] = $event->find(["club_id" => $club_id], [], [], [
-                "limit" => $data['limit'],
-                "offset" => ($data['page'] - 1) * $data['limit'],
-            ], isset($_GET['search']) ? $_GET['search'] : '');
-        }
-
 
         $this->view($path, $data);
     }
@@ -908,6 +787,382 @@ class Club extends Controller
     }
     private function election($path, $data)
     {
+        $db = new Database();
+        $club_member = new ClubMember($db);
+        $club_election = new ClubElection($db);
+        $club_election_candidates = new ClubElectionCandidates($db);
+        $club_election_voters = new ClubElectionVoters($db);
+        $club_election_vote = new ClubElectionVotes($db);
+
+        $storage = new Storage();
+        $club_id = $storage->get('club_id');
+        $redirect_on_success = true;
+
+        $tabs = ['votes', 'elections'];
+        $data["tab"] = getActiveTab($tabs, $_GET);
+
+        $data['total_count'] = 0;
+        $data['limit'] = 10;
+        $data['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
+
+        try {
+            $db->transaction();
+            $data['errors'] = [];
+
+            if ($_SERVER['REQUEST_METHOD'] == "POST") {
+                $form_data = $_POST;
+
+                $form_data['club_id'] = $club_id;
+
+                if ($form_data['submit'] == 'create-election') {
+                    if ($club_election->validateCreate($form_data)) {
+                        /* create election */
+                        $club_election_result = $club_election->create([
+                            "club_id" => $form_data['club_id'],
+                            "title" => $form_data['title'],
+                            "description" => $form_data['description'],
+                            "start_datetime" => $form_data['start_datetime'],
+                            "end_datetime" => $form_data['end_datetime'],
+                        ]);
+
+                        /* add candidates according to role */
+                        $roles = ['president', 'secretary', 'treasurer'];
+                        foreach ($roles as $role) {
+                            if (!empty($form_data[$role . '_candidate']) && is_array($form_data[$role . '_candidate'])) {
+                                foreach ($form_data[$role . '_candidate'] as $candidate) {
+                                    $club_election_candidates->create([
+                                        "club_id" => $form_data['club_id'],
+                                        "user_id" => $candidate['user_id'],
+                                        "club_member_id" => $candidate['id'],
+                                        "election_id" => $club_election_result->id,
+                                        "role" => strtoupper($role)
+                                    ]);
+                                }
+                            }
+                        }
+
+                        /* add voters */
+                        if (!empty($form_data['voter']) && is_array($form_data['voter'])) {
+                            foreach ($form_data['voter'] as $voter) {
+                                $club_election_voters->create([
+                                    "club_id" => $form_data['club_id'],
+                                    "user_id" => $voter['user_id'],
+                                    "club_member_id" => $voter['id'],
+                                    "election_id" => $club_election_result->id
+                                ]);
+                            }
+                        }
+                    }
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Election created successfully"]];
+                } else if ($form_data['submit'] == 'edit-election') {
+                    if ($club_election->validateUpdate($form_data)) {
+                        /* delete all candidates and voters related to the election */
+                        $club_election_candidates->delete(["election_id" => $form_data['id']]);
+                        $club_election_voters->delete(["election_id" => $form_data['id']]);
+
+                        /* create election */
+                        $club_election_result = $club_election->update(
+                            [
+                                "id" => $form_data['id']
+                            ],
+                            [
+                                "club_id" => $form_data['club_id'],
+                                "title" => $form_data['title'],
+                                "description" => $form_data['description'],
+                                "start_datetime" => $form_data['start_datetime'],
+                                "end_datetime" => $form_data['end_datetime'],
+                            ]
+                        );
+
+                        /* add candidates according to role */
+                        $roles = ['president', 'secretary', 'treasurer'];
+                        foreach ($roles as $role) {
+                            if (!empty($form_data[$role . '_candidate']) && is_array($form_data[$role . '_candidate'])) {
+                                foreach ($form_data[$role . '_candidate'] as $candidate) {
+                                    $club_election_candidates->create([
+                                        "club_id" => $form_data['club_id'],
+                                        "user_id" => $candidate['user_id'],
+                                        "club_member_id" => $candidate['id'],
+                                        "election_id" => $form_data['id'],
+                                        "role" => strtoupper($role)
+                                    ]);
+                                }
+                            }
+                        }
+
+                        /* add voters */
+                        if (!empty($form_data['voter']) && is_array($form_data['voter'])) {
+                            foreach ($form_data['voter'] as $voter) {
+                                $club_election_voters->create([
+                                    "club_id" => $form_data['club_id'],
+                                    "user_id" => $voter['user_id'],
+                                    "club_member_id" => $voter['id'],
+                                    "election_id" => $form_data['id']
+                                ]);
+                            }
+                        }
+                    }
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Election updated successfully"]];
+                } else if ($_POST['submit'] == "delete-election") {
+                    $club_election->update(["id" => $form_data['id']], ["is_deleted" => 1]);
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Election deleted successfully"]];
+                } else if ($form_data['submit'] == 'election-state') {
+                    $club_election->update(["id" => $form_data["id"]], [
+                        "state" => $form_data['state']
+                    ]);
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Election status updated successfully"]];
+                } else if ($form_data['submit'] == 'vote-election') {
+                    $tabs = ['president', 'secretary', 'treasurer'];
+                    $role = getActiveTab($tabs, $_GET);
+
+                    $user_id = Auth::getId();
+                    if (empty($_GET["election"])) return redirect('not-found');
+
+                    $election_voter = $club_election_voters->one(["user_id" => $user_id, "election_id" => $_GET['election']]);
+                    if (empty($election_voter)) return redirect('not-found');
+
+                    $form_data['club_election_id'] = $_GET['election'];
+                    $form_data['voter_id'] = $election_voter->id;
+                    $form_data['role'] = $role;
+
+                    if ($club_election_vote->validateCreate($form_data)) {
+                        if ($club_election_vote->one([
+                            "role" => strtoupper($role),
+                            "club_id" => $form_data['club_id'],
+                            "club_election_id" => $form_data['club_election_id'],
+                            "voter_id" => $form_data['voter_id'],
+                        ])) {
+                            $_SESSION['alerts'] = [["status" => "error", "message" => "You have already voted"]];
+
+                            return redirect();
+                        } {
+                            /* updated election voter state */
+                            $club_election_voters->update([
+                                "id" => $form_data['voter_id']
+                            ], [
+                                "did_vote" => 1
+                            ]);
+
+                            /* add president vote */
+                            $club_election_vote->create([
+                                "role" => strtoupper($role),
+                                "club_id" => $form_data['club_id'],
+                                "club_election_id" => $form_data['club_election_id'],
+                                "voter_id" => $form_data['voter_id'],
+                                "selected_candidate_id" => $form_data['candidate'],
+                                "description" => empty($form_data['description']) ? '' : $form_data['description'],
+                            ]);
+
+                            $_SESSION['alerts'] = [["status" => "success", "message" => "Election voted successfully"]];
+
+                            return redirect();
+                        }
+
+                        $data["errors"] = $club_election_vote->errors;
+                    }
+                }
+            } else {
+                if ($path == 'club/dashboard/election/add' || $path == 'club/dashboard/election/edit') {
+                    $data['vote_members_data']  = $data['candidate_members_data'] = $club_member->find(
+                        ["club_id" => $club_id, "state" => "ACCEPTED"],
+                        [
+                            "club_members.id as id",
+                            "user_id",
+                            "club_id",
+                            "user.first_name",
+                            "user.last_name",
+                        ],
+                        [
+                            ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"]
+                        ]
+                    );
+                }
+
+                /* fetch election data for the form */
+                if ($path == 'club/dashboard/election/edit') {
+                    if (empty($_GET['id'])) {
+                        return redirect('not-found');
+                    }
+
+                    /* if the election is opened or closed do not let them edit */
+                    $election_data = $club_election->one(
+                        ["club_id" => $club_id, "id" => $_GET['id'], "state" => "PENDING"]
+                    );
+
+                    $_POST['id'] = $election_data->id;
+                    $_POST['title'] = $election_data->title;
+                    $_POST['description'] = $election_data->description;
+                    $_POST['start_datetime'] = $election_data->start_datetime;
+                    $_POST['end_datetime'] = $election_data->end_datetime;
+
+                    /* election candidates */
+                    $roles = ['president', 'secretary', 'treasurer'];
+                    foreach ($roles as $role) {
+                        $_POST[$role . '_candidate'] = $club_election_candidates->find([
+                            "election_id" => $_GET['id'],
+                            "club_election_candidates.role" => strtoupper($role)
+                        ], [
+                            "club_election_candidates.club_member_id as id",
+                            "club_election_candidates.user_id",
+                            "club_election_candidates.club_id",
+                            "concat(user.first_name,' ', user.last_name) as name",
+                        ], [
+                            ["table" => "users", "as" => "user", "on" => "club_election_candidates.user_id = user.id"]
+                        ], ["type" => "array"]);
+                    }
+
+
+                    /* election voters */
+                    $_POST['voter'] = $club_election_voters->find([
+                        "election_id" => $_GET['id']
+                    ], [
+                        "club_election_voters.club_member_id as id",
+                        "club_election_voters.user_id",
+                        "club_election_voters.club_id",
+                        "concat(user.first_name,' ', user.last_name) as name",
+                    ], [
+                        ["table" => "users", "as" => "user", "on" => "club_election_voters.user_id = user.id"]
+                    ], ["type" => "array"]);
+                }
+
+                /* election vote data */
+                if ($path == 'club/dashboard/election/vote') {
+                    $tabs = ['president', 'secretary', 'treasurer'];
+                    $data["tab"] = getActiveTab($tabs, $_GET);
+
+                    $user_id = Auth::getId();
+                    if (empty($_GET["election"])) return redirect('not-found');
+
+                    /* get election details */
+                    $data['election_id'] = $_GET["election"];
+                    $data['election'] = $club_election->one(["id" => $data['election_id'], "state" => "OPEN"]);
+                    if (empty($data['election'])) return redirect('not-found');
+
+                    /* get election voter details */
+                    $election_voter = $club_election_voters->one(["user_id" => $user_id, "election_id" => $_GET['election']]);
+                    if (empty($election_voter)) return redirect('not-found');
+
+                    $data['candidate_members_data'] = $club_election_candidates->find(
+                        ["club_id" => $club_id, "election_id" => $_GET["election"], "club_election_candidates.role" => strtoupper($data['tab'])],
+                        [
+                            "club_election_candidates.id as id",
+                            "club_election_candidates.club_member_id as club_member_id",
+                            "club_election_candidates.user_id",
+                            "club_election_candidates.club_id",
+                            "user.first_name",
+                            "user.last_name",
+                            "user.image",
+                        ],
+                        [
+                            ["table" => "users", "as" => "user", "on" => "club_election_candidates.user_id = user.id"]
+                        ]
+                    );
+
+                    $redirect_on_success = false;
+                }
+
+                /* data fetching */
+                if ($path == 'club/dashboard/election' && $data['tab'] == 'votes') {
+                    $user_id = Auth::getId();
+
+                    /* count */
+                    $total_count = $club_election->find([
+                        "club_elections.club_id" => $club_id,
+                        "club_elections.is_deleted" => 0,
+                        "club_elections.state" => "OPEN",
+                        "voter.user_id" => $user_id
+                    ], ["count(*) as count"], [
+                        ["table" => "club_election_voters", "as" => "voter", "on" => "club_elections.id = voter.election_id"]
+                    ], [], isset($_GET['search']) ? $_GET['search'] : '');
+                    if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+
+                    /* data */
+                    $data['election_data'] = $club_election->find([
+                        "club_elections.club_id" => $club_id,
+                        "club_elections.is_deleted" => 0,
+                        "club_elections.state" => "OPEN",
+                        "voter.user_id" => $user_id
+                    ], [
+                        "club_elections.id",
+                        "club_elections.title",
+                        "club_elections.start_datetime",
+                        "club_elections.end_datetime",
+                        "club_elections.description",
+                        "club_elections.club_id",
+                        "voter.did_vote"
+                    ], [
+                        ["table" => "club_election_voters", "as" => "voter", "on" => "club_elections.id = voter.election_id"]
+                    ], [
+                        "limit" => $data['limit'],
+                        "offset" => ($data['page'] - 1) * $data['limit'],
+                    ], isset($_GET['search']) ? $_GET['search'] : '');
+                } else if ($path == 'club/dashboard/election' && $data['tab'] == 'elections') {
+                    /* count */
+                    $total_count = $club_election->find([
+                        "club_id" => $club_id,
+                        "is_deleted" => 0,
+                    ], ["count(*) as count"], [], [], isset($_GET['search']) ? $_GET['search'] : '');
+                    if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+
+                    /* data */
+                    $data['election_data'] = $club_election->find([
+                        "club_id" => $club_id,
+                        "is_deleted" => 0,
+                    ], [], [], [
+                        "limit" => $data['limit'],
+                        "offset" => ($data['page'] - 1) * $data['limit'],
+                    ], isset($_GET['search']) ? $_GET['search'] : '');
+                }
+
+                if ($path == 'club/dashboard/election/result') {
+                    if (empty($_GET['club_id']) || empty($_GET['election_id'])) {
+                        return redirect('club/dashboard/election');
+                    }
+
+                    $tabs = ['president', 'secretary', 'treasurer'];
+                    $data["tab"] = getActiveTab($tabs, $_GET);
+
+                    $data['club_id'] = $_GET['club_id'];
+                    $data['election_id'] = $_GET['election_id'];
+
+                    $data['election'] = $club_election->one(['id' => $data['election_id']], ["title", "description"]);
+                    if (empty($data['election'])) {
+                        return redirect('club/dashboard/election');
+                    }
+
+                    $data['election_results'] = $club_election_candidates->find([
+                        "club_election_candidates.club_id" => $data['club_id'],
+                        "club_election_candidates.election_id" =>  $data['election_id'],
+                    ], [
+                        "club_election_candidates.id as id",
+                        "user.first_name",
+                        "user.last_name",
+                        "user.image",
+                        "(select count(*) from club_election_votes votes where votes.selected_candidate_id = club_election_candidates.id and votes.role = '" . strtoupper($data['tab']) . "') as votes",
+                        "(select count(*) from club_election_votes votes where votes.selected_candidate_id = club_election_candidates.id and votes.role = '" . strtoupper($data['tab']) . "') /
+                         (select count(*) from club_election_voters votes where votes.election_id = '" .  $data['election_id'] . "') * 100 as vote_percentage",
+                    ], [
+                        ["table" => "users", "as" => "user", "on" => "club_election_candidates.user_id = user.id"],
+                    ], [
+                        "order_column" => "votes"
+                    ]);
+                }
+            }
+
+
+            $db->commit();
+
+            if ($redirect_on_success && $_SERVER['REQUEST_METHOD'] == "POST" &&  count($data['errors']) == 0) return redirect('club/dashboard/election');
+        } catch (\Throwable $th) {
+            show($th);
+            $db->rollback();
+            $_SESSION['alerts'] = [["status" => "error", "message" => $th->getMessage() || "Failed to process the action, please try again later."]];
+        }
+
         $this->view($path, $data);
     }
 }

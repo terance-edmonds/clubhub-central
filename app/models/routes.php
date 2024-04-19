@@ -16,6 +16,12 @@ class Routes
         "login" => [
             "ANY"
         ],
+        "password" => [
+            "ANY"
+        ],
+        "password/reset" => [
+            "ANY"
+        ],
         "register" => [
             "ANY"
         ],
@@ -135,6 +141,12 @@ class Routes
             "PRESIDENT",
             "CLUB_IN_CHARGE",
         ],
+        "events/dashboard/estimates" => [
+            "TREASURER",
+            "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+        ],
         "events/dashboard/budgets" => [
             "MEMBER",
             "TREASURER",
@@ -189,16 +201,6 @@ class Routes
         ],
         "club/dashboard/events/edit" => [
             "PRESIDENT",
-            "CLUB_IN_CHARGE",
-        ],
-        "club/dashboard/budgets" => [
-            "PRESIDENT",
-            "TREASURER",
-            "CLUB_IN_CHARGE",
-        ],
-        "club/dashboard/budgets/edit" => [
-            "PRESIDENT",
-            "TREASURER",
             "CLUB_IN_CHARGE",
         ],
         "club/dashboard/members" => [
@@ -266,7 +268,25 @@ class Routes
             "PRESIDENT",
             "CLUB_IN_CHARGE",
         ],
+        "club/dashboard/election/result" => [
+            "MEMBER",
+            "TREASURER",
+            "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+        ],
+        "club/dashboard/election/vote" => [
+            "MEMBER",
+            "TREASURER",
+            "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+        ],
         "club/dashboard/election/add" => [
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+        ],
+        "club/dashboard/election/edit" => [
             "PRESIDENT",
             "CLUB_IN_CHARGE",
         ],
