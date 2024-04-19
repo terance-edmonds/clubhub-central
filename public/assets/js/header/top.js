@@ -124,9 +124,9 @@ const onNotificationsClick = (e) => {
     }
 
     if (el.hasClass('active')) {
-        $('.notification-list').fadeOut();
+        $('.notification-list-wrap').fadeOut();
     } else {
-        $('.notification-list').css('display', 'flex').hide().fadeIn();
+        $('.notification-list-wrap').css('display', 'flex').hide().fadeIn();
     }
     el.toggleClass('active');
 };

@@ -68,20 +68,28 @@ $nav-item-padding: 15px 0;
                     }
                 }
             }
-
-            .notification-list {
+            .notification-list-wrap {
                 display: none;
-                flex-direction: column;
                 position: absolute;
                 top: 100%;
                 margin-top: 5px;
                 margin-right: 15px;
                 right: 0px;
+                max-height: 500px;
+                overflow-y: auto;
                 width: 400px;
                 min-height: 70px;
+                height: auto;
                 background-color: $border;
                 border-radius: 7px;
                 box-shadow: 0 3px 5px rgba(255, 255, 255, 0.2);
+            }
+
+            .notification-list {
+                flex-direction: column;
+                position: relative;
+                width: 400px;
+                min-height: 70px;
 
                 .notification-item {
                     display: flex;

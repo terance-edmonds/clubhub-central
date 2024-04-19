@@ -6,7 +6,9 @@
 
 <?php $this->view('includes/header') ?>
 
-<div id="admin-dashboard-requests" class="container container-sections side-padding admin-dashboard dashboard-container">
+<?php $this->view('includes/alerts') ?>
+
+<div id="admin-dashboard-requests" class="container container-sections side-padding club-dashboard dashboard-container">
     <?php $this->view('includes/side-bars/admin/left', ["menu" => $menu]) ?>
 
     <section class="center-section">
@@ -15,88 +17,78 @@
                 <span class="title">Requests</span>
             </div>
 
-            <div class="input-wrap search-input">
-                <div class="input">
-                    <span class="icon material-icons-outlined">
-                        search
-                    </span>
-                    <input type="text" placeholder="Search">
+            <form method="get" class="search-input">
+                <div class="input-wrap">
+                    <div class="input">
+                        <button type="submit" class="icon-button">
+                            <span class="icon material-icons-outlined">
+                                search
+                            </span>
+                        </button>
+                        <input type="text" placeholder="Search" name="search" value="<?= setValue('search', '', 'text', 'get') ?>">
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
 
         <div class="content-section">
             <div class="table-wrap">
                 <table>
                     <tr class="table-header">
+                        <th>ID</th>
                         <th>Subject</th>
-                        <th>Date & Time</th>
-                        <th>Venue</th>
-                        <th>View</th>
+                        <th>Created Date & Time</th>
+                        <th>Event Name</th>
+                        <th>Event Date & Time</th>
+                        <th>Description</th>
                         <th>Status</th>
-                        <th>Actions</th>
+                        <th>Remarks</th>
                     </tr>
-
-                    <?php if (count($requests_data) == 0) { ?>
-                        <tr>
-                            <td colspan="6">No Records.</td>
-                        </tr>
-                    <?php } ?>
-                    
-                        
-                    <?php foreach ($requests_data as $request) { ?>
-                        <tr class="table-data">
-                            <td>
-                                <?= displayValue($request->name) ?>
-                            </td>
-
-                            <td>
-                                <?= displayValue($request->start_datetime) ?>
-                            </td>
-
-                            <td>
-                                <?= displayValue($request->venue) ?>
-                            </td>
-
-                            <td align="center">
-                                <button class="icon-button">
-                                    <span class="material-icons-outlined">
-                                        visibility
-                                    </span>
-                                </button>
-                            </td>
-
-                            <td>
-                                <button class="button status-button" data-status="PENDING">
-                                    Pending
-                                </button>
-                            </td>
-                            
-                            <td align="center">
-                                <div class="buttons">
-                                    <button class="icon-button cl-green">
-                                        <span class="material-icons-outlined">
-                                            check
-                                        </span>
-                                    </button>
-                                    <button class="icon-button cl-red">
-                                        <span class="material-icons-outlined">
-                                            close
-                                        </span>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    <?php } ?>
-
-
+                    <tr class="table-data">
+                        <?php if (count($table_data) == 0) { ?>
+                            <td colspan="8">No Records.</td>
+                    </tr>
+                <?php } ?>
+                <?php foreach ($table_data as $x => $val) { ?>
+                    <tr>
+                        <td><?= displayValue($val->id) ?></td>
+                        <td><?= displayValue($val->subject) ?></td>
+                        <td><?= displayValue($val->created_datetime, 'datetime') ?></td>
+                        <td><?= displayValue($val->event_name) ?></td>
+                        <td><?= displayValue($val->event_date, 'datetime') ?></td>
+                        <td align="center">
+                            <button class="icon-button" onclick='onViewPopup("View Description", `<?= $val->description ?>`)'>
+                                <span class="material-icons-outlined">
+                                    visibility
+                                </span>
+                            </button>
+                        </td>
+                        <td>
+                            <button onclick='onDataPopup("request-status", <?= toJson($val, ["id", "state", "remarks"]) ?>)' class="button status-button pointer-cursor" data-status="<?= $val->state ?>">
+                                <?= displayValue($val->state, 'start-case') ?>
+                            </button>
+                        </td>
+                        <td align="center">
+                            <button class="icon-button" onclick='onViewPopup("View Remarks", `<?= $val->remarks ? $val->remarks : "No remarks." ?>`)'>
+                                <span class="material-icons-outlined">
+                                    visibility
+                                </span>
+                            </button>
+                        </td>
+                    </tr>
+                <?php } ?>
                 </table>
+                <?php $this->view('includes/pagination', [
+                    "total_count" => $total_count,
+                    "limit" => $limit,
+                    "page" => $page
+                ]) ?>
             </div>
         </div>
     </section>
 </div>
 
-<?php $this->view('includes/modals/event/register') ?>
-<script src="<?= ROOT ?>/assets/js/events/event.js"></script>
+<?php $this->view('includes/modals/view-text') ?>
+<?php $this->view('includes/modals/club/request/status') ?>
 
-<?php $this->view('includes/header/bottom') ?>
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

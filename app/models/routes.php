@@ -257,6 +257,10 @@ class Routes
             "CLUB_IN_CHARGE",
             "PRESIDENT",
         ],
+        "club/dashboard/requests/edit" => [
+            "CLUB_IN_CHARGE",
+            "PRESIDENT",
+        ],
         "club/dashboard/posts" => [
             "MEMBER",
             "TREASURER",

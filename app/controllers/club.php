@@ -178,7 +178,7 @@ class Club extends Controller
             array_push($menu, ["id" => "reports", "name" => "Reports", "icon" => "description", "path" => ["/club/dashboard/reports", "/club/dashboard/reports/add"], "active" => "false"], ["id" => "meetings", "name" => "Meetings", "icon" => "diversity_2", "path" => "/club/dashboard/meetings", "active" => "false"]);
         }
         if (in_array($club_role, ['CLUB_IN_CHARGE', 'PRESIDENT'])) {
-            array_push($menu, ["id" => "election", "name" => "Election", "icon" => "how_to_vote", "path" => ["/club/dashboard/election", "/club/dashboard/election/add", "/club/dashboard/election/edit", "/club/dashboard/election/vote", "/club/dashboard/election/result", "/club/dashboard/election/details"], "active" => "false"], ["id" => "requests", "name" => "Requests", "icon" => "crisis_alert", "path" => ["/club/dashboard/requests", "/club/dashboard/requests/add"], "active" => "false"]);
+            array_push($menu, ["id" => "election", "name" => "Election", "icon" => "how_to_vote", "path" => ["/club/dashboard/election", "/club/dashboard/election/add", "/club/dashboard/election/edit", "/club/dashboard/election/vote", "/club/dashboard/election/result", "/club/dashboard/election/details"], "active" => "false"], ["id" => "requests", "name" => "Requests", "icon" => "crisis_alert", "path" => ["/club/dashboard/requests", "/club/dashboard/requests/add", "/club/dashboard/requests/edit"], "active" => "false"]);
         }
 
         /* update the active menu item */
@@ -567,6 +567,180 @@ class Club extends Controller
 
     private function requests($path, $data)
     {
+        $db = new Database();
+        $storage = new Storage();
+        $user = new User($db);
+        $clubs = new Clubs($db);
+        $events = new Event($db);
+        $club_request = new ClubRequest($db);
+        $notification = new UserNotifications($db);
+        $notification_state = new UserNotificationsState($db);
+
+        $club_id = $storage->get('club_id');
+        $path = $_GET['url'];
+
+        $redirect_link = null;
+        $data['page'] = 1;
+        $data['limit'] = 15;
+
+        if (!empty($_GET['page']) && is_numeric($_GET['page']))
+            $data['page'] = $_GET['page'];
+
+        $db->transaction();
+
+        try {
+            if ($_SERVER['REQUEST_METHOD'] == "POST") {
+                $form_data = $_POST;
+                $form_data['club_id'] = $club_id;
+
+                if ($form_data['submit'] == 'create-request') {
+                    if ($club_request->validateCreateRequest($form_data)) {
+                        $club_request->create([
+                            "club_id" => $club_id,
+                            "subject" => $form_data['subject'],
+                            "description" => $form_data['description'],
+                            "club_event_id" => $form_data['club_event_id'],
+                        ]);
+
+                        /* set notification */
+                        $super_admin = $user->one(["role" => "SUPER_ADMIN"]);
+                        $club = $clubs->one(["id" => $club_id]);
+                        if (!empty($super_admin)) {
+                            $notification_result = $notification->create([
+                                "title" => 'New Club Request',
+                                "description" => '"' . $club->name . '" has sent a club request.',
+                            ]);
+
+                            $notification_state->create([
+                                "user_id" => $super_admin->id,
+                                "notification_id" => $notification_result->id,
+                            ]);
+                        }
+
+                        $redirect_link = 'club/dashboard/requests';
+                        $_SESSION['alerts'] = [["status" => "success", "message" => "Request has been sent successfully"]];
+                    }
+                } else if ($form_data['submit'] == 'update-request') {
+                    if (!isset($_GET['id'])) {
+                        $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to update the request, request ID is not found"]];
+                    } else if (empty($club_request->one(['id' => $_GET['id'], 'club_id' => $club_id]))) {
+                        $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to update the request, request details not found"]];
+                    } else {
+                        $form_data['id'] = $_GET['id'];
+
+                        if ($club_request->validateUpdateRequest($form_data)) {
+                            $club_request->update(["id" => $form_data['id']], [
+                                "subject" => $form_data['subject'],
+                                "description" => $form_data['description'],
+                                "club_event_id" => $form_data['club_event_id'],
+                            ]);
+
+                            /* set notification */
+                            $super_admin = $user->one(["role" => "SUPER_ADMIN"]);
+                            $club = $clubs->one(["id" => $club_id], ["clubs.name"]);
+                            if (!empty($super_admin)) {
+                                $notification_result = $notification->create([
+                                    "title" => 'Club Request Update',
+                                    "description" => '"' . $club->name . '" request with ID "' . $form_data['id'] . '" has been updated.',
+                                ]);
+
+                                $notification_state->create([
+                                    "user_id" => $super_admin->id,
+                                    "notification_id" => $notification_result->id,
+                                ]);
+                            }
+                        }
+
+                        $_SESSION['alerts'] = [["status" => "success", "message" => "Request has been updated successfully"]];
+                    }
+                } else if ($form_data['submit'] == 'delete-request') {
+                    $club_request->delete(["id" => $form_data['id']]);
+
+                    /* set notification */
+                    $super_admin = $user->one(["role" => "SUPER_ADMIN"]);
+                    $club = $clubs->one(["id" => $club_id]);
+                    if (!empty($super_admin)) {
+                        $notification_result = $notification->create([
+                            "title" => 'Club Request Removed',
+                            "description" => '"' . $club->name . '" request with ID "' . $form_data['id'] . '" has been removed.',
+                        ]);
+
+                        $notification_state->create([
+                            "user_id" => $super_admin->id,
+                            "notification_id" => $notification_result->id,
+                        ]);
+                    }
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Request has been removed successfully"]];
+                }
+
+                $data['errors'] = $club_request->errors;
+            }
+
+            /* pagination */
+            $total_count = $club_request->find([
+                "club_requests.club_id" => $club_id
+            ], ["count(*) as count"], [["table" => "club_events", "as" => "event", "on" => "club_requests.club_event_id = event.id"]], ["search" =>  ["event.name"]], isset($_GET['search']) ? $_GET['search'] : '');
+            if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+
+            /* fetch club requests */
+            $data['table_data'] = $club_request->find(
+                ["club_requests.club_id" => $club_id],
+                [
+                    "club_requests.id",
+                    "club_requests.state",
+                    "club_requests.subject",
+                    "club_requests.description",
+                    "club_requests.remarks",
+                    "club_requests.created_datetime",
+                    "event.name as event_name",
+                    "event.start_datetime as event_date",
+                ],
+                [
+                    ["table" => "club_events", "as" => "event", "on" => "club_requests.club_event_id = event.id"]
+                ],
+                [
+                    "limit" => $data['limit'],
+                    "offset" => ($data['page'] - 1) * $data['limit'],
+                    "search" =>  ["event.name"]
+                ],
+                isset($_GET['search']) ? $_GET['search'] : ''
+            );
+
+            if ($path == 'club/dashboard/requests/add' || $path == 'club/dashboard/requests/edit') {
+                $data['event_data'] = $events->find(
+                    ["club_id" => $club_id],
+                    [
+                        "club_events.id",
+                        "club_events.name",
+                    ],
+                    [],
+                    [
+                        "all" => true
+                    ]
+                );
+            }
+
+
+            if ($path == 'club/dashboard/requests/edit') {
+                if (!isset($_GET['id'])) return redirect('not-found');
+
+                $request_data = $club_request->one(['id' => $_GET['id'], 'club_id' => $club_id]);
+
+                $_POST['subject'] = $request_data->subject;
+                $_POST['description'] = $request_data->description;
+                $_POST['club_event_id'] = $request_data->club_event_id;
+            }
+
+            $db->commit();
+        } catch (\Throwable $th) {
+            $db->rollback();
+            show($th);
+            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to process the action. Please try again later"]];
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST" && count($data['errors']) == 0) return redirect($redirect_link);
+
         $this->view($path, $data);
     }
 

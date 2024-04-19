@@ -24,7 +24,7 @@
 }
 
 .cl-orange {
-  color: #ff8800;
+  color: #fbae56;
 }
 
 .cl-green {
@@ -82,7 +82,7 @@
   padding: 20px;
 }
 #register-verify .icon.error span {
-  color: #ff8800;
+  color: #fbae56;
 }
 #register-verify .icon span {
   font-size: 8em;

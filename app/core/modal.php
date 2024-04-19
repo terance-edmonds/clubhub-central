@@ -128,7 +128,13 @@ class Modal
             $condition = '&&';
 
             if (!empty($options['search']) && is_array($options['search'])) {
-                $query .= " && ( ";
+                if (str_contains($query, "where")) {
+                    $query .= ' &&';
+                } else {
+                    $query .= ' where';
+                }
+
+                $query .= " ( ";
 
                 foreach ($options['search'] as $search_key) {
                     $query .= $search_key . " like '%" . $search . "%' || ";

@@ -59,11 +59,13 @@
                                 <?= displayValue($event->venue) ?>
                             </td>
                             <td align="center">
-                                <button class="icon-button">
-                                    <span class="material-icons-outlined">
-                                        visibility
-                                    </span>
-                                </button>
+                                <a href="<?php echo ($event->state == 'ACTIVE') ? ROOT . '/events/event?id=' . $event->id : 'javascript:void(0);' ?>">
+                                    <button <?php if ($event->state != 'ACTIVE') { ?> disabled <?php } ?> class="icon-button">
+                                        <span class="material-icons-outlined">
+                                            visibility
+                                        </span>
+                                    </button>
+                                </a>
                             </td>
                             <td>
                                 <button class="button status-button" data-status="PENDING">

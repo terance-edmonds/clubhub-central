@@ -54,37 +54,38 @@
                         </div>
                         <span class="text">Notifications</span>
                     </div>
-
-                    <div class="notification-list">
-                        <?php if (empty($notifications) or count($notifications) == 0) { ?>
-                            <div class="notification-item empty">
-                                <p class="title">No Notifications.</p>
-                            </div>
-                        <?php } else { ?>
-                            <?php foreach ($notifications as $notification) { ?>
-                                <div data-notification="<?= $notification->notification_state_id ?>" class="notification-item" data-unread="<?= displayValue(!$notification->mark_as_read, 'boolean') ?>">
-                                    <p class="title"><?= $notification->title ?></p>
-                                    <p class="description truncate-text"><?= $notification->description ?></p>
-                                    <div class="buttons">
-                                        <?php if (!empty($notification->link)) { ?>
-                                            <a href="<?= $notification->link ?>">
-                                                <button type="button" class="icon-button cl-blue">
-                                                    <span class="material-icons-outlined">
-                                                        link
-                                                    </span>
-                                                </button>
-                                            </a>
-                                        <?php } ?>
-                                        <button onclick="onDeleteNotification(event, <?= $notification->notification_state_id ?>)" type="button" class="icon-button cl-red">
-                                            <span class="material-icons-outlined">
-                                                delete
-                                            </span>
-                                        </button>
-                                    </div>
+                    <div class="notification-list-wrap">
+                        <div class="notification-list">
+                            <?php if (empty($notifications) or count($notifications) == 0) { ?>
+                                <div class="notification-item empty">
+                                    <p class="title">No Notifications.</p>
                                 </div>
-                            <?php
-                            } ?>
-                        <?php } ?>
+                            <?php } else { ?>
+                                <?php foreach ($notifications as $notification) { ?>
+                                    <div data-notification="<?= $notification->notification_state_id ?>" class="notification-item" data-unread="<?= displayValue(!$notification->mark_as_read, 'boolean') ?>">
+                                        <p class="title"><?= $notification->title ?></p>
+                                        <p class="description truncate-text"><?= $notification->description ?></p>
+                                        <div class="buttons">
+                                            <?php if (!empty($notification->link)) { ?>
+                                                <a href="<?= $notification->link ?>">
+                                                    <button type="button" class="icon-button cl-blue">
+                                                        <span class="material-icons-outlined">
+                                                            link
+                                                        </span>
+                                                    </button>
+                                                </a>
+                                            <?php } ?>
+                                            <button onclick="onDeleteNotification(event, <?= $notification->notification_state_id ?>)" type="button" class="icon-button cl-red">
+                                                <span class="material-icons-outlined">
+                                                    delete
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                <?php
+                                } ?>
+                            <?php } ?>
+                        </div>
                     </div>
                 </div>
                 <div class="nav-item menu-item">

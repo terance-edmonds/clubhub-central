@@ -7,6 +7,10 @@
                 color: $yellow;
                 background-color: $yellow-light;
             }
+            &[data-status='PROCESSING'] {
+                color: $orange;
+                background-color: $orange-light;
+            }
             &[data-status='APPROVED'] {
                 color: $green;
                 background-color: $green-light;

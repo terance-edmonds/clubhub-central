@@ -14,7 +14,7 @@
     <section class="center-section">
         <div class="title-bar">
             <div class="title-wrap">
-                <span class="title">New Request</span>
+                <span class="title">Update Request</span>
             </div>
         </div>
 
@@ -26,10 +26,10 @@
                         <div class="multi-wrap">
                             <div class="input-wrap">
                                 <label for="event">Choose Event</label>
-                                <select name="club_event_id" id="event" required value="<?= setValue('club_event_id') ?>">
+                                <select name="club_event_id" id="event" required>
                                     <option value="" selected disabled hidden>Choose Event</option>
                                     <?php foreach ($event_data as $event) { ?>
-                                        <option value="<?= $event->id ?>"><?= displayValue($event->name) ?></option>
+                                        <option <?php if ($event->id == setValue('club_event_id')) { ?> selected <?php } ?> value="<?= $event->id ?>"><?= displayValue($event->name) ?></option>
                                     <?php } ?>
                                 </select>
                                 <?php if (!empty($errors['event'])) : ?>
@@ -50,7 +50,7 @@
                         </div>
                         <div class="input-wrap">
                             <label for="description">Description</label>
-                            <textarea value="<?= setValue('description') ?>" id="description" name="description" placeholder="Description" required></textarea>
+                            <textarea id="description" name="description" placeholder="Description" required><?= setValue('description') ?></textarea>
                             <?php if (!empty($errors['description'])) : ?>
                                 <small>
                                     <?= $errors['description'] ?>
@@ -61,7 +61,7 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button type="submit" name="submit" value="create-request" class="button contained">Send Request</button>
+                    <button type="submit" name="submit" value="update-request" class="button contained">Update Request</button>
                 </div>
             </form>
         </div>

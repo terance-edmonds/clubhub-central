@@ -1,7 +1,7 @@
 <div class="popup-modal-wrap" popup-name="event-status">
     <div class="popup-modal">
         <div class="popup-header">
-            <span class="title">View Post</span>
+            <span class="title">Event State</span>
             <div class="icon" onclick="$(`[popup-name='event-status']`).popup(false)">
                 <span class="material-icons-outlined">
                     close

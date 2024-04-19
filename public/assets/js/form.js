@@ -15,6 +15,14 @@ const onDataPopup = (name, data = {}) => {
     $(`[popup-name=${name}]`).popup(true);
 };
 
+const onViewPopup = (title, description) => {
+    const popup = $(`[popup-name='view-text']`);
+
+    popup.find('[name="title"]').text(title);
+    popup.find('[name="description"]').text(description);
+    $(`[popup-name='view-text']`).popup(true);
+};
+
 /* set default values for inputs */
 const setDefaultInputValues = () => {
     const inputs = $(`[set-default]`);
