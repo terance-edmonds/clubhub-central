@@ -1,0 +1,11 @@
+#event-dashboard-budgets {
+    .budget_buttons {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+
+        .reject {
+            background-color: $red-2;
+        }
+    }
+}

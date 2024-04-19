@@ -15,7 +15,11 @@ class Event extends Modal
         "state",
         "open_registrations",
         "created_datetime",
-        "is_budgets_verified",
+        "is_budget_submitted",
+        "president_budgets_verified",
+        "president_budget_remarks",
+        "incharge_budgets_verified",
+        "incharge_budget_remarks",
         "is_deleted"
     ];
     protected $search_columns = [
@@ -59,6 +63,19 @@ class Event extends Modal
         if ($data['start_datetime'] > $data['end_datetime']) {
             $this->errors['end_datetime'] = "Invalid end date & time";
         }
+
+        if (empty($this->errors)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function validateBudgetReject($data)
+    {
+        $this->errors = [];
+
+        if (empty($data['remarks'])) $this->errors['remarks'] = "Remarks is required";
 
         if (empty($this->errors)) {
             return true;

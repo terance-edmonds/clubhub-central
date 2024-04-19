@@ -86,6 +86,10 @@
                 width: 100%;
                 max-width: 470px;
 
+                &.align-end {
+                    justify-content: flex-end;
+                }
+
                 .search-input {
                     max-width: 350px;
                 }

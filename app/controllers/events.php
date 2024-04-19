@@ -907,6 +907,9 @@ class Events extends Controller
         $db = new Database();
         $event = new Event($db);
         $budget = new EstimatedBudget($db);
+        $notification = new UserNotifications($db);
+        $notification_state = new UserNotificationsState($db);
+        $club_member = new ClubMember($db);
 
         $club_id = $storage->get('club_id');
         $club_event_id = $storage->get('club_event_id');
@@ -922,7 +925,7 @@ class Events extends Controller
         if (empty($club_event_id))  $_SESSION['alerts'] = [["status" => "error", "message" => "Event details are not found"]];
 
         /* fetch event details */
-        $data['event'] = $event->one(["id" => $club_event_id], ["id", "is_budgets_verified"]);
+        $data['event'] = $event->one(["id" => $club_event_id], ["id", "name", "is_budget_submitted", "president_budgets_verified", "president_budget_remarks", "incharge_budgets_verified", "incharge_budget_remarks"]);
 
         try {
             $db->transaction();
@@ -937,11 +940,11 @@ class Events extends Controller
                     if ($budget->validateAddIncome($form_data)) {
                         try {
                             /* create budget record */
-                            $result = $budget->create($form_data);
+                            $budget->create($form_data);
 
                             $_SESSION['alerts'] = [["status" => "success", "message" => "Income budget details added successfully"]];
                         } catch (Throwable $th) {
-                            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to add budget details"]];
+                            throw new Error("Failed to add budget details");
                         }
                     } else {
                         $data['popups']["add-income"] = true;
@@ -957,7 +960,7 @@ class Events extends Controller
 
                             $_SESSION['alerts'] = [["status" => "success", "message" => "Income budget details updated successfully"]];
                         } catch (Throwable $th) {
-                            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to update budget details"]];
+                            throw new Error("Failed to update budget details");
                         }
                     } else {
                         $data['popups']["edit-income"] = $form_data;
@@ -972,7 +975,7 @@ class Events extends Controller
                         $_SESSION['alerts'] = [["status" => "success", "message" => "Income budget details deleted successfully"]];
                     } catch (Throwable $th) {
                         var_dump($th);
-                        $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to delete budget details"]];
+                        throw new Error("Failed to delete budget details");
                     }
 
                     $data['errors'] = $budget->errors;
@@ -986,7 +989,7 @@ class Events extends Controller
 
                             $_SESSION['alerts'] = [["status" => "success", "message" => "Expense budget details added successfully"]];
                         } catch (Throwable $th) {
-                            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to add budget details"]];
+                            throw new Error("Failed to add budget details");
                         }
                     } else {
                         $data['popups']["add-expense"] = true;
@@ -1002,7 +1005,7 @@ class Events extends Controller
 
                             $_SESSION['alerts'] = [["status" => "success", "message" => "Expense budget details updated successfully"]];
                         } catch (Throwable $th) {
-                            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to update budget details"]];
+                            throw new Error("Failed to update budget details");
                         }
                     } else {
                         $data['popups']["edit-expense"] = $form_data;
@@ -1016,57 +1019,194 @@ class Events extends Controller
 
                         $_SESSION['alerts'] = [["status" => "success", "message" => "Expense budget details deleted successfully"]];
                     } catch (Throwable $th) {
-                        $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to delete budget details"]];
+                        throw new Error("Failed to delete budget details");
                     }
-
-                    $data['errors'] = $budget->errors;
-                } else if ($_POST['submit'] == 'verify-budgets') {
+                } else if ($_POST['submit'] == 'submit-budgets') {
                     try {
                         $event->update([
                             "id" => $club_event_id
                         ], [
-                            "is_budgets_verified" => 1
+                            "is_budget_submitted" => 1,
+                        ]);
+
+                        /* set notification */
+                        $user_data = $club_member->one(["club_members.club_id" => $club_id, "club_members.role" => "PRESIDENT"], [
+                            "club_members.user_id as id",
+                            "club.name as club_name"
+                        ], [
+                            ["table" => "clubs", "as" => "club", "on" => "club_members.club_id = club.id"]
+                        ]);
+
+                        if (!empty($user_data)) {
+                            $notification_result = $notification->create([
+                                "title" => "Event Budget Submitted",
+                                "description" => '"' . $data['event']->name . '" event of club "' . $user_data->club_name . '" has submitted budget details.',
+                            ]);
+
+                            $notification_state->create([
+                                "user_id" => $user_data->id,
+                                "notification_id" => $notification_result->id,
+                            ]);
+                        }
+
+                        $_SESSION['alerts'] = [["status" => "success", "message" => "Event budgets have been submitted"]];
+                    } catch (Throwable $th) {
+                        throw new Error("Failed to submit event budgets");
+                    }
+                } else if ($_POST['submit'] == 'verify-president-budgets') {
+                    try {
+                        $event->update([
+                            "id" => $club_event_id
+                        ], [
+                            "president_budgets_verified" => 1,
+                            "president_budget_remarks" => ""
+                        ]);
+
+                        /* set notification */
+                        $user_data = $club_member->one(["club_members.club_id" => $club_id, "club_members.role" => "CLUB_IN_CHARGE"], [
+                            "club_members.user_id as id",
+                            "club.name as club_name"
+                        ], [
+                            ["table" => "clubs", "as" => "club", "on" => "club_members.club_id = club.id"]
+                        ]);
+
+                        if (!empty($user_data)) {
+                            $notification_result = $notification->create([
+                                "title" => "Event Budget Verified",
+                                "description" => '"' . $data['event']->name . '" event of club "' . $user_data->club_name . '" has verified the budget',
+                            ]);
+
+                            $notification_state->create([
+                                "user_id" => $user_data->id,
+                                "notification_id" => $notification_result->id,
+                            ]);
+                        }
+
+                        $_SESSION['alerts'] = [["status" => "success", "message" => "Event budgets have been verified"]];
+                    } catch (Throwable $th) {
+                        throw new Error("Failed to verify event budgets");
+                    }
+                } else if ($_POST['submit'] == 'reject-president-budgets') {
+                    try {
+                        if ($event->validateBudgetReject($form_data)) {
+                            $event->update([
+                                "id" => $club_event_id
+                            ], [
+                                "president_budget_remarks" => $form_data['remarks'],
+                                "president_budgets_verified" => 0
+                            ]);
+
+                            /* set notification */
+                            $user_data = $club_member->one(["club_members.club_id" => $club_id, "club_members.role" => "TREASURER"], [
+                                "club_members.user_id as id",
+                                "club.name as club_name"
+                            ], [
+                                ["table" => "clubs", "as" => "club", "on" => "club_members.club_id = club.id"]
+                            ]);
+
+                            if (!empty($user_data)) {
+                                $notification_result = $notification->create([
+                                    "title" => "Event Budget Rejected",
+                                    "description" => '"' . $data['event']->name . '" event of club "' . $user_data->club_name . '" has rejected the budget.',
+                                ]);
+
+                                $notification_state->create([
+                                    "user_id" => $user_data->id,
+                                    "notification_id" => $notification_result->id,
+                                ]);
+                            }
+
+                            $_SESSION['alerts'] = [["status" => "success", "message" => "Event budgets rejected and remarked"]];
+                        }
+                    } catch (Throwable $th) {
+                        throw new Error("Failed to reject event budgets");
+                    }
+                } else if ($_POST['submit'] == 'verify-incharge-budgets') {
+                    try {
+                        $event->update([
+                            "id" => $club_event_id
+                        ], [
+                            "incharge_budgets_verified" => 1,
+                            "incharge_budget_remarks" => ""
                         ]);
 
                         $_SESSION['alerts'] = [["status" => "success", "message" => "Event budgets have been verified"]];
                     } catch (Throwable $th) {
-                        $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to verify event budgets"]];
+                        throw new Error("Failed to verify event budgets");
+                    }
+                } else if ($_POST['submit'] == 'reject-incharge-budgets') {
+                    try {
+                        if ($event->validateBudgetReject($form_data)) {
+                            $event->update([
+                                "id" => $club_event_id
+                            ], [
+                                "incharge_budget_remarks" => $form_data['remarks'],
+                                "incharge_budgets_verified" => 0
+                            ]);
+
+                            /* set notification */
+                            $user_data = $club_member->one(["club_members.club_id" => $club_id, "club_members.role" => "PRESIDENT"], [
+                                "club_members.user_id as id",
+                                "club.name as club_name"
+                            ], [
+                                ["table" => "clubs", "as" => "club", "on" => "club_members.club_id = club.id"]
+                            ]);
+
+                            if (!empty($user_data)) {
+                                $notification_result = $notification->create([
+                                    "title" => "Event Budget Rejected",
+                                    "description" => '"' . $data['event']->name . '" event of club "' . $user_data->club_name . '" has rejected the budget',
+                                ]);
+
+                                $notification_state->create([
+                                    "user_id" => $user_data->id,
+                                    "notification_id" => $notification_result->id,
+                                ]);
+                            }
+
+                            $_SESSION['alerts'] = [["status" => "success", "message" => "Event budgets rejected and remarked"]];
+                        }
+                    } catch (Throwable $th) {
+                        throw new Error("Failed to reject event budgets");
                     }
                 }
             }
 
-            /* fetch budget data */
-            /* pagination */
-            $total_count = $budget->find([
-                "club_id" => $club_id,
-                "club_event_id" => $club_event_id,
-                "is_deleted" => 0,
-                "type" => upperCase($data['tab'])
-            ], ["count(*) as count"], [], [], isset($_GET['search']) ? $_GET['search'] : '');
-            if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
-
-            /* data */
-            $data["table_data"] = $budget->find(["club_id" => $club_id, "club_event_id" => $club_event_id, "is_deleted" => 0, "type" => upperCase($data['tab'])], [], [], [
-                "limit" => $data['limit'],
-                "offset" => ($data['page'] - 1) * $data['limit'],
-            ], isset($_GET['search']) ? $_GET['search'] : '');
-
-            /* calculate the income/expenses/profile/loss */
-            $data['income_data'] = 0;
-            $data['expense_data'] = 0;
-            $income_data = $budget->find(["club_id" => $club_id, "club_event_id" => $club_event_id, "is_deleted" => 0, "type" => "INCOME"], ["sum(amount) as total"]);
-            $expense_data = $budget->find(["club_id" => $club_id, "club_event_id" => $club_event_id, "is_deleted" => 0, "type" => "EXPENSE"], ["sum(amount) as total"]);
-
-            if ($income_data[0]->total) $data['income_data'] = $income_data[0]->total;
-            if ($expense_data[0]->total) $data['expense_data'] = $expense_data[0]->total;
+            $data['errors'] = array_merge($budget->errors, $event->errors);
 
             $db->commit();
 
             if ($_SERVER['REQUEST_METHOD'] == "POST" && count($data['errors']) == 0) return redirect();
         } catch (\Throwable $th) {
-            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to process the action, please try again later"]];
+            $_SESSION['alerts'] = [["status" => "error", "message" =>  $th->getMessage() || "Failed to process the action, please try again later"]];
             $db->rollback();
         }
+
+        /* fetch budget data */
+        /* pagination */
+        $fetch_budget = new EstimatedBudget();
+        $total_count = $fetch_budget->find([
+            "club_id" => $club_id,
+            "club_event_id" => $club_event_id,
+            "is_deleted" => 0,
+            "type" => upperCase($data['tab'])
+        ], ["count(*) as count"], [], [], isset($_GET['search']) ? $_GET['search'] : '');
+        if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+
+        /* data */
+        $data["table_data"] = $fetch_budget->find(["club_id" => $club_id, "club_event_id" => $club_event_id, "is_deleted" => 0, "type" => upperCase($data['tab'])], [], [], [
+            "limit" => $data['limit'],
+            "offset" => ($data['page'] - 1) * $data['limit'],
+        ], isset($_GET['search']) ? $_GET['search'] : '');
+
+        /* calculate the income/expenses/profile/loss */
+        $data['income_data'] = 0;
+        $data['expense_data'] = 0;
+        $income_data = $fetch_budget->find(["club_id" => $club_id, "club_event_id" => $club_event_id, "is_deleted" => 0, "type" => "INCOME"], ["sum(amount) as total"]);
+        $expense_data = $fetch_budget->find(["club_id" => $club_id, "club_event_id" => $club_event_id, "is_deleted" => 0, "type" => "EXPENSE"], ["sum(amount) as total"]);
+
+        if ($income_data[0]->total) $data['income_data'] = $income_data[0]->total;
+        if ($expense_data[0]->total) $data['expense_data'] = $expense_data[0]->total;
 
         $this->view($path, $data);
     }

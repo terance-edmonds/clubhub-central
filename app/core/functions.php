@@ -95,6 +95,9 @@ function displayValue($val, $format = 'text')
         case 'number':
             $val = numberFormat($val);
             break;
+        case 'snake_title':
+            $val = ucwords(str_replace('_', ' ', strtolower($val)));;
+            break;
     }
 
     return $val;

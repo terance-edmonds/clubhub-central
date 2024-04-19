@@ -25,7 +25,7 @@ class Profile extends Controller
         /* fetch clubs */
         $member_clubs = new ClubMember();
         $right_bar["clubs"] = $member_clubs->find(
-            ["user_id" => $auth_user['id']],
+            ["club_members.user_id" => $auth_user['id'], "club_members.state" => "ACCEPTED"],
             ["club_members.id as club_member_id", "role as club_role", "club.id as club_id", "club.name as club_name", "club.image as club_image"],
             [
                 ["table" => "clubs", "as" => "club", "on" => "club_members.club_id = club.id"]

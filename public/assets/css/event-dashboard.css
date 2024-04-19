@@ -369,6 +369,11 @@
   width: 100%;
   max-width: 470px;
 }
+#event-dashboard-budgets .content-section .actions-wrap .action-search.align-end {
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
 #event-dashboard-budgets .content-section .actions-wrap .action-search .search-input {
   max-width: 350px;
 }
@@ -497,4 +502,17 @@
 #event-dashboard-announcements .selected-members .checkbox-wrap:hover .material-icons-outlined {
   position: relative;
   opacity: 1;
+}
+
+#event-dashboard-budgets .budget_buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 10px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+#event-dashboard-budgets .budget_buttons .reject {
+  background-color: #ff4646;
 }

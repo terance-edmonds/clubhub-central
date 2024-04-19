@@ -69,8 +69,8 @@
                                 <?= displayValue($event->venue) ?>
                             </td>
                             <td align="center">
-                                <span class="material-icons-outlined <?= $event->is_budgets_verified ? 'cl-green' : 'cl-red' ?>">
-                                    <?= $event->is_budgets_verified ? 'task_alt' : 'highlight_off' ?>
+                                <span class="material-icons-outlined <?= ($event->is_budget_submitted && $event->president_budgets_verified && $event->incharge_budgets_verified) ? 'cl-green' : 'cl-red' ?>">
+                                    <?= ($event->is_budget_submitted && $event->president_budgets_verified && $event->incharge_budgets_verified) ? 'task_alt' : 'highlight_off' ?>
                                 </span>
                             </td>
                             <td align="center">
@@ -83,7 +83,7 @@
                                 </a>
                             </td>
                             <td>
-                                <button <?php if (!$event->is_budgets_verified) { ?> disabled <?php } ?> <?php if ($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') { ?> onclick='onDataPopup("event-status", <?= toJson($event, ["id", "state"]) ?>)' <?php } ?> class="button status-button <?= (($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') && $event->is_budgets_verified) ? 'pointer-cursor' : '' ?>" data-status="<?= $event->state ?>">
+                                <button <?php if (!$event->is_budget_submitted || !$event->president_budgets_verified || !$event->incharge_budgets_verified) { ?> disabled <?php } ?> <?php if (($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') && ($event->is_budget_submitted && $event->president_budgets_verified && $event->incharge_budgets_verified)) { ?> onclick='onDataPopup("event-status", <?= toJson($event, ["id", "state"]) ?>)' <?php } ?> class="button status-button <?= (($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') && ($event->is_budget_submitted && $event->president_budgets_verified && $event->incharge_budgets_verified)) ? 'pointer-cursor' : '' ?>" data-status="<?= $event->state ?>">
                                     <?= displayValue($event->state, 'start-case') ?>
                                 </button>
                             </td>

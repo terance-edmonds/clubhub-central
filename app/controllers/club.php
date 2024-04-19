@@ -156,7 +156,7 @@ class Club extends Controller
 
         $club_id = $storage->get('club_id');
         $club_role = $storage->get('club_role');
-
+        $data['club_role'] = $club_role;
         if (empty($club_id)) {
             return redirect('not-found');
         }
@@ -171,14 +171,16 @@ class Club extends Controller
         if (in_array($club_role, ['MEMBER', 'SECRETARY', 'TREASURER'])) {
             array_push($menu, ["id" => "election", "name" => "Election", "icon" => "how_to_vote", "path" => ["/club/dashboard/election", "/club/dashboard/election/vote", "/club/dashboard/election/result", "/club/dashboard/election/details"], "active" => "false"]);
         }
-        if (in_array($club_role, ['CLUB_IN_CHARGE', 'PRESIDENT', 'SECRETARY', 'TREASURER'])) {
-            array_push($menu, ["id" => "logs", "name" => "Logs", "icon" => "article", "path" => "/club/dashboard/logs", "active" => "false"], ["id" => "members", "name" => "Members", "icon" => "people", "path" => "/club/dashboard/members", "active" => "false"],);
-        }
-        if (in_array($club_role, ['CLUB_IN_CHARGE', 'PRESIDENT', 'SECRETARY'])) {
-            array_push($menu, ["id" => "reports", "name" => "Reports", "icon" => "description", "path" => ["/club/dashboard/reports", "/club/dashboard/reports/add"], "active" => "false"], ["id" => "meetings", "name" => "Meetings", "icon" => "diversity_2", "path" => "/club/dashboard/meetings", "active" => "false"]);
-        }
         if (in_array($club_role, ['CLUB_IN_CHARGE', 'PRESIDENT'])) {
             array_push($menu, ["id" => "election", "name" => "Election", "icon" => "how_to_vote", "path" => ["/club/dashboard/election", "/club/dashboard/election/add", "/club/dashboard/election/edit", "/club/dashboard/election/vote", "/club/dashboard/election/result", "/club/dashboard/election/details"], "active" => "false"], ["id" => "requests", "name" => "Requests", "icon" => "crisis_alert", "path" => ["/club/dashboard/requests", "/club/dashboard/requests/add", "/club/dashboard/requests/edit"], "active" => "false"]);
+        }
+        if (in_array($club_role, ['CLUB_IN_CHARGE', 'PRESIDENT', 'SECRETARY', 'TREASURER'])) {
+            array_splice($menu, 4, 0, [["id" => "members", "name" => "Members", "icon" => "people", "path" => "/club/dashboard/members", "active" => "false"]]);
+            array_splice($menu, 6, 0, [["id" => "logs", "name" => "Logs", "icon" => "article", "path" => "/club/dashboard/logs", "active" => "false"]]);
+        }
+        if (in_array($club_role, ['CLUB_IN_CHARGE', 'PRESIDENT', 'SECRETARY'])) {
+            array_splice($menu, 3, 0, [["id" => "meetings", "name" => "Meetings", "icon" => "diversity_2", "path" => "/club/dashboard/meetings", "active" => "false"]]);
+            array_push($menu, ["id" => "reports", "name" => "Reports", "icon" => "description", "path" => ["/club/dashboard/reports", "/club/dashboard/reports/add"], "active" => "false"]);
         }
 
         /* update the active menu item */
@@ -483,7 +485,11 @@ class Club extends Controller
                 "club_events.state",
                 "club_events.open_registrations",
                 "club_events.created_datetime",
-                "club_events.is_budgets_verified"
+                "club_events.is_budget_submitted",
+                "club_events.president_budgets_verified",
+                "club_events.president_budget_remarks",
+                "club_events.incharge_budgets_verified",
+                "club_events.incharge_budget_remarks",
             ],
             $includes,
             [
@@ -549,10 +555,12 @@ class Club extends Controller
                 "club_community_chat.id",
                 "club_community_chat.message",
                 "club_community_chat.created_datetime",
+                "member.role",
                 "concat(user.first_name,' ', user.last_name) as name",
             ],
             [
-                ["table" => "users", "as" => "user", "on" => "club_community_chat.sender_user_id = user.id"]
+                ["table" => "users", "as" => "user", "on" => "club_community_chat.sender_user_id = user.id"],
+                ["table" => "club_members", "as" => "member", "on" => "club_community_chat.sender_club_member_id = member.id"],
             ],
             [
                 "limit" => $limit,
