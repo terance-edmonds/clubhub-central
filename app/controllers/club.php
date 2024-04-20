@@ -10,7 +10,9 @@ class Club extends Controller
         $post = new ClubPost();
         $club_member = new ClubMember();
         $event = new Event();
+        $club_gallery = new ClubGallery();
         $moment = new \Moment\Moment();
+        $data['club_role'] = 'NONE';
 
         $data = [
             "tab" => "club-posts",
@@ -24,8 +26,39 @@ class Club extends Controller
             return redirect('not-found');
         }
 
-        $tabs = ['club-posts', 'events'];
+        if (Auth::logged()) {
+            $auth_user_id = Auth::getId();
+            $user = $club_member->one(["club_id" => $data['club_id'], "user_id" => $auth_user_id], ['role']);
+
+            if (!empty($user)) $data['club_role'] = $user->role;
+        }
+
+        $tabs = ['club-posts', 'events', 'gallery'];
         $data["tab"] = getActiveTab($tabs, $_GET);
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            /* logout */
+            if ($_POST['submit'] == 'upload-image') {
+                if (!empty($_FILES['image']['name'])) {
+                    $file_upload = uploadFile('image');
+
+                    $club_gallery->create([
+                        "club_id" => $data['club_id'],
+                        "image" => $file_upload['url']
+                    ]);
+                } else {
+                    $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to upload the image, please try again later"]];
+                }
+
+                return redirect();
+            } else if ($_POST['submit'] == 'delete-image') {
+                $club_gallery->delete([
+                    "id" => $_POST['id']
+                ]);
+
+                return redirect();
+            }
+        }
 
         $today_events = $event->find(
             [
@@ -94,7 +127,7 @@ class Club extends Controller
 
         /* fetch club posts */
         if ($data['tab'] === 'club-posts') {
-            $posts = $post->find(
+            $data['posts'] = $post->find(
                 ["club_posts.club_id" => $data["club_id"], "club_posts.is_deleted" => 0],
                 [
                     "club_posts.id",
@@ -113,10 +146,8 @@ class Club extends Controller
                     ["table" => "clubs", "as" => "club", "on" => "club_posts.club_id = club.id"]
                 ],
             );
-
-            $data['posts'] = $posts;
         } else if ($data['tab'] === 'events') {
-            $events = $event->find(
+            $data['events'] = $event->find(
                 [
                     "club_events.club_id" => $data['club_id'],
                     "club_events.state" => "ACTIVE"
@@ -138,8 +169,8 @@ class Club extends Controller
                     ["table" => "clubs", "as" => "club", "on" => "club_events.club_id = club.id"]
                 ]
             );
-
-            $data['events'] = $events;
+        } else if ($data['tab'] === 'gallery') {
+            $data['gallery'] = $club_gallery->find(["club_id" => $data['club_id']]);
         }
 
 

@@ -15,28 +15,28 @@
 
                 <div class="input-wrap">
                     <label for="name">Name</label>
-                    <input value="<?= setValue('name') ?>" id="name" name="name" type="text" required>
+                    <input placeholder="Name" value="<?= setValue('name') ?>" id="name" name="name" type="text" required>
                     <?php if (!empty($errors['name'])) : ?>
                         <small><?= $errors['name'] ?></small>
                     <?php endif; ?>
                 </div>
                 <div class="input-wrap">
                     <label for="description">Description</label>
-                    <textarea class="textarea" name="description" id="description" type="text" rows="5" cols="50"><?= setValue('description') ?></textarea>
+                    <textarea placeholder="Description" class="textarea" name="description" id="description" type="text" rows="5" cols="50"><?= setValue('description') ?></textarea>
                     <?php if (!empty($errors['description'])) : ?>
                         <small><?= $errors['description'] ?></small>
                     <?php endif; ?>
                 </div>
                 <div class="input-wrap">
                     <label for="amount">Amount</label>
-                    <input value="<?= setValue('amount') ?>" id="amount" name="amount" type="number" min="0" required>
+                    <input value="<?= setValue('amount') ?>" id="amount" name="amount" type="number" min="0" required placeholder="0">
                     <?php if (!empty($errors['amount'])) : ?>
                         <small><?= $errors['amount'] ?></small>
                     <?php endif; ?>
                 </div>
                 <div class="input-wrap">
                     <label for="third_party">To</label>
-                    <input value="<?= setValue('third_party') ?>" id="third_party" name="third_party" type="text" required>
+                    <input placeholder="To" value="<?= setValue('third_party') ?>" id="third_party" name="third_party" type="text" required>
                     <?php if (!empty($errors['third_party'])) : ?>
                         <small><?= $errors['third_party'] ?></small>
                     <?php endif; ?>

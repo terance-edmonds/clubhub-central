@@ -71,11 +71,11 @@ class Profile extends Controller
                         "user_id" => $auth_user['id'],
                         "image" => $file_upload['url']
                     ]);
-
-                    return redirect();
                 } else {
-                    $data["errors"]["image"] = "Failed to upload the image, please try again later";
+                    $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to upload the image, please try again later"]];
                 }
+
+                return redirect();
             } else if ($_POST['submit'] == 'delete-image') {
                 $user_gallery = new UserGallery();
                 $user_gallery->delete([
@@ -115,6 +115,90 @@ class Profile extends Controller
         }
 
         $this->view("profile", $data);
+    }
+
+    public function public()
+    {
+        $params = $_GET;
+        $user = new User();
+
+        if (!isset($params["id"])) return redirect('not-found');
+
+        $user = $user->one(["id" => $params['id']]);
+        if (empty($user)) return redirect('not-found');
+
+        $left_bar = [
+            "user" => $user,
+            "calendar_data" => [
+                "current_path" => "/"
+            ]
+        ];
+        $right_bar = [
+            "clubs" => [],
+            "menu" => [
+                ["id" => "profile", "name" => "Profile Details", "icon" => "info", "path" => "/profile/edit"],
+            ]
+        ];
+
+        /* if super admin add the menu item */
+        $auth_user = Auth::user();
+        if ($auth_user['role'] == 'SUPER_ADMIN') {
+            array_push($right_bar["menu"], ["id" => "system", "name" => "Manage System", "icon" => "dashboard", "path" => "/admin/dashboard"]);
+        }
+
+        /* fetch clubs */
+        $member_clubs = new ClubMember();
+        $right_bar["clubs"] = $member_clubs->find(
+            ["club_members.user_id" => $auth_user['id'], "club_members.state" => "ACCEPTED"],
+            ["club_members.id as club_member_id", "role as club_role", "club.id as club_id", "club.name as club_name", "club.image as club_image"],
+            [
+                ["table" => "clubs", "as" => "club", "on" => "club_members.club_id = club.id"]
+            ]
+        );
+
+        $menu_side_bar = array_merge($left_bar, $right_bar);
+
+        /* set data */
+        $data = [
+            "tab" => "gallery",
+            "left_bar" => $left_bar,
+            "right_bar" => $right_bar,
+            "gallery" => [],
+            "menu_side_bar" => $menu_side_bar
+        ];
+
+        if (isset($params["tab"]))
+            $data["tab"] = $params["tab"];
+
+        if ($data['tab'] == 'club-posts') {
+            $post = new ClubPost();
+            $posts_data = $post->find(
+                ["club_posts.is_deleted" => 0, "club_posts.user_id" => $params['id']],
+                [
+                    "club_posts.id",
+                    "club_posts.post_name",
+                    "club_posts.description",
+                    "club_posts.image",
+                    "club_posts.created_datetime",
+                    "user.first_name",
+                    "user.last_name",
+                    "club.id as club_id",
+                    "club.name as club_name",
+                    "club.image as club_image",
+                ],
+                [
+                    ["table" => "users", "as" => "user", "on" => "club_posts.user_id = user.id"],
+                    ["table" => "clubs", "as" => "club", "on" => "club_posts.club_id = club.id"]
+                ],
+            );
+
+            $data['posts'] = $posts_data;
+        } else {
+            $user_gallery = new UserGallery();
+            $data['gallery'] = $user_gallery->find(["user_id" => $auth_user['id']]);
+        }
+
+        $this->view("profile/public", $data);
     }
 
     public function edit()

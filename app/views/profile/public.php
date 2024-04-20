@@ -10,7 +10,7 @@
 <?php $this->view('includes/alerts') ?>
 
 <div id="profile" class="container container-sections side-padding">
-    <?php $this->view('includes/side-bars/profile/left', $left_bar) ?>
+    <?php $this->view('includes/side-bars/profile/public/left', $left_bar) ?>
     <section class="center-section">
         <div class="tabs">
             <a href="<?= ROOT ?>/profile" class="tab" data-active="<?php if ($tab == 'gallery')
@@ -31,41 +31,23 @@
                 ?>
             </div>
         <?php } else { ?>
-            <div class="gallery-buttons">
-                <div onclick="$(`[popup-name='add-profile-gallery']`).popup(true)" class="gallery-button">
-                    <button class="icon-button">
-                        <span class="material-icons-outlined">
-                            add
-                        </span>
-                    </button>
-
-                    <span>Add New Image</span>
-                </div>
-            </div>
-
             <div class="gallery">
-                <?php foreach ($gallery as $item) { ?>
-                    <div class="card">
-                        <div class="overlay">
-                            <button onclick='onDataPopup("delete-profile-gallery", <?= toJson($item, ["id"]) ?>)' class=" icon-button">
-                                <span class="material-icons-outlined">
-                                    delete
-                                </span>
-                            </button>
+                <?php if (count($gallery) == 0) {
+                    echo "No Gallery Items.";
+                } else {
+                    foreach ($gallery as $item) { ?>
+                        <div class="card">
+                            <img loading="lazy" src="<?= $item->image ?>" alt="Gallery Image" class="gallery-image">
                         </div>
-                        <img loading="lazy" src="<?= $item->image ?>" alt="Gallery Image" class="gallery-image">
-                    </div>
-                <?php } ?>
+                <?php }
+                } ?>
             </div>
         <?php } ?>
     </section>
-    <?php $this->view('includes/side-bars/profile/right', $right_bar) ?>
+    <?php $this->view('includes/side-bars/profile/public/right', $right_bar) ?>
 </div>
 
 <?php $this->view('includes/header/side-bars/profile', $menu_side_bar) ?>
-
-<?php $this->view("includes/modals/profile/upload-image") ?>
-<?php $this->view("includes/modals/profile/delete-image") ?>
 
 <?php $this->view('includes/header/bottom') ?>
 

@@ -31,7 +31,8 @@ class Event extends Modal
     public function validateCreateEvent($data)
     {
         $this->errors = [];
-
+        show($data);
+        $this->errors['name'] = "Name is required";
         if (empty($data['name'])) $this->errors['name'] = "Name is required";
         if (empty($data['venue'])) $this->errors['venue'] = "Venue is required";
         if (empty($data['start_datetime'])) $this->errors['start_datetime'] = "Start date & time is required";
