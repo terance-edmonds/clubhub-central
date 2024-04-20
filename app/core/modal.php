@@ -94,9 +94,10 @@ class Modal
         }
 
         /* where clause */
-        if (count($data) > 0) {
+        if (count($data) > 0 || !empty($options['where'])) {
             $query .= " where ";
         }
+
         foreach ($keys as $key) {
             $condition = '&&';
             $operator = '=';
@@ -119,6 +120,14 @@ class Modal
             }
 
             $query .= $key . " " . $operator . " :" . $value . " " . $condition . " ";
+        }
+        if (!empty($options['where'])) {
+            foreach ($options['where'] as $where) {
+                $condition = '&&';
+                $query .= " " . $where . " " . $condition;
+            }
+
+            $query = trim($query, "&& ");
         }
         $query = trim($query, "&& ");
         $query = trim($query, "|| ");

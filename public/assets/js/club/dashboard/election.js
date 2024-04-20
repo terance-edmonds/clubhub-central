@@ -46,13 +46,23 @@ const onStartEndDatesChange = () => {
 let page = 1;
 let loaded = true;
 
+const onFilterPercentage = () => {
+    if ($('input[name="filter_event_percentage"]').is(':checked')) {
+        onSearch();
+    }
+};
+
 const onSearch = (e) => {
-    const el = $(e.target);
+    const el = $('#users_search');
     const search = el.val();
 
     if (loaded) {
         loaded = false;
         let params = { page, search, data: 'users_data' };
+
+        if ($('input[name="filter_event_percentage"]').is(':checked')) {
+            params['filter_event_percentage'] = $('#filter_event_percentage').val();
+        }
 
         const url = new URL(window.location.href);
         url.pathname = `${url.pathname}`;

@@ -1327,18 +1327,19 @@ class Club extends Controller
                 $data['select_users']['total_count'] = 0;
                 $data['select_users']['limit'] = 10;
                 $data['select_users']['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
+                $where = null;
 
-                $total_count = $club_member->find(
-                    ["club_id" => $club_id, "state" => "ACCEPTED"],
-                    ["count(*) as count"],
-                    [],
-                    [
-                        "limit" => $data['select_users']['limit'],
-                        "offset" => ($data['select_users']['page'] - 1) * $data['select_users']['limit'],
-                    ],
-                    isset($_GET['search']) ? $_GET['search'] : ''
-                );
-                if (!empty($total_count[0]->count)) $data['select_users']['total_count'] = $total_count[0]->count;
+                if (isset($_GET['filter_event_percentage'])) {
+
+                    $data['select_users']['percentage'] = $_GET['filter_event_percentage'];
+
+                    $where = [
+                        "(
+                            (select count(*) from club_event_registrations er where er.user_email = user.email and er.club_id = '" . $club_id . "') / 
+                            (select count(*) from club_events ce where ce.club_id = '" . $club_id . "')
+                        ) * 100 > " . $data['select_users']['percentage']
+                    ];
+                }
 
                 /* if the view requires only specific data view */
                 if (isset($_GET['data'])) {
@@ -1346,6 +1347,21 @@ class Club extends Controller
                         $path = 'includes/modals/club/election/users/data';
                     }
                 }
+
+                /* pagination */
+                $total_count = $club_member->find(
+                    ["club_id" => $club_id, "state" => "ACCEPTED"],
+                    ["count(*) as count"],
+                    [["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"]],
+                    [
+                        "where" => $where,
+                        "search" => ["user.email", "user.first_name", "user.last_name"],
+                        "limit" => $data['select_users']['limit'],
+                        "offset" => ($data['select_users']['page'] - 1) * $data['select_users']['limit'],
+                    ],
+                    isset($_GET['search']) ? $_GET['search'] : ''
+                );
+                if (!empty($total_count[0]->count)) $data['select_users']['total_count'] = $total_count[0]->count;
 
                 /* data */
                 $data['select_users']['table_data'] =  $club_member->find(
@@ -1363,24 +1379,12 @@ class Club extends Controller
                         ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"]
                     ],
                     [
+                        "where" => $where,
+                        "search" => ["user.email", "user.first_name", "user.last_name"],
                         "limit" => $data['select_users']['limit'],
                         "offset" => ($data['select_users']['page'] - 1) * $data['select_users']['limit'],
                     ],
                     isset($_GET['search']) ? $_GET['search'] : ''
-                );
-
-                $data['vote_members_data']  = $data['candidate_members_data'] = $club_member->find(
-                    ["club_id" => $club_id, "state" => "ACCEPTED"],
-                    [
-                        "club_members.id as id",
-                        "user_id",
-                        "club_id",
-                        "user.first_name",
-                        "user.last_name",
-                    ],
-                    [
-                        ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"]
-                    ]
                 );
             }
 

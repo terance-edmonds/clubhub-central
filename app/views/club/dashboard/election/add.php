@@ -2,6 +2,7 @@
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/side-bar.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/dashboard.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/club-dashboard.css">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/data-loader.css">
 </head>
 
 <?php $this->view('includes/header') ?>
