@@ -153,7 +153,7 @@ function uploadFile($name)
         $file_name = milliseconds() . "." . $extension;
         $save_path = $target_dir . $file_name;
 
-        $result = move_uploaded_file($_FILES['image']['tmp_name'], $save_path);
+        $result = move_uploaded_file($_FILES[$name]['tmp_name'], $save_path);
 
         if (!$result)
             return null;
