@@ -37,6 +37,11 @@
             background-color: $yellow-light;
             cursor: default;
 
+            &[data-status='READY'] {
+                color: $orange;
+                background-color: $orange-light;
+            }
+
             &[data-status='OPEN'] {
                 color: $green;
                 background-color: $green-light;

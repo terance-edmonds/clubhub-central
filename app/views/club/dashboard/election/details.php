@@ -37,10 +37,12 @@
                 <?php } ?>
                 <div class="candidates">
                     <?php foreach ($candidate_members_data as $club_member) { ?>
-                        <label class="candidate">
-                            <img src="<?php echo (!empty($club_member->image)) ? $club_member->image : ROOT . '/assets/images/other/empty-profile.jpg' ?>" alt="Profile Image" class="image">
-                            <p class="name"><?= $club_member->first_name ?> <?= $club_member->last_name ?></p>
-                        </label>
+                        <a class="candidate" href="<?= ROOT ?>/profile/public?id=<?= $club_member->user_id ?>">
+                            <label class="candidate">
+                                <img src="<?php echo (!empty($club_member->image)) ? $club_member->image : ROOT . '/assets/images/other/empty-profile.jpg' ?>" alt="Profile Image" class="image colored">
+                                <p class="name"><?= $club_member->first_name ?> <?= $club_member->last_name ?></p>
+                            </label>
+                        </a>
                     <?php } ?>
                 </div>
             </div>

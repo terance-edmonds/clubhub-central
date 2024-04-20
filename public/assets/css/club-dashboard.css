@@ -381,6 +381,10 @@
   background-color: #303021;
   cursor: default;
 }
+#club-dashboard-election .table-wrap .status-button[data-status=READY] {
+  color: #fbae56;
+  background-color: #342d25;
+}
 #club-dashboard-election .table-wrap .status-button[data-status=OPEN] {
   color: #7dff7a;
   background-color: #213021;
@@ -516,6 +520,9 @@
   border: 7px solid #a5a5a5;
   -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
+}
+#club-dashboard-election-vote .candidates .candidate .image.colored {
+  border-color: #69e4be;
 }
 #club-dashboard-election-vote .candidates .candidate input:checked ~ .image {
   border-color: #69e4be;

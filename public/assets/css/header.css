@@ -238,7 +238,7 @@
           user-select: none;
 }
 @media screen and (max-width: 1350px) {
-  .nav-header .notification-item {
+  .nav-header .notification-wrap {
     display: none;
   }
   .nav-header .menu-item {

@@ -1098,6 +1098,8 @@ class Club extends Controller
         $data['limit'] = 10;
         $data['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
 
+        $redirect_link = 'club/dashboard/election';
+
         try {
             $db->transaction();
             $data['errors'] = [];
@@ -1311,15 +1313,62 @@ class Club extends Controller
                             ]);
 
                             $_SESSION['alerts'] = [["status" => "success", "message" => "Election voted successfully"]];
-
-                            return redirect();
                         }
 
                         $data["errors"] = $club_election_vote->errors;
+
+                        $redirect_on_success = false;
+                        $redirect_link = null;
                     }
                 }
             }
+
             if ($path == 'club/dashboard/election/add' || $path == 'club/dashboard/election/edit') {
+                $data['select_users']['total_count'] = 0;
+                $data['select_users']['limit'] = 10;
+                $data['select_users']['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
+
+                $total_count = $club_member->find(
+                    ["club_id" => $club_id, "state" => "ACCEPTED"],
+                    ["count(*) as count"],
+                    [],
+                    [
+                        "limit" => $data['select_users']['limit'],
+                        "offset" => ($data['select_users']['page'] - 1) * $data['select_users']['limit'],
+                    ],
+                    isset($_GET['search']) ? $_GET['search'] : ''
+                );
+                if (!empty($total_count[0]->count)) $data['select_users']['total_count'] = $total_count[0]->count;
+
+                /* if the view requires only specific data view */
+                if (isset($_GET['data'])) {
+                    if ($_GET['data'] == 'users_data') {
+                        $path = 'includes/modals/club/election/users/data';
+                    }
+                }
+
+                /* data */
+                $data['select_users']['table_data'] =  $club_member->find(
+                    ["club_id" => $club_id, "state" => "ACCEPTED"],
+                    [
+                        "club_members.id as id",
+                        "user_id",
+                        "club_id",
+                        "joined_datetime",
+                        "user.email",
+                        "user.first_name",
+                        "user.last_name",
+                    ],
+                    [
+                        ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"]
+                    ],
+                    [
+                        "limit" => $data['select_users']['limit'],
+                        "offset" => ($data['select_users']['page'] - 1) * $data['select_users']['limit'],
+                    ],
+                    isset($_GET['search']) ? $_GET['search'] : ''
+                );
+
                 $data['vote_members_data']  = $data['candidate_members_data'] = $club_member->find(
                     ["club_id" => $club_id, "state" => "ACCEPTED"],
                     [
@@ -1414,8 +1463,6 @@ class Club extends Controller
                         ["table" => "users", "as" => "user", "on" => "club_election_candidates.user_id = user.id"]
                     ]
                 );
-
-                $redirect_on_success = false;
             }
 
             if ($path == 'club/dashboard/election/details') {
@@ -1434,6 +1481,7 @@ class Club extends Controller
                     ["club_id" => $club_id, "election_id" => $data["election_id"], "club_election_candidates.role" => strtoupper($data['tab'])],
                     [
                         "club_election_candidates.id as id",
+                        "club_election_candidates.user_id as user_id",
                         "club_election_candidates.club_member_id as club_member_id",
                         "club_election_candidates.user_id",
                         "club_election_candidates.club_id",
@@ -1535,7 +1583,7 @@ class Club extends Controller
 
             $db->commit();
 
-            if ($redirect_on_success && $_SERVER['REQUEST_METHOD'] == "POST" &&  count($data['errors']) == 0) return redirect('club/dashboard/election');
+            if ($redirect_on_success && $_SERVER['REQUEST_METHOD'] == "POST" &&  count($data['errors']) == 0) return redirect($redirect_link);
         } catch (\Throwable $th) {
             show($th);
             $db->rollback();
