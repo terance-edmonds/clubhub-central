@@ -71,6 +71,16 @@ class Routes
             "ADMIN",
             "USER"
         ],
+        "profile/public" => [
+            "MEMBER",
+            "TREASURER",
+            "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+            "SUPER_ADMIN",
+            "ADMIN",
+            "USER"
+        ],
         "profile/edit" => [
             "MEMBER",
             "TREASURER",

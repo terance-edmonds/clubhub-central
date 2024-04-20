@@ -78,6 +78,17 @@ class EstimatedBudget extends Modal
             $this->errors['amount'] = "Amount is not valid";
         }
 
+        $income_data = $this->find(["club_id" => $data['club_id'], "club_event_id" => $data['club_event_id'], "is_deleted" => 0, "type" => "INCOME"], ["sum(amount) as total"]);
+        $expense_data = $this->find(["club_id" => $data['club_id'], "club_event_id" => $data['club_event_id'], "is_deleted" => 0, "type" => "EXPENSE"], ["sum(amount) as total"]);
+
+        $total_income = $income_data[0]->total ? $income_data[0]->total :  0;
+        $total_expense = $expense_data[0]->total ? $expense_data[0]->total : 0;
+
+        $total_expense += (float) $data['amount'];
+        if ($total_expense > $total_income) {
+            $this->errors['amount'] = "Total expenses must be less than the total income";
+        }
+
         if (empty($this->errors)) {
             return true;
         }

@@ -21,7 +21,7 @@
             <div class="budget_buttons">
                 <?php if ($club_role === 'TREASURER') { ?>
                     <form method="post">
-                        <button <?php if ($event->is_budget_submitted && $event->president_budgets_verified) { ?> disabled <?php } ?> title="Submit event budgets" type="submit" name="submit" value="submit-budgets" class="button w-content" data-variant="contained" data-type="icon" data-size="small">
+                        <button <?php if (($event->is_budget_submitted && $event->president_budgets_verified) || ($income_data == 0 || $expense_data == 0)) { ?> disabled <?php } ?> title="Submit event budgets" type="submit" name="submit" value="submit-budgets" class="button w-content" data-variant="contained" data-type="icon" data-size="small">
                             <span><?= $event->is_budget_submitted ? 'Budgets Submitted' : 'Submit Budgets' ?></span>
                             <span class="material-icons-outlined">
                                 task_alt
@@ -156,13 +156,19 @@
                         </div>
                     </div>
                     <?php if ($club_role == 'TREASURER') { ?>
-                        <button onclick="$(`[popup-name='add-<?= $tab ?>']`).popup(true)" class="button w-content" data-variant="outlined" data-type="icon" data-size="small">
+                        <button <?php if ($event->is_budget_submitted && $event->president_budgets_verified && $event->incharge_budgets_verified) { ?> disabled <?php } ?> onclick="$(`[popup-name='add-<?= $tab ?>']`).popup(true)" class="button w-content" data-variant="outlined" data-type="icon" data-size="small">
                             <span>Add New</span>
                             <span class="material-icons-outlined">
                                 add
                             </span>
                         </button>
                     <?php } ?>
+                    <button onclick="$(`[popup-name='add-<?= $tab ?>']`).popup(true)" class="button w-content" data-variant="outlined" data-type="icon" data-size="small">
+                        <span>Add New</span>
+                        <span class="material-icons-outlined">
+                            add
+                        </span>
+                    </button>
                 </div>
             </div>
             <div class="table-wrap">
@@ -228,9 +234,11 @@
     </section>
 </div>
 
-<?php if ($club_role == 'TREASURER') {
-    $this->view("includes/modals/event/$tab");
-    $this->view("includes/modals/event/$tab/edit");
+<?php if ($club_role == 'CLUB_IN_CHARGE') {
+    $data = ["errors" => $errors];
+
+    $this->view("includes/modals/event/$tab", $data);
+    $this->view("includes/modals/event/$tab/edit", $data);
     $this->view("includes/modals/event/$tab/delete");
 } ?>
 

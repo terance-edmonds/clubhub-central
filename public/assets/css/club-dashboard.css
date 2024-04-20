@@ -381,6 +381,10 @@
   background-color: #303021;
   cursor: default;
 }
+#club-dashboard-election .table-wrap .status-button[data-status=READY] {
+  color: #fbae56;
+  background-color: #342d25;
+}
 #club-dashboard-election .table-wrap .status-button[data-status=OPEN] {
   color: #7dff7a;
   background-color: #213021;
@@ -447,6 +451,42 @@
 #club-dashboard-edit-election .selected-users .checkbox-wrap:hover .material-icons-outlined {
   position: relative;
   opacity: 1;
+}
+
+.club-election-users-popup .checkbox-inputs {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+}
+.club-election-users-popup .checkbox-inputs .checkbox-input {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+.club-election-users-popup .checkbox-inputs .checkbox-input .input-wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 5px;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+.club-election-users-popup .checkbox-inputs .checkbox-input .input-wrap .input {
+  padding-right: 0;
 }
 
 #club-dashboard-election-vote .center-section .title-wrap.column {
@@ -516,6 +556,9 @@
   border: 7px solid #a5a5a5;
   -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
+}
+#club-dashboard-election-vote .candidates .candidate .image.colored {
+  border-color: #69e4be;
 }
 #club-dashboard-election-vote .candidates .candidate input:checked ~ .image {
   border-color: #69e4be;
