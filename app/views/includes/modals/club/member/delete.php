@@ -1,8 +1,8 @@
-<div class="popup-modal-wrap" popup-name="delete-member">
+<div class="popup-modal-wrap" popup-name="delete-club-member">
     <div class="popup-modal">
         <div class="popup-header">
             <span class="title">Delete Member</span>
-            <div class="icon" onclick="$(`[popup-name='delete-member']`).popup(false)">
+            <div class="icon" onclick="$(`[popup-name='delete-club-member']`).popup(false)">
                 <span class="material-icons-outlined">
                     close
                 </span>
