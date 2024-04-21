@@ -37,11 +37,10 @@ class Club extends Controller
         $tabs = ['club-posts', 'events', 'gallery'];
         $data["tab"] = getActiveTab($tabs, $_GET);
 
-
         $db->transaction();
 
-        try {
-            if ($_SERVER['REQUEST_METHOD'] == "POST") {
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            try {
                 $form_data = $_POST;
 
                 if ($form_data['submit'] == "apply-membership") {
@@ -54,6 +53,7 @@ class Club extends Controller
                             "user_id" => $auth_user_id,
                             "role" => "MEMBER",
                             "state" => "PROCESSING",
+                            "joined_datetime" => $form_data['created_datetime']
                         ]);
 
                         if (!empty($_FILES['user_document'])) {
@@ -77,32 +77,32 @@ class Club extends Controller
 
                         $_SESSION['alerts'] = [["status" => "success", "message" => "Requested to join the club successfully"]];
                     }
-                }
-            } else if ($_POST['submit'] == 'upload-image') {
-                if (!empty($_FILES['image']['name'])) {
-                    $file_upload = uploadFile('image');
+                } else if ($_POST['submit'] == 'upload-image') {
+                    if (!empty($_FILES['image']['name'])) {
+                        $file_upload = uploadFile('image');
 
-                    $club_gallery->create([
-                        "club_id" => $data['club_id'],
-                        "image" => $file_upload['url']
+                        $club_gallery->create([
+                            "club_id" => $data['club_id'],
+                            "image" => $file_upload['url']
+                        ]);
+                    } else {
+                        $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to upload the image, please try again later"]];
+                    }
+                } else if ($_POST['submit'] == 'delete-image') {
+                    $club_gallery->delete([
+                        "id" => $_POST['id']
                     ]);
-                } else {
-                    $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to upload the image, please try again later"]];
                 }
-            } else if ($_POST['submit'] == 'delete-image') {
-                $club_gallery->delete([
-                    "id" => $_POST['id']
-                ]);
+
+                $db->commit();
+
+                $data['errors'] = $club_member->errors;
+            } catch (\Throwable $th) {
+                $_SESSION['alerts'] = [["status" => "error", "message" => $th->getMessage() || "Failed to process the action, please try again later."]];
+                $db->rollback();
             }
 
-            $db->commit();
-
-            $data['errors'] = $club_member->errors;
-
             if (count($data['errors']) == 0) return redirect();
-        } catch (\Throwable $th) {
-            $_SESSION['alerts'] = [["status" => "error", "message" => $th->getMessage() || "Failed to process the action, please try again later."]];
-            $db->rollback();
         }
 
         $today_events = $event->find(
