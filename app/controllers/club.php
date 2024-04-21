@@ -548,8 +548,7 @@ class Club extends Controller
         $storage = new Storage();
         $club_id = $storage->get('club_id');
         $members = new ClubMember($db);
-        $club_meeting_attendence = new ClubMeetingAttendence($db);
-
+        
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $form_data = $_POST;
 
