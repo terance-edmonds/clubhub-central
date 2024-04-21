@@ -62,8 +62,8 @@
                                 <?= displayValue($val->email) ?>
                             </td>
                             <td align="center">
-                                <a href="<?= $val->document_link ?>">
-                                    <button class="icon-button">
+                                <a target="_blank" href="<?php echo !empty($val->document_link) ? $val->document_link : 'javascript:void(0);' ?>">
+                                    <button <?php if (empty($val->document_link)) { ?> disabled <?php } ?> class="icon-button">
                                         <span class="material-icons-outlined">
                                             visibility
                                         </span>
