@@ -511,7 +511,6 @@ CREATE TABLE `club_members` (
   `club_id` int(11) NOT NULL,
   `role` enum('MEMBER','PRESIDENT','TREASURER','SECRETARY','CLUB_IN_CHARGE') NOT NULL DEFAULT 'MEMBER',
   `state` enum('ACCEPTED','REJECTED','PROCESSING') NOT NULL DEFAULT 'PROCESSING',
-  `is_deleted` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `club_members_FK` (`user_id`),
   KEY `club_members_FK_1` (`club_id`),
