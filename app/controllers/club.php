@@ -6,9 +6,14 @@ class Club extends Controller
 {
     public function index()
     {
+        $db = new Database();
         $club = new Clubs();
         $post = new ClubPost();
         $club_member = new ClubMember();
+        $club_member_documents = new ClubMemberDocuments();
+
+        $file_uploaded = true;
+
         $event = new Event();
         $club_gallery = new ClubGallery();
         $moment = new \Moment\Moment();
@@ -173,9 +178,57 @@ class Club extends Controller
             $data['gallery'] = $club_gallery->find(["club_id" => $data['club_id']]);
         }
 
+        try {
+
+            $db->transaction();
+
+            if ($_SERVER['REQUEST_METHOD'] == "POST") {
+                $form_data = $_POST;
+
+                if ($form_data['submit'] == "apply-membership") {
+                    $club_member = new ClubMember();
+                    $club_member->create([
+                        "club_id" => $data['club_id'],
+                        "user_id" => Auth::getId(),
+                        "role" => "MEMBER",
+                        "state" => "PROCESSING",
+                    ]);
+
+                    if (!empty($_FILES['user_document'])) {
+                        $club_member_documents = new ClubMemberDocuments();
+                        $file_upload = uploadFile('user_document');
+
+                        $club_member_documents->create([
+                            "club_id" => $data['club_id'],
+                            "user_id" => Auth::getId(),
+                            "document" => $file_upload['url'],
+                            "club_member_id" => $form_data['id'],
+                        ]);
+                        if (empty($file_upload)) {
+                            $file_uploaded = false;
+                            $data["errors"]["user_document"] = "Failed to upload the document, please try again later";
+                        } else {
+                            $form_data['user_document'] = $_POST['user_document'] = $file_upload['url'];
+                        }
+                    }
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Requested to join the club successfully"]];
+                } else if ($_POST['submit'] == 'delete-member') {
+                    $club_member->update(["id" => $form_data['id']], [
+                        "is_deleted" => 1
+                    ]);
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Member deleted successfully"]];
+                }
+
+                return redirect('club?id=' . $data['club_id']);
+            }
+        } catch (\Throwable $th) {
+            $_SESSION['alerts'] = [["status" => "error", "message" => $th->getMessage() || "Failed to process the action, please try again later."]];
+        }
 
         $this->view("club", $data);
     }
+
 
     public function dashboard()
     {
@@ -537,6 +590,112 @@ class Club extends Controller
     {
         $tabs = ['accepted', 'rejected', 'requested'];
         $data["tab"] = getActiveTab($tabs, $_GET);
+
+        $storage = new Storage();
+        $accepted_member = new ClubMember();
+        $rejected_member = new ClubMember();
+        $requested_member = new ClubMember();
+
+        $club_id = $storage->get('club_id');
+
+        $data['total_count'] = 0;
+        $data['limit'] = 10;
+        $data['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
+        $table_data = [];
+
+        if ($data['tab'] == 'accepted') {
+            /* fetch data */
+            $table_data = $accepted_member->find(
+                ["club_members.club_id" => $club_id, "club_members.state" => "ACCEPTED", "club_members.is_deleted" => 0],
+                [
+                    "club_members.id",
+                    "club_members.user_id",
+                    "user.first_name",
+                    "user.last_name",
+                    "user.email",
+                    "document.document",
+                ],
+                [
+                    ["table" => "club_member_documents", "as" => "document", "on" => "club_members.id = document.club_member_id"],
+                    // ["table" => "club_members", "as" => "member", "on" => "club_member_documents.club_member_id = member.id"],
+                    ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"],
+                ],
+                [
+                    "limit" => $data['limit'],
+                    "offset" => ($data['page'] - 1) * $data['limit'],
+                ],
+                isset($_GET['search']) ? $_GET['search'] : ''
+            );
+
+            /* pagination */
+            $total_count = $accepted_member->find([
+                "club_id" => $club_id,
+            ], ["count(*) as count"], [], [], isset($_GET['search']) ? $_GET['search'] : '');
+            if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+
+        } else if ($data['tab'] == 'rejected') {
+            /* fetch data */
+            $table_data = $rejected_member->find(
+                ["club_members.club_id" => $club_id, "club_members.state" => "REJECTED", "club_members.is_deleted" => 0],
+                [
+                    "club_members.id",
+                    "club_members.user_id",
+                    "user.first_name",
+                    "user.last_name",
+                    "user.email",
+                    "document.document",
+                ],
+                [
+                    ["table" => "club_member_documents", "as" => "document", "on" => "club_members.id = document.club_member_id"],
+                    // ["table" => "club_members", "as" => "member", "on" => "club_member_documents.club_member_id = member.id"],
+                    ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"],
+                ],
+                [
+                    "limit" => $data['limit'],
+                    "offset" => ($data['page'] - 1) * $data['limit'],
+                ],
+                isset($_GET['search']) ? $_GET['search'] : ''
+            );
+
+            /* pagination */
+            $total_count = $rejected_member->find([
+                "club_id" => $club_id,
+            ], ["count(*) as count"], [], [], isset($_GET['search']) ? $_GET['search'] : '');
+            if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+
+        } else if ($data['tab'] == 'requested') {
+            /* fetch data */
+            $table_data = $requested_member->find(
+                ["club_members.club_id" => $club_id, "club_members.state" => "PROCESSING", "club_members.is_deleted" => 0],
+                [
+                    "club_members.id",
+                    "club_members.user_id",
+                    "user.first_name",
+                    "user.last_name",
+                    "user.email",
+                    "document.document",
+                ],
+                [
+                    ["table" => "club_member_documents", "as" => "document", "on" => "club_members.id = document.club_member_id"],
+                    // ["table" => "club_members", "as" => "member", "on" => "club_member_documents.club_member_id = member.id"],
+                    ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"],
+                ],
+                [
+                    "limit" => $data['limit'],
+                    "offset" => ($data['page'] - 1) * $data['limit'],
+                ],
+                isset($_GET['search']) ? $_GET['search'] : '' 
+            );
+
+            /* pagination */
+            $total_count = $requested_member->find([
+                "club_id" => $club_id,
+            ], ["count(*) as count"], [], [], isset($_GET['search']) ? $_GET['search'] : '');
+            if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+            
+        }
+
+        $data['table_data'] = $table_data;
 
         $this->view($path, $data);
     }
