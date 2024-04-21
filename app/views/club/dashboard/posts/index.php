@@ -85,8 +85,8 @@
                                             </span>
                                         </button>
                                     </form>
-                                    <button class="icon-button cl-red">
-                                        <span onclick='onDataPopup("delete-club-post", <?= toJson($post_data, ["id"]) ?>)' class="material-icons-outlined">
+                                    <button onclick='onDataPopup("delete-club-post", <?= toJson($post_data, ["id"]) ?>)' class="icon-button cl-red">
+                                        <span class="material-icons-outlined">
                                             delete
                                         </span>
                                     </button>

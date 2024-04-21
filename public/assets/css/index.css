@@ -804,6 +804,10 @@ input[type=checkbox]:checked {
   gap: 20px;
   width: 100%;
 }
+.form.bottom-border {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #2d2d2d;
+}
 .form input {
   color-scheme: dark;
 }
@@ -837,6 +841,9 @@ input[type=checkbox]:checked {
   gap: 24px;
   border-bottom: 1px solid #2d2d2d;
   padding: 20px;
+}
+.form .form-section.no-border {
+  border-bottom: 0;
 }
 .form .form-section:first-child {
   padding-top: 0;

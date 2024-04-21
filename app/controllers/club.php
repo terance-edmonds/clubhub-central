@@ -785,6 +785,179 @@ class Club extends Controller
 
     private function reports($path, $data)
     {
+        $db = new Database();
+        $storage = new Storage();
+
+        $club_report = new ClubReport($db);
+        $notification = new UserNotifications($db);
+        $notification_state = new UserNotificationsState($db);
+
+        $club_id = $storage->get('club_id');
+        $club_member_id = $storage->get('club_member_id');
+
+        $data['total_count'] = 0;
+        $data['page'] = 1;
+        $data['limit'] = 15;
+
+        if (!empty($_GET['page']) && is_numeric($_GET['page']))
+            $data['page'] = $_GET['page'];
+
+        $db->transaction();
+
+        try {
+            if ($_SERVER['REQUEST_METHOD'] == "POST") {
+                $form_data = $_POST;
+
+                if ($form_data['submit'] == 'generate-report') {
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Report is being generated and will be notified when it's done."]];
+
+                    $fields = array();
+                    $data = array();
+                    if ($form_data['report_type'] == 'Event Details') {
+                        $club_events = new Event($db);
+                        $data = $club_events->find([
+                            "club_id" => $club_id, "is_deleted" => 0,
+                            "start_datetime" => [
+                                "operator" => ">",
+                                "data" => $form_data['start_datetime']
+                            ], "start_datetime" => [
+                                "operator" => "<",
+                                "data" => $form_data['end_datetime']
+                            ]
+                        ], [], []);
+                        $fields = array(
+                            'ID' => array("column" => "id"),
+                            'Name'  => array("column" => "name"),
+                            'Description'  => array("column" => "description"),
+                            'Venue' => array("column" => "venue"),
+                            'Start Date & Time' => array("column" => "start_datetime", "format" => "datetime"),
+                            'End Date & Time' => array("column" => "end_datetime", "format" => "datetime"),
+                            'Is a Public Event' => array("column" => "start_datetime", "format" => "boolean")
+                        );
+                    }
+                    if ($form_data['report_type'] == 'Member Details') {
+                        $club_member = new ClubMember($db);
+                        $data = $club_member->find(
+                            ["club_id" => $club_id, "club_members.is_deleted" => 0],
+                            [
+                                "club_members.id as id",
+                                "user_id",
+                                "club_members.role as role",
+                                "club_members.state as state",
+                                "joined_datetime",
+                                "user.email",
+                                "user.first_name",
+                                "user.last_name",
+                            ],
+                            [
+                                ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"]
+                            ],
+                        );
+
+                        $fields = array(
+                            'ID' => array("column" => "id"),
+                            'First Name'  => array("column" => "first_name"),
+                            'Last Name'  => array("column" => "last_name"),
+                            'Email'  => array("column" => "email"),
+                            'Joined Date & Time' => array("column" => "joined_datetime", "format" => "datetime"),
+                            'Member State'  => array("column" => "state", "format" => "snake_title"),
+                            'Member Role'  => array("column" => "role", "format" => "snake_title"),
+                        );
+                    }
+
+                    /* open file */
+                    $dir = generateFileDir('reports/' . date_create()->format('Uv'));
+                    $file_name = $form_data['report_name'] . ".csv";
+                    $fp = fopen($dir['dir'] . '/' . $file_name, 'w');
+
+                    /* feed header */
+                    $header = array_keys($fields);
+                    fputcsv($fp, $header);
+
+                    /* feed data */
+                    foreach ($data as $row => $row_data) {
+                        $line = array();
+                        foreach ($fields as $field => $field_data) {
+                            array_push(
+                                $line,
+                                displayValue(
+                                    $row_data->{$field_data['column']},
+                                    isset($field_data['format']) ? $field_data['format'] : 'text'
+                                )
+                            );
+                        }
+                        fputcsv($fp, $line);
+                    }
+
+                    $auth_user_id = Auth::getId();
+
+                    $club_report->create([
+                        "club_id" => $club_id,
+                        "user_id" => $auth_user_id,
+                        "club_member_id" => $club_member_id,
+                        "report_name" => $form_data['report_name'],
+                        "report_type" => $form_data['report_type'],
+                        "report_link" => $dir['url'] . "/" . $file_name,
+                        "start_datetime" => !empty($form_data['start_datetime']) ? $form_data['start_datetime'] : null,
+                        "end_datetime" => !empty($form_data['end_datetime']) ? $form_data['end_datetime'] : null,
+                    ]);
+
+                    /* set notification */
+                    $notification_result = $notification->create([
+                        "title" => 'Report Generated',
+                        "description" => '"' . $form_data['report_name'] . '" has been generated. Please check club reports.',
+                    ]);
+                    $notification_state->create([
+                        "user_id" => $auth_user_id,
+                        "notification_id" => $notification_result->id,
+                    ]);
+                } else if ($form_data['submit'] == 'delete-report') {
+                    $club_report->delete([
+                        "id" => $form_data['id']
+                    ]);
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Report deleted successfully"]];
+                }
+            }
+        } catch (\Throwable $th) {
+            show($th);
+            $db->rollback();
+            show($th);
+            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to process the action, please try again later."]];
+        }
+
+        /* pagination */
+        $total_count = $club_report->find([
+            "club_id" => $club_id
+        ], ["count(*) as count"], [], ["limit" => $data['limit']], isset($_GET['search']) ? $_GET['search'] : '');
+
+        if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+
+        /* fetch data */
+        $data['table_data'] = $club_report->find([
+            "club_id" => $club_id
+        ], [
+            "club_reports.id",
+            "club_reports.report_name",
+            "club_reports.report_type",
+            "club_reports.report_link",
+            "club_reports.start_datetime",
+            "club_reports.end_datetime",
+            "club_reports.created_datetime",
+            "concat(user.first_name,' ', user.last_name) as user_name",
+        ], [
+            ["table" => "users", "as" => "user", "on" => "club_reports.user_id = user.id"]
+        ], [
+            "limit" => $data['limit'],
+            "offset" => ($data['page'] - 1) * $data['limit'],
+        ], isset($_GET['search']) ? $_GET['search'] : '');
+
+        $data['errors'] = $club_report->errors;
+
+        $db->commit();
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST" &&  count($data['errors']) == 0) return redirect();
+
         $this->view($path, $data);
     }
 

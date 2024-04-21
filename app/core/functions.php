@@ -134,6 +134,25 @@ function milliseconds()
     return intval($mt[1] * 1E3) + intval(round($mt[0] * 1E3));
 }
 
+function generateFileDir($folder = null)
+{
+    $currentRoot = dirname(__DIR__, 2);
+    $route = "/assets/uploads/";
+
+    if (empty($folder))
+        $folder = date_create()->format('Uv');
+
+    $route .= $folder;
+
+    $target_dir = $currentRoot . "/public" . $route;
+
+    if (!file_exists($target_dir)) {
+        mkdir($target_dir, 0777, true);
+    }
+
+    return ["dir" => $target_dir, "url" => ROOT . $route];
+}
+
 /* upload file */
 function uploadFile($name)
 {
