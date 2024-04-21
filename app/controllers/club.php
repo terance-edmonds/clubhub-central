@@ -824,7 +824,18 @@ class Club extends Controller
                                 "operator" => "<",
                                 "data" => $form_data['end_datetime']
                             ]
-                        ], [], []);
+                        ], [
+                            "club_events.id as id",
+                            "club_events.name",
+                            "club_events.description",
+                            "club_events.venue",
+                            "club_events.start_datetime",
+                            "club_events.end_datetime",
+                            "club_events.is_public",
+                            "( select count(*) from club_event_registrations as cer where cer.club_event_id = club_events.id ) as total_registrations",
+                            "( select count(*) from club_event_registrations as cer where cer.club_event_id = club_events.id and cer.attended = 1 ) as total_participants",
+                        ]);
+
                         $fields = array(
                             'ID' => array("column" => "id"),
                             'Name'  => array("column" => "name"),
@@ -832,7 +843,9 @@ class Club extends Controller
                             'Venue' => array("column" => "venue"),
                             'Start Date & Time' => array("column" => "start_datetime", "format" => "datetime"),
                             'End Date & Time' => array("column" => "end_datetime", "format" => "datetime"),
-                            'Is a Public Event' => array("column" => "start_datetime", "format" => "boolean")
+                            'Is a Public Event' => array("column" => "is_public", "format" => "boolean"),
+                            'Total Registrations' => array("column" => "total_registrations", "format" => "number"),
+                            'Total Participants' => array("column" => "total_participants", "format" => "number"),
                         );
                     }
                     if ($form_data['report_type'] == 'Member Details') {
@@ -848,6 +861,7 @@ class Club extends Controller
                                 "user.email",
                                 "user.first_name",
                                 "user.last_name",
+                                "( select count(*) from club_event_registrations as cer where cer.club_id = club_members.club_id and cer.user_email = user.email and cer.attended = 1 ) as total_events_attend",
                             ],
                             [
                                 ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"]
@@ -862,6 +876,7 @@ class Club extends Controller
                             'Joined Date & Time' => array("column" => "joined_datetime", "format" => "datetime"),
                             'Member State'  => array("column" => "state", "format" => "snake_title"),
                             'Member Role'  => array("column" => "role", "format" => "snake_title"),
+                            'Number of Events Attended'  => array("column" => "total_events_attend", "format" => "number"),
                         );
                     }
 
