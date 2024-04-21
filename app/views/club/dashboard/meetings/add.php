@@ -51,27 +51,19 @@
                                     </small>
                                 <?php endif; ?>
                             </div>
-                            <div class="input-wrap">
-                                <label for="end_time">End Time</label>
-                                <input value="<?= setValue('end_time') ?>" id="end_time" type="time" name="end_time" placeholder="End Time" required>
-                                <?php if (!empty($errors['end_time'])) : ?>
-                                    <small>
-                                        <?= $errors['end_time'] ?>
-                                    </small>
-                                <?php endif; ?>
-                            </div>
+                            
                         </div>
                         <div class="multi-wrap">
                             <div class="input-wrap">
-                                <label for="member_select">Choose Members</label>
-                                <select onchange="onAddMember(event)" value="" name="member_select" id="member_select">
-                                    <option value="" selected disabled hidden>Choose Member</option>
-                                    <option value="1">Terance</option>
-                                    <option value="2">Raguram</option>
+                                <label for="type_select">Choose Type</label>
+                                <select onchange="onAddMember(event)" value="" name="type_select" id="type_select">
+                                    <option value="" selected disabled hidden>Choose Type</option>
+                                    <option value="1">OPEN</option>
+                                    <option value="2">CLOSED</option>
                                 </select>
-                                <?php if (!empty($errors['member_select'])) : ?>
+                                <?php if (!empty($errors['type_select'])) : ?>
                                     <small>
-                                        <?= $errors['member_select'] ?>
+                                        <?= $errors['type_select'] ?>
                                     </small>
                                 <?php endif; ?>
                             </div>

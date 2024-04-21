@@ -39,8 +39,7 @@
                     <tr class="table-header">
                         <th>Meeting Name</th>
                         <th>Date</th>
-                        <th>Start Time</th>
-                        <th>End Time</th>
+                        <th>Time</th>
                         <th>No. Attendants</th>
                         <th>No. Participants</th>
                         <th>Actions</th>
@@ -49,7 +48,6 @@
                         <td>Freshers' Day</td>
                         <td>11/04/23</td>
                         <td>10.00 AM</td>
-                        <td>12.00 AM</td>
                         <td>5</td>
                         <td>7</td>
                         <td align="center">
