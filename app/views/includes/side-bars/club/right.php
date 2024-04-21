@@ -9,7 +9,7 @@
                     <img loading="lazy" src="<?php echo (!empty($president->image)) ? $president->image : ROOT . '/assets/images/other/empty-profile.jpg' ?>" alt="Profile Image" class="profile-image">
                     <div class="details">
                         <div class="titles-wrap">
-                            <a href="<?= ROOT ?>/user?id=<?= $president->user_id ?>" class="title"><?= $president->first_name ?> <?= $president->last_name ?></a>
+                            <a href="<?= ROOT ?>/profile/public?id=<?= $president->user_id ?>" class="title"><?= $president->first_name ?> <?= $president->last_name ?></a>
                             <span class="sub-title">President</span>
                         </div>
                         <span class="material-icons-outlined">
@@ -23,7 +23,7 @@
                     <img loading="lazy" src="<?php echo (!empty($secretary->image)) ? $secretary->image : ROOT . '/assets/images/other/empty-profile.jpg' ?>" alt="Profile Image" class="profile-image">
                     <div class="details">
                         <div class="titles-wrap">
-                            <a href="<?= ROOT ?>/user?id=<?= $secretary->user_id ?>" class="title"><?= $secretary->first_name ?> <?= $secretary->last_name ?></a>
+                            <a href="<?= ROOT ?>/profile/public?id=<?= $secretary->user_id ?>" class="title"><?= $secretary->first_name ?> <?= $secretary->last_name ?></a>
                             <span class="sub-title">Secretary</span>
                         </div>
                         <span class="material-icons-outlined">
@@ -37,7 +37,7 @@
                     <img loading="lazy" src="<?php echo (!empty($treasurer->image)) ? $treasurer->image : ROOT . '/assets/images/other/empty-profile.jpg' ?>" alt="Profile Image" class="profile-image">
                     <div class="details">
                         <div class="titles-wrap">
-                            <a href="<?= ROOT ?>/user?id=<?= $treasurer->user_id ?>" class="title"><?= $treasurer->first_name ?> <?= $treasurer->last_name ?></a>
+                            <a href="<?= ROOT ?>/profile/public?id=<?= $treasurer->user_id ?>" class="title"><?= $treasurer->first_name ?> <?= $treasurer->last_name ?></a>
                             <span class="sub-title">Treasurer</span>
                         </div>
                         <span class="material-icons-outlined">

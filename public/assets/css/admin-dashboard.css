@@ -19,8 +19,12 @@
   color: #ff0000;
 }
 
+.cl-blue {
+  color: #33abff;
+}
+
 .cl-orange {
-  color: #ff8800;
+  color: #fbae56;
 }
 
 .cl-green {
@@ -112,6 +116,10 @@
 #admin-dashboard-requests .table-wrap .status-button[data-status=PENDING] {
   color: #edff7d;
   background-color: #303021;
+}
+#admin-dashboard-requests .table-wrap .status-button[data-status=PROCESSING] {
+  color: #fbae56;
+  background-color: #342d25;
 }
 #admin-dashboard-requests .table-wrap .status-button[data-status=APPROVED] {
   color: #7dff7a;

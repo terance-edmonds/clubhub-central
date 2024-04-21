@@ -1,7 +1,6 @@
 <?php
 
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 class Mail
@@ -30,7 +29,15 @@ class Mail
             }
             $this->mail->setFrom($data['from']['mail'], $data['from']['name']);
 
-            if (!empty($data['to'])) $this->mail->addAddress($data['to']['mail'], $data['to']['name']);
+            if (!empty($data['to'])) {
+                if (is_array($data['to'])) {
+                    foreach ($data['to'] as $user) {
+                        $this->mail->addAddress($user['mail'], $data['name']);
+                    }
+                } else {
+                    $this->mail->addAddress($data['to']['mail'], $data['to']['name']);
+                }
+            }
             if (!empty($data['subject'])) $this->mail->Subject = $data['subject'];
 
             $this->mail->isHTML(true);

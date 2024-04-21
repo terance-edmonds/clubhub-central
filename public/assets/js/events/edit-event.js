@@ -36,7 +36,10 @@ const onAddGroupMember = (e, group_name) => {
     $(`#group_member_select-${group_name} option:first`).prop('selected', true);
 
     /* check if member already added */
-    const exists = $(`#${group_name}-group_members`).find(`:checkbox[value="${values[0]}"]`);
+    const exists = $(`#${group_name}-group_members`)
+        .find(`:checkbox[name*='[id]']`)
+        .find(`:checkbox[value="${values[0]}"]`);
+
     if (exists.length) return;
 
     /* add new group member */

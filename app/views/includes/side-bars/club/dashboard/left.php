@@ -18,7 +18,7 @@ $side_bar_user = $side_bar_user->one(["id" => $side_bar_auth_user_id]);
         <div class="title-card">
             <img loading="lazy" src="<?= $club["image"] ?>" alt="Club Logo" class="club-logo">
             <div class="details">
-                <a href="<?= ROOT ?>/club?id=<?= $club["id"] ?>" class="title"><?= $club["name"] ?></a>
+                <a href="<?= ROOT ?>/club?id=<?= $club['id'] ?>" class="title"><?= $club["name"] ?></a>
                 <span class="material-icons-outlined">
                     chevron_right
                 </span>

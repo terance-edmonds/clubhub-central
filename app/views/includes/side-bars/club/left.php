@@ -8,7 +8,9 @@
                 <p class="desc"><?= $club["description"] ?></p>
             </div>
         </div>
-        <button class="button">Apply Membership</button>
+        <button onclick="$(`[popup-name='apply-membership']`).popup(true)" class="button">
+            Apply Membership
+        </button>
     </div>
 
     <div class="inner-section">
@@ -21,3 +23,11 @@
         </div>
     </div>
 </section>
+
+<?php $this->view("includes/modals/club") ?>
+
+<script>
+    <?php if (!empty($popups["add-$tab"])) { ?>
+        $(`[popup-name='apply-membership']`).popup(true)
+    <?php } ?>
+</script>

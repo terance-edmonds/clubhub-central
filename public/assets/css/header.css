@@ -19,8 +19,12 @@
   color: #ff0000;
 }
 
+.cl-blue {
+  color: #33abff;
+}
+
 .cl-orange {
-  color: #ff8800;
+  color: #fbae56;
 }
 
 .cl-green {
@@ -104,14 +108,94 @@
   width: 100%;
   border: 0;
   padding-bottom: 0;
+  padding-top: 0;
 }
 .nav-header .container-sections .notification-section {
+  position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: end;
       -ms-flex-pack: end;
           justify-content: flex-end;
+}
+.nav-header .container-sections .notification-section .notification-icon-wrap {
+  padding: 0;
+}
+.nav-header .container-sections .notification-section .notification-icon-wrap .icon-wrap {
+  position: relative;
+}
+.nav-header .container-sections .notification-section .notification-icon-wrap .icon-wrap .active {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #69e4be;
+  border-radius: 50%;
+  top: 0;
+  right: 0;
+}
+.nav-header .container-sections .notification-section .notification-list-wrap {
+  display: none;
+  position: absolute;
+  top: 100%;
+  margin-top: 5px;
+  margin-right: 15px;
+  right: 0px;
+  max-height: 500px;
+  overflow-y: auto;
+  width: 400px;
+  min-height: 70px;
+  height: auto;
+  background-color: #2d2d2d;
+  border-radius: 7px;
+  -webkit-box-shadow: 0 3px 5px rgba(255, 255, 255, 0.2);
+          box-shadow: 0 3px 5px rgba(255, 255, 255, 0.2);
+}
+.nav-header .container-sections .notification-section .notification-list {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  position: relative;
+  width: 400px;
+  min-height: 70px;
+}
+.nav-header .container-sections .notification-section .notification-list .notification-item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 4px;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  padding: 5px 10px;
+  min-height: 70px;
+  border-bottom: 1px solid #6a6a6a;
+  -webkit-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+}
+.nav-header .container-sections .notification-section .notification-list .notification-item[data-unread=true] {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.nav-header .container-sections .notification-section .notification-list .notification-item .title {
+  font-weight: 600;
+}
+.nav-header .container-sections .notification-section .notification-list .notification-item .description {
+  font-size: 14px;
+}
+.nav-header .container-sections .notification-section .notification-list .notification-item .buttons {
+  display: none;
+  gap: 10px;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+.nav-header .container-sections .notification-section .notification-list .notification-item:last-child {
+  border-bottom-color: transparent;
 }
 .nav-header .nav-item {
   display: -webkit-box;
@@ -144,18 +228,6 @@
     display: none;
   }
 }
-.nav-header .notification-item .icon-wrap {
-  position: relative;
-}
-.nav-header .notification-item .icon-wrap .active {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background-color: #69e4be;
-  border-radius: 50%;
-  top: 0;
-  right: 0;
-}
 .nav-header .menu-item {
   display: none;
   cursor: pointer;
@@ -166,7 +238,7 @@
           user-select: none;
 }
 @media screen and (max-width: 1350px) {
-  .nav-header .notification-item {
+  .nav-header .notification-wrap {
     display: none;
   }
   .nav-header .menu-item {

@@ -20,7 +20,7 @@ class Modal
         $this->order_column = $this->table . '.id';
     }
 
-    public function create($data, $select_key = '')
+    public function create($data)
     {
         if (!empty($this->allowed_columns)) {
             foreach ($data as $key => $value) {
@@ -37,7 +37,6 @@ class Modal
 
         $result = $this->db->query($query, $data);
 
-        // if (!empty($select_key)) return $this->one([$select_key => $data[$select_key]]);
         if (empty($result)) $result = null;
 
         if (!empty($result[0])) $result = $result[0];
@@ -95,9 +94,10 @@ class Modal
         }
 
         /* where clause */
-        if (count($data) > 0) {
+        if (count($data) > 0 || !empty($options['where'])) {
             $query .= " where ";
         }
+
         foreach ($keys as $key) {
             $condition = '&&';
             $operator = '=';
@@ -121,6 +121,14 @@ class Modal
 
             $query .= $key . " " . $operator . " :" . $value . " " . $condition . " ";
         }
+        if (!empty($options['where'])) {
+            foreach ($options['where'] as $where) {
+                $condition = '&&';
+                $query .= " " . $where . " " . $condition;
+            }
+
+            $query = trim($query, "&& ");
+        }
         $query = trim($query, "&& ");
         $query = trim($query, "|| ");
 
@@ -129,7 +137,13 @@ class Modal
             $condition = '&&';
 
             if (!empty($options['search']) && is_array($options['search'])) {
-                $query .= " && ( ";
+                if (str_contains($query, "where")) {
+                    $query .= ' &&';
+                } else {
+                    $query .= ' where';
+                }
+
+                $query .= " ( ";
 
                 foreach ($options['search'] as $search_key) {
                     $query .= $search_key . " like '%" . $search . "%' || ";
@@ -228,6 +242,7 @@ class Modal
             $type = $options['type'];
         }
 
+        // print_r($query);
         $res = $this->db->query($query, $data, $type);
 
         if (is_array($res)) {
@@ -286,5 +301,10 @@ class Modal
         $this->db->query($query, $where);
 
         return true;
+    }
+
+    public function query($query, $data, $type = 'object')
+    {
+        return $this->db->query($query, $data, $type);
     }
 }

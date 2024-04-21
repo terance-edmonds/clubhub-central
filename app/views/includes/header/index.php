@@ -29,16 +29,64 @@
                     <span class="text">Profile</span>
                 </a>
             </section>
-
+            <?php
+            if (Auth::logged()) {
+                $user_notifications = new UserNotifications();
+                $notifications = $user_notifications->find([
+                    "notification_state.user_id" => Auth::getId()
+                ], ["user_notifications.id as id", "title", "description", "link", "notification_state.id as notification_state_id", "notification_state.mark_as_read"],  [
+                    ["table" => "user_notification_state", "as" => "notification_state", "on" => "user_notifications.id = notification_state.notification_id"]
+                ]);
+            }
+            ?>
             <section class="notification-section">
-                <div class="nav-item notification-item">
-                    <div class="icon-wrap">
-                        <div class="active"></div>
-                        <span class="icon material-icons-outlined">
-                            notifications
-                        </span>
+                <div class="nav-item notification-wrap">
+                    <div onclick="onNotificationsClick(event)" class="nav-item notification-icon-wrap">
+                        <div class="icon-wrap">
+                            <?php if (!empty($notifications) and count($notifications) != 0) {
+                                if (in_array('0', array_column($notifications, 'mark_as_read'))) { ?>
+                                    <div class="active"></div>
+                            <?php }
+                            } ?>
+                            <span class="icon material-icons-outlined">
+                                notifications
+                            </span>
+                        </div>
+                        <span class="text">Notifications</span>
                     </div>
-                    <span class="text">Notifications</span>
+                    <div class="notification-list-wrap">
+                        <div class="notification-list">
+                            <?php if (empty($notifications) or count($notifications) == 0) { ?>
+                                <div class="notification-item empty">
+                                    <p class="title">No Notifications.</p>
+                                </div>
+                            <?php } else { ?>
+                                <?php foreach ($notifications as $notification) { ?>
+                                    <div data-notification="<?= $notification->notification_state_id ?>" class="notification-item" data-unread="<?= displayValue(!$notification->mark_as_read, 'boolean') ?>">
+                                        <p class="title"><?= $notification->title ?></p>
+                                        <p class="description truncate-text"><?= $notification->description ?></p>
+                                        <div class="buttons">
+                                            <?php if (!empty($notification->link)) { ?>
+                                                <a href="<?= $notification->link ?>">
+                                                    <button type="button" class="icon-button cl-blue">
+                                                        <span class="material-icons-outlined">
+                                                            link
+                                                        </span>
+                                                    </button>
+                                                </a>
+                                            <?php } ?>
+                                            <button onclick="onDeleteNotification(event, <?= $notification->notification_state_id ?>)" type="button" class="icon-button cl-red">
+                                                <span class="material-icons-outlined">
+                                                    delete
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                <?php
+                                } ?>
+                            <?php } ?>
+                        </div>
+                    </div>
                 </div>
                 <div class="nav-item menu-item">
                     <div onclick="onMenuClick(event)" class="icon-wrap">

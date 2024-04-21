@@ -13,7 +13,6 @@ $.fn.extend({
         }
     },
     scrollDisable: function (state) {
-        console.log(state);
         if (state) {
             /* disable body scroll */
             $('html, body').css({

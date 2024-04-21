@@ -24,7 +24,7 @@ $side_bar_club = $side_bar_club->one(["id" => $side_bar_club_id]);
         <div class="title-card">
             <img loading="lazy" src="<?php echo (!empty($side_bar_club->image)) ? $side_bar_club->image : ROOT . '/assets/images/logo/logo.png' ?>" alt="Club Logo" class="club-logo">
             <div class="details">
-                <a href="<?= ROOT ?>/club?id=<?= $side_bar_club->id ?>" class="title"><?= $side_bar_club->name ?> Dashboard</a>
+                <a href="<?= ROOT ?>/club/dashboard" class="title">Club Dashboard</a>
             </div>
         </div>
 

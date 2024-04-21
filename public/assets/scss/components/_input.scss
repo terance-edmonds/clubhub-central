@@ -87,6 +87,10 @@ input {
     align-items: center;
     width: 100%;
 
+    &.flex-between {
+        justify-content: space-between;
+    }
+
     @media screen and (max-width: 800px) {
         flex-direction: column;
 

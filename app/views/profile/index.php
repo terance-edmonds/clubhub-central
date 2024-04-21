@@ -7,6 +7,8 @@
 
 <?php $this->view('includes/header') ?>
 
+<?php $this->view('includes/alerts') ?>
+
 <div id="profile" class="container container-sections side-padding">
     <?php $this->view('includes/side-bars/profile/left', $left_bar) ?>
     <section class="center-section">
@@ -29,6 +31,18 @@
                 ?>
             </div>
         <?php } else { ?>
+            <div class="gallery-buttons">
+                <div onclick="$(`[popup-name='add-profile-gallery']`).popup(true)" class="gallery-button">
+                    <button class="icon-button">
+                        <span class="material-icons-outlined">
+                            add
+                        </span>
+                    </button>
+
+                    <span>Add New Image</span>
+                </div>
+            </div>
+
             <div class="gallery">
                 <?php foreach ($gallery as $item) { ?>
                     <div class="card">
@@ -42,14 +56,6 @@
                         <img loading="lazy" src="<?= $item->image ?>" alt="Gallery Image" class="gallery-image">
                     </div>
                 <?php } ?>
-
-                <div class="card add-new" onclick="$(`[popup-name='add-profile-gallery']`).popup(true)">
-                    <button class="icon-button">
-                        <span class="material-icons-outlined">
-                            add
-                        </span>
-                    </button>
-                </div>
             </div>
         <?php } ?>
     </section>

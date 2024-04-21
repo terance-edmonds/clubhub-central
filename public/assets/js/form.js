@@ -5,10 +5,22 @@ const onDataPopup = (name, data = {}) => {
         const input = popup.find(`[name="${key}"]`);
         if (input) {
             input.val(data[key]);
+
+            if (input.filter('[set-min]').length > 0) {
+                input.attr('set-min', data[key]);
+            }
         }
     }
 
     $(`[popup-name=${name}]`).popup(true);
+};
+
+const onViewPopup = (title, description) => {
+    const popup = $(`[popup-name='view-text']`);
+
+    popup.find('[name="title"]').text(title);
+    popup.find('[name="description"]').text(description);
+    $(`[popup-name='view-text']`).popup(true);
 };
 
 /* set default values for inputs */

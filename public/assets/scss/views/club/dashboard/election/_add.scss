@@ -48,3 +48,29 @@
         }
     }
 }
+
+.club-election-users-popup {
+    .checkbox-inputs {
+        display: flex;
+        width: 100%;
+
+        .checkbox-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+
+            .input-wrap {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 5px;
+                width: fit-content;
+
+                .input {
+                    padding-right: 0;
+                }
+            }
+        }
+    }
+}

@@ -71,6 +71,16 @@ class Routes
             "ADMIN",
             "USER"
         ],
+        "profile/public" => [
+            "MEMBER",
+            "TREASURER",
+            "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+            "SUPER_ADMIN",
+            "ADMIN",
+            "USER"
+        ],
         "profile/edit" => [
             "MEMBER",
             "TREASURER",
@@ -107,6 +117,13 @@ class Routes
         ],
         /* event dashboard routes */
         "events/dashboard" => [
+            "MEMBER",
+            "TREASURER",
+            "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+        ],
+        "events/dashboard/details" => [
             "MEMBER",
             "TREASURER",
             "SECRETARY",
@@ -220,6 +237,10 @@ class Routes
         ],
         "club/dashboard/reports" => [
             "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+        ],
+        "club/dashboard/reports/add" => [
             "SECRETARY",
             "PRESIDENT",
             "CLUB_IN_CHARGE",
@@ -231,11 +252,22 @@ class Routes
             "PRESIDENT",
             "CLUB_IN_CHARGE",
         ],
+        "club/dashboard/community/scroll" => [
+            "MEMBER",
+            "TREASURER",
+            "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+        ],
         "club/dashboard/requests" => [
             "CLUB_IN_CHARGE",
             "PRESIDENT",
         ],
         "club/dashboard/requests/add" => [
+            "CLUB_IN_CHARGE",
+            "PRESIDENT",
+        ],
+        "club/dashboard/requests/edit" => [
             "CLUB_IN_CHARGE",
             "PRESIDENT",
         ],
@@ -287,6 +319,13 @@ class Routes
             "PRESIDENT",
             "CLUB_IN_CHARGE",
         ],
+        "club/dashboard/election/details" => [
+            "MEMBER",
+            "TREASURER",
+            "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+        ],
         "club/dashboard/election/add" => [
             "PRESIDENT",
             "CLUB_IN_CHARGE",
@@ -310,6 +349,37 @@ class Routes
         ],
         "admin/dashboard/users" => [
             "SUPER_ADMIN"
+        ],
+        /* notification routes */
+        "notification" => [
+            "MEMBER",
+            "TREASURER",
+            "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+            "SUPER_ADMIN",
+            "ADMIN",
+            "USER"
+        ],
+        "notification/read" => [
+            "MEMBER",
+            "TREASURER",
+            "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+            "SUPER_ADMIN",
+            "ADMIN",
+            "USER"
+        ],
+        "notification/delete" => [
+            "MEMBER",
+            "TREASURER",
+            "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+            "SUPER_ADMIN",
+            "ADMIN",
+            "USER"
         ],
     ];
 }

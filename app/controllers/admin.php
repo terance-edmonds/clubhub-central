@@ -36,8 +36,8 @@ class Admin extends Controller
         $db = new Database();
         $club = new Clubs($db);
         $user = new User($db);
-
-        // die("LOL");
+        $notification = new UserNotifications($db);
+        $notification_state = new UserNotificationsState($db);
 
         $user_invitation = new UserInvitation($db);
         $mail = new Mail();
@@ -84,6 +84,17 @@ class Admin extends Controller
                             "club_name" => $form_data["name"],
                             "invitation_link" => ROOT . "/" . $link_path . "?token=" . $user_invitation_data["invitation_code"]
                         ])
+                    ]);
+
+                    /* set notification */
+                    $notification_result = $notification->create([
+                        "title" => $form_data['name']  . ' Club',
+                        "description" => '"' . $form_data['name'] . '" is inviting you to be the club in charge. Please check your mail box for the invitation.',
+                    ]);
+
+                    $notification_state->create([
+                        "user_id" => $user_invitation_data["user_id"],
+                        "notification_id" => $notification_result->id,
                     ]);
 
                     $_SESSION['alerts'] = [["status" => "success", "message" => "Club account created and club in charge email sent successfully"]];
@@ -142,32 +153,104 @@ class Admin extends Controller
 
     public function requests($path, $data)
     {
-
-        $request = new EventRegistration();
+        $db = new Database();
         $storage = new Storage();
+        $club_request = new ClubRequest($db);
+        $club_member = new ClubMember($db);
+        $notification = new UserNotifications($db);
+        $notification_state = new UserNotificationsState($db);
 
-        $data['total_count'] = 0;
-        $data['limit'] = 10;
-        $data['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
+        $path = $_GET['url'];
 
-        $data['requests_data'] = $request->find(
-            [],
-            [
-                "club_events.id as id",
-                "club_events.name as name",
-                "club_events.venue as venue",
-                "club_events.image as image",
-                "club_events.start_datetime as start_datetime",
-                "club_events.end_datetime as end_datetime",
-                "club_events.state as state",
-                "club_event_registrations.id as request_id"
+        $data['page'] = 1;
+        $data['limit'] = 15;
 
-            ],
-            [
-                ["table" => "club_event_registrations", "as" => "club_event_registration", "on" => "club_event.club_event_registration_id = club_event_registration.id = "]
-            ]
+        if (!empty($_GET['page']) && is_numeric($_GET['page']))
+            $data['page'] = $_GET['page'];
 
-        );
+        $db->transaction();
+
+        try {
+
+            if ($_SERVER['REQUEST_METHOD'] == "POST") {
+                $form_data = $_POST;
+
+                if ($form_data['submit'] == 'request-state') {
+                    if (!isset($form_data['id'])) {
+                        $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to update the request, request ID is not found"]];
+                    } else {
+                        if ($club_request->validateUpdateRequestState($form_data)) {
+                            $club_request->update(["id" => $form_data['id']], [
+                                "state" => $form_data['state'],
+                                "remarks" => $form_data['remarks'],
+                            ]);
+
+                            $request_data = $club_request->one(['id' => $form_data['id']]);
+
+                            /* set notification */
+                            $roles = ['PRESIDENT', 'CLUB_IN_CHARGE'];
+                            $club_administrators_ids = $club_member->query("select user_id from club_members where club_id = ? && role in (" . trim(str_repeat('?,', count($roles)), ',') . ")", array_merge([$request_data->club_id], $roles), 'array');
+                            $admin_users = array_column($club_administrators_ids, 'user_id');
+
+                            if (!empty($admin_users)) {
+                                $notification_result = $notification->create([
+                                    "title" => 'Club Request State Update',
+                                    "description" => '"' . $request_data->subject . '" request with ID "' . $form_data['id'] . '" state has been updated.',
+                                ]);
+
+                                foreach ($admin_users as $user_id) {
+                                    $notification_state->create([
+                                        "user_id" => $user_id,
+                                        "notification_id" => $notification_result->id,
+                                    ]);
+                                }
+                            }
+
+                            $_SESSION['alerts'] = [["status" => "success", "message" => "Request state been updated successfully"]];
+                        }
+                    }
+                }
+
+                $data['errors'] = $club_request->errors;
+            }
+
+            /* pagination */
+            $total_count = $club_request->find([], ["count(*) as count"], [["table" => "club_events", "as" => "event", "on" => "club_requests.club_event_id = event.id"]], ["limit" => $data['limit'], "search" =>  ["club_requests.id", "event.name"]], isset($_GET['search']) ? $_GET['search'] : '');
+            if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+
+            /* fetch club requests */
+            $data['table_data'] = $club_request->find(
+                [],
+                [
+                    "club_requests.id",
+                    "club_requests.state",
+                    "club_requests.subject",
+                    "club_requests.description",
+                    "club_requests.remarks",
+                    "club_requests.created_datetime",
+                    "event.name as event_name",
+                    "event.start_datetime as event_date",
+                ],
+                [
+                    ["table" => "club_events", "as" => "event", "on" => "club_requests.club_event_id = event.id"]
+                ],
+                [
+                    "limit" => $data['limit'],
+                    "offset" => ($data['page'] - 1) * $data['limit'],
+                    "search" =>  ["club_requests.id", "event.name"]
+                ],
+                isset($_GET['search']) ? $_GET['search'] : ''
+            );
+
+            $db->commit();
+        } catch (\Throwable $th) {
+            show($th);
+            $db->rollback();
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST" &&  count($data['errors']) == 0) return redirect();
+
+        $this->view($path, $data);
     }
 
 

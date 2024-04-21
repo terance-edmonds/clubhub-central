@@ -6,6 +6,8 @@
 
 <?php $this->view('includes/header') ?>
 
+<?php $this->view('includes/alerts') ?>
+
 <div id="club-dashboard-add-request" class="container container-sections side-padding club-dashboard dashboard-container">
     <?php $this->view('includes/side-bars/club/dashboard/left', $left_bar) ?>
 
@@ -24,9 +26,11 @@
                         <div class="multi-wrap">
                             <div class="input-wrap">
                                 <label for="event">Choose Event</label>
-                                <select name="event" id="event" required>
+                                <select name="club_event_id" id="event" required value="<?= setValue('club_event_id') ?>">
                                     <option value="" selected disabled hidden>Choose Event</option>
-                                    <option value="1">Freshers</option>
+                                    <?php foreach ($event_data as $event) { ?>
+                                        <option value="<?= $event->id ?>"><?= displayValue($event->name) ?></option>
+                                    <?php } ?>
                                 </select>
                                 <?php if (!empty($errors['event'])) : ?>
                                     <small>
@@ -57,7 +61,7 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button type="submit" class="button contained">Send Request</button>
+                    <button type="submit" name="submit" value="create-request" class="button contained">Send Request</button>
                 </div>
             </form>
         </div>

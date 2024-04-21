@@ -11,18 +11,31 @@
         padding: 10px 15px;
         overflow-y: auto;
         display: flex;
-        flex-direction: column;
+        flex-direction: column-reverse;
         gap: 15px;
 
         .text-wrap {
             display: flex;
-            width: 100%;
+            flex-direction: column;
+            gap: 3px;
+            width: fit-content;
+            background-color: $secondary_theme;
+            border-radius: 8px;
+            padding: 5px 10px;
+            min-width: 200px;
 
             .text {
-                background-color: $secondary_theme;
                 color: $dark;
-                border-radius: 8px;
-                padding: 5px 10px;
+            }
+
+            .name {
+                color: $dark;
+            }
+
+            .datetime {
+                font-size: x-small;
+                color: $secondary_dark;
+                text-align: right;
             }
         }
     }
@@ -38,5 +51,62 @@
             align-items: center;
             width: fit-content;
         }
+    }
+
+    .chat-scroll-loader-wrap {
+        display: none;
+        justify-content: center;
+
+        &[data-active='true'] {
+            display: flex;
+        }
+
+        .scroll-loader,
+        .scroll-loader div {
+            box-sizing: border-box;
+        }
+
+        .scroll-loader {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+
+            div {
+                display: inline-block;
+                position: absolute;
+                left: 4px;
+                width: 8px;
+                background: $theme;
+                animation: box-animation 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+
+                &:nth-child(1) {
+                    left: 4px;
+                    animation-delay: -0.24s;
+                }
+
+                &:nth-child(2) {
+                    left: 16px;
+                    animation-delay: -0.12s;
+                }
+
+                &:nth-child(3) {
+                    left: 28px;
+                    animation-delay: 0s;
+                }
+            }
+        }
+    }
+}
+
+@keyframes box-animation {
+    0% {
+        top: 8px;
+        height: 64px;
+    }
+    50%,
+    100% {
+        top: 24px;
+        height: 32px;
     }
 }
