@@ -144,8 +144,8 @@ function generateFileDir($folder = null)
 
     $route .= $folder;
 
+    /* create folder path if does not exist */
     $target_dir = $currentRoot . "/public" . $route;
-
     if (!file_exists($target_dir)) {
         mkdir($target_dir, 0777, true);
     }
@@ -154,30 +154,42 @@ function generateFileDir($folder = null)
 }
 
 /* upload file */
-function uploadFile($name)
+function uploadFile($name, $folder = null, $file_name = null)
 {
     if (!empty($_FILES[$name]['name'])) {
         /* create upload directory if not exists */
         $currentRoot = dirname(__DIR__, 2);
         $route = "/assets/uploads/";
+
+        /* create a folder path */
+        if (empty($folder))
+            $folder = date_create()->format('Uv');
+        $route .= $folder;
+
+        /* create folder path if does not exist */
         $target_dir = $currentRoot . "/public" . $route;
         if (!file_exists($target_dir)) {
             mkdir($target_dir, 0777, true);
         }
 
         $info = pathinfo($_FILES[$name]['name']);
-
         $extension = $info['extension'];
 
-        $file_name = milliseconds() . "." . $extension;
-        $save_path = $target_dir . $file_name;
+        /* add a file name if not given */
+        if (!empty($_FILES[$name]['name']))
+            $file_name = $_FILES[$name]['name'];
+        else if (empty($file_name))
+            $file_name = milliseconds() . "." . $extension;
 
+        $save_path = $target_dir . '/' . $file_name;
+
+        /* save the file */
         $result = move_uploaded_file($_FILES[$name]['tmp_name'], $save_path);
 
         if (!$result)
             return null;
 
-        return ["url" => ROOT . $route . $file_name, "name" => $file_name, "result" => $result];
+        return ["url" => ROOT . $route . '/' . $file_name, "name" => $file_name, "result" => $result];
     }
 
     return null;

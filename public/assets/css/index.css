@@ -503,6 +503,44 @@ input[type=checkbox]:checked {
   }
 }
 
+.file-upload {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  cursor: pointer;
+  border: 2px dashed #2d2d2d;
+  border-radius: 5px;
+  padding: 20px;
+  min-height: 150px;
+  max-height: 640px;
+}
+.file-upload .on-upload {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 20px;
+}
+.file-upload .on-upload .text {
+  color: #fff;
+}
+.file-upload .on-upload .icon {
+  font-size: 3rem;
+}
+
 .image-upload {
   display: -webkit-box;
   display: -ms-flexbox;

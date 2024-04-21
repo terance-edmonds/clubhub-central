@@ -1,4 +1,13 @@
-<div class="popup-modal-wrap" popup-name="apply-membership">
+<?php
+$auth_user_id = Auth::getId();
+$user = new User();
+
+$user_data = $user->one(["id" => $auth_user_id]);
+$_POST['user_name'] = $user_data->first_name . " " . $user_data->last_name;
+$_POST['user_email'] = $user_data->email;
+?>
+
+<div class="popup-modal-wrap apply-membership-modal" popup-name="apply-membership">
     <div class="popup-modal">
         <div class="popup-header">
             <span class="title">Apply Membership</span>
@@ -10,24 +19,35 @@
         </div>
 
         <div class="popup-body">
-            <form class="form" method="post">
+            <form class="form" method="post" enctype="multipart/form-data">
                 <div class="input-wrap">
                     <label for="user_name">Full Name</label>
-                    <input value="<?= setValue('user_name') ?>" name="user_name" id="user_name" type="text" placeholder="Full Name" required>
+                    <input readonly value="<?= setValue('user_name') ?>" name="user_name" id="user_name" type="text" placeholder="Full Name" required>
                     <?php if (!empty($errors['user_name'])) : ?>
                         <small><?= $errors['user_name'] ?></small>
                     <?php endif; ?>
                 </div>
                 <div class="input-wrap">
                     <label for="user_email">Email Address</label>
-                    <input value="<?= setValue('user_email') ?>" name="user_email" id="user_email" type="email" placeholder="Email Address" required>
+                    <input readonly value="<?= setValue('user_email') ?>" name="user_email" id="user_email" type="email" placeholder="Email Address" required>
                     <?php if (!empty($errors['user_email'])) : ?>
                         <small><?= $errors['user_email'] ?></small>
                     <?php endif; ?>
                 </div>
                 <div class="input-wrap">
-                    <label for="user_document">Document</label>
-                    <input name="user_document" id="user_document" type="file" placeholder="Upload Document">
+                    <label class="file-upload">
+                        <input name="user_document" type="file" placeholder="Upload Document" hidden>
+                        <div class="on-upload">
+                            <span class="material-icons-outlined icon">
+                                upload_file
+                            </span>
+                            <span class="text">Upload File</span>
+                            <small class="text">(Optional)</small>
+                        </div>
+                    </label>
+                    <?php if (!empty($errors['user_document'])) : ?>
+                        <small><?= $errors['user_document'] ?></small>
+                    <?php endif; ?>
                 </div>
                 <button type="submit" name="submit" value="apply-membership" class="button contained">Apply</button>
             </form>
