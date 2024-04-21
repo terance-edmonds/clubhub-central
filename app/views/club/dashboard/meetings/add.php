@@ -85,7 +85,7 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button type="submit" class="button contained" value = "create-meeting">Schedule</button>
+                    <button type="submit" class="button contained" value= "create-meeting">Schedule</button>
                 </div>
             </form>
         </div>

@@ -547,6 +547,8 @@ class Club extends Controller
         $meeting = new ClubMeeting($db);
         $storage = new Storage();
         $club_id = $storage->get('club_id');
+        $members = new ClubMember($db);
+        $club_meeting_attendence = new ClubMeetingAttendence($db);
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $form_data = $_POST;
@@ -554,13 +556,38 @@ class Club extends Controller
             if ($_POST['submit'] == 'create-meeting') {
                 if ($meeting->validateAddMeeting($form_data)) {
                     try {
-                        $meeting->create([
-                            "club_id" => $club_id,
-                            "name" => $form_data['name'],
-                            "date" => $form_data['date'],
-                            "start_time" => $form_data['start_time'],
-                            "end_time" => $form_data['end_time'],
-                        ]);
+                        if($form_data['type_select'] == "COMMITTEE"){
+                            $participants = $members->find([
+                                "club_id" => $club_id,
+                                "role" => "PRESIDENT",
+                                "role" => "SECRETARY",
+                                "role" => "TREASURER",
+                                "role" => "CLUB_IN_CHARGE"
+                            ],["count(*) as count"],[],[]);
+                            $meeting->create([
+                                "club_id" => $club_id,
+                                "name" => $form_data['name'],
+                                "date" => $form_data['date'],
+                                "start_time" => $form_data['start_time'],
+                                "type" => $form_data['type_select'],
+                                "partcipants" => $participants
+                            ]);
+                            $_SESSION['alerts'] = [["status" => "success", "message" => "Meeting details added successfully"]];
+                        }
+                        if($form_data['type_select'] == "CLOSED"){
+                            $participants = $members->find([
+                                "club_id" => $club_id,
+                            ],["count(*) as count"],[],[]);
+                            $meeting->create([
+                                "club_id" => $club_id,
+                                "name" => $form_data['name'],
+                                "date" => $form_data['date'],
+                                "start_time" => $form_data['start_time'],
+                                "type" => $form_data['type_select'],
+                                "partcipants" => $participants
+                            ]);
+                            $_SESSION['alerts'] = [["status" => "success", "message" => "Meeting details added successfully"]];
+                        }
 
                         $_SESSION['alerts'] = [["status" => "success", "message" => "Meeting details added successfully"]];
                     } catch (\Throwable $th) {
@@ -577,6 +604,27 @@ class Club extends Controller
         $data['meeting_data'] = $meeting->find(["club_id" => $club_id]);
 
         $this->view($path, $data);
+    }
+    private function sendMeetingAttendanceMail($data)
+    {
+        $mail = new Mail();
+        $qr_code_image = generateQRCode($data['id']);
+
+        $mail->send([
+            "to" => [
+                "mail" => $data['user_email'],
+                "name" => $data['user_name']
+            ],
+            "subject" => "Meeting Attendance Tracking",
+            "body" => $mail->template("meeting-attendance", [
+                "from_email" => MAIL_USER,
+                "from_name" => MAIL_USERNAME,
+                "meeting_name" => $data['name'],
+                "meeting_date" => $data['date'],
+                "meeting_time" => $data['time'],
+                "qr_code_image" => $qr_code_image
+            ])
+        ]);
     }
 
     private function community($path, $data)
