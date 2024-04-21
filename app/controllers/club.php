@@ -551,7 +551,7 @@ class Club extends Controller
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $form_data = $_POST;
 
-            if ($_POST['submit'] == 'create-event-agenda') {
+            if ($_POST['submit'] == 'create-meeting') {
                 if ($meeting->validateAddMeeting($form_data)) {
                     try {
                         $meeting->create([
@@ -569,10 +569,13 @@ class Club extends Controller
 
                     return redirect();
                 } else {
-                    $data['popups']["add-mee"] = true;
+                    $data['popups']["add-meeting"] = true;
                 }
             }
         }
+        #Fetch meeting Data
+        $data['meeting_data'] = $meeting->find(["club_id" => $club_id]);
+
         $this->view($path, $data);
     }
 

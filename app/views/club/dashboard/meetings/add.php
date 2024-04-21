@@ -58,7 +58,7 @@
                                 <label for="type_select">Choose Type</label>
                                 <select onchange="onAddMember(event)" value="" name="type_select" id="type_select">
                                     <option value="" selected disabled hidden>Choose Type</option>
-                                    <option value="1">OPEN</option>
+                                    <option value="1">COMMITTEE</option>
                                     <option value="2">CLOSED</option>
                                 </select>
                                 <?php if (!empty($errors['type_select'])) : ?>
@@ -85,21 +85,12 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button type="submit" class="button contained">Schedule</button>
+                    <button type="submit" class="button contained" value = "create-meeting">Schedule</button>
                 </div>
             </form>
         </div>
     </section>
 
-    <div class="checkbox-wrap selected-member-template">
-        <label class="checkbox-label">
-            {{selected_member_name}}
-            <input hidden type="checkbox" checked name="selected_member" value="{{selected_member_id}}">
-        </label>
-        <span onclick="onRemoveMember(event)" class="material-icons-outlined">
-            clear
-        </span>
-    </div>
 </div>
 
 <?php $this->view('includes/header/side-bars/club-dashboard', $menu_side_bar) ?>

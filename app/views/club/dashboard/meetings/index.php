@@ -44,12 +44,28 @@
                         <th>No. Participants</th>
                         <th>Actions</th>
                     </tr>
+                    <?php if (count($meeting_data) == 0) { ?>
+                        <tr>
+                            <td colspan="4">No Records.</td>
+                        </tr>
+                    <?php } ?>
+                    <?php foreach ($meeting_data as $meeting) { ?>
                     <tr class="table-data">
-                        <td>Freshers' Day</td>
-                        <td>11/04/23</td>
-                        <td>10.00 AM</td>
-                        <td>5</td>
-                        <td>7</td>
+                        <td>
+                            <?= displayValue($meeting->name) ?>
+                        </td>
+                        <td>
+                            <?= displayValue($meeting->date) ?>
+                        </td>
+                        <td>
+                            <?= displayValue($meeting->time) ?>
+                        </td>
+                        <td>
+                            <?= displayValue($meeting->participants) ?>
+                        </td>
+                        <td>
+                            <?= displayValue($meeting->attendence) ?>
+                        </td>
                         <td align="center">
                             <div class="buttons">
                                 <button class="icon-button">
@@ -65,6 +81,7 @@
                             </div>
                         </td>
                     </tr>
+                    <?php } ?>
                 </table>
             </div>
         </div>
