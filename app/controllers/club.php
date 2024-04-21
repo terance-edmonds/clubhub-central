@@ -139,6 +139,7 @@ class Club extends Controller
 
         $club_data = $club->one(["id" => $data["club_id"]], ["clubs.id", "clubs.name", "clubs.description", "clubs.image"]);
         $left_bar = [
+            "tab" => $data['tab'],
             "club" =>  [
                 "id" => $club_data->id,
                 "name" => $club_data->name,

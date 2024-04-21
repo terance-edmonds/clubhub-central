@@ -520,6 +520,11 @@ input[type=checkbox]:checked {
   padding: 20px;
   min-height: 150px;
   max-height: 640px;
+  -webkit-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+}
+.file-upload[data-uploaded=true] {
+  background-color: #213021;
 }
 .file-upload .on-upload {
   display: -webkit-box;

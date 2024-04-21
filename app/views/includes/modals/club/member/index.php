@@ -36,13 +36,13 @@ $_POST['user_email'] = $user_data->email;
                 </div>
                 <div class="input-wrap">
                     <label class="file-upload">
-                        <input name="user_document" type="file" placeholder="Upload Document" hidden>
+                        <input onchange="onFile(event)" name="user_document" type="file" placeholder="Upload Document" hidden>
                         <div class="on-upload">
                             <span class="material-icons-outlined icon">
                                 upload_file
                             </span>
-                            <span class="text">Upload File</span>
-                            <small class="text">(Optional)</small>
+                            <span class="text upload-text">Upload File</span>
+                            <span class="f-14 file-name">( Optional )</span>
                         </div>
                     </label>
                     <?php if (!empty($errors['user_document'])) : ?>
@@ -54,3 +54,5 @@ $_POST['user_email'] = $user_data->email;
         </div>
     </div>
 </div>
+
+<script src="<?= ROOT ?>/assets/js/file-upload.js"></script>

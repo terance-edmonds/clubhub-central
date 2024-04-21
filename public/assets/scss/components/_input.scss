@@ -111,6 +111,11 @@ input {
     padding: 20px;
     min-height: 150px;
     max-height: 640px;
+    transition: all 0.4s ease;
+
+    &[data-uploaded='true'] {
+        background-color: $green-light;
+    }
 
     .on-upload {
         display: flex;
