@@ -66,7 +66,7 @@
                             <?= displayValue($meeting->date) ?>
                         </td>
                         <td>
-                            <?= displayValue($meeting->time) ?>
+                            <?= displayValue($meeting->start_time) ?>
                         </td>
                         <td>
                             <?= displayValue($meeting->participants) ?>

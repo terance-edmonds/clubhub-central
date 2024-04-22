@@ -552,6 +552,7 @@ class Club extends Controller
         $club_attendence = new ClubMeetingAttendence;
         $data['user_found'] = False;
         $roles = ["PRESIDENT", "SECRETARY", "TREASURER", "CLUB_IN_CHARGE"];
+        show($_POST);
         
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $form_data = $_POST;
@@ -561,7 +562,7 @@ class Club extends Controller
                     try {
                         
                         if($form_data['type_select'] == "COMMITTEE"){
-                            $commitee_members = $members->find(
+                            $committee_members = $members->find(
                                 [
                                 "club_id" => $club_id,
                                 "role" => $roles
@@ -589,15 +590,33 @@ class Club extends Controller
                                 "date" => $form_data['date'],
                                 "start_time" => $form_data['start_time'],
                                 "type" => $form_data['type_select'],
-                                "partcipants" => $participants
+                                "participants" => $participants
                             ]);
+                            for($x=0;$x < count($committee_members) ; $x++){
+                               $email =  $commitee_members[$x]->user->email;
+                               $name = $committee_members[$x]->user->fname.' '.$committee_members[$x]->user->lname;
+                               $result = $club_attendence->create([
+                                "club_id" => $club_id,
+                                "meeting_id"=> $result_meeting->id,
+                                "user_name" => $name,
+                                "user_email" => $email
+                               ]);
+                               $this->sendAttendanceMail([
+                                "user_name" => $result -> user_name,
+                                "user_email" => $result -> user_email,
+                                "event_name" => $result_meeting->name,
+                                "meeting_date" => $result_meeting->date,
+                                "meeting_time" => $result_meeting -> start_date,
+                                "id" => $result->id
+                            ]);
+                            };
             
                            
                             $_SESSION['alerts'] = [["status" => "success", "message" => "Meeting details added successfully"]];
                         }
                         if($form_data['type_select'] == "CLOSED"){
 
-                            $commitee_members = $members->find(
+                            $committee_members = $members->find(
                                 ["club_id" => $club_id],
                                 [
                                     "user.email as email",
@@ -614,14 +633,33 @@ class Club extends Controller
                             $participants = $members->find([
                                 "club_id" => $club_id,
                             ],["count(*) as count"],[],[]);
-                            $meeting->create([
+                            $result_meeting = $meeting->create([
                                 "club_id" => $club_id,
                                 "name" => $form_data['name'],
                                 "date" => $form_data['date'],
                                 "start_time" => $form_data['start_time'],
                                 "type" => $form_data['type_select'],
-                                "partcipants" => $participants
+                                "participants" => $participants
                             ]);
+                            for($x=0;$x < count($committee_members) ; $x++){
+                                $email =  $commitee_members[$x]->user->email;
+                                $name = $commitee_members[$x]->user->fname.' '.$commitee_members[$x]->user->lname;
+                                $result = $club_attendence->create([
+                                 "club_id" => $club_id,
+                                 "meeting_id"=> $result_meeting->id,
+                                 "user_name" => $name,
+                                 "user_email" => $email
+                                ]);
+                                $this->sendAttendanceMail([
+                                    "user_name" => $form_data['user_name'],
+                                    "user_email" => $form_data['user_email'],
+                                    "event_name" => $result_meeting->name,
+                                    "meeting_date" => $result_meeting->date,
+                                    "meeting_time" => $result_meeting -> start_date,
+                                    "id" => $result->id
+                                ]);
+                            };
+             
                             $_SESSION['alerts'] = [["status" => "success", "message" => "Meeting details added successfully"]];
                         }
 
@@ -634,6 +672,18 @@ class Club extends Controller
                 } else {
                     $data['popups']["add-meeting"] = true;
                 }
+            }else if ($_POST['submit'] == 'event-attendance-mark') {
+                try {
+                    $club_attendence->update(["id" => $form_data['id']], [
+                        "attended" => 1,
+                    ]);
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Event attendance marked as attended"]];
+                } catch (\Throwable $th) {
+                    $_SESSION['alerts'] = [["status" => "error", "message" => "Attendance details update failed, please try again later"]];
+                }
+
+                return redirect();
             }
         }
         #Fetch meeting Data
