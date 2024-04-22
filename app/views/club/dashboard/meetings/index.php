@@ -31,6 +31,14 @@
                     <input type="text" placeholder="Search">
                 </div>
             </div>
+            <a href="<?= ROOT ?>/club/dashboard/meetings/meeting-attendence">
+                <button class="button w-content" data-variant="outlined" data-type="icon" data-size="small">
+                    <span>Mark Attendance</span>
+                    <span class="material-icons-outlined">
+                        how_to_reg
+                    </span>
+                </button>
+            </a>
         </div>
 
         <div class="content-section">

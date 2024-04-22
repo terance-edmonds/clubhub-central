@@ -56,7 +56,7 @@
                         <div class="multi-wrap">
                             <div class="input-wrap">
                                 <label for="type_select">Choose Type</label>
-                                <select onchange="onAddMember(event)" value="" name="type_select" id="type_select">
+                                <select value="type-select" name="type_select" id="type_select">
                                     <option value="" selected disabled hidden>Choose Type</option>
                                     <option value="1">COMMITTEE</option>
                                     <option value="2">CLOSED</option>
