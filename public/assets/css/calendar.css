@@ -77,36 +77,21 @@
 }
 #calendar .top-bar {
   padding: 10px;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: space-between;
+  align-items: center;
 }
 #calendar .top-bar .center {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   gap: 10px;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+  flex-wrap: wrap;
   font-size: 1.25em;
   font-weight: 600;
 }
 #calendar .top-bar .icon-wrap {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
   padding: 10px;
   background-color: #161616;
   border-radius: 7px;
@@ -137,24 +122,14 @@
   height: 110px;
 }
 #calendar .calendar-cell .cell-content {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  flex-direction: column;
   gap: 5px;
   height: 100%;
 }
 #calendar .calendar-cell .cell-content .content {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  flex-direction: column;
   gap: 3px;
 }
 #calendar .calendar-cell .cell-content .content .item {
@@ -182,7 +157,6 @@
   border-radius: 5px;
   opacity: 0;
   padding: 10px;
-  -webkit-transition: all 0.4s ease;
   transition: all 0.4s ease;
   z-index: 2;
   font-size: 0.875em;
@@ -196,8 +170,6 @@
   font-size: 1rem;
 }
 #calendar .calendar-cell .cell-content .content .item .pop-over .info-wrap {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   gap: 5px;
 }
@@ -217,36 +189,21 @@
 }
 #calendar-date .top-bar {
   padding: 10px;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: space-between;
+  align-items: center;
 }
 #calendar-date .top-bar .center {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   gap: 10px;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+  flex-wrap: wrap;
   font-size: 1.25em;
   font-weight: 600;
 }
 #calendar-date .top-bar .icon-wrap {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
   padding: 10px;
   background-color: #161616;
   border-radius: 7px;
@@ -257,13 +214,8 @@
   color: #a5a5a5;
 }
 #calendar-date .calendar-content {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  flex-direction: column;
   gap: 15px;
   width: 100%;
   padding: 20px;
@@ -273,19 +225,10 @@
   grid-template-columns: 100px auto;
 }
 #calendar-date .calendar-content .item .date-section {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 10px;
   border-right: 2px solid #94d1be;
 }
@@ -293,16 +236,9 @@
   font-weight: 600;
 }
 #calendar-date .calendar-content .item .content-section {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  flex-direction: column;
+  justify-content: center;
   gap: 5px;
   padding: 20px;
   border-left: 2px solid #94d1be;
@@ -314,4 +250,4 @@
 #calendar-date .calendar-content .item .content-section .date {
   font-size: small;
   color: #a5a5a5;
-}
+}/*# sourceMappingURL=calendar.css.map */
