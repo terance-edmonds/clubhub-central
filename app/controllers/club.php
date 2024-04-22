@@ -636,6 +636,13 @@ class Club extends Controller
                 ]);
 
                 $_SESSION['alerts'] = [["status" => "success", "message" => "Member details deleted successfully"]];
+            } else if ($_POST['submit'] == 'club-member-state') {
+                $club_member->update(["id" => $form_data['id']], [
+                    "state" => $form_data['state']
+                ]);
+
+                $_SESSION['alerts'] = [["status" => "success", "message" => "Member state updated successfully"]];
+                $redirect_link = 'club/members';
             }
         }
 
@@ -649,6 +656,7 @@ class Club extends Controller
                 "user.last_name",
                 "user.email",
                 "document.document as document_link",
+                "state"
             ],
             [
                 ["table" => "club_member_documents", "as" => "document", "on" => "club_members.id = document.club_member_id"],
