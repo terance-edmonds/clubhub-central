@@ -8,7 +8,9 @@ class ClubMeeting extends Modal
         "name",
         "date",
         "start_time",
-        "end_time"
+        "participants",
+        "type",
+        "attendence"
     ];
     protected $search_columns = [
         "name",
@@ -23,7 +25,9 @@ class ClubMeeting extends Modal
         if (empty($data['name'])) $this->errors['name'] = "Name is required";
         if (empty($data['date'])) $this->errors['date'] = "Date is required";
         if (empty($data['start_time'])) $this->errors['start_time'] = "Start Time is required";
-        if (empty($data['end_time'])) $this->errors['end_time'] = "End Time is required";
+        if (empty($data['participants'])) $this->errors['participants'] = "participants is required";
+        if (empty($data['type'])) $this->errors['type'] = "type is required";
+
 
 
         if (empty($this->errors)) {

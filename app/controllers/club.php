@@ -625,7 +625,7 @@ class Club extends Controller
                             $_SESSION['alerts'] = [["status" => "success", "message" => "Meeting details added successfully"]];
                         }
 
-                        $_SESSION['alerts'] = [["status" => "success", "message" => "Meeting details added successfully"]];
+                        //$_SESSION['alerts'] = [["status" => "success", "message" => "Meeting details added successfully"]];
                     } catch (\Throwable $th) {
                         $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to add Meeting details"]];
                     }
@@ -634,18 +634,6 @@ class Club extends Controller
                 } else {
                     $data['popups']["add-meeting"] = true;
                 }
-            }else if ($_POST['submit'] == 'event-attendance-mark') {
-                try {
-                    $event_registration->update(["id" => $form_data['id']], [
-                        "attended" => 1,
-                    ]);
-
-                    $_SESSION['alerts'] = [["status" => "success", "message" => "Event attendance marked as attended"]];
-                } catch (\Throwable $th) {
-                    $_SESSION['alerts'] = [["status" => "error", "message" => "Attendance details update failed, please try again later"]];
-                }
-
-                return redirect();
             }
         }
         #Fetch meeting Data
