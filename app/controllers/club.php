@@ -611,8 +611,7 @@ class Club extends Controller
 
         $mail->send([
             "to" => [
-                "mail" => $data['user_email'],
-                "name" => $data['user_name']
+                $data['user_email']=>$data['user_name']
             ],
             "subject" => "Meeting Attendance Tracking",
             "body" => $mail->template("meeting-attendance", [
