@@ -27,18 +27,10 @@ const onAddNewGroup = () => {
     resetGroupAttributes();
 };
 
-const onAddGroupMember = (e, group_name) => {
-    const option_value = $(`#group_member_select-${group_name}`).val();
-    const name = $(`#group_member_select-${group_name} option[value="${option_value}"]`).text();
-    const values = option_value.split(',');
-
-    /* reset select */
-    $(`#group_member_select-${group_name} option:first`).prop('selected', true);
-
+const onAddGroupMember = (e, id, user_id, name) => {
     /* check if member already added */
-    const exists = $(`#${group_name}-group_members`)
-        .find(`:checkbox[name*='[id]']`)
-        .find(`:checkbox[value="${values[0]}"]`);
+    let group_name = this.group_name;
+    const exists = $(`#${group_name}-group_members`).find(`[data-${group_name}="${id}"]`);
 
     if (exists.length) return;
 
@@ -49,8 +41,8 @@ const onAddGroupMember = (e, group_name) => {
         .html()
         .replaceAll('{{group_name}}', group_name)
         .replaceAll('{{group_member_name}}', name)
-        .replaceAll('{{group_member_user_id}}', values[1])
-        .replaceAll('{{group_member_id}}', values[0]);
+        .replaceAll('{{group_member_user_id}}', user_id)
+        .replaceAll('{{group_member_id}}', id);
 
     clone
         .html(element)
@@ -103,6 +95,81 @@ const onStartEndDatesChange = () => {
             $(this).val(min);
         }
     });
+};
+
+let page = 1;
+let loaded = true;
+
+const onSearch = (e) => {
+    const el = $('#users_search');
+    const search = el.val();
+
+    if (loaded) {
+        loaded = false;
+        let params = { page, search, data: 'users_data' };
+
+        const url = new URL(window.location.href);
+        url.pathname = `${url.pathname}`;
+        url.search = new URLSearchParams(params).toString();
+
+        $('.data-loader-wrap').attr('data-active', 'true');
+
+        fetch(url.href)
+            .then((res) => res.text())
+            .then((data) => {
+                const html = $.parseHTML(data);
+                const table = $(html).filter('.table-wrap');
+
+                $('.table-wrap').replaceWith(table);
+
+                /* set the checkbox state */
+                checkDataState();
+            })
+            .catch((err) => {
+                console.error(err);
+            })
+            .finally(() => {
+                loaded = true;
+                $('.data-loader-wrap').attr('data-active', 'false');
+            });
+    }
+};
+
+const onSelectAll = (event) => {
+    const el = $(event.target);
+    /* check all the check boxes */
+    /* first set the "checked" mark to opposite of the select-all checkbox then trigger a click */
+    /* this ensures that all the checkboxes are in one state before click */
+    $("input[name='user_select_checkbox']").prop('checked', !el.is(':checked')).trigger('click');
+};
+
+/* check if any checkbox data is available in the list if so check the box */
+const checkDataState = () => {
+    $("input[name='user_select_checkbox']").each(function () {
+        const el = $(this);
+        const exists = $(`#${this.group_name}-group_members`).find(
+            `:checkbox[value=${el.attr('data-value')}]`
+        );
+
+        el.prop('checked', !!exists.length > 0);
+    });
+
+    checkAllState();
+};
+
+const checkAllState = () => {
+    const check_boxes = $("input[name='user_select_checkbox']").length;
+    const checked_boxes = $("input[name='user_select_checkbox']:checked").length;
+    $("input[name='select_all_checkbox']").prop('checked', check_boxes == checked_boxes);
+};
+
+const onSelectUsersPopup = (state, group_name) => {
+    $(`[popup-name='select-member-users']`).popup(state);
+
+    this.group_name = group_name;
+    if (state) {
+        checkDataState();
+    }
 };
 
 $(document).ready(() => {

@@ -6,7 +6,7 @@
 
 <?php $this->view('includes/header') ?>
 
-<div id="admin-dashboard-events" class="container container-sections side-padding admin-dashboard dashboard-container">
+<div id="admin-dashboard-users" class="container container-sections side-padding admin-dashboard dashboard-container">
     <?php $this->view('includes/side-bars/admin/left', ["menu" => $menu]) ?>
 
     <section class="center-section">
@@ -33,7 +33,8 @@
             <div class="table-wrap">
                 <table>
                     <tr class="table-header">
-                        <th>Name</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
                         <th>Email</th>
                         <th>Assigned Clubs</th>
                         <th>Verified</th>
@@ -46,12 +47,15 @@
                         </tr>
                     <?php } ?>
 
-                    <?php foreach ($users_data as $user) { ?>
+                    <?php foreach ($users_data as $user_data) {
+                        $user =  (object) $user_data[0];
+                    ?>
                         <tr class="table-data">
-                            <td><?= displayValue($user->first_name) ?> <?= displayValue($user->last_name) ?></td>
+                            <td><?= displayValue($user->first_name) ?></td>
+                            <td><?= displayValue($user->last_name) ?></td>
                             <td><?= displayValue($user->email) ?></td>
                             <td align="center">
-                                <button class="icon-button">
+                                <button onclick="$(`[popup-name='user-<?= $user->id ?>-clubs']`).popup(true)" <?php if ($user->total_clubs == 0) { ?> disabled <?php } ?> class="icon-button">
                                     <span class="material-icons-outlined">
                                         visibility
                                     </span>
@@ -85,6 +89,11 @@
                                 </div>
                             </td>
                         </tr>
+
+                        <?php $this->view('includes/modals/admin/users/clubs', [
+                            "id" => $user->id,
+                            "clubs" => $user_data
+                        ]) ?>
                     <?php } ?>
                 </table>
                 <?php $this->view('includes/pagination', [

@@ -23,12 +23,17 @@ class ClubReport extends Modal
     {
         $this->errors = [];
 
-        if (empty($data['club_id'])) $this->errors['error'] = "Club ID is required";
-        if (empty($data['user_id'])) $this->errors['error'] = "User ID is required";
-        if (empty($data['club_member_id'])) $this->errors['error'] = "Club member ID is required";
         if (empty($data['report_name'])) $this->errors['report_name'] = "Report name is required";
         if (empty($data['report_type'])) $this->errors['report_type'] = "Report type is required";
-        if (empty($data['report_link'])) $this->errors['error'] = "Report resource link is required";
+
+        if (!empty($data['start_datetime']) && empty($data['end_datetime']))  $this->errors['end_datetime'] = "End date & time is required";
+        if (!empty($data['end_datetime']) && empty($data['start_datetime']))  $this->errors['start_datetime'] = "Start date & time is required";
+
+        if (!empty($data['start_datetime']) && !empty($data['end_datetime'])) {
+            if ($data['start_datetime'] > $data['end_datetime']) {
+                $this->errors['end_datetime'] = "Invalid end date & time";
+            }
+        }
 
         if (empty($this->errors)) {
             return true;

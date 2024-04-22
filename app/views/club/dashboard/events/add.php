@@ -2,6 +2,7 @@
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/side-bar.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/dashboard.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/event-dashboard.css">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/data-loader.css">
 </head>
 
 <?php $this->view('includes/header') ?>
@@ -111,16 +112,15 @@
                                         <?php endif; ?>
                                     </div>
                                     <div class="input-wrap">
-                                        <label for="group_member_select-<?= $key ?>">Group Members</label>
-                                        <select onchange="onAddGroupMember(event, '<?= $key ?>')" value="" name="group_member_select-<?= $key ?>" id="group_member_select-<?= $key ?>">
-                                            <option value="" selected disabled hidden>Choose Member</option>
-                                            <?php foreach ($club_members_data as $club_member) { ?>
-                                                <option value="<?= $club_member->id ?>,<?= $club_member->user_id ?>">
-                                                    <?= $club_member->first_name ?>
-                                                    <?= $club_member->last_name ?>
-                                                </option>
-                                            <?php } ?>
-                                        </select>
+                                        <label>Group Members</label>
+
+                                        <button type="button" onclick="onSelectUsersPopup(true, '<?= $key ?>')" class="button contained w-content" class="button" data-variant="outlined" data-type="icon" data-size="small">
+                                            <span>Select Users</span>
+                                            <span class="material-icons-outlined">
+                                                add
+                                            </span>
+                                        </button>
+
                                         <?php if (!empty($errors["groups[$key][group_member]"])) : ?>
                                             <small>
                                                 <?= $errors["groups[$key][group_member]"] ?>
@@ -132,7 +132,7 @@
                                 <div id="<?= $key ?>-group_members" class="group-members">
                                     <?php foreach ($group['members'] as $member) { ?>
                                         <div class="checkbox-wrap">
-                                            <label class="checkbox-label">
+                                            <label data-<?= $key ?>="<?= $member['id'] ?>" class="checkbox-label">
                                                 <?= $member['name'] ?>
                                                 <input hidden type="checkbox" checked name="groups[<?= $key ?>][members][<?= $member['id'] ?>][id]" value="<?= $member['id'] ?>">
                                                 <input hidden type="checkbox" checked name="groups[<?= $key ?>][members][<?= $member['id'] ?>][user_id]" value="<?= $member['user_id'] ?>">
@@ -199,16 +199,15 @@
                 <?php endif; ?>
             </div>
             <div class="input-wrap">
-                <label for="group_member_select-{{group_name}}">Group Members</label>
-                <select onchange="onAddGroupMember(event, '{{group_name}}')" value="" name="group_member_select-{{group_name}}" id="group_member_select-{{group_name}}">
-                    <option value="" selected disabled hidden>Choose Member</option>
-                    <?php foreach ($club_members_data as $club_member) { ?>
-                        <option value="<?= $club_member->id ?>,<?= $club_member->user_id ?>">
-                            <?= $club_member->first_name ?>
-                            <?= $club_member->last_name ?>
-                        </option>
-                    <?php } ?>
-                </select>
+                <label>Group Members</label>
+
+                <button type="button" onclick="onSelectUsersPopup(true, '{{group_name}}')" class="button contained w-content" class="button" data-variant="outlined" data-type="icon" data-size="small">
+                    <span>Select Users</span>
+                    <span class="material-icons-outlined">
+                        add
+                    </span>
+                </button>
+
                 <?php if (!empty($errors["groups[{{group_name}}][group_member]"])) : ?>
                     <small>
                         <?= $errors["groups[{{group_name}}][group_member]"] ?>
@@ -251,7 +250,7 @@
     </div>
 
     <div class="checkbox-wrap group-member-template">
-        <label class="checkbox-label">
+        <label data-{{group_name}}="{{group_member_id}}" class="checkbox-label">
             {{group_member_name}}
             <input hidden type="checkbox" checked name="groups[{{group_name}}][members][{{group_member_id}}][id]" value="{{group_member_id}}">
             <input hidden type="checkbox" checked name="groups[{{group_name}}][members][{{group_member_id}}][user_id]" value="{{group_member_user_id}}">
@@ -264,6 +263,8 @@
 </div>
 
 <?php $this->view('includes/header/side-bars/club-dashboard', $menu_side_bar) ?>
+
+<?php $this->view('includes/modals/club/events/users', $select_users) ?>
 
 <script src="<?= ROOT ?>/assets/js/events/edit-event.js"></script>
 <script src="<?= ROOT ?>/assets/js/form.js"></script>

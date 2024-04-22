@@ -82,6 +82,62 @@
   width: fit-content;
 }
 
+#admin-dashboard-users .user-clubs-modal .clubs-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 20px;
+}
+#admin-dashboard-users .user-clubs-modal .clubs-section .card {
+  width: 100%;
+  background-color: transparent;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 16px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 10px 15px;
+  border-bottom: 1px solid #2d2d2d;
+  cursor: pointer;
+}
+#admin-dashboard-users .user-clubs-modal .clubs-section .card:last-child {
+  border-bottom: 0;
+}
+#admin-dashboard-users .user-clubs-modal .clubs-section .card .club-logo {
+  width: 70px;
+  height: 70px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border: 2px solid #2d2d2d;
+  border-radius: 8px;
+}
+#admin-dashboard-users .user-clubs-modal .clubs-section .card .details {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 16px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: 100%;
+}
+#admin-dashboard-users .user-clubs-modal .clubs-section .card .details .title {
+  display: -webkit-box;
+  max-width: 165px;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 #admin-dashboard-clubs .table-wrap .status-button {
   cursor: default;
 }

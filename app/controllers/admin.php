@@ -267,12 +267,30 @@ class Admin extends Controller
             "is_deleted" => 0
         ], ["count(*) as count"], [], [], isset($_GET['search']) ? $_GET['search'] : '');
         if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+
         /* fetch data */
         $data['users_data'] = $user->find(
-            ["is_deleted" => 0],
-            [],
-            [],
+            ["users.is_deleted" => 0],
             [
+                "users.id",
+                "users.id as id",
+                "users.first_name",
+                "users.last_name",
+                "users.email",
+                "users.is_verified",
+                "club_member.state as club_state",
+                "club_member.role as club_role",
+                "club.id as club_id",
+                "club.name as club_name",
+                "club.image as club_image",
+                "( select count(*) from club_members where club_members.club_id = club.id and club_members.user_id = users.id ) as total_clubs"
+            ],
+            [
+                ["table" => "club_members", "as" => "club_member", "on" => "users.id = club_member.user_id"],
+                ["table" => "clubs", "as" => "club", "on" => "club.id = club_member.club_id"]
+            ],
+            [
+                "type" => "group",
                 "limit" => $data['limit'],
                 "offset" => ($data['page'] - 1) * $data['limit'],
             ],

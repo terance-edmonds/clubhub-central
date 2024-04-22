@@ -42,7 +42,7 @@
                         <div class="multi-wrap">
                             <div class="input-wrap">
                                 <label>Start Date</label>
-                                <input set-default="date" value="<?= setValue('start_datetime') ?>" type="date" name="start_datetime" placeholder="Start Date" required>
+                                <input id="events_datetime_start" set-min set-default="date" value="<?= setValue('start_datetime') ?>" type="date" name="start_datetime" placeholder="Start Date" required>
                                 <?php if (!empty($errors['start_datetime'])) : ?>
                                     <small>
                                         <?= $errors['start_datetime'] ?>
@@ -51,7 +51,7 @@
                             </div>
                             <div class="input-wrap">
                                 <label>End Date</label>
-                                <input set-default="date" value="<?= setValue('end_datetime') ?>" type="date" name="end_datetime" placeholder="End Date" required>
+                                <input id="events_datetime_end" set-min set-default="date" value="<?= setValue('end_datetime') ?>" type="date" name="end_datetime" placeholder="End Date" required>
                                 <?php if (!empty($errors['end_datetime'])) : ?>
                                     <small>
                                         <?= $errors['end_datetime'] ?>
@@ -92,7 +92,7 @@
                         <div class="multi-wrap">
                             <div class="input-wrap">
                                 <label>Start Date</label>
-                                <input set-default="date" value="<?= setValue('start_datetime') ?>" type="date" name="start_datetime" placeholder="Start Date" required>
+                                <input id="users_datetime_start" set-default="date" value="<?= setValue('start_datetime') ?>" type="date" name="start_datetime" placeholder="Start Date" required>
                                 <?php if (!empty($errors['start_datetime'])) : ?>
                                     <small>
                                         <?= $errors['start_datetime'] ?>
@@ -101,7 +101,7 @@
                             </div>
                             <div class="input-wrap">
                                 <label>End Date</label>
-                                <input set-default="date" value="<?= setValue('end_datetime') ?>" type="date" name="end_datetime" placeholder="End Date" required>
+                                <input id="users_datetime_end" set-default="date" value="<?= setValue('end_datetime') ?>" type="date" name="end_datetime" placeholder="End Date" required>
                                 <?php if (!empty($errors['end_datetime'])) : ?>
                                     <small>
                                         <?= $errors['end_datetime'] ?>

@@ -385,18 +385,53 @@ class Events extends Controller
         $event_data = $event->one(["id" => $club_event_id, "club_id" => $club_id]);
 
         $data['start_datetime'] = $event_data->start_datetime;
-        $data['club_members_data'] = $club_member->find(
+
+        $data['select_users']['total_count'] = 0;
+        $data['select_users']['limit'] = 10;
+        $data['select_users']['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
+
+        /* if the view requires only specific data view */
+        if (isset($_GET['data'])) {
+            if ($_GET['data'] == 'users_data') {
+                $path = 'includes/modals/club/events/users/data';
+            }
+        }
+
+        /* pagination */
+        $total_count = $club_member->find(
+            ["club_id" => $club_id, "state" => "ACCEPTED"],
+            ["count(*) as count"],
+            [["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"]],
+            [
+                "search" => ["user.email", "user.first_name", "user.last_name"],
+                "limit" => $data['select_users']['limit'],
+                "offset" => ($data['select_users']['page'] - 1) * $data['select_users']['limit'],
+            ],
+            isset($_GET['search']) ? $_GET['search'] : ''
+        );
+        if (!empty($total_count[0]->count)) $data['select_users']['total_count'] = $total_count[0]->count;
+
+        /* data */
+        $data['select_users']['table_data'] =  $club_member->find(
             ["club_id" => $club_id, "state" => "ACCEPTED"],
             [
                 "club_members.id as id",
                 "user_id",
                 "club_id",
-                "user.first_name as first_name",
-                "user.last_name as last_name",
+                "joined_datetime",
+                "user.email",
+                "user.first_name",
+                "user.last_name",
             ],
             [
                 ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"]
-            ]
+            ],
+            [
+                "search" => ["user.email", "user.first_name", "user.last_name"],
+                "limit" => $data['select_users']['limit'],
+                "offset" => ($data['select_users']['page'] - 1) * $data['select_users']['limit'],
+            ],
+            isset($_GET['search']) ? $_GET['search'] : ''
         );
 
         $image_uploaded = true;

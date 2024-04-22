@@ -135,7 +135,7 @@ const onAddMember = (event, id, user_id, name) => {
         .find(`:checkbox[value="${id}"]`);
 
     if (exists.length) {
-        showError(type, 'User already added');
+        // showError(type, 'User already added');
         return;
     }
 
