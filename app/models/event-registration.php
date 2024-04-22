@@ -23,7 +23,13 @@ class EventRegistration extends Modal
 
         if (empty($data['user_name'])) $this->errors['user_name'] = "Name is required";
         if (empty($data['user_email'])) $this->errors['user_email'] = "Email is required";
-        if (empty($data['user_contact'])) $this->errors['user_contact'] = "Contact no. is required";
+        if (empty($data['user_contact'])) {
+            $this->errors['user_contact'] = "Contact no. is required";
+        } else if (!is_numeric($data['user_contact'])) {
+            $this->errors['user_contact'] = "Contact no. must only include digits";
+        } else if (count($data['user_contact']) > 10 || count($data['user_contact']) < 10) {
+            $this->errors['user_contact'] = "Contact no. must have 10 digits";
+        }
 
         /* check if email exists */
         if (!filter_var($data['user_email'], FILTER_VALIDATE_EMAIL)) {
@@ -46,7 +52,13 @@ class EventRegistration extends Modal
         if (empty($data['id'])) $this->errors['id'] = "ID is required";
         if (empty($data['user_name'])) $this->errors['user_name'] = "Name is required";
         if (empty($data['user_email'])) $this->errors['user_email'] = "Email is required";
-        if (empty($data['user_contact'])) $this->errors['user_contact'] = "Contact no. is required";
+        if (empty($data['user_contact'])) {
+            $this->errors['user_contact'] = "Contact no. is required";
+        } else if (!is_numeric($data['user_contact'])) {
+            $this->errors['user_contact'] = "Contact no. must only include digits";
+        } else if (count($data['user_contact']) > 10 || count($data['user_contact']) < 10) {
+            $this->errors['user_contact'] = "Contact no. must have 10 digits";
+        }
 
         /* check if email exists */
         if (!filter_var($data['user_email'], FILTER_VALIDATE_EMAIL)) {

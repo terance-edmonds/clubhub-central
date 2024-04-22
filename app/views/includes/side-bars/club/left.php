@@ -24,7 +24,7 @@
     </div>
 </section>
 
-<?php $this->view("includes/modals/club") ?>
+<?php $this->view("includes/modals/club/member") ?>
 
 <script>
     <?php if (!empty($popups["add-$tab"])) { ?>

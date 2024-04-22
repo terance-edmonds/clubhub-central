@@ -170,6 +170,7 @@ class Modal
             $type = $options['type'];
         }
 
+        // print_r($data);
         // print_r($query);
         // die;
         $res = $this->db->query($query, $data, $type);
@@ -282,7 +283,7 @@ class Modal
 
         /* merge array and where data */
         $data = array_merge($data, $where);
-
+        // print_r($query);
         $this->db->query($query, $data);
     }
 

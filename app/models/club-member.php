@@ -9,6 +9,7 @@ class ClubMember extends Modal
         "role",
         "state",
         "joined_datetime",
+        "is_deleted",
     ];
 
     public function validateCreate($data)

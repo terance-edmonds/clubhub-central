@@ -17,38 +17,32 @@
         </div>
 
         <div class="content-section">
-            <form class="form" method="post">
-                <div class="form-section">
-                    <p class="form-section-title">Details</p>
+            <form class="form bottom-border" method="post" onsubmit="onSubmit(event)">
+                <input type="text" name="report_type" value="Event Details" hidden>
+                <div class="form-section no-border">
+                    <p class="form-section-title">Event Details Report</p>
                     <div class="form-section-content">
+                        <?php if (!empty($errors['errors'])) : ?>
+                            <small>
+                                <?= $errors['errors'] ?>
+                            </small>
+                        <?php endif; ?>
+
                         <div class="multi-wrap">
                             <div class="input-wrap">
-                                <label for="name">Report Name</label>
-                                <input value="<?= setValue('name') ?>" id="name" type="text" name="name" placeholder="Report Name" required>
-                                <?php if (!empty($errors['name'])) : ?>
+                                <label>Report Name</label>
+                                <input value="<?= setValue('report_name') ?>" type="text" name="report_name" placeholder="Report Name" required>
+                                <?php if (!empty($errors['report_name'])) : ?>
                                     <small>
-                                        <?= $errors['name'] ?>
-                                    </small>
-                                <?php endif; ?>
-                            </div>
-                            <div class="input-wrap">
-                                <label for="type">Choose Type</label>
-                                <select name="type" id="type" required>
-                                    <option value="" selected disabled hidden>Choose Type</option>
-                                    <option value="users">Users</option>
-                                    <option value="events">Events</option>
-                                </select>
-                                <?php if (!empty($errors['type'])) : ?>
-                                    <small>
-                                        <?= $errors['type'] ?>
+                                        <?= $errors['report_name'] ?>
                                     </small>
                                 <?php endif; ?>
                             </div>
                         </div>
                         <div class="multi-wrap">
                             <div class="input-wrap">
-                                <label for="start_datetime">Start Date & Time</label>
-                                <input value="<?= setValue('start_datetime') ?>" id="start_datetime" type="datetime-local" name="start_datetime" placeholder="Start Date & Time" required>
+                                <label>Start Date</label>
+                                <input set-default="date" value="<?= setValue('start_datetime') ?>" type="date" name="start_datetime" placeholder="Start Date" required>
                                 <?php if (!empty($errors['start_datetime'])) : ?>
                                     <small>
                                         <?= $errors['start_datetime'] ?>
@@ -56,8 +50,8 @@
                                 <?php endif; ?>
                             </div>
                             <div class="input-wrap">
-                                <label for="end_datetime">End Date & Time</label>
-                                <input value="<?= setValue('end_datetime') ?>" id="end_datetime" type="datetime-local" name="end_datetime" placeholder="End Date & Time" required>
+                                <label>End Date</label>
+                                <input set-default="date" value="<?= setValue('end_datetime') ?>" type="date" name="end_datetime" placeholder="End Date" required>
                                 <?php if (!empty($errors['end_datetime'])) : ?>
                                     <small>
                                         <?= $errors['end_datetime'] ?>
@@ -69,7 +63,57 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button type="submit" class="button contained">Generate</button>
+                    <button type="submit" name="submit" value="generate-report" class="button contained">Generate</button>
+                </div>
+            </form>
+
+            <form class="form bottom-border" method="post" onsubmit="onSubmit(event)">
+                <input type="text" name="report_type" value="Member Details" hidden>
+                <div class="form-section no-border">
+                    <p class="form-section-title">User Details Report</p>
+                    <div class="form-section-content">
+                        <?php if (!empty($errors['errors'])) : ?>
+                            <small>
+                                <?= $errors['errors'] ?>
+                            </small>
+                        <?php endif; ?>
+
+                        <div class="multi-wrap">
+                            <div class="input-wrap">
+                                <label>Report Name</label>
+                                <input value="<?= setValue('report_name') ?>" type="text" name="report_name" placeholder="Report Name" required>
+                                <?php if (!empty($errors['report_name'])) : ?>
+                                    <small>
+                                        <?= $errors['report_name'] ?>
+                                    </small>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <div class="multi-wrap">
+                            <div class="input-wrap">
+                                <label>Start Date</label>
+                                <input set-default="date" value="<?= setValue('start_datetime') ?>" type="date" name="start_datetime" placeholder="Start Date" required>
+                                <?php if (!empty($errors['start_datetime'])) : ?>
+                                    <small>
+                                        <?= $errors['start_datetime'] ?>
+                                    </small>
+                                <?php endif; ?>
+                            </div>
+                            <div class="input-wrap">
+                                <label>End Date</label>
+                                <input set-default="date" value="<?= setValue('end_datetime') ?>" type="date" name="end_datetime" placeholder="End Date" required>
+                                <?php if (!empty($errors['end_datetime'])) : ?>
+                                    <small>
+                                        <?= $errors['end_datetime'] ?>
+                                    </small>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="buttons-wrap">
+                    <button type="submit" name="submit" value="generate-report" class="button contained">Generate</button>
                 </div>
             </form>
         </div>
@@ -79,3 +123,4 @@
 <?php $this->view('includes/header/side-bars/club-dashboard', $menu_side_bar) ?>
 
 <script src="<?= ROOT ?>/assets/js/form.js"></script>
+<script src="<?= ROOT ?>/assets/js/club/dashboard/reports.js"></script>
