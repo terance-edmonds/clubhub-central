@@ -99,6 +99,8 @@
     </section>
 </div>
 
-<?php $this->view('includes/models/club/meetings/delete') ?>
+<?php $this->view('includes/modals/club/meetings/delete') ?>
 
 <?php $this->view('includes/header/side-bars/club-dashboard', $menu_side_bar) ?>
+
+<script src="<?= ROOT ?>/assets/js/form.js"></script>
