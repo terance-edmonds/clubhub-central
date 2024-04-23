@@ -222,7 +222,6 @@ class Club extends Controller
         $this->view("club", $data);
     }
 
-
     public function dashboard()
     {
         $storage = new Storage();
@@ -256,7 +255,7 @@ class Club extends Controller
             array_splice($menu, 6, 0, [["id" => "logs", "name" => "Logs", "icon" => "article", "path" => "/club/dashboard/logs", "active" => "false"]]);
         }
         if (in_array($club_role, ['CLUB_IN_CHARGE', 'PRESIDENT', 'SECRETARY'])) {
-            array_splice($menu, 3, 0, [["id" => "meetings", "name" => "Meetings", "icon" => "diversity_2", "path" => "/club/dashboard/meetings", "active" => "false"]]);
+            array_splice($menu, 3, 0, [["id" => "meetings", "name" => "Meetings", "icon" => "diversity_2", "path" => ["/club/dashboard/meetings", "/club/dashboard/meetings/add", "/club/dashboard/meetings/attendance"], "active" => "false"]]);
             array_push($menu, ["id" => "reports", "name" => "Reports", "icon" => "description", "path" => ["/club/dashboard/reports", "/club/dashboard/reports/add"], "active" => "false"]);
         }
 
@@ -615,7 +614,7 @@ class Club extends Controller
 
     private function members($path, $data)
     {
-        $tabs = ['accepted', 'rejected', 'requested'];
+       $tabs = ['accepted', 'rejected', 'requested'];
         $data["tab"] = getActiveTab($tabs, $_GET);
 
         $storage = new Storage();
@@ -684,7 +683,131 @@ class Club extends Controller
 
     private function meetings($path, $data)
     {
+        $storage = new Storage();
+        $db = new Database();
+        $meeting = new ClubMeeting($db);
+        $members = new ClubMember($db);
+        $club_attendance = new ClubMeetingAttendance($db);
+
+        $data['user_found'] = False;
+        $roles = ["PRESIDENT", "SECRETARY", "TREASURER", "CLUB_IN_CHARGE"];
+
+        $club_id = $storage->get('club_id');
+
+        try {
+            $db->transaction();
+
+            if ($_SERVER['REQUEST_METHOD'] == "POST") {
+                $form_data = $_POST;
+
+                if ($form_data['submit'] == 'create-meeting') {
+                    if ($meeting->validateAddMeeting($form_data)) {
+                        try {
+                            $where = ["club_id" => $club_id];
+                            if ($form_data['type'] == "COMMITTEE") {
+                                $where["club_members.role"] = [
+                                    "operator" => "in",
+                                    "data" => $roles
+                                ];
+                            }
+                          
+                            $participants = $members->find(
+                                $where,
+                                [
+                                    "user.email",
+                                    "user.last_name",
+                                    "user.first_name"
+                                ],
+                                [
+                                    ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"]
+                                ]
+                            );
+                            $participants_count = count($participants);
+
+                            $result_meeting = $meeting->create([
+                                "club_id" => $club_id,
+                                "name" => $form_data['name'],
+                                "date" => $form_data['date'],
+                                "start_time" => $form_data['start_time'],
+                                "end_time" => $form_data['end_time'],
+                                "type" => $form_data['type'],
+                                "description" => $form_data['description'],
+                                "venue" => $form_data['venue'],
+                                "participants" => $participants_count
+                            ]);
+
+                            /* send mails to participants */
+                            foreach ($participants as $participant) {
+                                $result = $club_attendance->create([
+                                    "club_id" => $club_id,
+                                    "meeting_id" => $result_meeting->id,
+                                    "user_name" => $participant->first_name . " " . $participant->last_name,
+                                    "user_email" => $participant->email
+                                ]);
+
+                                $this->sendMeetingAttendanceMail([
+                                    "user_name" => $result->user_name,
+                                    "user_email" => $result->user_email,
+                                    "meeting_name" => $result_meeting->name,
+                                    "meeting_date" => displayValue($result_meeting->date, 'date'),
+                                    "meeting_time" => displayValue($result_meeting->start_time, 'time') . "-" . displayValue($result_meeting->end_time, 'time'),
+                                    "id" => $result->id
+                                ]);
+                            };
+                            $_SESSION['alerts'] = [["status" => "success", "message" => "Meeting details added successfully"]];
+                        } catch (\Throwable $th) {
+                            show($th);
+                            throw new Error("Failed to add Meeting details");
+                        }
+                    }
+                } else if ($_POST['submit'] == 'event-attendance-mark') {
+                    try {
+                        $club_attendance->update(["id" => $form_data['id']], [
+                            "attended" => 1,
+                        ]);
+
+                        $_SESSION['alerts'] = [["status" => "success", "message" => "Event attendance marked as attended"]];
+                    } catch (\Throwable $th) {
+                        throw new Error("Attendance details update failed, please try again later");
+                    }
+                }
+            }
+
+            $data['errors'] = $meeting->errors;
+            /* Fetch meeting Data */
+            $data['meeting_data'] = $meeting->find(["club_id" => $club_id]);
+
+            $db->commit();
+        } catch (\Throwable $th) {
+            $db->rollback();
+            $_SESSION['alerts'] = [["status" => "error", "message" => $th->getMessage() || "Failed to process the action, please try again later."]];
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST" && count($data['errors']) == 0) return redirect();
+
         $this->view($path, $data);
+    }
+
+    private function sendMeetingAttendanceMail($data)
+    {
+        $mail = new Mail();
+        $qr_code_image = generateQRCode($data['id']);
+
+        $mail->send([
+            "to" => [
+                "mail" => $data['user_email'],
+                "name" => $data['user_name']
+            ],
+            "subject" => "Meeting Invitation",
+            "body" => $mail->template("club-meeting-attendance", [
+                "from_email" => MAIL_USER,
+                "from_name" => MAIL_USERNAME,
+                "meeting_name" => $data['meeting_name'],
+                "meeting_date" => $data['meeting_date'],
+                "meeting_time" => $data['meeting_time'],
+                "qr_code_image" => $qr_code_image
+            ])
+        ]);
     }
 
     private function community($path, $data)
@@ -1080,7 +1203,6 @@ class Club extends Controller
         } catch (\Throwable $th) {
             show($th);
             $db->rollback();
-            show($th);
             $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to process the action, please try again later."]];
         }
 
@@ -1406,6 +1528,7 @@ class Club extends Controller
 
         $this->view($path, $data);
     }
+  
     private function election($path, $data)
     {
         $db = new Database();

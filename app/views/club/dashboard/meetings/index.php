@@ -31,6 +31,14 @@
                     <input type="text" placeholder="Search">
                 </div>
             </div>
+            <a href="<?= ROOT ?>/club/dashboard/meetings/meeting-attendence">
+                <button class="button w-content" data-variant="outlined" data-type="icon" data-size="small">
+                    <span>Mark Attendance</span>
+                    <span class="material-icons-outlined">
+                        how_to_reg
+                    </span>
+                </button>
+            </a>
         </div>
 
         <div class="content-section">
@@ -39,19 +47,33 @@
                     <tr class="table-header">
                         <th>Meeting Name</th>
                         <th>Date</th>
-                        <th>Start Time</th>
-                        <th>End Time</th>
+                        <th>Time</th>
                         <th>No. Attendants</th>
                         <th>No. Participants</th>
                         <th>Actions</th>
                     </tr>
+                    <?php if (count($meeting_data) == 0) { ?>
+                        <tr>
+                            <td colspan="4">No Records.</td>
+                        </tr>
+                    <?php } ?>
+                    <?php foreach ($meeting_data as $meeting) { ?>
                     <tr class="table-data">
-                        <td>Freshers' Day</td>
-                        <td>11/04/23</td>
-                        <td>10.00 AM</td>
-                        <td>12.00 AM</td>
-                        <td>5</td>
-                        <td>7</td>
+                        <td>
+                            <?= displayValue($meeting->name) ?>
+                        </td>
+                        <td>
+                            <?= displayValue($meeting->date) ?>
+                        </td>
+                        <td>
+                            <?= displayValue($meeting->start_time) ?>
+                        </td>
+                        <td>
+                            <?= displayValue($meeting->participants) ?>
+                        </td>
+                        <td>
+                            <?= displayValue($meeting->attendence) ?>
+                        </td>
                         <td align="center">
                             <div class="buttons">
                                 <button class="icon-button">
@@ -67,6 +89,7 @@
                             </div>
                         </td>
                     </tr>
+                    <?php } ?>
                 </table>
             </div>
         </div>
