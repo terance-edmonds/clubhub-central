@@ -10,7 +10,7 @@
 <?php $this->view('includes/alerts') ?>
 
 <div id="event-dashboard-registrations-attendance" class="container container-sections side-padding event-dashboard dashboard-container">
-    <?php $this->view('includes/side-bars/events/dashboard/left', $left_bar) ?>
+    <?php $this->view('includes/side-bars/club/dashboard/left', $left_bar) ?>
 
     <section class="center-section">
         <div class="title-bar">
@@ -64,29 +64,20 @@
                         </small>
                     <?php endif; ?>
                 </div>
-                <div class="input-wrap">
-                    <label for="user_contact">Contact Number</label>
-                    <input disabled value="<?= setValue('user_contact') ?>" name="user_contact" id="user_contact" type="text" placeholder="Contact Number" required>
-                    <?php if (!empty($errors['user_contact'])) : ?>
-                        <small>
-                            <?= $errors['user_contact'] ?>
-                        </small>
-                    <?php endif; ?>
-                </div>
             <?php } ?>
 
             <?php if ($user_found) { ?>
-                <button type="submit" name="submit" value="event-attendance-mark" class="button contained w-content">Mark as
+                <button type="submit" name="submit" value="meeting-attendance-mark" class="button contained w-content">Mark as
                     Attended</button>
             <?php } else { ?>
-                <button type="submit" name="submit" value="event-attendance-search" class="button contained w-content">Find
+                <button type="submit" name="submit" value="meeting-attendance-search" class="button contained w-content">Find
                     Details</button>
             <?php } ?>
         </form>
     </section>
 </div>
 
-<?php $this->view('includes/header/side-bars/event-dashboard', $menu_side_bar) ?>
+<?php $this->view('includes/header/side-bars/club-dashboard', $menu_side_bar) ?>
 
 <script src="<?= ROOT ?>/assets/js/form.js"></script>
 <script src="<?= ROOT ?>/assets/js/libs/instascan.min.js"></script>

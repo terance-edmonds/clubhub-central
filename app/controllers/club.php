@@ -614,7 +614,7 @@ class Club extends Controller
 
     private function members($path, $data)
     {
-       $tabs = ['accepted', 'rejected', 'requested'];
+        $tabs = ['accepted', 'rejected', 'requested'];
         $data["tab"] = getActiveTab($tabs, $_GET);
 
         $storage = new Storage();
@@ -689,8 +689,15 @@ class Club extends Controller
         $members = new ClubMember($db);
         $club_attendance = new ClubMeetingAttendance($db);
 
-        $data['user_found'] = False;
         $roles = ["PRESIDENT", "SECRETARY", "TREASURER", "CLUB_IN_CHARGE"];
+        $redirect_on_success = True;
+
+        $data['page'] = 1;
+        $data['limit'] = 15;
+        $data['user_found'] = False;
+
+        if (!empty($_GET['page']) && is_numeric($_GET['page']))
+            $data['page'] = $_GET['page'];
 
         $club_id = $storage->get('club_id');
 
@@ -710,7 +717,7 @@ class Club extends Controller
                                     "data" => $roles
                                 ];
                             }
-                          
+
                             $participants = $members->find(
                                 $where,
                                 [
@@ -760,22 +767,74 @@ class Club extends Controller
                             throw new Error("Failed to add Meeting details");
                         }
                     }
-                } else if ($_POST['submit'] == 'event-attendance-mark') {
-                    try {
-                        $club_attendance->update(["id" => $form_data['id']], [
-                            "attended" => 1,
-                        ]);
+                } else if ($_POST['submit'] == 'meeting-attendance-search') {
+                    $result = $club_attendance->one(["id" => $form_data['id']]);
 
-                        $_SESSION['alerts'] = [["status" => "success", "message" => "Event attendance marked as attended"]];
+                    if (empty($result)) {
+                        $_SESSION['alerts'] = [["status" => "error", "message" => "User invitation details not found"]];
+                    } else {
+                        $_POST['id'] = $result->id;
+                        $_POST['user_name'] = $result->user_name;
+                        $_POST['user_email'] = $result->user_email;
+
+                        $data['user_found'] = True;
+
+                        $redirect_on_success = False;
+                    }
+                } else if ($_POST['submit'] == 'meeting-attendance-mark') {
+                    try {
+                        $attendant = $club_attendance->one(["id" => $form_data['id']]);
+
+                        if (empty($attendant)) {
+                            $_SESSION['alerts'] = [["status" => "error", "message" => "User invitation details not found"]];
+                        }
+                        if ($attendant->attended) {
+                            $_SESSION['alerts'] = [["status" => "info", "message" => "User already marked attendance"]];
+                        } else {
+                            $meeting_data = $meeting->one(["id" => $attendant->meeting_id]);
+                            $meeting->update(["id" => $attendant->meeting_id], [
+                                "attendance" => intval($meeting_data->attendance) + 1
+                            ]);
+                            $club_attendance->update(["id" => $form_data['id']], [
+                                "attended" => 1,
+                            ]);
+
+                            $_SESSION['alerts'] = [["status" => "success", "message" => "Meeting attendance marked as attended"]];
+                        }
                     } catch (\Throwable $th) {
                         throw new Error("Attendance details update failed, please try again later");
+                    }
+                } else if ($_POST['submit'] == 'delete-meeting') {
+                    try {
+                        $club_attendance->delete(["meeting_id" => $form_data['id']]);
+                        $meeting->delete(["id" => $form_data['id']]);
+
+                        $_SESSION['alerts'] = [["status" => "success", "message" => "Meeting has been deleted"]];
+                    } catch (\Throwable $th) {
+                        throw new Error("Meeting deletion failed, please try again later");
                     }
                 }
             }
 
             $data['errors'] = $meeting->errors;
+
+            /* pagination */
+            $total_count = $meeting->find([
+                "club_id" => $club_id
+            ], ["count(*) as count"], [], ["limit" => $data['limit']], isset($_GET['search']) ? $_GET['search'] : '');
+            if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+
             /* Fetch meeting Data */
-            $data['meeting_data'] = $meeting->find(["club_id" => $club_id]);
+            $data['meeting_data'] = $meeting->find(
+                ["club_id" => $club_id],
+                [],
+                [],
+                [
+                    "limit" => $data['limit'],
+                    "offset" => ($data['page'] - 1) * $data['limit'],
+                ],
+                isset($_GET['search']) ? $_GET['search'] : ''
+            );
 
             $db->commit();
         } catch (\Throwable $th) {
@@ -783,7 +842,7 @@ class Club extends Controller
             $_SESSION['alerts'] = [["status" => "error", "message" => $th->getMessage() || "Failed to process the action, please try again later."]];
         }
 
-        if ($_SERVER['REQUEST_METHOD'] == "POST" && count($data['errors']) == 0) return redirect();
+        if ($redirect_on_success && $_SERVER['REQUEST_METHOD'] == "POST" && count($data['errors']) == 0) return redirect();
 
         $this->view($path, $data);
     }
@@ -1528,7 +1587,7 @@ class Club extends Controller
 
         $this->view($path, $data);
     }
-  
+
     private function election($path, $data)
     {
         $db = new Database();

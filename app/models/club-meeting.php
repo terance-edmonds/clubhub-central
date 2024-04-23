@@ -17,7 +17,8 @@
         ];
         protected $search_columns = [
             "name",
-            "date"
+            "venue",
+            "description",
         ];
 
         public function validateAddMeeting($data)

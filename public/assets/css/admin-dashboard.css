@@ -73,23 +73,35 @@
 }
 
 .admin-dashboard .buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   gap: 10px;
+  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
 }
 
 #admin-dashboard-users .user-clubs-modal .clubs-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   gap: 20px;
 }
 #admin-dashboard-users .user-clubs-modal .clubs-section .card {
   width: 100%;
   background-color: transparent;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   gap: 16px;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   padding: 10px 15px;
   border-bottom: 1px solid #2d2d2d;
   cursor: pointer;
@@ -106,10 +118,16 @@
   border-radius: 8px;
 }
 #admin-dashboard-users .user-clubs-modal .clubs-section .card .details {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   gap: 16px;
-  align-items: center;
-  justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   width: 100%;
 }
 #admin-dashboard-users .user-clubs-modal .clubs-section .card .details .title {
@@ -166,4 +184,4 @@
 #admin-dashboard-requests .table-wrap .status-button[data-status=REJECTED] {
   color: #ff4646;
   background-color: #392a2d;
-}/*# sourceMappingURL=admin-dashboard.css.map */
+}

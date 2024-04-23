@@ -73,8 +73,11 @@
 }
 
 .club-dashboard .buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   gap: 10px;
+  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
 }
@@ -96,8 +99,11 @@
 }
 
 #club-dashboard-members .center-section .action-buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 20px;
 }
@@ -105,6 +111,7 @@
   background-color: transparent;
   color: #fff;
   border: 1px solid #69e4be;
+  max-width: -webkit-fit-content;
   max-width: -moz-fit-content;
   max-width: fit-content;
 }
@@ -132,18 +139,26 @@
   display: none;
 }
 #club-dashboard-add-meeting .selected-members {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   gap: 15px;
-  flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
 }
 #club-dashboard-add-meeting .selected-members .checkbox-wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   gap: 5px;
   border: 2px solid #2d2d2d;
   padding: 5px 10px;
   border-radius: 20px;
   position: relative;
+  -webkit-transition: all 0.4s ease;
   transition: all 0.4s ease;
 }
 #club-dashboard-add-meeting .selected-members .checkbox-wrap label,
@@ -158,6 +173,7 @@
   cursor: pointer;
   color: #ff0000;
   z-index: 8;
+  -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
 #club-dashboard-add-meeting .selected-members .checkbox-wrap:hover .material-icons-outlined {
@@ -165,9 +181,26 @@
   opacity: 1;
 }
 
-#club-dashboard-community .content-section {
+#club-dashboard-meeting .top-buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+#club-dashboard-community .content-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   gap: 20px;
 }
 #club-dashboard-community .chat-box {
@@ -175,14 +208,25 @@
   height: 500px;
   padding: 10px 15px;
   overflow-y: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column-reverse;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: reverse;
+      -ms-flex-direction: column-reverse;
+          flex-direction: column-reverse;
   gap: 15px;
 }
 #club-dashboard-community .chat-box .text-wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   gap: 3px;
+  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   background-color: #94d1be;
@@ -202,27 +246,43 @@
   text-align: right;
 }
 #club-dashboard-community .chat-form {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   gap: 10px;
-  align-items: flex-end;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
 }
 #club-dashboard-community .chat-form .button {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
 }
 #club-dashboard-community .chat-scroll-loader-wrap {
   display: none;
-  justify-content: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 #club-dashboard-community .chat-scroll-loader-wrap[data-active=true] {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
 }
 #club-dashboard-community .chat-scroll-loader-wrap .scroll-loader,
 #club-dashboard-community .chat-scroll-loader-wrap .scroll-loader div {
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 #club-dashboard-community .chat-scroll-loader-wrap .scroll-loader {
   display: inline-block;
@@ -236,19 +296,34 @@
   left: 4px;
   width: 8px;
   background: #69e4be;
-  animation: box-animation 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+  -webkit-animation: box-animation 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+          animation: box-animation 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
 }
 #club-dashboard-community .chat-scroll-loader-wrap .scroll-loader div:nth-child(1) {
   left: 4px;
-  animation-delay: -0.24s;
+  -webkit-animation-delay: -0.24s;
+          animation-delay: -0.24s;
 }
 #club-dashboard-community .chat-scroll-loader-wrap .scroll-loader div:nth-child(2) {
   left: 16px;
-  animation-delay: -0.12s;
+  -webkit-animation-delay: -0.12s;
+          animation-delay: -0.12s;
 }
 #club-dashboard-community .chat-scroll-loader-wrap .scroll-loader div:nth-child(3) {
   left: 28px;
-  animation-delay: 0s;
+  -webkit-animation-delay: 0s;
+          animation-delay: 0s;
+}
+
+@-webkit-keyframes box-animation {
+  0% {
+    top: 8px;
+    height: 64px;
+  }
+  50%, 100% {
+    top: 24px;
+    height: 32px;
+  }
 }
 
 @keyframes box-animation {
@@ -269,8 +344,11 @@
 }
 
 #club-dashboard-logs .center-section .action-buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 20px;
 }
@@ -278,6 +356,7 @@
   background-color: transparent;
   color: #fff;
   border: 1px solid #69e4be;
+  max-width: -webkit-fit-content;
   max-width: -moz-fit-content;
   max-width: fit-content;
 }
@@ -287,23 +366,36 @@
 }
 
 #club-dashboard-election .actions-wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   gap: 20px;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   margin-bottom: 25px;
 }
 #club-dashboard-election .actions-wrap .action-buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   gap: 10px;
 }
 #club-dashboard-election .actions-wrap .action-buttons .button {
   background-color: transparent;
   color: #fff;
   border: 1px solid #69e4be;
+  max-width: -webkit-fit-content;
   max-width: -moz-fit-content;
   max-width: fit-content;
 }
@@ -335,24 +427,33 @@
 }
 #club-dashboard-add-election .checkbox-filters,
 #club-dashboard-edit-election .checkbox-filters {
+  max-width: -webkit-fit-content;
   max-width: -moz-fit-content;
   max-width: fit-content;
 }
 #club-dashboard-add-election .selected-users,
 #club-dashboard-edit-election .selected-users {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   gap: 15px;
-  flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
 }
 #club-dashboard-add-election .selected-users .checkbox-wrap,
 #club-dashboard-edit-election .selected-users .checkbox-wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   gap: 5px;
   border: 2px solid #2d2d2d;
   padding: 5px 10px;
   border-radius: 20px;
   position: relative;
+  -webkit-transition: all 0.4s ease;
   transition: all 0.4s ease;
 }
 #club-dashboard-add-election .selected-users .checkbox-wrap label,
@@ -370,6 +471,7 @@
   cursor: pointer;
   color: #ff0000;
   z-index: 8;
+  -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
 #club-dashboard-add-election .selected-users .checkbox-wrap:hover .material-icons-outlined,
@@ -379,20 +481,34 @@
 }
 
 .club-election-users-popup .checkbox-inputs {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   width: 100%;
 }
 .club-election-users-popup .checkbox-inputs .checkbox-input {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   gap: 10px;
   width: 100%;
 }
 .club-election-users-popup .checkbox-inputs .checkbox-input .input-wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   gap: 5px;
+  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
 }
@@ -401,27 +517,45 @@
 }
 
 #club-dashboard-election-vote .center-section .title-wrap.column {
-  flex-direction: column;
-  align-items: flex-start;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
 }
 #club-dashboard-election-vote .actions-wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   gap: 20px;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   margin-bottom: 25px;
 }
 #club-dashboard-election-vote .actions-wrap .action-buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   gap: 10px;
 }
 #club-dashboard-election-vote .actions-wrap .action-buttons .button {
   background-color: transparent;
   color: #fff;
   border: 1px solid #69e4be;
+  max-width: -webkit-fit-content;
   max-width: -moz-fit-content;
   max-width: fit-content;
 }
@@ -447,6 +581,7 @@
   -o-object-fit: cover;
      object-fit: cover;
   border: 7px solid #a5a5a5;
+  -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
 #club-dashboard-election-vote .candidates .candidate .image.colored {
@@ -457,27 +592,45 @@
 }
 
 #club-dashboard-election-result .center-section .title-wrap.column {
-  flex-direction: column;
-  align-items: flex-start;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
 }
 #club-dashboard-election-result .actions-wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   gap: 20px;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   margin-bottom: 25px;
 }
 #club-dashboard-election-result .actions-wrap .action-buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   gap: 10px;
 }
 #club-dashboard-election-result .actions-wrap .action-buttons .button {
   background-color: transparent;
   color: #fff;
   border: 1px solid #69e4be;
+  max-width: -webkit-fit-content;
   max-width: -moz-fit-content;
   max-width: fit-content;
 }
@@ -486,19 +639,33 @@
   color: #09090b;
 }
 #club-dashboard-election-result .content-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   gap: 10px;
 }
 #club-dashboard-election-result .content-section .results-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   gap: 15px;
   width: 100%;
 }
 #club-dashboard-election-result .content-section .results-content .result-item {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 #club-dashboard-election-result .content-section .results-content .result-item .user-image {
   z-index: 2;
@@ -513,9 +680,15 @@
   background-color: #09090b;
 }
 #club-dashboard-election-result .content-section .results-content .result-item .progress {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   height: 80%;
   width: 100%;
   position: relative;
@@ -528,8 +701,13 @@
   overflow-x: hidden;
 }
 #club-dashboard-election-result .content-section .results-content .result-item .progress .progress-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   gap: 7px;
   position: relative;
   z-index: 1;
@@ -544,6 +722,7 @@
   height: 100%;
   position: absolute;
   z-index: 0;
+  -webkit-transition: all 4s ease-out;
   transition: all 4s ease-out;
 }
 
@@ -558,18 +737,26 @@
   display: none;
 }
 #club-dashboard-budget-edit .budget-members {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   gap: 15px;
-  flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
 }
 #club-dashboard-budget-edit .budget-members .checkbox-wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   gap: 5px;
   border: 2px solid #2d2d2d;
   padding: 5px 10px;
   border-radius: 20px;
   position: relative;
+  -webkit-transition: all 0.4s ease;
   transition: all 0.4s ease;
 }
 #club-dashboard-budget-edit .budget-members .checkbox-wrap label,
@@ -584,6 +771,7 @@
   cursor: pointer;
   color: #ff0000;
   z-index: 8;
+  -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
 #club-dashboard-budget-edit .budget-members .checkbox-wrap:hover .material-icons-outlined {
@@ -591,16 +779,25 @@
   opacity: 1;
 }
 #club-dashboard-budget-edit .sub-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   gap: 10px;
 }
 #club-dashboard-budget-edit .sub-section .checkboxes-wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   gap: 15px;
   -webkit-user-select: none;
      -moz-user-select: none;
+      -ms-user-select: none;
           user-select: none;
 }
 #club-dashboard-budget-edit .sub-section .checkboxes-wrap label {
@@ -614,32 +811,56 @@
   border-bottom: 0;
 }
 #club-dashboard-budget-edit .budgets .form-section-buttons-wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: flex-end;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
 }
 #club-dashboard-budget-edit .budgets .created-budgets {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   gap: 20px;
 }
 #club-dashboard-budget-edit .budgets .created-budgets .created-budget {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   gap: 20px;
   border-top: 1px solid #2d2d2d;
   padding-top: 10px;
 }
 #club-dashboard-budget-edit .budgets .created-budgets .created-budget .budget-content-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   gap: 10px;
 }
 #club-dashboard-budget-edit .buttons-wrap {
   padding: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: flex-end;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
 }
 #club-dashboard-budget-edit .buttons-wrap .button {
+  max-width: -webkit-fit-content;
   max-width: -moz-fit-content;
   max-width: fit-content;
 }
@@ -662,4 +883,4 @@
 #club-dashboard-requests .table-wrap .status-button[data-status=REJECTED] {
   color: #ff4646;
   background-color: #392a2d;
-}/*# sourceMappingURL=club-dashboard.css.map */
+}

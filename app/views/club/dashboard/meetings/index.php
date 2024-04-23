@@ -6,7 +6,7 @@
 
 <?php $this->view('includes/header') ?>
 
-<div id="club-dashboard-requests" class="container container-sections side-padding club-dashboard dashboard-container">
+<div id="club-dashboard-meeting" class="container container-sections side-padding club-dashboard dashboard-container">
     <?php $this->view('includes/side-bars/club/dashboard/left', $left_bar) ?>
 
     <section class="center-section">
@@ -31,7 +31,10 @@
                     <input type="text" placeholder="Search">
                 </div>
             </div>
-            <a href="<?= ROOT ?>/club/dashboard/meetings/meeting-attendence">
+        </div>
+
+        <div class="top-buttons">
+            <a href="<?= ROOT ?>/club/dashboard/meetings/attendance">
                 <button class="button w-content" data-variant="outlined" data-type="icon" data-size="small">
                     <span>Mark Attendance</span>
                     <span class="material-icons-outlined">
@@ -48,8 +51,8 @@
                         <th>Meeting Name</th>
                         <th>Date</th>
                         <th>Time</th>
-                        <th>No. Attendants</th>
                         <th>No. Participants</th>
+                        <th>No. Attendants</th>
                         <th>Actions</th>
                     </tr>
                     <?php if (count($meeting_data) == 0) { ?>
@@ -58,42 +61,44 @@
                         </tr>
                     <?php } ?>
                     <?php foreach ($meeting_data as $meeting) { ?>
-                    <tr class="table-data">
-                        <td>
-                            <?= displayValue($meeting->name) ?>
-                        </td>
-                        <td>
-                            <?= displayValue($meeting->date) ?>
-                        </td>
-                        <td>
-                            <?= displayValue($meeting->start_time) ?>
-                        </td>
-                        <td>
-                            <?= displayValue($meeting->participants) ?>
-                        </td>
-                        <td>
-                            <?= displayValue($meeting->attendence) ?>
-                        </td>
-                        <td align="center">
-                            <div class="buttons">
-                                <button class="icon-button">
-                                    <span class="material-icons-outlined">
-                                        edit
-                                    </span>
-                                </button>
-                                <button class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        delete
-                                    </span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                        <tr class="table-data">
+                            <td>
+                                <?= displayValue($meeting->name) ?>
+                            </td>
+                            <td>
+                                <?= displayValue($meeting->date) ?>
+                            </td>
+                            <td>
+                                <?= displayValue($meeting->start_time) ?>
+                            </td>
+                            <td align="center">
+                                <?= displayValue($meeting->participants, 'number') ?>
+                            </td>
+                            <td align="center">
+                                <?= displayValue($meeting->attendance, 'number') ?>
+                            </td>
+                            <td align="center">
+                                <div class="buttons">
+                                    <button onclick='onDataPopup("delete-club-meeting", <?= toJson($meeting, ["id"]) ?>)' class="icon-button cl-red">
+                                        <span class="material-icons-outlined">
+                                            delete
+                                        </span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
                     <?php } ?>
                 </table>
+                <?php $this->view('includes/pagination', [
+                    "total_count" => $total_count,
+                    "limit" => $limit,
+                    "page" => $page
+                ]) ?>
             </div>
         </div>
     </section>
 </div>
+
+<?php $this->view('includes/models/club/meetings/delete') ?>
 
 <?php $this->view('includes/header/side-bars/club-dashboard', $menu_side_bar) ?>
