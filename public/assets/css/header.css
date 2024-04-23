@@ -53,15 +53,9 @@
 }
 
 .nav-header {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  align-items: center;
+  justify-content: center;
   border-bottom: 1px solid #2d2d2d;
   width: 100%;
   position: sticky;
@@ -78,32 +72,20 @@
   z-index: 10;
 }
 .nav-header.bottom .container-sections {
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  justify-content: center;
 }
 .nav-header .container-sections {
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  justify-content: space-between;
   gap: 20px;
 }
 .nav-header .container-sections .logo-section {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
   padding: 15px 0;
 }
 .nav-header .container-sections .center-section {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  justify-content: space-between;
   gap: 10px;
   width: 100%;
   border: 0;
@@ -112,12 +94,8 @@
 }
 .nav-header .container-sections .notification-section {
   position: relative;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
+  justify-content: flex-end;
 }
 .nav-header .container-sections .notification-section .notification-icon-wrap {
   padding: 0;
@@ -148,34 +126,22 @@
   height: auto;
   background-color: #2d2d2d;
   border-radius: 7px;
-  -webkit-box-shadow: 0 3px 5px rgba(255, 255, 255, 0.2);
-          box-shadow: 0 3px 5px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 3px 5px rgba(255, 255, 255, 0.2);
 }
 .nav-header .container-sections .notification-section .notification-list {
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  flex-direction: column;
   position: relative;
   width: 400px;
   min-height: 70px;
 }
 .nav-header .container-sections .notification-section .notification-list .notification-item {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  flex-direction: column;
   gap: 4px;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  justify-content: center;
   padding: 5px 10px;
   min-height: 70px;
   border-bottom: 1px solid #6a6a6a;
-  -webkit-transition: all 0.4s ease;
   transition: all 0.4s ease;
 }
 .nav-header .container-sections .notification-section .notification-list .notification-item[data-unread=true] {
@@ -190,30 +156,18 @@
 .nav-header .container-sections .notification-section .notification-list .notification-item .buttons {
   display: none;
   gap: 10px;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
+  justify-content: flex-end;
 }
 .nav-header .container-sections .notification-section .notification-list .notification-item:last-child {
   border-bottom-color: transparent;
 }
 .nav-header .nav-item {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 6px;
   cursor: pointer;
-  -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
   max-width: 160px;
   width: 100%;
@@ -234,7 +188,6 @@
   max-width: 100px;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
 }
 @media screen and (max-width: 1350px) {
@@ -242,15 +195,11 @@
     display: none;
   }
   .nav-header .menu-item {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
   }
 }
 @media screen and (max-width: 960px) {
   .nav-header.bottom {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
   }
   .nav-header:not(.bottom) .container-sections {
@@ -262,13 +211,8 @@
 }
 
 .side-menu {
-  display: -webkit-box !important;
-  display: -ms-flexbox !important;
   display: flex !important;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  flex-direction: column;
   gap: 20px;
   position: fixed;
   height: 100vh;
@@ -279,15 +223,12 @@
   background-color: #09090b;
   padding-top: 125px;
   overflow-y: auto;
-  -webkit-transition: all 0.5s ease;
   transition: all 0.5s ease;
-  -webkit-transform: translateX(360px);
-          transform: translateX(360px);
+  transform: translateX(360px);
   z-index: 11;
 }
 .side-menu[data-active=true] {
-  -webkit-transform: translateX(0px);
-          transform: translateX(0px);
+  transform: translateX(0px);
 }
 .side-menu .right-section {
   display: none;
@@ -297,8 +238,6 @@
     padding-bottom: 125px;
   }
   .side-menu .right-section {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
   }
-}
+}/*# sourceMappingURL=header.css.map */

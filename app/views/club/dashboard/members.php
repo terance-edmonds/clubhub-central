@@ -47,6 +47,7 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Documents</th>
+                        <th>State</th>
                         <th>Actions</th>
                     </tr>
                     <?php foreach ($table_data as $x => $val) {
@@ -69,6 +70,11 @@
                                         </span>
                                     </button>
                                 </a>
+                            </td>
+                            <td>
+                                <button <?php if ($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') { ?> onclick='onDataPopup("club-member-state", <?= toJson($val, ["id", "state"]) ?>)' <?php } ?> class="button status-button <?= ($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') ? 'pointer-cursor' : '' ?>" data-status="<?= $val->state ?>">
+                                    <?= displayValue($val->state, 'start-case') ?>
+                                </button>
                             </td>
                             <td align="center">
                                 <button onclick='onDataPopup("delete-club-member", <?= toJson($val, ["id"]) ?>)' title="Delete Member" class="icon-button cl-red">
@@ -93,5 +99,15 @@
 <?php $this->view('includes/header/side-bars/club-dashboard', $menu_side_bar) ?>
 
 <?php $this->view('includes/modals/club/member/delete') ?>
+
+<?php if ($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') {
+    $this->view('includes/modals/club/member/status');
+?>
+    <script>
+        <?php if (!empty($popups["club-member-state"])) { ?>
+            $(`[popup-name='club-member-state']`).popup(true)
+        <?php } ?>
+    </script>
+<?php } ?>
 
 <script src="<?= ROOT ?>/assets/js/form.js"></script>

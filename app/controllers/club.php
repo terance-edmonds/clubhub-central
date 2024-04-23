@@ -614,8 +614,69 @@ class Club extends Controller
 
     private function members($path, $data)
     {
-        $tabs = ['accepted', 'rejected', 'requested'];
+       $tabs = ['accepted', 'rejected', 'requested'];
         $data["tab"] = getActiveTab($tabs, $_GET);
+
+        $storage = new Storage();
+        $club_member = new ClubMember();
+
+        $club_id = $storage->get('club_id');
+
+        $data['total_count'] = 0;
+        $data['limit'] = 10;
+        $data['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $form_data = $_POST;
+
+            if ($_POST['submit'] == 'delete-member') {
+                $club_member->update(["id" => $form_data['id']], [
+                    "is_deleted" => 1
+                ]);
+
+                $_SESSION['alerts'] = [["status" => "success", "message" => "Member details deleted successfully"]];
+            } else if ($_POST['submit'] == 'club-member-state') {
+                $club_member->update(["id" => $form_data['id']], [
+                    "state" => $form_data['state']
+                ]);
+
+                $_SESSION['alerts'] = [["status" => "success", "message" => "Member state updated successfully"]];
+                $redirect_link = 'club/members';
+            }
+        }
+
+        $state = $data['tab'] == 'requested' ? 'processing' : $data['tab'];
+        $data['table_data'] = $club_member->find(
+            ["club_members.club_id" => $club_id, "club_members.state" => strtoupper($state), "club_members.is_deleted" => 0],
+            [
+                "club_members.id",
+                "club_members.user_id",
+                "user.first_name",
+                "user.last_name",
+                "user.email",
+                "document.document as document_link",
+                "state"
+            ],
+            [
+                ["table" => "club_member_documents", "as" => "document", "on" => "club_members.id = document.club_member_id"],
+                ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"],
+            ],
+            [
+                "limit" => $data['limit'],
+                "offset" => ($data['page'] - 1) * $data['limit'],
+            ],
+            isset($_GET['search']) ? $_GET['search'] : ''
+        );
+
+        /* pagination */
+        $total_count = $club_member->find([
+            "club_id" => $club_id, "club_members.state" => strtoupper($state), "club_members.is_deleted" => 0
+        ], ["count(*) as count"], [], ["limit" => $data['limit'],], isset($_GET['search']) ? $_GET['search'] : '');
+        if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+
+        $data['errors'] = $club_member->errors;
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST" && count($data['errors']) == 0) return redirect();
 
         $this->view($path, $data);
     }
@@ -649,7 +710,7 @@ class Club extends Controller
                                     "data" => $roles
                                 ];
                             }
-
+                          
                             $participants = $members->find(
                                 $where,
                                 [
@@ -1467,6 +1528,7 @@ class Club extends Controller
 
         $this->view($path, $data);
     }
+  
     private function election($path, $data)
     {
         $db = new Database();
