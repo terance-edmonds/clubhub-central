@@ -51,27 +51,19 @@
                                     </small>
                                 <?php endif; ?>
                             </div>
-                            <div class="input-wrap">
-                                <label for="end_time">End Time</label>
-                                <input value="<?= setValue('end_time') ?>" id="end_time" type="time" name="end_time" placeholder="End Time" required>
-                                <?php if (!empty($errors['end_time'])) : ?>
-                                    <small>
-                                        <?= $errors['end_time'] ?>
-                                    </small>
-                                <?php endif; ?>
-                            </div>
+                            
                         </div>
                         <div class="multi-wrap">
                             <div class="input-wrap">
-                                <label for="member_select">Choose Members</label>
-                                <select onchange="onAddMember(event)" value="" name="member_select" id="member_select">
-                                    <option value="" selected disabled hidden>Choose Member</option>
-                                    <option value="1">Terance</option>
-                                    <option value="2">Raguram</option>
+                                <label for="type_select">Choose Type</label>
+                                <select value="type-select" name="type_select" id="type_select">
+                                    <option value="" selected disabled hidden>Choose Type</option>
+                                    <option value="1">COMMITTEE</option>
+                                    <option value="2">CLOSED</option>
                                 </select>
-                                <?php if (!empty($errors['member_select'])) : ?>
+                                <?php if (!empty($errors['type_select'])) : ?>
                                     <small>
-                                        <?= $errors['member_select'] ?>
+                                        <?= $errors['type_select'] ?>
                                     </small>
                                 <?php endif; ?>
                             </div>
@@ -93,21 +85,12 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button type="submit" class="button contained">Schedule</button>
+                    <button type="submit" class="button contained" value= "create-meeting">Schedule</button>
                 </div>
             </form>
         </div>
     </section>
 
-    <div class="checkbox-wrap selected-member-template">
-        <label class="checkbox-label">
-            {{selected_member_name}}
-            <input hidden type="checkbox" checked name="selected_member" value="{{selected_member_id}}">
-        </label>
-        <span onclick="onRemoveMember(event)" class="material-icons-outlined">
-            clear
-        </span>
-    </div>
 </div>
 
 <?php $this->view('includes/header/side-bars/club-dashboard', $menu_side_bar) ?>
