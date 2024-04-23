@@ -59,7 +59,6 @@ class Club extends Controller
                         if (!empty($_FILES['user_document'])) {
                             $folder = 'documents/' . date_create()->format('Uv');
                             $file_upload = uploadFile('user_document', $folder);
-                            show($file_upload);
 
                             if (empty($file_upload)) {
                                 $data["errors"]["user_document"] = "Failed to upload the document, please try again later";

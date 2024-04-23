@@ -1568,7 +1568,6 @@ class Events extends Controller
 
             if ($_POST['submit'] == "send-email") {
                 $ids = array_values($form_data['selected_member']);
-                show($ids);
 
                 $selected = $event_registration->query("select user_name as name, user_email as mail from club_event_registrations where id in (" . trim(str_repeat('?,', count($ids)), ',') . ")", $ids, 'array');
 

@@ -35,7 +35,6 @@ class Mail
                         $this->mail->addAddress($user['mail'], $user['name']);
                     }
                 } else {
-                    show($data['to']['mail']);
                     $this->mail->addAddress($data['to']['mail'], $data['to']['name']);
                 }
             }
