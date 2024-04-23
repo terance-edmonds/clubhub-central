@@ -30,11 +30,12 @@ class Mail
             $this->mail->setFrom($data['from']['mail'], $data['from']['name']);
 
             if (!empty($data['to'])) {
-                if (is_array($data['to'])) {
+                if (!empty($data['to'][0]) && is_array($data['to'][0])) {
                     foreach ($data['to'] as $user) {
-                        $this->mail->addAddress($user['mail'], $data['name']);
+                        $this->mail->addAddress($user['mail'], $user['name']);
                     }
                 } else {
+                    show($data['to']['mail']);
                     $this->mail->addAddress($data['to']['mail'], $data['to']['name']);
                 }
             }

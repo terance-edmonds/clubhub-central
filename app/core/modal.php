@@ -101,26 +101,38 @@ class Modal
         foreach ($keys as $key) {
             $condition = '&&';
             $operator = '=';
-            $value = $key;
+            $value = ":" . $key;
 
             /* if the data is an array of options */
             if (is_array($data[$key])) {
                 if (!empty($data[$key]['condition'])) $condition = $data[$key]['condition'];
                 if (!empty($data[$key]['operator'])) $operator = $data[$key]['operator'];
-                $data[$key] = $data[$value]['data'];
+
+                if ($operator == 'in') {
+                    $value = "(" . implode(', ', array_map(function ($val) {
+                        return "'$val'";
+                    }, $data[$key]['data'])) . ")";
+
+                    unset($data[$key]);
+                } else {
+                    $data[$key] = $data[$key]['data'];
+                }
             }
 
             /* handle joined table columns */
             $multi_keys = explode('.', $key);
             if (count($multi_keys) > 1) {
-                $value = $multi_keys[1];
-                $data[$value] = $data[$key];
+                if ($operator != 'in') {
+                    $value = ":" . $multi_keys[1];
+                    $data[$multi_keys[1]] = $data[$key];
+                }
 
                 unset($data[$key]);
             }
 
-            $query .= $key . " " . $operator . " :" . $value . " " . $condition . " ";
+            $query .= $key . " " . $operator . " " . $value . " " . $condition . " ";
         }
+
         if (!empty($options['where'])) {
             foreach ($options['where'] as $where) {
                 $condition = '&&';

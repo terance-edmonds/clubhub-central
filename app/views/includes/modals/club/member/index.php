@@ -50,7 +50,7 @@ $_POST['user_email'] = $user_data->email;
                     <?php endif; ?>
                 </div>
 
-                <!-- <input set-default="datetime" value="<?= setValue('created_datetime') ?>" id="created_datetime" type="datetime-local" name="created_datetime" required hidden> -->
+                <input set-default="datetime" value="<?= setValue('created_datetime') ?>" id="created_datetime" type="datetime-local" name="created_datetime" required hidden>
                 <button type="submit" name="submit" value="apply-membership" class="button contained">Apply</button>
             </form>
         </div>

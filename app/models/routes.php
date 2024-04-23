@@ -235,7 +235,7 @@ class Routes
             "PRESIDENT",
             "CLUB_IN_CHARGE",
         ],
-        "club/dashboard/meetings/meeting-attendence" => [
+        "club/dashboard/meetings/attendance" => [
             "SECRETARY",
             "PRESIDENT",
             "CLUB_IN_CHARGE",

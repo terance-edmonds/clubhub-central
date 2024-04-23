@@ -33,7 +33,7 @@
                             </div>
                             <div class="input-wrap">
                                 <label for="date">Date</label>
-                                <input value="<?= setValue('date') ?>" id="date" type="date" name="date" placeholder="Meeting Date" required>
+                                <input set-default="date" set-min value="<?= setValue('date') ?>" id="date" type="date" name="date" placeholder="Meeting Date" required>
                                 <?php if (!empty($errors['date'])) : ?>
                                     <small>
                                         <?= $errors['date'] ?>
@@ -44,22 +44,31 @@
                         <div class="multi-wrap">
                             <div class="input-wrap">
                                 <label for="start_time">Start Time</label>
-                                <input value="<?= setValue('start_time') ?>" id="start_time" type="time" name="start_time" placeholder="Start Time" required>
+                                <input set-default="time" set-min value="<?= setValue('start_time') ?>" id="start_time" type="time" name="start_time" placeholder="Start Time" required>
                                 <?php if (!empty($errors['start_time'])) : ?>
                                     <small>
                                         <?= $errors['start_time'] ?>
                                     </small>
                                 <?php endif; ?>
                             </div>
-                            
+
+                            <div class="input-wrap">
+                                <label for="end_time">End Time</label>
+                                <input set-default="time" set-min value="<?= setValue('end_time') ?>" id="end_time" type="time" name="end_time" placeholder="End Time" required>
+                                <?php if (!empty($errors['end_time'])) : ?>
+                                    <small>
+                                        <?= $errors['end_time'] ?>
+                                    </small>
+                                <?php endif; ?>
+                            </div>
                         </div>
                         <div class="multi-wrap">
                             <div class="input-wrap">
                                 <label for="type_select">Choose Type</label>
-                                <select value="type-select" name="type_select" id="type_select">
+                                <select name="type" id="type_select">
                                     <option value="" selected disabled hidden>Choose Type</option>
-                                    <option value="1">COMMITTEE</option>
-                                    <option value="2">CLOSED</option>
+                                    <option value="COMMITTEE" selected>Committee</option>
+                                    <option value="CLOSED">Closed</option>
                                 </select>
                                 <?php if (!empty($errors['type_select'])) : ?>
                                     <small>
@@ -67,14 +76,20 @@
                                     </small>
                                 <?php endif; ?>
                             </div>
-                            <div class="input-wrap"></div>
+                            <div class="input-wrap">
+                                <label for="venue">Venue</label>
+                                <input value="<?= setValue('venue') ?>" id="venue" type="text" name="venue" placeholder="Venue" required>
+                                <?php if (!empty($errors['venue'])) : ?>
+                                    <small>
+                                        <?= $errors['venue'] ?>
+                                    </small>
+                                <?php endif; ?>
+                            </div>
                         </div>
-
-                        <div id="selected_members" class="selected-members"></div>
 
                         <div class="input-wrap">
                             <label for="description">Description</label>
-                            <textarea value="<?= setValue('description') ?>" id="description" name="description" placeholder="Description" required></textarea>
+                            <textarea id="description" name="description" placeholder="Description"><?= setValue('description') ?></textarea>
                             <?php if (!empty($errors['description'])) : ?>
                                 <small>
                                     <?= $errors['description'] ?>
@@ -85,7 +100,7 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button type="submit" class="button contained" value= "create-meeting">Schedule</button>
+                    <button name="submit" value="create-meeting" type="submit" class="button contained" value="create-meeting">Schedule</button>
                 </div>
             </form>
         </div>

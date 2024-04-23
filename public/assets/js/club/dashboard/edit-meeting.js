@@ -1,25 +1,52 @@
-const onAddMember = (e) => {
-    const option_value = $(`#member_select`).val();
-    const name = $(`#member_select option:eq(${option_value})`).text();
+const init = () => {
+    let min_date = moment().format('yyyy-MM-DD');
+    $('#date').attr('min', min_date).val(min_date);
 
-    /* reset select */
-    $(`#member_select option:first`).prop('selected', true);
+    let min_time = moment().format('HH:00');
+    let min_end_time = moment(min_time, 'HH:mm').add('h', 1).format('HH:mm');
 
-    /* check if member already added */
-    const exists = $(`#selected_members`).find(`:checkbox[value=${option_value}]`);
-    if (exists.length) return;
-
-    /* add new member */
-    const selected_member = $('.selected-member-template');
-    const clone = selected_member.clone();
-    const element = clone
-        .html()
-        .replaceAll('{{selected_member_name}}', name)
-        .replaceAll('{{selected_member_id}}', option_value);
-
-    clone.html(element).removeClass('selected-member-template').appendTo(`#selected_members`);
+    $('#start_time').attr('min', min_time).val(min_time);
+    $('#end_time').attr('min', min_end_time).val(min_end_time);
 };
 
-const onRemoveMember = (e) => {
-    $(e.target).parent().remove();
+const onStartEndTimesChange = () => {
+    let min = moment().format('HH:00');
+
+    $('#start_time').attr('min', min);
+    $('#end_time').attr('min', min);
+
+    $('#start_time').on('change', function () {
+        let start = $(this).val();
+        let end = $('#end_time').val();
+        let now = moment().format('HH:mm');
+        let min = start;
+
+        if (now > start) {
+            min = now;
+            start = min;
+            $(this).val(min);
+        }
+
+        if (moment.duration(moment(end, 'HH:mm').diff(moment(start, 'HH:mm'))).asHours() < 1) {
+            min = moment(min, 'HH:mm').add('h', 1).format('HH:mm');
+        }
+
+        $('#end_time').attr('min', min).val(min);
+    });
+
+    $('#end_time').on('change', function () {
+        let end = $(this).val();
+        let start = $('#start_time').val();
+        let min = start;
+
+        if (start > end) {
+            min = moment(start, 'HH:mm').add('h', 1).format('HH:mm');
+            $(this).val(min);
+        }
+    });
 };
+
+$(document).ready(() => {
+    onStartEndTimesChange();
+    init();
+});
