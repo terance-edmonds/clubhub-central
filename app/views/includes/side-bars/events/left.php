@@ -8,29 +8,11 @@
                             search
                         </span>
                     </button>
-                    <input type="text" placeholder="Search" name="feed_search" value="<?= setValue('feed_search', '', 'text', 'get') ?>">
+                    <input type="text" placeholder="Search" name="search" value="<?= setValue('search', '', 'text', 'get') ?>">
                 </div>
             </div>
         </form>
     </div>
-
-    <!-- <div class="inner-section">
-        <div class="title-wrap">
-            <p class="title">Event Filter</p>
-            <span class="icon material-icons-outlined">
-                tune
-            </span>
-        </div>
-
-        <div class="content filter-checkboxes">
-            <div class="checkbox-wrap">
-                Sports Tournament
-            </div>
-            <div class="checkbox-wrap" data-active="true">
-                Musical
-            </div>
-        </div>
-    </div> -->
 
     <div class="inner-section">
         <div class="title-wrap">

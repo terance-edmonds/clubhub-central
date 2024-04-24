@@ -9,6 +9,10 @@ window.addEventListener('scroll', () => {
             let params = { page };
 
             const url = new URL(window.location.href);
+            const url_params = new URLSearchParams(url.search);
+            if (url_params.get('search')) {
+                params['search'] = url_params.get('search');
+            }
             url.pathname = `${url.pathname}/scroll`;
             url.search = new URLSearchParams(params).toString();
 

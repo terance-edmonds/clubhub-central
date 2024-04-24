@@ -202,6 +202,15 @@ class Routes
             "SUPER_ADMIN",
             "ADMIN",
         ],
+        "club/all" => [
+            "MEMBER",
+            "TREASURER",
+            "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+            "SUPER_ADMIN",
+            "ADMIN",
+        ],
         /* club dashboard routes */
         "club/dashboard" => [
             "MEMBER",

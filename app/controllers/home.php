@@ -64,7 +64,7 @@ class Home extends Controller
                 ["table" => "clubs", "as" => "club", "on" => "club_posts.club_id = club.id"]
             ],
             [],
-            isset($_GET['feed_search']) ? $_GET['feed_search'] : ''
+            isset($_GET['search']) ? $_GET['search'] : ''
         );
 
         $data = [
@@ -111,7 +111,7 @@ class Home extends Controller
                 "limit" => $limit,
                 "offset" => ($page - 1) * $limit
             ],
-            isset($_GET['feed_search']) ? $_GET['feed_search'] : ''
+            isset($_GET['search']) ? $_GET['search'] : ''
         );
 
         $data['posts'] = $posts_data;

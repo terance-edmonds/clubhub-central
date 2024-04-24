@@ -51,7 +51,9 @@ class Events extends Controller
             ],
             [
                 ["table" => "clubs", "as" => "club", "on" => "club_events.club_id = club.id"]
-            ]
+            ],
+            [],
+            isset($_GET['search']) ? $_GET['search'] : ''
         );
 
         $left_bar = [
@@ -108,7 +110,8 @@ class Events extends Controller
             [
                 "limit" => $limit,
                 "offset" => ($page - 1) * $limit
-            ]
+            ],
+            isset($_GET['search']) ? $_GET['search'] : ''
         );
 
         $data['events'] = $events;

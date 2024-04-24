@@ -23,9 +23,9 @@ class Event extends Modal
         "is_deleted"
     ];
     protected $search_columns = [
-        "name",
-        "description",
-        "venue"
+        "club_events.name",
+        "club_events.description",
+        "club_events.venue"
     ];
 
     public function validateCreateEvent($data)

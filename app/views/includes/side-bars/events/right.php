@@ -28,14 +28,14 @@ $events_count = shortNumber($events_count[0]->count);
                         <?= $users_count > 1 ? 'Users' : 'User' ?>
                     </span>
                 </div>
-                <div class="box">
+                <a class="box" href="<?= ROOT ?>/club/all">
                     <span class="num">
                         <?= $clubs_count ?>
                     </span>
                     <span class="text">
                         <?= $clubs_count > 1 ? 'Clubs' : 'Club' ?>
                     </span>
-                </div>
+                </a>
                 <div class="box">
                     <span class="num">
                         <?= $events_count ?>
