@@ -1355,17 +1355,11 @@ class Club extends Controller
 
                         $fields = array();
                         $data = array();
+
                         if ($form_data['report_type'] == 'Event Details') {
                             $club_events = new Event($db);
                             $data = $club_events->find([
-                                "club_id" => $club_id, "is_deleted" => 0,
-                                "start_datetime" => [
-                                    "operator" => ">",
-                                    "data" => $form_data['start_datetime']
-                                ], "start_datetime" => [
-                                    "operator" => "<",
-                                    "data" => $form_data['end_datetime']
-                                ]
+                                "club_id" => $club_id, "is_deleted" => 0
                             ], [
                                 "club_events.id as id",
                                 "club_events.name",
@@ -1376,8 +1370,15 @@ class Club extends Controller
                                 "club_events.is_public",
                                 "( select count(*) from club_event_registrations as cer where cer.club_event_id = club_events.id ) as total_registrations",
                                 "( select count(*) from club_event_registrations as cer where cer.club_event_id = club_events.id and cer.attended = 1 ) as total_participants",
+                                "( select sum(amount) from club_event_estimated_budgets ceeb where ceeb.club_event_id = club_events.id and type = 'INCOME' ) as total_estimated_income",
+                                "( select sum(amount) from club_event_estimated_budgets ceeb where ceeb.club_event_id = club_events.id and type = 'EXPENSE' ) as total_estimated_expense",
+                                "( select sum(amount) from club_event_budgets ceb where ceb.club_event_id = club_events.id and type = 'INCOME' ) as total_income",
+                                "( select sum(amount) from club_event_budgets ceb where ceb.club_event_id = club_events.id and type = 'EXPENSE' ) as total_expense",
+                            ], [], [
+                                "where" => ["club_events.start_datetime > '" . $form_data['start_datetime'] . "' && club_events.start_datetime < '" . $form_data['end_datetime'] . "'"],
+                                "all" => true
                             ]);
-
+                            // club_event_budgets
                             $fields = array(
                                 'ID' => array("column" => "id"),
                                 'Name'  => array("column" => "name"),
@@ -1388,6 +1389,10 @@ class Club extends Controller
                                 'Is a Public Event' => array("column" => "is_public", "format" => "boolean"),
                                 'Total Registrations' => array("column" => "total_registrations", "format" => "number"),
                                 'Total Participants' => array("column" => "total_participants", "format" => "number"),
+                                'Total Estimated Income' => array("column" => "total_estimated_income", "format" => "number"),
+                                'Total Estimated Expense' => array("column" => "total_estimated_expense", "format" => "number"),
+                                'Total Income' => array("column" => "total_income", "format" => "number"),
+                                'Total Expense' => array("column" => "total_expense", "format" => "number"),
                             );
                         }
                         if ($form_data['report_type'] == 'Member Details') {
@@ -1408,6 +1413,10 @@ class Club extends Controller
                                 [
                                     ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"]
                                 ],
+                                [
+                                    "where" => ["club_members.joined_datetime > '" . $form_data['start_datetime'] . "' && club_members.joined_datetime < '" . $form_data['end_datetime'] . "'"],
+                                    "all" => true,
+                                ]
                             );
 
                             $fields = array(
