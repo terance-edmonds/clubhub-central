@@ -212,6 +212,15 @@ class Routes
             "SUPER_ADMIN",
             "ADMIN",
         ],
+        "club/dashboard/events" => [
+            "MEMBER",
+            "TREASURER",
+            "SECRETARY",
+            "PRESIDENT",
+            "CLUB_IN_CHARGE",
+            "SUPER_ADMIN",
+            "ADMIN",
+        ],
         "club/dashboard/events/add" => [
             "PRESIDENT",
             "CLUB_IN_CHARGE",

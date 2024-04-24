@@ -25,6 +25,7 @@ class User extends Modal
         $this->errors = [];
         $pattern = '/^[a-zA-Z0-9._%+-]+@stu\.ucsc\.cmb\.ac\.lk$/';
 
+        // TODO: update pattern validation
         /* check email format preg_match($pattern, $email) */
         if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $this->errors['email'] = "Email is not valid";
@@ -59,7 +60,7 @@ class User extends Modal
         if ($data['password'] !== $data['confirm_password']) {
             $this->errors['password'] = "Passwords does not match";
         }
-
+        // TODO: update pattern validation
         /* check email format preg_match($pattern, $email) */
         if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $this->errors['email'] = "Email is not valid";

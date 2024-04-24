@@ -237,7 +237,8 @@ class Club extends Controller
         }
 
         $menu = [
-            ["id" => "events", "name" => "Events", "icon" => "emoji_events", "path" => ["/club/dashboard", "/club/dashboard/events/add",  "/club/dashboard/events/edit"], "active" => "false"],
+            ["id" => "club", "name" => "Club", "icon" => "info", "path" => "/club/dashboard", "active" => "false"],
+            ["id" => "events", "name" => "Events", "icon" => "emoji_events", "path" => ["/club/dashboard/events", "/club/dashboard/events/add",  "/club/dashboard/events/edit"], "active" => "false"],
             ["id" => "posts", "name" => "Posts", "icon" => "history_edu", "path" => ["/club/dashboard/posts", "/club/dashboard/posts/add", "/club/dashboard/posts/edit"], "active" => "false"],
             ["id" => "community", "name" => "Community Chat", "icon" => "mark_unread_chat_alt", "path" => ["/club/dashboard/community", "/club/dashboard/community/scroll"], "active" => "false"],
         ];
@@ -281,6 +282,66 @@ class Club extends Controller
         ];
 
         $this->$func($path, $data);
+    }
+
+    private function club($path, $data)
+    {
+        $club = new Clubs();
+
+        $storage = new Storage();
+        $club_id = $storage->get('club_id');
+        $club_role = $storage->get('club_role');
+
+        try {
+            if ($_SERVER['REQUEST_METHOD'] == "POST") {
+                $form_data = $_POST;
+                $form_data['club_id'] = $club_id;
+
+                if ($form_data['submit'] == 'update-club') {
+                    /* save uploaded image */
+                    if (!empty($_FILES['image']['name'])) {
+                        $file_upload = uploadFile('image');
+
+                        if (empty($file_upload)) {
+                            $data["errors"]["image"] = "Failed to upload the image, please try again later";
+                        } else {
+                            $form_data['image'] = $_POST['image'] = $file_upload['url'];
+                        }
+                    } else if (!empty($form_data['pre_uploaded_image'])) {
+                        $form_data['image'] = $_POST['image'] = $form_data['pre_uploaded_image'];
+                    }
+
+                    if ($club->validateUpdateClub($form_data)) {
+                        $club_data = $club->one(["id" => $club_id]);
+                        $club->update(["id" => $club_id], [
+                            "name" => $form_data['name'],
+                            "description" => $form_data['description'],
+                            "image" => $form_data['image'],
+                            "created_datetime" => $club_data->created_datetime
+                        ]);
+
+                        $_SESSION['alerts'] = [["status" => "success", "message" => "Club details updated successfully"]];
+                    }
+                }
+            }
+        } catch (\Throwable $th) {
+            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to process the action, please try again later."]];
+        }
+
+        $data['errors'] = $club->errors;
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST" &&  count($data['errors']) == 0) return redirect();
+
+        $data['role'] = $club_role;
+        $data['club'] = $club->one(["id" => $club_id]);
+
+        if (empty($_POST)) {
+            $_POST['name'] = $data['club']->name;
+            $_POST['description'] = $data['club']->description;
+            $_POST['image'] = $data['club']->image;
+        }
+
+        $this->view($path, $data);
     }
 
     private function events($path, $data)

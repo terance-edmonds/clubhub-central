@@ -180,7 +180,7 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button type="submit" name="submit" value="create_event" class="button contained">Request Budget Analysis</button>
+                    <button type="submit" name="submit" value="create_event" class="button contained">Create Event</button>
                 </div>
             </form>
         </div>

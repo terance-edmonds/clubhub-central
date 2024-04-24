@@ -30,4 +30,22 @@ class Clubs extends Modal
         }
         return false;
     }
+
+    public function validateUpdateClub($data)
+    {
+        $this->errors = [];
+
+        if (empty($data['name'])) $this->errors['name'] = "Name is required";
+        if (empty($data['description'])) $this->errors['description'] = "Description is required";
+
+        $club = $this->one(['name' => $data['name']]);
+        if (!empty($club) and $club->id != $data['club_id']) {
+            $this->errors['name'] = "Club name already exists";
+        }
+
+        if (empty($this->errors)) {
+            return true;
+        }
+        return false;
+    }
 }

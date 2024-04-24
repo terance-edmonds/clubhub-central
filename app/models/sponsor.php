@@ -28,7 +28,11 @@ class Sponsor extends Modal
         if (empty($data['name'])) $this->errors['name'] = "Package name is required";
         if (empty($data['contact_person'])) $this->errors['contact_person'] = "Person name is required";
         if (empty($data['contact_number'])) $this->errors['contact_number'] = "Contact Number is required";
-        if (empty($data['email'])) $this->errors['email'] = "Email is required";
+        if (empty($data['email'])) {
+            $this->errors['email'] = "Email is required";
+        } else if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+            $this->errors['email'] = "Email is not valid";
+        };
         if (empty($data['amount'])) $this->errors['amount'] = "Amount is required";
         if ($data['amount'] < 0) {
             $this->errors['amount'] = "Amount is not valid";
@@ -48,7 +52,11 @@ class Sponsor extends Modal
         if (empty($data['name'])) $this->errors['name'] = "Package name is required";
         if (empty($data['contact_person'])) $this->errors['contact_person'] = "Person name is required";
         if (empty($data['contact_number'])) $this->errors['contact_number'] = "Contact Number is required";
-        if (empty($data['email'])) $this->errors['email'] = "Email is required";
+        if (empty($data['email'])) {
+            $this->errors['email'] = "Email is required";
+        } else if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+            $this->errors['email'] = "Email is not valid";
+        };
         if (empty($data['amount'])) $this->errors['amount'] = "Amount is required";
 
         if ($data['amount'] < 0) {

@@ -34,26 +34,18 @@
                 </div>
                 <div class="input-wrap">
                     <label for="email">Email</label>
-                    <input value="<?= setValue('email') ?>" id="email" name="email" type="text" placeholder="Email" required>
+                    <input value="<?= setValue('email') ?>" id="email" name="email" type="email" placeholder="Email" required>
                     <?php if (!empty($errors['email'])) : ?>
                         <small><?= $errors['email'] ?></small>
                     <?php endif; ?>
                 </div>
                 <div class="input-wrap">
                     <label for="amount">Amount</label>
-                    <input value="<?= setValue('amount') ?>" id="amount" name="amount" type="text" placeholder="Amount" required>
+                    <input value="<?= setValue('amount') ?>" id="amount" name="amount" placeholder="Amount" type="number" min="0" required>
                     <?php if (!empty($errors['amount'])) : ?>
                         <small><?= $errors['amount'] ?></small>
                     <?php endif; ?>
                 </div>
-                <!-- <div class="input-wrap">
-                    <label for="sponsor_type">Sponsor Type</label>
-                    <input id="sponsor_type" type="text" placeholder="Sponsor Type" required>
-                </div>
-                <div class="input-wrap">
-                    <label for="package">Package</label>
-                    <input id="package" type="text" placeholder="Package" required>
-                </div> -->
 
                 <button type="submit" name="submit" value="add-sponsor" class="button contained">Submit</button>
             </form>
