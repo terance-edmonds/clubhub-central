@@ -289,13 +289,14 @@ class Modal
         /* where columns */
         $query .= " where ";
         foreach ($where_keys as $where_key) {
-            $query .= $where_key . "=:" . $where_key . ",";
+            $query .= $where_key . "=:" . $where_key . "&&";
         }
-        $query = trim($query, ",");
+        $query = trim($query, "&&");
 
         /* merge array and where data */
         $data = array_merge($data, $where);
         // print_r($query);
+        // print_r($data);
         $this->db->query($query, $data);
     }
 

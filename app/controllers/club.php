@@ -674,69 +674,169 @@ class Club extends Controller
 
     private function members($path, $data)
     {
-        $tabs = ['accepted', 'rejected', 'requested'];
+        $tabs = ['accepted', 'rejected', 'requested', 'administrators'];
         $data["tab"] = getActiveTab($tabs, $_GET);
 
         $storage = new Storage();
         $club_member = new ClubMember();
 
         $club_id = $storage->get('club_id');
+        $club_role = $storage->get('club_role');
 
         $data['total_count'] = 0;
         $data['limit'] = 10;
         $data['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
+        $data['role'] = $club_role;
+
+        $data['select_users']['total_count'] = 0;
+        $data['select_users']['limit'] = 10;
+        $data['select_users']['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $form_data = $_POST;
 
             if ($_POST['submit'] == 'delete-member') {
-                $club_member->update(["id" => $form_data['id']], [
+                $club_member->update(["id" => $form_data['id'], "club_id" => $club_id], [
                     "is_deleted" => 1
                 ]);
 
                 $_SESSION['alerts'] = [["status" => "success", "message" => "Member details deleted successfully"]];
             } else if ($_POST['submit'] == 'club-member-state') {
-                $club_member->update(["id" => $form_data['id']], [
+                $club_member->update(["id" => $form_data['id'], "club_id" => $club_id], [
                     "state" => $form_data['state']
                 ]);
 
                 $_SESSION['alerts'] = [["status" => "success", "message" => "Member state updated successfully"]];
-                $redirect_link = 'club/members';
+            } else if ($_POST['submit'] == 'update-admin-member') {
+                /* reset current member */
+                $current_member = $club_member->one([
+                    "club_id" => $club_id,
+                    "role" => $form_data['role']
+                ], ['id']);
+
+                if (!empty($current_member)) {
+                    $club_member->update(["id" => $current_member->id], [
+                        "role" => "MEMBER"
+                    ]);
+                }
+
+                /* update new member */
+                $club_member->update(["id" => $form_data['id'], "club_id" => $club_id], [
+                    "role" => $form_data['role']
+                ]);
+
+                $_SESSION['alerts'] = [["status" => "success", "message" => "Member role updated successfully"]];
             }
         }
 
-        $state = $data['tab'] == 'requested' ? 'processing' : $data['tab'];
-        $data['table_data'] = $club_member->find(
-            ["club_members.club_id" => $club_id, "club_members.state" => strtoupper($state), "club_members.is_deleted" => 0],
-            [
-                "club_members.id",
-                "club_members.user_id",
-                "user.first_name",
-                "user.last_name",
-                "user.email",
-                "document.document as document_link",
-                "state"
-            ],
-            [
-                ["table" => "club_member_documents", "as" => "document", "on" => "club_members.id = document.club_member_id"],
-                ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"],
-            ],
-            [
-                "limit" => $data['limit'],
-                "offset" => ($data['page'] - 1) * $data['limit'],
-            ],
-            isset($_GET['search']) ? $_GET['search'] : ''
-        );
+        if ($data['tab'] == 'administrators') {
+            $roles = array("PRESIDENT", "SECRETARY", "TREASURER");
+            $options = [
+                [
+                    "club_members.id",
+                    "club_members.user_id",
+                    "club_members.role",
+                    "concat(user.first_name,' ', user.last_name) as name",
+                    "user.email",
+                    "user.image",
+                ], [
+                    ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"]
+                ]
+            ];
+            $data['admins'] = $club_member->find(
+                [
+                    "club_members.club_id" => $club_id,
+                    "club_members.role" => [
+                        "operator" => "in",
+                        "data" =>  $roles
+                    ]
+                ],
+                ...$options
+            );
 
-        /* pagination */
-        $total_count = $club_member->find([
-            "club_id" => $club_id, "club_members.state" => strtoupper($state), "club_members.is_deleted" => 0
-        ], ["count(*) as count"], [], ["limit" => $data['limit'],], isset($_GET['search']) ? $_GET['search'] : '');
-        if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+            /* order the records */
+            usort($data['admins'], function ($a, $b) {
+                $roles = array("PRESIDENT", "SECRETARY", "TREASURER");
+                return array_search($a->role, $roles) - array_search($b->role, $roles);
+            });
+
+            /* club member details */
+            $total_count = $club_member->find(
+                ["club_id" => $club_id, "state" => "ACCEPTED"],
+                ["count(*) as count"],
+                [["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"]],
+                [
+                    "search" => ["user.email", "user.first_name", "user.last_name"],
+                    "limit" => $data['select_users']['limit'],
+                    "offset" => ($data['select_users']['page'] - 1) * $data['select_users']['limit'],
+                ],
+                isset($_GET['member_search']) ? $_GET['member_search'] : ''
+            );
+            if (!empty($total_count[0]->count)) $data['select_users']['total_count'] = $total_count[0]->count;
+
+            /* data */
+            $data['select_users']['table_data'] =  $club_member->find(
+                ["club_id" => $club_id, "state" => "ACCEPTED", "club_members.is_deleted" => 0],
+                [
+                    "club_members.id as id",
+                    "user_id",
+                    "club_id",
+                    "joined_datetime",
+                    "user.email",
+                    "user.first_name",
+                    "user.last_name",
+                ],
+                [
+                    ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"]
+                ],
+                [
+                    "search" => ["user.email", "user.first_name", "user.last_name"],
+                    "limit" => $data['select_users']['limit'],
+                    "offset" => ($data['select_users']['page'] - 1) * $data['select_users']['limit'],
+                ],
+                isset($_GET['member_search']) ? $_GET['member_search'] : ''
+            );
+
+            /* if the view requires only specific data view */
+            if (isset($_GET['data'])) {
+                if ($_GET['data'] == 'users_data') {
+                    $path = 'includes/modals/club/member/users/data';
+                }
+            }
+        } else {
+            $state = $data['tab'] == 'requested' ? 'processing' : $data['tab'];
+            $data['table_data'] = $club_member->find(
+                ["club_members.club_id" => $club_id, "club_members.state" => strtoupper($state), "club_members.is_deleted" => 0],
+                [
+                    "club_members.id",
+                    "club_members.user_id",
+                    "user.first_name",
+                    "user.last_name",
+                    "user.email",
+                    "document.document as document_link",
+                    "state"
+                ],
+                [
+                    ["table" => "club_member_documents", "as" => "document", "on" => "club_members.id = document.club_member_id"],
+                    ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"],
+                ],
+                [
+                    "limit" => $data['limit'],
+                    "offset" => ($data['page'] - 1) * $data['limit'],
+                ],
+                isset($_GET['search']) ? $_GET['search'] : ''
+            );
+
+            /* pagination */
+            $total_count = $club_member->find([
+                "club_id" => $club_id, "club_members.state" => strtoupper($state), "club_members.is_deleted" => 0
+            ], ["count(*) as count"], [], ["limit" => $data['limit'],], isset($_GET['search']) ? $_GET['search'] : '');
+            if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+        }
 
         $data['errors'] = $club_member->errors;
 
-        if ($_SERVER['REQUEST_METHOD'] == "POST" && count($data['errors']) == 0) return redirect();
+        // if ($_SERVER['REQUEST_METHOD'] == "POST" && count($data['errors']) == 0) return redirect();
 
         $this->view($path, $data);
     }

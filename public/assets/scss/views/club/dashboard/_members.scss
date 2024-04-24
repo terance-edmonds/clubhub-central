@@ -1,4 +1,38 @@
 #club-dashboard-members {
+    .club-administrators {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        .club-administrator {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+
+            .details {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                gap: 20px;
+
+                .section {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 15px;
+                }
+            }
+
+            .image {
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+                object-fit: cover;
+                background-color: $dark;
+            }
+        }
+    }
+
     .center-section {
         .action-buttons {
             display: flex;

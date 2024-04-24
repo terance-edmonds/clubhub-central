@@ -2,6 +2,7 @@
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/side-bar.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/dashboard.css">
     <link rel="stylesheet" href="<?= ROOT ?>/assets/css/club-dashboard.css">
+    <link rel="stylesheet" href="<?= ROOT ?>/assets/css/data-loader.css">
 </head>
 
 <?php $this->view('includes/header') ?>
@@ -17,18 +18,20 @@
                 <span class="title">Members</span>
             </div>
 
-            <form method="get" class="search-input">
-                <div class="input-wrap">
-                    <div class="input">
-                        <button type="submit" class="icon-button">
-                            <span class="icon material-icons-outlined">
-                                search
-                            </span>
-                        </button>
-                        <input type="text" placeholder="Search" name="search" value="<?= setValue('search', '', 'text', 'get') ?>">
+            <?php if ($tab != 'administrators') { ?>
+                <form method="get" class="search-input">
+                    <div class="input-wrap">
+                        <div class="input">
+                            <button type="submit" class="icon-button">
+                                <span class="icon material-icons-outlined">
+                                    search
+                                </span>
+                            </button>
+                            <input type="text" placeholder="Search" name="search" value="<?= setValue('search', '', 'text', 'get') ?>">
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            <?php } ?>
         </div>
 
         <div class="content-section">
@@ -39,59 +42,95 @@
                                                         echo 'true'; ?>" href="<?= ROOT ?>/club/dashboard/members?tab=rejected"><button class="button">Rejected</button></a>
                 <a class="action-link" data-active="<?php if ($tab == 'requested')
                                                         echo 'true'; ?>" href="<?= ROOT ?>/club/dashboard/members?tab=requested"><button class="button">Requested</button></a>
+                <?php if ($role == 'CLUB_IN_CHARGE') { ?>
+                    <a class="action-link" data-active="<?php if ($tab == 'administrators')
+                                                            echo 'true'; ?>" href="<?= ROOT ?>/club/dashboard/members?tab=administrators"><button class="button">Administrators</button></a>
+                <?php } ?>
             </div>
-            <div class="table-wrap">
-                <table>
-                    <tr class="table-header">
-                        <th>Reg No.</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Documents</th>
-                        <th>State</th>
-                        <th>Actions</th>
-                    </tr>
-                    <?php foreach ($table_data as $x => $val) {
-                    ?>
-                        <tr class="table-data">
-                            <td>
-                                <?= displayValue($val->id) ?>
-                            </td>
-                            <td>
-                                <?= displayValue($val->first_name) ?> <?= displayValue($val->last_name) ?>
-                            </td>
-                            <td>
-                                <?= displayValue($val->email) ?>
-                            </td>
-                            <td align="center">
-                                <a target="_blank" href="<?php echo !empty($val->document_link) ? $val->document_link : 'javascript:void(0);' ?>">
-                                    <button <?php if (empty($val->document_link)) { ?> disabled <?php } ?> class="icon-button">
+
+            <?php if ($role == 'CLUB_IN_CHARGE' && $tab == 'administrators') { ?>
+                <div class="club-administrators">
+                    <?php foreach ($admins as $admin) { ?>
+                        <div class="club-administrator">
+                            <h3 class="role"><?= displayValue($admin->role, "snake_title") ?></h3>
+
+                            <div class="details">
+                                <div class="section">
+                                    <div class="user-image">
+                                        <img src="<?php echo (!empty($admin->image)) ? $admin->image : ROOT . '/assets/images/other/empty-profile.jpg' ?>" alt="User" class="image">
+                                    </div>
+
+                                    <p class="name">
+                                        <span><b>Name: </b></span><span><?= displayValue($admin->name) ?></span>
+                                    </p>
+                                    <p class="name">
+                                        <span><b>Email: </b></span><span><?= displayValue($admin->email) ?></span>
+                                    </p>
+                                </div>
+
+                                <div class="section">
+                                    <button onclick=" onSelectUsersPopup(true, '<?= $admin->role ?>')" class="button w-content" data-variant="outlined">
+                                        Change
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
+                </div>
+            <?php } else { ?>
+                <div class="table-wrap">
+                    <table>
+                        <tr class="table-header">
+                            <th>Reg No.</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Documents</th>
+                            <th>State</th>
+                            <th>Actions</th>
+                        </tr>
+                        <?php foreach ($table_data as $x => $val) {
+                        ?>
+                            <tr class="table-data">
+                                <td>
+                                    <?= displayValue($val->id) ?>
+                                </td>
+                                <td>
+                                    <?= displayValue($val->first_name) ?> <?= displayValue($val->last_name) ?>
+                                </td>
+                                <td>
+                                    <?= displayValue($val->email) ?>
+                                </td>
+                                <td align="center">
+                                    <a target="_blank" href="<?php echo !empty($val->document_link) ? $val->document_link : 'javascript:void(0);' ?>">
+                                        <button <?php if (empty($val->document_link)) { ?> disabled <?php } ?> class="icon-button">
+                                            <span class="material-icons-outlined">
+                                                visibility
+                                            </span>
+                                        </button>
+                                    </a>
+                                </td>
+                                <td>
+                                    <button <?php if ($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') { ?> onclick='onDataPopup("club-member-state", <?= toJson($val, ["id", "state"]) ?>)' <?php } ?> class="button status-button <?= ($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') ? 'pointer-cursor' : '' ?>" data-status="<?= $val->state ?>">
+                                        <?= displayValue($val->state, 'start-case') ?>
+                                    </button>
+                                </td>
+                                <td align="center">
+                                    <button onclick='onDataPopup("delete-club-member", <?= toJson($val, ["id"]) ?>)' title="Delete Member" class="icon-button cl-red">
                                         <span class="material-icons-outlined">
-                                            visibility
+                                            delete
                                         </span>
                                     </button>
-                                </a>
-                            </td>
-                            <td>
-                                <button <?php if ($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') { ?> onclick='onDataPopup("club-member-state", <?= toJson($val, ["id", "state"]) ?>)' <?php } ?> class="button status-button <?= ($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') ? 'pointer-cursor' : '' ?>" data-status="<?= $val->state ?>">
-                                    <?= displayValue($val->state, 'start-case') ?>
-                                </button>
-                            </td>
-                            <td align="center">
-                                <button onclick='onDataPopup("delete-club-member", <?= toJson($val, ["id"]) ?>)' title="Delete Member" class="icon-button cl-red">
-                                    <span class="material-icons-outlined">
-                                        delete
-                                    </span>
-                                </button>
-                            </td>
-                        </tr>
-                    <?php } ?>
-                </table>
-                <?php $this->view('includes/pagination', [
-                    "total_count" => $total_count,
-                    "limit" => $limit,
-                    "page" => $page
-                ]) ?>
-            </div>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    </table>
+                    <?php $this->view('includes/pagination', [
+                        "total_count" => $total_count,
+                        "limit" => $limit,
+                        "page" => $page
+                    ]) ?>
+                </div>
+            <?php } ?>
         </div>
     </section>
 </div>
@@ -99,6 +138,10 @@
 <?php $this->view('includes/header/side-bars/club-dashboard', $menu_side_bar) ?>
 
 <?php $this->view('includes/modals/club/member/delete') ?>
+
+<?php if ($club_role == 'CLUB_IN_CHARGE' && $tab == 'administrators') {
+    $this->view('includes/modals/club/member/users', $select_users);
+} ?>
 
 <?php if ($club_role == 'CLUB_IN_CHARGE' || $club_role == 'PRESIDENT') {
     $this->view('includes/modals/club/member/status');
@@ -110,4 +153,5 @@
     </script>
 <?php } ?>
 
+<script src="<?= ROOT ?>/assets/js/club/dashboard/members.js"></script>
 <script src="<?= ROOT ?>/assets/js/form.js"></script>
