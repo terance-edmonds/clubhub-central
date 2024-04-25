@@ -78,6 +78,14 @@
 
             .description {
                 color: $secondary_white;
+                word-wrap: break-word;
+                white-space: pre;
+            }
+
+            .complain-note {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
             }
         }
     }

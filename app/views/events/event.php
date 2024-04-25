@@ -18,7 +18,7 @@
                     <?= $event_data['name'] ?>
                 </span>
 
-                <?php if ($event_data['open_registrations']) { ?>
+                <?php if ($event_data['state'] == 'ACTIVE' && $event_data['open_registrations']) { ?>
                     <button onclick="$(`[popup-name='event-register']`).popup(true)" class="button contained">Register
                         Now</button>
                 <?php } ?>
@@ -54,17 +54,23 @@
                 </div>
             </div>
 
-            <p class="description">
-                <?= $event_data['description'] ?>
-            </p>
+            <p class="description"><?= $event_data['description'] ?></p>
+
+            <?php if ($event_data['state'] != 'DEACTIVE') { ?>
+                <div class="complain-note">
+                    <span>If you have any complaints, please use the button below to fill out the form. Your feedback will help us improve our future events.</span>
+                    <button onclick="$(`[popup-name='add-complain']`).popup(true)" class=" button w-content contained">Complains</button>
+                </div>
+            <?php } ?>
         </div>
     </section>
 
     <?php $this->view('includes/side-bars/events/right', $right_bar) ?>
 </div>
 
-<?php if ($event_data['open_registrations'])
-    $this->view('includes/modals/event/register', ["errors" => $errors]); ?>
+<?php if ($event_data['state'] != 'DEACTIVE') $this->view('includes/modals/event/complain'); ?>
+
+<?php if ($event_data['state'] == 'ACTIVE' && $event_data['open_registrations']) $this->view('includes/modals/event/register', ["errors" => $errors]); ?>
 
 <script>
     <?php if (!empty($popups["event-register"])) { ?>
@@ -73,3 +79,5 @@
 </script>
 
 <?php $this->view('includes/header/bottom') ?>
+
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

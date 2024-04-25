@@ -13,7 +13,7 @@ jobs:
         steps:
             - name: Set env vars (common)
               run: |
-                  echo "REMOTE_APP_FOLDER=/opt/bitnami/apps/clubhub-central" >> $GITHUB_ENV
+                  echo "REMOTE_APP_FOLDER=~/htdocs/NILIS-MIS" >> $GITHUB_ENV
 
             - name: Set env vars (prod)
               if: endsWith(github.ref, '/master')
@@ -33,7 +33,7 @@ jobs:
               with:
                   src: ./project.tar.gz
                   host: ${{ env.REMOTE_HOST }}
-                  remote: ${{ env.REMOTE_APP_FOLDER }}/${{ env.REMOTE_APP_ENV }}
+                  remote: ${{ env.REMOTE_APP_FOLDER }}
                   port: ${{ secrets.SSH_PORT }}
                   user: ${{ secrets.SSH_USER }}
                   key: ${{ secrets.SSH_KEY }}
@@ -46,20 +46,9 @@ jobs:
                   key: ${{ secrets.SSH_KEY }}
                   port: ${{ secrets.SSH_PORT }}
                   script: |
-                      cd ${{ env.REMOTE_APP_FOLDER }}/${{ env.REMOTE_APP_ENV }}
+                      cd ${{ env.REMOTE_APP_FOLDER }}
                       tar xvzf ./project.tar.gz --directory ./
                       rm ./project.tar.gz
-
-            - name: Install Dependencies 🪐
-              uses: appleboy/ssh-action@master
-              with:
-                  host: ${{ env.REMOTE_HOST }}
-                  username: ${{ secrets.SSH_USER }}
-                  key: ${{ secrets.SSH_KEY }}
-                  port: ${{ secrets.SSH_PORT }}
-                  script: |
-                      cd ${{ env.REMOTE_APP_FOLDER }}/${{ env.REMOTE_APP_ENV }}
-                      composer install
 
             - name: Deploy application 🚀
               uses: appleboy/ssh-action@master

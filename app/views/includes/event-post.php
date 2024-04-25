@@ -2,7 +2,7 @@
     <div class="top">
         <img loading="lazy" src="<?= $data->club_image ?>" alt="Club Logo" class="club-logo">
         <div class="details">
-            <a href="<?= ROOT ?>/club?id=" class="club-title">
+            <a href="<?= ROOT ?>/club?id=<?= $data->club_id ?>" class="club-title">
                 <?= $data->club_name ?>
             </a>
             <p class="other-details">

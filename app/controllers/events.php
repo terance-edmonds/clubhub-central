@@ -125,6 +125,7 @@ class Events extends Controller
         $moment = new \Moment\Moment();
         $event = new Event();
         $event_registration = new EventRegistration();
+        $complain = new Complain();
 
         /* if event ID is not found */
         if (empty($event_id)) {
@@ -183,6 +184,7 @@ class Events extends Controller
                 "description" => $event_details->description,
                 "is_public" => $event_details->is_public,
                 "open_registrations" => $event_details->open_registrations,
+                "state" => $event_details->state,
                 "image" => $event_details->image,
                 "start_date" => $moment->format('dS F'),
                 "start_time" => $moment->format('h:i A'),
@@ -227,6 +229,23 @@ class Events extends Controller
                     return redirect();
                 } else {
                     $data['popups']['event-register'] = true;
+                }
+            }
+            if ($_POST['submit'] == 'create-event-complain') {
+                if ($complain->validateAddEventComplain($form_data)) {
+                    try {
+                        $result = $complain->create([
+                            "club_id" => $event_details->club_id,
+                            "club_event_id" => $event_details->id,
+                            "complain" => $form_data['complain'],
+                        ]);
+
+                        $_SESSION['alerts'] = [["status" => "success", "message" => "Thank you for your feedback."]];
+                    } catch (\Throwable $th) {
+                        $_SESSION['alerts'] = [["status" => "error", "message" => "Event registration failed, please try again later"]];
+                    }
+
+                    return redirect();
                 }
             }
 
@@ -1649,8 +1668,19 @@ class Events extends Controller
             }
         }
 
+        $total_count = $complain->find([
+            "club_id" => $club_id,
+            "club_event_id" => $club_event_id,
+        ], ["count(*) as count"], [], [
+            "limit" => $data['limit'],
+        ]);
+        if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+
         /* fetch data */
-        $data['complains_data'] = $complain->find(["club_id" => $club_id, "club_event_id" => $club_event_id]);
+        $data['complains_data'] = $complain->find(["club_id" => $club_id, "club_event_id" => $club_event_id], [], [], [
+            "limit" => $data['limit'],
+            "offset" => ($data['page'] - 1) * $data['limit'],
+        ]);
 
         $this->view($path, $data);
     }

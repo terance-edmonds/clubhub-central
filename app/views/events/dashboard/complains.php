@@ -23,8 +23,7 @@
             <div class="table-wrap">
                 <table>
                     <tr class="table-header">
-                        <th>Name</th>
-                        <th>Email</th>
+                        <th>ID</th>
                         <th>Complain</th>
                         <th>Actions</th>
                     </tr>
@@ -35,17 +34,18 @@
                     <?php } ?>
                     <?php foreach ($complains_data as $complain) { ?>
                         <tr class="table-data">
-                            <td>
-                                <?= displayValue($complain->user_name) ?>
-                            </td>
-                            <td>
-                                <?= displayValue($complain->user_email) ?>
-                            </td>
-                            <td>
-                                <?= displayValue($complain->complain) ?>
+                            <td align="center">
+                                <?= displayValue($complain->id) ?>
                             </td>
                             <td align="center">
-                                <button title="Delete Record" class="icon-button cl-red">
+                                <button class="icon-button" onclick='onViewPopup("View Complain", `<?= $complain->complain ?>`)'>
+                                    <span class="material-icons-outlined">
+                                        visibility
+                                    </span>
+                                </button>
+                            </td>
+                            <td align="center">
+                                <button onclick='onDataPopup("delete-complain", <?= toJson($complain, ["id"]) ?>)' title="Delete Record" class="icon-button cl-red">
                                     <span class="material-icons-outlined">
                                         delete
                                     </span>
@@ -64,7 +64,8 @@
     </section>
 </div>
 
+<?php $this->view('includes/modals/view-text') ?>
 <?php $this->view('includes/header/side-bars/event-dashboard', $menu_side_bar) ?>
 <?php $this->view('includes/modals/event/complain/delete') ?>
 
-<script src="<?= ROOT ?>/assets/js/events/event.js"></script>
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

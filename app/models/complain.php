@@ -6,7 +6,6 @@ class Complain extends Modal
     protected $allowed_columns = [
         "club_id",
         "club_event_id",
-        "user_id",
         "complain"
     ];
 

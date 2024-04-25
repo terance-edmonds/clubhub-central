@@ -511,7 +511,7 @@ class Club extends Controller
                         }
 
                         $_SESSION['alerts'] = [["status" => "success", "message" => "Created an event successfully"]];
-                        $redirect_link = 'club/dashboard';
+                        $redirect_link = 'club/dashboard/events';
                     }
                 } else if ($_POST['submit'] == 'event-state') {
                     $event->update(["id" => $form_data['id']], [
@@ -519,7 +519,6 @@ class Club extends Controller
                     ]);
 
                     $_SESSION['alerts'] = [["status" => "success", "message" => "Event status updated successfully"]];
-                    $redirect_link = 'club/dashboard';
                 } else if ($_POST['submit'] == 'event-redirect') {
                     $storage = new Storage();
                     $storage->set('club_event_id', $_POST['club_event_id']);
