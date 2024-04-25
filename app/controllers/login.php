@@ -24,11 +24,10 @@ class Login extends Controller
                 /* validate the form data */
                 if ($user->validateLogin($form_data)) {
                     $result = $user->one(['email' => $_POST['email']]);
-
                     if ($result) {
-                        if (!$result->is_verified) {
+                        if ($result->is_verified == 0) {
                             $data['errors']['email'] = "User account not verified";
-                        } else if ($result->is_blacklisted) {
+                        } else if ($result->is_blacklisted == 0) {
                             $data['errors']['email'] = "User account has been suspended";
                         } else if (password_verify($_POST['password'], $result->password)) {
                             $params = $_GET;
@@ -65,7 +64,7 @@ class Login extends Controller
                     }
                 }
 
-                $data['errors'] = $user->errors;
+                $data['errors'] = array_merge($data['errors'], $user->errors);
 
                 $db->commit();
 

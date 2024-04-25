@@ -74,13 +74,6 @@
                             </td>
                             <td align="center">
                                 <div class="buttons">
-                                    <a href="<?= ROOT ?>/users/dashboard">
-                                        <button class="icon-button">
-                                            <span class="material-icons-outlined">
-                                                edit
-                                            </span>
-                                        </button>
-                                    </a>
                                     <button class="icon-button cl-red">
                                         <span class="material-icons-outlined">
                                             delete

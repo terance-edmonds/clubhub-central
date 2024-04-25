@@ -893,7 +893,7 @@ class Club extends Controller
 
         $data['errors'] = $club_member->errors;
 
-        // if ($_SERVER['REQUEST_METHOD'] == "POST" && count($data['errors']) == 0) return redirect();
+        if ($_SERVER['REQUEST_METHOD'] == "POST" && count($data['errors']) == 0) return redirect();
 
         $this->view($path, $data);
     }

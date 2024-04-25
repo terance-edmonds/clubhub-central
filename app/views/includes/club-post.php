@@ -1,6 +1,6 @@
 <div class="club-post">
     <div class="top">
-        <img loading="lazy" src="<?= $data->club_image ?>" alt="Club Logo" class="club-logo">
+        <img loading="lazy" src="<?php echo empty($data->club_image) ? ROOT . '/assets/images/other/empty-image.png' : $data->club_image; ?>" alt="Club Logo" class="club-logo">
         <div class="details">
             <a href="<?= ROOT ?>/club?id=<?= $data->club_id ?>" class="club-title"><?= $data->club_name ?></a>
             <p class="other-details">

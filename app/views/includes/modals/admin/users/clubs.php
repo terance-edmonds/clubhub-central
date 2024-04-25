@@ -14,7 +14,7 @@
                 <?php foreach ($data['clubs'] as $club) { ?>
                     <a href="<?= ROOT ?>/club?id=<?= $club['club_id'] ?>" target="_blank">
                         <div class="card">
-                            <img loading="lazy" src="<?= $club['club_image'] ?>" alt="Club Logo" class="club-logo">
+                            <img loading="lazy" src="<?php echo empty($club['club_image']) ? ROOT . '/assets/images/other/empty-image.png' : $club['club_image']; ?>" alt="Club Logo" class="club-logo">
                             <div class="details">
                                 <div class="text-details">
                                     <p class="title"><?= $club['club_name'] ?></p>

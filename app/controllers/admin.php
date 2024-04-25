@@ -87,15 +87,17 @@ class Admin extends Controller
                     ]);
 
                     /* set notification */
-                    $notification_result = $notification->create([
-                        "title" => $form_data['name']  . ' Club',
-                        "description" => '"' . $form_data['name'] . '" is inviting you to be the club in charge. Please check your mail box for the invitation.',
-                    ]);
+                    if (!empty($user_invitation_data["user_id"])) {
+                        $notification_result = $notification->create([
+                            "title" => $form_data['name']  . ' Club',
+                            "description" => '"' . $form_data['name'] . '" is inviting you to be the club in charge. Please check your mail box for the invitation.',
+                        ]);
 
-                    $notification_state->create([
-                        "user_id" => $user_invitation_data["user_id"],
-                        "notification_id" => $notification_result->id,
-                    ]);
+                        $notification_state->create([
+                            "user_id" => $user_invitation_data["user_id"],
+                            "notification_id" => $notification_result->id,
+                        ]);
+                    }
 
                     $_SESSION['alerts'] = [["status" => "success", "message" => "Club account created and club in charge email sent successfully"]];
                     $redirect_link = "admin/dashboard";
@@ -109,6 +111,7 @@ class Admin extends Controller
 
             $db->commit();
         } catch (\Throwable $th) {
+            // show($th);
             $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to process the action, please try again later."]];
             $db->rollback();
         }
