@@ -27,7 +27,7 @@ class Login extends Controller
                     if ($result) {
                         if ($result->is_verified == 0) {
                             $data['errors']['email'] = "User account not verified";
-                        } else if ($result->is_blacklisted == 0) {
+                        } else if ($result->is_blacklisted == 1) {
                             $data['errors']['email'] = "User account has been suspended";
                         } else if (password_verify($_POST['password'], $result->password)) {
                             $params = $_GET;
