@@ -37,7 +37,7 @@ CREATE TABLE `club_community_chat` (
   CONSTRAINT `club_community_chat_club_members_FK` FOREIGN KEY (`sender_club_member_id`) REFERENCES `club_members` (`id`),
   CONSTRAINT `club_community_chat_clubs_FK` FOREIGN KEY (`club_id`) REFERENCES `clubs` (`id`),
   CONSTRAINT `club_community_chat_users_FK` FOREIGN KEY (`sender_user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -64,7 +64,7 @@ CREATE TABLE `club_election_candidates` (
   CONSTRAINT `club_election_candidates_club_members_FK` FOREIGN KEY (`club_member_id`) REFERENCES `club_members` (`id`),
   CONSTRAINT `club_election_candidates_clubs_FK` FOREIGN KEY (`club_id`) REFERENCES `clubs` (`id`),
   CONSTRAINT `club_election_candidates_users_FK` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -91,7 +91,7 @@ CREATE TABLE `club_election_voters` (
   CONSTRAINT `club_election_voters_club_members_FK` FOREIGN KEY (`club_member_id`) REFERENCES `club_members` (`id`),
   CONSTRAINT `club_election_voters_clubs_FK` FOREIGN KEY (`club_id`) REFERENCES `clubs` (`id`),
   CONSTRAINT `club_election_voters_users_FK` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -120,7 +120,7 @@ CREATE TABLE `club_election_votes` (
   CONSTRAINT `club_election_votes_club_election_voters_FK` FOREIGN KEY (`voter_id`) REFERENCES `club_election_voters` (`id`),
   CONSTRAINT `club_election_votes_club_elections_FK` FOREIGN KEY (`club_election_id`) REFERENCES `club_elections` (`id`),
   CONSTRAINT `club_election_votes_clubs_FK` FOREIGN KEY (`club_id`) REFERENCES `clubs` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -145,7 +145,7 @@ CREATE TABLE `club_elections` (
   KEY `club_elections_clubs_FK` (`club_id`),
   FULLTEXT KEY `club_elections_title_IDX` (`title`,`description`),
   CONSTRAINT `club_elections_clubs_FK` FOREIGN KEY (`club_id`) REFERENCES `clubs` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -158,18 +158,19 @@ DROP TABLE IF EXISTS `club_event_agenda`;
 CREATE TABLE `club_event_agenda` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
-  `datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `start_datetime` timestamp NOT NULL DEFAULT current_timestamp(),
   `venue` varchar(100) NOT NULL,
   `note` text DEFAULT NULL,
   `club_id` int(11) NOT NULL,
   `club_event_id` int(11) NOT NULL,
+  `end_datetime` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `club_event_agenda_FK` (`club_id`),
   KEY `club_event_agenda_FK_1` (`club_event_id`),
   FULLTEXT KEY `club_event_agenda_name_IDX` (`name`,`venue`,`note`),
   CONSTRAINT `club_event_agenda_FK` FOREIGN KEY (`club_id`) REFERENCES `clubs` (`id`),
   CONSTRAINT `club_event_agenda_FK_1` FOREIGN KEY (`club_event_id`) REFERENCES `club_events` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -241,18 +242,15 @@ DROP TABLE IF EXISTS `club_event_complains`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `club_event_complains` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `complain` text NOT NULL,
-  `user_id` int(11) NOT NULL,
   `club_id` int(11) NOT NULL,
   `club_event_id` int(11) NOT NULL,
+  `complain` text NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `club_event_complains_FK` (`user_id`),
-  KEY `club_event_complains_FK_1` (`club_event_id`),
-  KEY `club_event_complains_FK_2` (`club_id`),
-  CONSTRAINT `club_event_complains_FK` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  CONSTRAINT `club_event_complains_FK_1` FOREIGN KEY (`club_event_id`) REFERENCES `club_events` (`id`),
-  CONSTRAINT `club_event_complains_FK_2` FOREIGN KEY (`club_id`) REFERENCES `clubs` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  KEY `club_event_complains_clubs_FK` (`club_id`),
+  KEY `club_event_complains_club_events_FK` (`club_event_id`),
+  CONSTRAINT `club_event_complains_club_events_FK` FOREIGN KEY (`club_event_id`) REFERENCES `club_events` (`id`),
+  CONSTRAINT `club_event_complains_clubs_FK` FOREIGN KEY (`club_id`) REFERENCES `clubs` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -279,7 +277,7 @@ CREATE TABLE `club_event_estimated_budgets` (
   FULLTEXT KEY `club_event_estimated_budgets_name_IDX` (`name`,`description`),
   CONSTRAINT `club_event_estimated_budgets_FK` FOREIGN KEY (`club_id`) REFERENCES `clubs` (`id`),
   CONSTRAINT `club_event_estimated_budgets_FK_1` FOREIGN KEY (`club_event_id`) REFERENCES `club_events` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -307,7 +305,7 @@ CREATE TABLE `club_event_group_members` (
   CONSTRAINT `club_event_group_members_FK_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `club_event_group_members_FK_3` FOREIGN KEY (`club_event_group_id`) REFERENCES `club_event_groups` (`id`),
   CONSTRAINT `club_event_group_members_FK_4` FOREIGN KEY (`club_member_id`) REFERENCES `club_members` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=122 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=145 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -331,7 +329,7 @@ CREATE TABLE `club_event_groups` (
   KEY `club_event_groups_FK_1` (`club_event_id`),
   CONSTRAINT `club_event_groups_FK` FOREIGN KEY (`club_id`) REFERENCES `clubs` (`id`),
   CONSTRAINT `club_event_groups_FK_1` FOREIGN KEY (`club_event_id`) REFERENCES `club_events` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -354,7 +352,7 @@ CREATE TABLE `club_event_packages` (
   FULLTEXT KEY `club_event_packages_name_IDX` (`name`),
   CONSTRAINT `club_event_packages_FK` FOREIGN KEY (`club_id`) REFERENCES `clubs` (`id`),
   CONSTRAINT `club_event_packages_FK_1` FOREIGN KEY (`club_event_id`) REFERENCES `club_events` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci COMMENT='Table for Packages';
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci COMMENT='Table for Packages';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -378,7 +376,7 @@ CREATE TABLE `club_event_registrations` (
   FULLTEXT KEY `club_event_registrations_user_name_IDX` (`user_name`,`user_contact`,`user_email`),
   CONSTRAINT `club_event_registrations_FK` FOREIGN KEY (`club_id`) REFERENCES `clubs` (`id`),
   CONSTRAINT `club_event_registrations_FK_1` FOREIGN KEY (`club_event_id`) REFERENCES `club_events` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -403,7 +401,7 @@ CREATE TABLE `club_event_sponsors` (
   KEY `club_event_sponsors_name_IDX` (`name`,`contact_person`,`contact_number`,`email`) USING BTREE,
   CONSTRAINT `club_event_sponsors_FK` FOREIGN KEY (`club_id`) REFERENCES `clubs` (`id`),
   CONSTRAINT `club_event_sponsors_FK_1` FOREIGN KEY (`club_event_id`) REFERENCES `club_events` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -426,13 +424,17 @@ CREATE TABLE `club_events` (
   `state` enum('PROCESSING','ACTIVE','DEACTIVE') DEFAULT 'PROCESSING',
   `open_registrations` tinyint(1) DEFAULT 0,
   `created_datetime` timestamp NOT NULL DEFAULT current_timestamp(),
-  `is_budgets_verified` tinyint(1) DEFAULT 0,
+  `is_budget_submitted` tinyint(1) DEFAULT 0,
   `is_deleted` tinyint(1) DEFAULT 0,
+  `incharge_budgets_verified` tinyint(1) DEFAULT 0,
+  `president_budgets_verified` tinyint(1) DEFAULT 0,
+  `incharge_budget_remarks` text DEFAULT NULL,
+  `president_budget_remarks` text DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `club_events_FK` (`club_id`),
   FULLTEXT KEY `club_events_name_IDX` (`name`,`description`,`venue`),
   CONSTRAINT `club_events_FK` FOREIGN KEY (`club_id`) REFERENCES `clubs` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1027 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1037 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -449,7 +451,7 @@ CREATE TABLE `club_gallery` (
   PRIMARY KEY (`id`),
   KEY `club_gallery_FK` (`club_id`),
   CONSTRAINT `club_gallery_FK` FOREIGN KEY (`club_id`) REFERENCES `clubs` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -464,15 +466,40 @@ CREATE TABLE `club_meeting` (
   `club_id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
   `date` datetime NOT NULL,
-  `time` datetime NOT NULL,
-  `qr` varchar(100) NOT NULL,
-  `participants` int(11) NOT NULL,
-  `attendence` int(11) DEFAULT NULL,
-  `type` enum('CLOSED','OPEN') NOT NULL DEFAULT 'OPEN',
+  `start_time` time NOT NULL,
+  `participants` int(11) NOT NULL DEFAULT 0,
+  `attendance` int(11) DEFAULT 0,
+  `type` enum('CLOSED','COMMITTEE') NOT NULL DEFAULT 'CLOSED',
+  `end_time` time NOT NULL,
+  `venue` varchar(100) NOT NULL,
+  `description` text DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `club_meeting_clubs_FK` (`club_id`),
+  FULLTEXT KEY `club_meeting_venue_IDX` (`venue`,`description`,`name`),
   CONSTRAINT `club_meeting_clubs_FK` FOREIGN KEY (`club_id`) REFERENCES `clubs` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `club_meeting_attendance`
+--
+
+DROP TABLE IF EXISTS `club_meeting_attendance`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `club_meeting_attendance` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `club_id` int(11) NOT NULL,
+  `meeting_id` int(11) NOT NULL,
+  `user_name` varchar(100) NOT NULL,
+  `user_email` varchar(100) NOT NULL,
+  `attended` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `club_meeting_attendence_clubs_FK` (`club_id`),
+  KEY `club_meeting_attendence_club_meeting_FK` (`meeting_id`),
+  CONSTRAINT `club_meeting_attendence_club_meeting_FK` FOREIGN KEY (`meeting_id`) REFERENCES `club_meeting` (`id`),
+  CONSTRAINT `club_meeting_attendence_clubs_FK` FOREIGN KEY (`club_id`) REFERENCES `clubs` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -495,7 +522,7 @@ CREATE TABLE `club_member_documents` (
   CONSTRAINT `club_member_documents_FK` FOREIGN KEY (`club_id`) REFERENCES `clubs` (`id`),
   CONSTRAINT `club_member_documents_FK_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `club_member_documents_FK_2` FOREIGN KEY (`club_member_id`) REFERENCES `club_members` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -511,12 +538,14 @@ CREATE TABLE `club_members` (
   `club_id` int(11) NOT NULL,
   `role` enum('MEMBER','PRESIDENT','TREASURER','SECRETARY','CLUB_IN_CHARGE') NOT NULL DEFAULT 'MEMBER',
   `state` enum('ACCEPTED','REJECTED','PROCESSING') NOT NULL DEFAULT 'PROCESSING',
+  `is_deleted` tinyint(1) DEFAULT 0,
+  `joined_datetime` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `club_members_FK` (`user_id`),
   KEY `club_members_FK_1` (`club_id`),
   CONSTRAINT `club_members_FK` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `club_members_FK_1` FOREIGN KEY (`club_id`) REFERENCES `clubs` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -545,7 +574,7 @@ CREATE TABLE `club_post_logs` (
   CONSTRAINT `club_post_logs_club_posts_FK` FOREIGN KEY (`club_post_id`) REFERENCES `club_posts` (`id`),
   CONSTRAINT `club_post_logs_clubs_FK` FOREIGN KEY (`club_id`) REFERENCES `clubs` (`id`),
   CONSTRAINT `club_post_logs_users_FK` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -570,7 +599,61 @@ CREATE TABLE `club_posts` (
   FULLTEXT KEY `club_posts_post_name_IDX` (`post_name`,`description`),
   CONSTRAINT `club_posts_FK` FOREIGN KEY (`club_id`) REFERENCES `clubs` (`id`),
   CONSTRAINT `club_posts_users_FK` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `club_reports`
+--
+
+DROP TABLE IF EXISTS `club_reports`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `club_reports` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `club_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `club_member_id` int(11) NOT NULL,
+  `report_type` varchar(100) NOT NULL,
+  `report_name` varchar(100) NOT NULL,
+  `report_link` text NOT NULL,
+  `start_datetime` timestamp NULL DEFAULT NULL,
+  `end_datetime` timestamp NULL DEFAULT NULL,
+  `created_datetime` timestamp NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `club_reports_users_FK` (`user_id`),
+  KEY `club_reports_clubs_FK` (`club_id`),
+  KEY `club_reports_club_members_FK` (`club_member_id`),
+  FULLTEXT KEY `club_reports_report_name_IDX` (`report_name`,`report_type`),
+  CONSTRAINT `club_reports_club_members_FK` FOREIGN KEY (`club_member_id`) REFERENCES `club_members` (`id`),
+  CONSTRAINT `club_reports_clubs_FK` FOREIGN KEY (`club_id`) REFERENCES `clubs` (`id`),
+  CONSTRAINT `club_reports_users_FK` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `club_requests`
+--
+
+DROP TABLE IF EXISTS `club_requests`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `club_requests` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `club_event_id` int(11) DEFAULT NULL,
+  `subject` varchar(100) NOT NULL,
+  `description` text NOT NULL,
+  `created_datetime` timestamp NULL DEFAULT current_timestamp(),
+  `state` enum('PENDING','PROCESSING','APPROVED','REJECTED') NOT NULL DEFAULT 'PENDING',
+  `remarks` text DEFAULT NULL,
+  `club_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `club_requests_club_events_FK` (`club_event_id`),
+  KEY `club_requests_clubs_FK` (`club_id`),
+  FULLTEXT KEY `club_requests_subject_IDX` (`subject`,`description`),
+  CONSTRAINT `club_requests_club_events_FK` FOREIGN KEY (`club_event_id`) REFERENCES `club_events` (`id`),
+  CONSTRAINT `club_requests_clubs_FK` FOREIGN KEY (`club_id`) REFERENCES `clubs` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -590,7 +673,7 @@ CREATE TABLE `clubs` (
   `club_in_charge_email` varchar(100) NOT NULL,
   `created_datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -630,7 +713,28 @@ CREATE TABLE `user_invitations` (
   KEY `user_invitations_FK_1` (`club_id`),
   CONSTRAINT `user_invitations_FK` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `user_invitations_FK_1` FOREIGN KEY (`club_id`) REFERENCES `clubs` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `user_notification_state`
+--
+
+DROP TABLE IF EXISTS `user_notification_state`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_notification_state` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `created_datetime` timestamp NOT NULL DEFAULT current_timestamp(),
+  `notification_id` int(11) NOT NULL,
+  `mark_as_read` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `user_notification_state_users_FK` (`user_id`),
+  KEY `user_notification_state_user_notifications_FK` (`notification_id`),
+  CONSTRAINT `user_notification_state_user_notifications_FK` FOREIGN KEY (`notification_id`) REFERENCES `user_notifications` (`id`),
+  CONSTRAINT `user_notification_state_users_FK` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -642,15 +746,12 @@ DROP TABLE IF EXISTS `user_notifications`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_notifications` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11),
-  `for_all_users` tinyint(1) NOT NULL DEFAULT 0,
   `title` varchar(100) NOT NULL,
   `description` text DEFAULT NULL,
   `created_datetime` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  KEY `user_notifications_users_FK` (`user_id`),
-  CONSTRAINT `user_notifications_users_FK` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `link` text DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -695,7 +796,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   KEY `users_id_IDX` (`id`) USING BTREE,
   FULLTEXT KEY `users_search_IDX` (`first_name`,`last_name`,`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -711,4 +812,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-17 13:18:33
+-- Dump completed on 2024-04-25 13:28:03
