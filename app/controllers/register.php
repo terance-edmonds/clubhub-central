@@ -9,6 +9,8 @@ class Register extends Controller
             "errors" => []
         ];
 
+        $redirect_link = null;
+
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $user_data = $_POST;
             $params = $_GET;
@@ -18,8 +20,8 @@ class Register extends Controller
             $user_invitation = new UserInvitation($db);
 
             if ($user->validateRegister($user_data)) {
+                $db->transaction();
                 try {
-                    $db->transaction();
 
                     $user_data['password'] = password_hash($user_data['password'], PASSWORD_DEFAULT);
                     $result = $user->create($user_data, "email");
@@ -55,18 +57,22 @@ class Register extends Controller
 
                         $db->commit();
 
-                        return redirect('login');
+                        $_SESSION['alerts'] = [["status" => "success", "message" => "A verification mail is sent to your email please check your inbox."]];
+                        $redirect_link = 'login';
                     } else {
                         $data["errors"]["email"] = "Something went wrong!";
                     }
                 } catch (Throwable $th) {
-                    $data['errors'] = "Failed to register user, please try again later.";
+                    $data['errors'] = ["error" => "Failed"];
+                    $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to register user. Please try again later."]];
                     $db->rollback();
                 }
             }
 
             $data['errors'] = $user->errors;
         }
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST" && count($data['errors']) == 0) return redirect($redirect_link);
 
         $this->view("register", $data);
     }
@@ -115,8 +121,8 @@ class Register extends Controller
                 /* send registered mail */
                 $mail->send([
                     "to" => [
-                        "mail" => $user_data['email'],
-                        "name" => $user_data['first_name'] . " " . $user_data['last_name'],
+                        "mail" => $user_data->email,
+                        "name" => $user_data->first_name . " " . $user_data->last_name,
                     ],
                     "subject" => "Email Verification",
                     "body" => $mail->template("user-registered", [
@@ -129,6 +135,7 @@ class Register extends Controller
 
             $db->commit();
         } catch (Throwable $th) {
+            show($th);
             $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to register user, please try again later."]];
             $db->rollback();
         }
