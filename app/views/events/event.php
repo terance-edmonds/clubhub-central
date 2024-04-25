@@ -56,7 +56,7 @@
 
             <p class="description"><?= $event_data['description'] ?></p>
 
-            <?php if ($event_data['state'] != 'DEACTIVE') { ?>
+            <?php if ($event_data['state'] == 'DEACTIVE') { ?>
                 <div class="complain-note">
                     <span>If you have any complaints, please use the button below to fill out the form. Your feedback will help us improve our future events.</span>
                     <button onclick="$(`[popup-name='add-complain']`).popup(true)" class=" button w-content contained">Complains</button>
@@ -68,7 +68,7 @@
     <?php $this->view('includes/side-bars/events/right', $right_bar) ?>
 </div>
 
-<?php if ($event_data['state'] != 'DEACTIVE') $this->view('includes/modals/event/complain'); ?>
+<?php if ($event_data['state'] == 'DEACTIVE') $this->view('includes/modals/event/complain'); ?>
 
 <?php if ($event_data['state'] == 'ACTIVE' && $event_data['open_registrations']) $this->view('includes/modals/event/register', ["errors" => $errors]); ?>
 
