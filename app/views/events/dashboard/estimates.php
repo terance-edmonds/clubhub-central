@@ -163,12 +163,6 @@
                             </span>
                         </button>
                     <?php } ?>
-                    <button onclick="$(`[popup-name='add-<?= $tab ?>']`).popup(true)" class="button w-content" data-variant="outlined" data-type="icon" data-size="small">
-                        <span>Add New</span>
-                        <span class="material-icons-outlined">
-                            add
-                        </span>
-                    </button>
                 </div>
             </div>
             <div class="table-wrap">
@@ -234,7 +228,7 @@
     </section>
 </div>
 
-<?php if ($club_role == 'CLUB_IN_CHARGE') {
+<?php if ($club_role == 'TREASURER') {
     $data = ["errors" => $errors];
 
     $this->view("includes/modals/event/$tab", $data);

@@ -655,7 +655,7 @@ input[type=checkbox]:checked {
   -webkit-animation: button-loading-spinner 1s ease infinite;
           animation: button-loading-spinner 1s ease infinite;
 }
-.button[data-variant=outlined] {
+.button[data-variant=outlined]:not(:disabled) {
   background-color: #09090b;
   border-color: #69e4be;
   color: #fff;

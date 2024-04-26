@@ -46,7 +46,7 @@
     }
 
     /* variants */
-    &[data-variant='outlined'] {
+    &[data-variant='outlined']:not(:disabled) {
         background-color: $dark;
         border-color: $theme;
         color: #fff;
