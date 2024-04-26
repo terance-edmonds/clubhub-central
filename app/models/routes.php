@@ -201,6 +201,7 @@ class Routes
             "CLUB_IN_CHARGE",
             "SUPER_ADMIN",
             "ADMIN",
+            "USER"
         ],
         "club/all" => [
             "MEMBER",
@@ -210,6 +211,7 @@ class Routes
             "CLUB_IN_CHARGE",
             "SUPER_ADMIN",
             "ADMIN",
+            "USER"
         ],
         /* club dashboard routes */
         "club/dashboard" => [
