@@ -50,32 +50,78 @@
 
             <?php if ($role == 'CLUB_IN_CHARGE' && $tab == 'administrators') { ?>
                 <div class="club-administrators">
-                    <?php foreach ($admins as $admin) { ?>
-                        <div class="club-administrator">
-                            <h3 class="role"><?= displayValue($admin->role, "snake_title") ?></h3>
+                    <div class="club-administrator">
+                        <h3 class="role">President</h3>
 
-                            <div class="details">
-                                <div class="section">
-                                    <div class="user-image">
-                                        <img src="<?php echo (!empty($admin->image)) ? $admin->image : ROOT . '/assets/images/other/empty-profile.jpg' ?>" alt="User" class="image">
-                                    </div>
-
-                                    <p class="name">
-                                        <span><b>Name: </b></span><span><?= displayValue($admin->name) ?></span>
-                                    </p>
-                                    <p class="name">
-                                        <span><b>Email: </b></span><span><?= displayValue($admin->email) ?></span>
-                                    </p>
+                        <div class="details">
+                            <div class="section">
+                                <div class="user-image">
+                                    <img src="<?php echo (!empty($president->image)) ? $president->image : ROOT . '/assets/images/other/empty-profile.jpg' ?>" alt="User" class="image">
                                 </div>
 
-                                <div class="section">
-                                    <button onclick=" onSelectUsersPopup(true, '<?= $admin->role ?>')" class="button w-content" data-variant="outlined">
-                                        Change
-                                    </button>
-                                </div>
+                                <p class="name">
+                                    <span><b>Name: </b></span><span><?= empty($president->name) ? 'Not Assigned' : displayValue($president->name) ?></span>
+                                </p>
+                                <p class="name">
+                                    <span><b>Email: </b></span><span><?= empty($president->email) ? 'Not Assigned' : displayValue($president->email) ?></span>
+                                </p>
+                            </div>
+
+                            <div class="section">
+                                <button onclick=" onSelectUsersPopup(true, 'PRESIDENT')" class="button w-content" data-variant="outlined">
+                                    Change
+                                </button>
                             </div>
                         </div>
-                    <?php } ?>
+                    </div>
+                    <div class="club-administrator">
+                        <h3 class="role">Secretary</h3>
+
+                        <div class="details">
+                            <div class="section">
+                                <div class="user-image">
+                                    <img src="<?php echo (!empty($secretary->image)) ? $secretary->image : ROOT . '/assets/images/other/empty-profile.jpg' ?>" alt="User" class="image">
+                                </div>
+
+                                <p class="name">
+                                    <span><b>Name: </b></span><span><?= empty($secretary->name) ? 'Not Assigned' : displayValue($secretary->name) ?></span>
+                                </p>
+                                <p class="name">
+                                    <span><b>Email: </b></span><span><?= empty($secretary->email) ? 'Not Assigned' : displayValue($secretary->email) ?></span>
+                                </p>
+                            </div>
+
+                            <div class="section">
+                                <button onclick=" onSelectUsersPopup(true, 'SECRETARY')" class="button w-content" data-variant="outlined">
+                                    Change
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="club-administrator">
+                        <h3 class="role">Treasurer</h3>
+
+                        <div class="details">
+                            <div class="section">
+                                <div class="user-image">
+                                    <img src="<?php echo (!empty($treasurer->image)) ? $treasurer->image : ROOT . '/assets/images/other/empty-profile.jpg' ?>" alt="User" class="image">
+                                </div>
+
+                                <p class="name">
+                                    <span><b>Name: </b></span><span><?= empty($treasurer->name) ? 'Not Assigned' : displayValue($treasurer->name) ?></span>
+                                </p>
+                                <p class="name">
+                                    <span><b>Email: </b></span><span><?= empty($treasurer->email) ? 'Not Assigned' : displayValue($treasurer->email) ?></span>
+                                </p>
+                            </div>
+
+                            <div class="section">
+                                <button onclick=" onSelectUsersPopup(true, 'TREASURER')" class="button w-content" data-variant="outlined">
+                                    Change
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             <?php } else { ?>
                 <div class="table-wrap">

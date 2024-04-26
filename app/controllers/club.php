@@ -800,22 +800,27 @@ class Club extends Controller
                     ["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"]
                 ]
             ];
-            $data['admins'] = $club_member->find(
+            $data['president'] = $club_member->one(
                 [
                     "club_members.club_id" => $club_id,
-                    "club_members.role" => [
-                        "operator" => "in",
-                        "data" =>  $roles
-                    ]
+                    "club_members.role" => "PRESIDENT"
                 ],
                 ...$options
             );
-
-            /* order the records */
-            usort($data['admins'], function ($a, $b) {
-                $roles = array("PRESIDENT", "SECRETARY", "TREASURER");
-                return array_search($a->role, $roles) - array_search($b->role, $roles);
-            });
+            $data['secretary'] = $club_member->one(
+                [
+                    "club_members.club_id" => $club_id,
+                    "club_members.role" => "SECRETARY"
+                ],
+                ...$options
+            );
+            $data['treasurer'] = $club_member->one(
+                [
+                    "club_members.club_id" => $club_id,
+                    "club_members.role" => "TREASURER"
+                ],
+                ...$options
+            );
 
             /* club member details */
             $total_count = $club_member->find(
