@@ -19,7 +19,7 @@ class UserPasswordToken extends Modal
         /* check email format preg_match($pattern, $email) */
         if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $this->errors['email'] = "Email is not valid";
-        } else if (preg_match($pattern, $data['email'])) {
+        } else if (!preg_match($pattern, $data['email'])) {
             $this->errors['email'] = "Email is not allowed ( allowed only emails in '@stu.ucsc.cmb.ac.lk' format )";
             /* check if the email is in valid format */
         }

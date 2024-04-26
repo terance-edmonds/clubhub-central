@@ -124,11 +124,24 @@ class Admin extends Controller
     public function events($path, $data)
     {
         $event = new Event();
-        $storage = new Storage();
 
         $data['total_count'] = 0;
         $data['limit'] = 10;
         $data['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
+
+        /* pagination */
+        $total_count = $event->find(
+            [],
+            ["count(*) as count"],
+            [
+                ["table" => "clubs", "as" => "club", "on" => "club_events.club_id = club.id"]
+            ],
+            [
+                "limit" => $data['limit'],
+            ],
+            isset($_GET['search']) ? $_GET['search'] : ''
+        );
+        if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
 
 
         /* fetch data */
@@ -147,7 +160,12 @@ class Admin extends Controller
             ],
             [
                 ["table" => "clubs", "as" => "club", "on" => "club_events.club_id = club.id"]
-            ]
+            ],
+            [
+                "limit" => $data['limit'],
+                "offset" => ($data['page'] - 1) * $data['limit'],
+            ],
+            isset($_GET['search']) ? $_GET['search'] : ''
         );
 
 

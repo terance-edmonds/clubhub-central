@@ -27,7 +27,7 @@ class EventRegistration extends Modal
             $this->errors['user_contact'] = "Contact no. is required";
         } else if (!is_numeric($data['user_contact'])) {
             $this->errors['user_contact'] = "Contact no. must only include digits";
-        } else if (count($data['user_contact']) > 10 || count($data['user_contact']) < 10) {
+        } else if (strlen($data['user_contact']) != 10) {
             $this->errors['user_contact'] = "Contact no. must have 10 digits";
         }
 
@@ -56,7 +56,7 @@ class EventRegistration extends Modal
             $this->errors['user_contact'] = "Contact no. is required";
         } else if (!is_numeric($data['user_contact'])) {
             $this->errors['user_contact'] = "Contact no. must only include digits";
-        } else if (count($data['user_contact']) > 10 || count($data['user_contact']) < 10) {
+        } else if (strlen($data['user_contact']) != 10) {
             $this->errors['user_contact'] = "Contact no. must have 10 digits";
         }
 
