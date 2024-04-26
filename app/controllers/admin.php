@@ -4,7 +4,6 @@ class Admin extends Controller
 {
     public function index()
     {
-
         $this->view("admin");
     }
 
@@ -43,71 +42,98 @@ class Admin extends Controller
         $mail = new Mail();
         $redirect_link = null;
 
+        $data['total_count'] = 0;
+        $data['limit'] = 10;
+        $data['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
+
         try {
             $db->transaction();
             if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
                 $form_data = $_POST;
-                $link_path = "register";
+                if ($form_data['submit'] == 'create-club') {
+                    $link_path = "register";
 
-                if ($club->validateCreateClub($form_data)) {
-                    $user_invitation_data = [
-                        "club_role" => "CLUB_IN_CHARGE",
-                        "invitation_code" => randomString(),
-                        "is_valid" => 1,
-                        "club_id" => "",
-                    ];
-                    $user_exists = $user->one(["email" => $form_data['club_in_charge_email']]);
+                    if ($club->validateCreateClub($form_data)) {
+                        $user_invitation_data = [
+                            "club_role" => "CLUB_IN_CHARGE",
+                            "invitation_code" => randomString(),
+                            "is_valid" => 1,
+                            "club_id" => "",
+                        ];
+                        $user_exists = $user->one(["email" => $form_data['club_in_charge_email']]);
 
-                    if (!empty($user_exists)) {
-                        $link_path = "login";
-                        $user_invitation_data["user_id"] = $user_exists->id;
+                        if (!empty($user_exists)) {
+                            $link_path = "login";
+                            $user_invitation_data["user_id"] = $user_exists->id;
+                        }
+
+                        /* create club record */
+                        $club_result = $club->create($form_data);
+                        if (!empty($club_result)) {
+                            $user_invitation_data["club_id"] = $club_result->id;
+                        }
+
+                        /* create a user invitation */
+                        $user_invitation->create($user_invitation_data);
+
+                        $mail->send([
+                            "to" => [
+                                "mail" => $form_data['club_in_charge_email']
+                            ],
+                            "subject" => "You Are Invited As Club In Charge",
+                            "body" => $mail->template("club-invitation", [
+                                "from_email" => MAIL_USER,
+                                "from_name" => MAIL_USERNAME,
+                                "club_name" => $form_data["name"],
+                                "invitation_link" => ROOT . "/" . $link_path . "?token=" . $user_invitation_data["invitation_code"]
+                            ])
+                        ]);
+
+                        /* set notification */
+                        if (!empty($user_invitation_data["user_id"])) {
+                            $notification_result = $notification->create([
+                                "title" => $form_data['name']  . ' Club',
+                                "description" => '"' . $form_data['name'] . '" is inviting you to be the club in charge. Please check your mail box for the invitation.',
+                            ]);
+
+                            $notification_state->create([
+                                "user_id" => $user_invitation_data["user_id"],
+                                "notification_id" => $notification_result->id,
+                            ]);
+                        }
+
+                        $_SESSION['alerts'] = [["status" => "success", "message" => "Club account created and club in charge email sent successfully"]];
+                        $redirect_link = "admin/dashboard";
                     }
-
-                    /* create club record */
-                    $club_result = $club->create($form_data);
-                    if (!empty($club_result)) {
-                        $user_invitation_data["club_id"] = $club_result->id;
-                    }
-
-                    /* create a user invitation */
-                    $user_invitation->create($user_invitation_data);
-
-                    $mail->send([
-                        "to" => [
-                            "mail" => $form_data['club_in_charge_email']
-                        ],
-                        "subject" => "You Are Invited As Club In Charge",
-                        "body" => $mail->template("club-invitation", [
-                            "from_email" => MAIL_USER,
-                            "from_name" => MAIL_USERNAME,
-                            "club_name" => $form_data["name"],
-                            "invitation_link" => ROOT . "/" . $link_path . "?token=" . $user_invitation_data["invitation_code"]
-                        ])
+                } else  if ($form_data['submit'] == 'delete-club') {
+                    $club->update(["id" => $form_data['id']], [
+                        "is_deleted" => 1
                     ]);
 
-                    /* set notification */
-                    if (!empty($user_invitation_data["user_id"])) {
-                        $notification_result = $notification->create([
-                            "title" => $form_data['name']  . ' Club',
-                            "description" => '"' . $form_data['name'] . '" is inviting you to be the club in charge. Please check your mail box for the invitation.',
-                        ]);
-
-                        $notification_state->create([
-                            "user_id" => $user_invitation_data["user_id"],
-                            "notification_id" => $notification_result->id,
-                        ]);
-                    }
-
-                    $_SESSION['alerts'] = [["status" => "success", "message" => "Club account created and club in charge email sent successfully"]];
-                    $redirect_link = "admin/dashboard";
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "Club deleted successfully"]];
                 }
 
                 $data['errors'] = $club->errors;
             }
 
+            /* pagination */
+            $total_count = $club->find(
+                ["is_deleted" => 0],
+                ["count(*) as count"],
+                [],
+                [
+                    "limit" => $data['limit'],
+                ],
+                isset($_GET['search']) ? $_GET['search'] : ''
+            );
+            if (!empty($total_count[0]->count)) $data['total_count'] = $total_count[0]->count;
+
             /* fetch results */
-            $data["table_data"] = $club->find(["is_deleted" => 0]);
+            $data["table_data"] = $club->find(["is_deleted" => 0], [], [], [
+                "limit" => $data['limit'],
+                "offset" => ($data['page'] - 1) * $data['limit'],
+            ], isset($_GET['search']) ? $_GET['search'] : '');
 
             $db->commit();
         } catch (\Throwable $th) {
@@ -265,7 +291,8 @@ class Admin extends Controller
 
             $db->commit();
         } catch (\Throwable $th) {
-            show($th);
+            // show($th);
+            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to process the action. Please try again later"]];
             $db->rollback();
         }
 
@@ -282,6 +309,24 @@ class Admin extends Controller
         $data['total_count'] = 0;
         $data['limit'] = 10;
         $data['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
+
+        try {
+
+            if ($_SERVER['REQUEST_METHOD'] == "POST") {
+                $form_data = $_POST;
+                show($form_data);
+                if ($form_data['submit'] == 'delete-user') {
+                    $user->update(["id" => $form_data['id']], [
+                        "is_deleted" => 1
+                    ]);
+
+                    $_SESSION['alerts'] = [["status" => "success", "message" => "User deleted successfully"]];
+                }
+            }
+        } catch (\Throwable $th) {
+            // show($th);
+            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to delete the user"]];
+        }
 
         /* pagination */
         $total_count = $user->find([
@@ -317,6 +362,8 @@ class Admin extends Controller
             ],
             isset($_GET['search']) ? $_GET['search'] : ''
         );
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST" &&  count($data['errors']) == 0) return redirect();
 
         $this->view($path, $data);
     }

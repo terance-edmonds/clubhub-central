@@ -26,14 +26,18 @@
                 </a>
             </div>
 
-            <div class="input-wrap search-input">
-                <div class="input">
-                    <span class="icon material-icons-outlined">
-                        search
-                    </span>
-                    <input type="text" placeholder="Search">
+            <form method="get" class="search-input">
+                <div class="input-wrap">
+                    <div class="input">
+                        <button type="submit" class="icon-button">
+                            <span class="icon material-icons-outlined">
+                                search
+                            </span>
+                        </button>
+                        <input type="text" placeholder="Search" name="search" value="<?= setValue('search', '', 'text', 'get') ?>">
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
 
         <div class="content-section">
@@ -53,7 +57,7 @@
                         </tr>
                     <?php } ?>
                     <?php foreach ($table_data as $x => $val) {
-                        ?>
+                    ?>
                         <tr class="table-data">
                             <td>
                                 <?= displayValue($val->name) ?>
@@ -70,10 +74,8 @@
                                 </button>
                             </td>
                             <td align="center">
-                                <a
-                                    href="<?php echo ($val->state == 'ACTIVE') ? ROOT . '/club?id=' . $val->id : 'javascript:void(0);' ?>">
-                                    <button <?php if ($val->state === 'DEACTIVE') { ?> disabled <?php } ?>
-                                        class="icon-button">
+                                <a href="<?php echo ($val->state == 'ACTIVE') ? ROOT . '/club?id=' . $val->id : 'javascript:void(0);' ?>">
+                                    <button <?php if ($val->state === 'DEACTIVE') { ?> disabled <?php } ?> class="icon-button">
                                         <span class="material-icons-outlined">
                                             visibility
                                         </span>
@@ -82,14 +84,7 @@
                             </td>
                             <td align="center">
                                 <div class="buttons">
-                                    <a href="<?= ROOT ?>/club/dashboard">
-                                        <button class="icon-button">
-                                            <span class="material-icons-outlined">
-                                                edit
-                                            </span>
-                                        </button>
-                                    </a>
-                                    <button class="icon-button cl-red">
+                                    <button onclick='onDataPopup("delete-club", <?= toJson($val, ["id"]) ?>)' class="icon-button cl-red">
                                         <span class="material-icons-outlined">
                                             delete
                                         </span>
@@ -99,9 +94,19 @@
                         </tr>
                     <?php } ?>
                 </table>
+                <?php
+                $this->view('includes/pagination', [
+                    "total_count" => $total_count,
+                    "limit" => $limit,
+                    "page" => $page
+                ]); ?>
             </div>
         </div>
     </section>
 </div>
 
+<?php $this->view('includes/modals/admin/club/delete') ?>
+
 <?php $this->view('includes/header/bottom') ?>
+
+<script src="<?= ROOT ?>/assets/js/form.js"></script>

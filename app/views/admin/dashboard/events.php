@@ -15,14 +15,18 @@
                 <span class="title">Events</span>
             </div>
 
-            <div class="input-wrap search-input">
-                <div class="input">
-                    <span class="icon material-icons-outlined">
-                        search
-                    </span>
-                    <input type="text" placeholder="Search">
+            <form method="get" class="search-input">
+                <div class="input-wrap">
+                    <div class="input">
+                        <button type="submit" class="icon-button">
+                            <span class="icon material-icons-outlined">
+                                search
+                            </span>
+                        </button>
+                        <input type="text" placeholder="Search" name="search" value="<?= setValue('search', '', 'text', 'get') ?>">
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
 
         <div class="content-section">
@@ -35,7 +39,6 @@
                         <th>Venue</th>
                         <th>View</th>
                         <th>Status</th>
-                        <th>Actions</th>
                     </tr>
 
                     <?php if (count($events_data) == 0) { ?>
@@ -71,22 +74,6 @@
                                 <button class="button status-button" data-status="PENDING">
                                     Pending
                                 </button>
-                            </td>
-                            <td align="center">
-                                <div class="buttons">
-                                    <a href="<?= ROOT ?>/events/dashboard">
-                                        <button class="icon-button">
-                                            <span class="material-icons-outlined">
-                                                edit
-                                            </span>
-                                        </button>
-                                    </a>
-                                    <button class="icon-button cl-red">
-                                        <span class="material-icons-outlined">
-                                            delete
-                                        </span>
-                                    </button>
-                                </div>
                             </td>
                         </tr>
                     <?php } ?>

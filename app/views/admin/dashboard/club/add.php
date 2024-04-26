@@ -9,8 +9,7 @@
 <!-- alerts -->
 <?php $this->view('includes/alerts') ?>
 
-<div id="admin-dashboard-add-club"
-    class="container container-sections side-padding admin-dashboard dashboard-container">
+<div id="admin-dashboard-add-club" class="container container-sections side-padding admin-dashboard dashboard-container">
     <?php $this->view('includes/side-bars/admin/left', ["menu" => $menu]) ?>
 
     <section class="center-section">
@@ -28,9 +27,8 @@
                         <div class="multi-wrap">
                             <div class="input-wrap">
                                 <label for="name">Club Name</label>
-                                <input value="<?= setValue('name') ?>" id="name" type="text" name="name"
-                                    placeholder="Club Name" required>
-                                <?php if (!empty($errors['name'])): ?>
+                                <input value="<?= setValue('name') ?>" id="name" type="text" name="name" placeholder="Club Name" required>
+                                <?php if (!empty($errors['name'])) : ?>
                                     <small>
                                         <?= $errors['name'] ?>
                                     </small>
@@ -38,10 +36,8 @@
                             </div>
                             <div class="input-wrap">
                                 <label for="club_in_charge_email">Club In-charge Email</label>
-                                <input value="<?= setValue('club_in_charge_email') ?>" id="club_in_charge_email"
-                                    type="email" name="club_in_charge_email" placeholder="Club In-charge Email"
-                                    required>
-                                <?php if (!empty($errors['club_in_charge_email'])): ?>
+                                <input value="<?= setValue('club_in_charge_email') ?>" id="club_in_charge_email" type="email" name="club_in_charge_email" placeholder="Club In-charge Email" required>
+                                <?php if (!empty($errors['club_in_charge_email'])) : ?>
                                     <small>
                                         <?= $errors['club_in_charge_email'] ?>
                                     </small>
@@ -51,10 +47,8 @@
                         <div class="multi-wrap">
                             <div class="input-wrap">
                                 <label for="created_datetime">Create On</label>
-                                <input set-default="datetime" readonly value="<?= setValue('created_datetime') ?>"
-                                    id="created_datetime" type="datetime-local" name="created_datetime"
-                                    placeholder="Created Date & Time" required>
-                                <?php if (!empty($errors['created_datetime'])): ?>
+                                <input set-default="datetime" readonly value="<?= setValue('created_datetime') ?>" id="created_datetime" type="datetime-local" name="created_datetime" placeholder="Created Date & Time" required>
+                                <?php if (!empty($errors['created_datetime'])) : ?>
                                     <small>
                                         <?= $errors['created_datetime'] ?>
                                     </small>
@@ -65,7 +59,7 @@
                 </div>
 
                 <div class="buttons-wrap">
-                    <button type="submit" class="button contained">Create Club</button>
+                    <button type="submit" name="submit" value="create-club" class="button contained">Create Club</button>
                 </div>
             </form>
         </div>

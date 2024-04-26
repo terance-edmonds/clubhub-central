@@ -12,6 +12,7 @@ class User extends Modal
         "image",
         "is_blacklisted",
         "is_verified",
+        "is_deleted",
         "description"
     ];
     protected $search_columns = [

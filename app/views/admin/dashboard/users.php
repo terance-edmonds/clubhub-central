@@ -74,7 +74,7 @@
                             </td>
                             <td align="center">
                                 <div class="buttons">
-                                    <button class="icon-button cl-red">
+                                    <button onclick='onDataPopup("delete-user", <?= toJson($user, ["id"]) ?>)' class="icon-button cl-red">
                                         <span class="material-icons-outlined">
                                             delete
                                         </span>
@@ -99,6 +99,9 @@
     </section>
 </div>
 
+<?php $this->view('includes/modals/admin/users/delete') ?>
+
 <?php $this->view('includes/header/bottom') ?>
 
 <script src="<?= ROOT ?>/assets/js/users/user.js"></script>
+<script src="<?= ROOT ?>/assets/js/form.js"></script>
