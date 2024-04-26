@@ -30,12 +30,10 @@ class User extends Modal
         /* check email format preg_match($pattern, $email) */
         if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $this->errors['email'] = "Email is not valid";
-        }
-
-        /* check if the email is in valid format */
-        /* else if (!preg_match($pattern, $data['email'])) {
+        } else if (!preg_match($pattern, $data['email'])) {
+            /* check if the email is in valid format */
             $this->errors['email'] = "Email is not allowed ( allowed only emails in '@stu.ucsc.cmb.ac.lk' format )";
-        } */
+        }
 
         if (empty($data['password'])) $this->errors['password'] = "Password is required";
 
@@ -65,12 +63,10 @@ class User extends Modal
         /* check email format preg_match($pattern, $email) */
         if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $this->errors['email'] = "Email is not valid";
-        }
-
-        /* check if the email is in valid format */
-        /* else if (!preg_match($pattern, $data['email'])) {
+        } else if (!preg_match($pattern, $data['email'])) {
+            /* check if the email is in valid format */
             $this->errors['email'] = "Email is not allowed ( allowed only emails in '@stu.ucsc.cmb.ac.lk' format )";
-        }  */ else if ($this->one(['email' => $data['email']])) {
+        } else if ($this->one(['email' => $data['email']])) {
             /* check if email exists */
             $this->errors['email'] = "Email already exists";
         }
