@@ -314,7 +314,7 @@ class Admin extends Controller
 
             if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 $form_data = $_POST;
-                show($form_data);
+                // show($form_data);
                 if ($form_data['submit'] == 'delete-user') {
                     $user->update(["id" => $form_data['id']], [
                         "is_deleted" => 1
