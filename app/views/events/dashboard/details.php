@@ -82,6 +82,16 @@
                             <?php endif; ?>
                         </div>
 
+                        <div class="input-wrap">
+                            <label for="max_registrations">Maximum No. of Registrations</label>
+                            <input value="<?= setValue('max_registrations') ?>" id="max_registrations" type="number" name="max_registrations" placeholder="10" min="10" required>
+                            <?php if (!empty($errors['max_registrations'])) : ?>
+                                <small>
+                                    <?= $errors['max_registrations'] ?>
+                                </small>
+                            <?php endif; ?>
+                        </div>
+
                         <div class="multi-wrap">
                             <label class="checkbox-label max-width">
                                 <span>Open For External Registrations</span>

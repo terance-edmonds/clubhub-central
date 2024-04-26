@@ -161,6 +161,11 @@
             grid-template-columns: 45% 45%;
             gap: 20px;
 
+            @media screen and (max-width: 770px) {
+                display: flex;
+                flex-direction: column;
+            }
+
             .detail-wrap {
                 display: flex;
                 align-items: center;

@@ -489,11 +489,7 @@
   font-weight: 600;
 }
 .club-side-bar .profile-details .details .desc {
-  display: -webkit-box;
   max-width: 200px;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
   font-size: 0.875em;
   color: #e7e7e7;
 }

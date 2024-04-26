@@ -496,7 +496,8 @@ class Events extends Controller
                                 "is_public" => empty($form_data['is_public']) ? 0 : 1,
                                 "start_datetime" => $form_data['start_datetime'],
                                 "end_datetime" => $form_data['end_datetime'],
-                                "description" => $form_data['description']
+                                "description" => $form_data['description'],
+                                "max_registrations" => $form_data['max_registrations'],
                             ]);
                         } catch (\Throwable $th) {
                             throw new Error("Failed to update event details");
@@ -558,6 +559,7 @@ class Events extends Controller
                 $_POST['description'] = $event_data->description;
                 $_POST['start_datetime'] = $event_data->start_datetime;
                 $_POST['end_datetime'] = $event_data->end_datetime;
+                $_POST['max_registrations'] = $event_data->max_registrations;
 
                 $event_group_data = $event_group->find(
                     ["club_event_groups.club_event_id" => $club_event_id],

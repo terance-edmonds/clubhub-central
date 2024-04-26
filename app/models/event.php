@@ -20,7 +20,8 @@ class Event extends Modal
         "president_budget_remarks",
         "incharge_budgets_verified",
         "incharge_budget_remarks",
-        "is_deleted"
+        "is_deleted",
+        "max_registrations"
     ];
     protected $search_columns = [
         "club_events.name",

@@ -1939,7 +1939,7 @@ class Club extends Controller
 
                     $data['errors'] = $club_election->errors;
 
-                    $_SESSION['alerts'] = [["status" => "success", "message" => "Election created successfully"]];
+                    if (count($data['errors']) == 0) $_SESSION['alerts'] = [["status" => "success", "message" => "Election created successfully"]];
                 } else if ($form_data['submit'] == 'edit-election') {
                     if ($club_election->validateUpdate($form_data)) {
                         /* delete all candidates and voters related to the election */
@@ -2308,6 +2308,7 @@ class Club extends Controller
                 $data['election_results'] = $club_election_candidates->find([
                     "club_election_candidates.club_id" => $data['club_id'],
                     "club_election_candidates.election_id" =>  $data['election_id'],
+                    "club_election_candidates.role" => strtoupper($data["tab"])
                 ], [
                     "club_election_candidates.id as id",
                     "user.first_name",

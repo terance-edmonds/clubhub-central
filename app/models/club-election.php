@@ -31,7 +31,11 @@ class ClubElection extends Modal
         $roles = ['president', 'secretary', 'treasurer'];
         $candidate_members = array();
         foreach ($roles as $role) {
-            if (!empty($data[$role . '_candidate']) && is_array($data[$role . '_candidate'])) {
+            if (empty($data[$role . '_candidate']) || !is_array($data[$role . '_candidate'])) {
+                $this->errors['message'] = "Candidates are required for the election";
+            } else if (count($data[$role . '_candidate']) == 1) {
+                $this->errors['message'] = "Each candidate category must have at least 2 members";
+            } else {
                 foreach ($data[$role . '_candidate'] as $candidate) {
                     array_push($candidate_members, $candidate['user_id']);
                 }
@@ -70,7 +74,11 @@ class ClubElection extends Modal
         $roles = ['president', 'secretary', 'treasurer'];
         $candidate_members = array();
         foreach ($roles as $role) {
-            if (!empty($data[$role . '_candidate']) && is_array($data[$role . '_candidate'])) {
+            if (empty($data[$role . '_candidate']) || !is_array($data[$role . '_candidate'])) {
+                $this->errors['message'] = "Candidates are required for the election";
+            } else if (count($data[$role . '_candidate']) == 1) {
+                $this->errors['message'] = "Each candidate category must have at least 2 members";
+            } else {
                 foreach ($data[$role . '_candidate'] as $candidate) {
                     array_push($candidate_members, $candidate['user_id']);
                 }

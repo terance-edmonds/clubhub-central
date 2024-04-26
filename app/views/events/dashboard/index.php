@@ -22,7 +22,7 @@
         <div id="event" class="side-padding">
 
             <section class="center-section">
-                <img loading="lazy" src="<?= $event_data['image'] ?>" alt="Event Cover" class="club-event-image">
+                <img loading="lazy" src="<?php echo empty($event_data['image']) ? ROOT . '/assets/images/other/empty-image.png' : $event_data['image']; ?>" alt="Event Cover" class="club-event-image">
 
                 <div class="content">
                     <div class="title-wrap">
@@ -66,9 +66,7 @@
                         </div>
                     </div>
 
-                    <p class="description">
-                        <?= $event_data['description'] ?>
-                    </p>
+                    <p class="description"><?= $event_data['description'] ?></p>
                 </div>
             </section>
         </div>
