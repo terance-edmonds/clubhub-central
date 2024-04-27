@@ -761,7 +761,7 @@ class Club extends Controller
                                     "id" => $result->id
                                 ]);
                             };
-                            $_SESSION['alerts'] = [["status" => "success", "message" => "Meeting details added successfully"]];
+                            $_SESSION['alerts'] = [["status" => "success", "message" => "Meeting details successfully added."]];
                         } catch (\Throwable $th) {
                             show($th);
                             throw new Error("Failed to add Meeting details");
