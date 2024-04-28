@@ -110,6 +110,7 @@
                 <table>
                     <tr class="table-header">
                         <th>Sponsor Name</th>
+                        <th>Package Name</th>
                         <th>Contact Person</th>
                         <th>Contact No</th>
                         <th>Email</th>
@@ -126,6 +127,7 @@
                         <?php $json = json_encode($val); ?>
                         <tr class="table-data table-align">
                             <td><?= displayValue($val->name) ?></td>
+                            <td><?= displayValue($val->package_name) ?></td>
                             <td><?= displayValue($val->contact_person) ?></td>
                             <td><?= displayValue($val->contact_number) ?></td>
                             <td><?= displayValue($val->email) ?></td>
@@ -159,12 +161,12 @@
     </section>
 </div>
 
-<?php $this->view('includes/modals/event/package') ?>
-<?php $this->view('includes/modals/event/package/edit') ?>
+<?php $this->view('includes/modals/event/package', ["errors" => $errors]) ?>
+<?php $this->view('includes/modals/event/package/edit', ["errors" => $errors]) ?>
 <?php $this->view('includes/modals/event/package/delete') ?>
 
-<?php $this->view('includes/modals/event/sponsor') ?>
-<?php $this->view('includes/modals/event/sponsor/edit') ?>
+<?php $this->view('includes/modals/event/sponsor', ["select_packages" => $select_packages, "errors" => $errors]) ?>
+<?php $this->view('includes/modals/event/sponsor/edit', ["select_packages" => $select_packages, "errors" => $errors]) ?>
 <?php $this->view('includes/modals/event/sponsor/delete') ?>
 
 <?php $this->view('includes/header/side-bars/event-dashboard', $menu_side_bar) ?>

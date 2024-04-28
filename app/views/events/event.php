@@ -56,6 +56,21 @@
 
             <p class="description"><?= $event_data['description'] ?></p>
 
+            <?php if (!empty($packages_data) and count($packages_data) > 0) { ?>
+                <div class="packages">
+                    <h2 class="title">Packages</h2>
+
+                    <div class="packages-details">
+                        <?php foreach ($packages_data as $package) { ?>
+                            <div class="card">
+                                <p class="name"><?= displayValue($package->name) ?></p>
+                                <h3 class="amount"><?= displayValue($package->amount, 'number') ?></h3>
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
+            <?php } ?>
+
             <?php if ($event_data['state'] == 'DEACTIVE') { ?>
                 <div class="complain-note">
                     <span>If you have any complaints, please use the button below to fill out the form. Your feedback will help us improve our future events.</span>

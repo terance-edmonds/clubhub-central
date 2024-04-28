@@ -88,5 +88,30 @@
                 gap: 15px;
             }
         }
+
+        .packages {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+
+            .packages-details {
+                display: grid;
+                grid-template-columns: 30% 30% 30%;
+                gap: 15px;
+            }
+
+            .card {
+                display: flex;
+                width: 100%;
+                min-height: 100px;
+                flex-direction: column;
+                gap: 10px;
+                align-items: center;
+                padding: 15px;
+                border-radius: 7px;
+                background-color: $secondary_dark;
+                border: 1px solid $theme;
+            }
+        }
     }
 }

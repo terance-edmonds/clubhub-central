@@ -135,7 +135,7 @@ class Register extends Controller
 
             $db->commit();
         } catch (Throwable $th) {
-            show($th);
+            // show($th);
             $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to register user, please try again later."]];
             $db->rollback();
         }

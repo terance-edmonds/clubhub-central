@@ -47,6 +47,20 @@
                         <small><?= $errors['amount'] ?></small>
                     <?php endif; ?>
                 </div>
+                <div class="input-wrap">
+                    <label for="package_id">Choose Package</label>
+                    <select name="package_id" id="package_id" required>
+                        <option value="" selected disabled hidden>Select Package</option>
+                        <?php foreach ($select_packages as $package) { ?>
+                            <option value="<?= $package->id ?>" <?php if (!empty(setValue('package_id')) and setValue('package_id') == $package->id) { ?> selected <?php } ?>><?= displayValue($package->name) ?></option>
+                        <?php } ?>
+                    </select>
+                    <?php if (!empty($errors['package_id'])) : ?>
+                        <small>
+                            <?= $errors['package_id'] ?>
+                        </small>
+                    <?php endif; ?>
+                </div>
 
                 <button type="submit" name="submit" value="edit-sponsor" class="button contained">Submit</button>
             </form>

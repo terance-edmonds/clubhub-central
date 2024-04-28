@@ -126,6 +126,7 @@ class Events extends Controller
         $event = new Event();
         $event_registration = new EventRegistration();
         $complain = new Complain();
+        $package = new Package();
 
         /* if event ID is not found */
         if (empty($event_id)) {
@@ -191,6 +192,10 @@ class Events extends Controller
                 "venue" => $event_details->venue,
             ]
         ];
+
+        $data["packages_data"] = $package->find(["club_id" => $event_details->club_id, "club_event_id" => $event_id], [], [], [
+            "all" => true
+        ]);
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $form_data = $_POST;
@@ -813,35 +818,64 @@ class Events extends Controller
                     $form_data['club_id'] = $club_id;
                     $form_data['club_event_id'] = $club_event_id;
                     if ($sponsor->validateCreateSponsor($form_data)) {
-                        try {
-                            $sponsor->create($form_data);
-                            $_SESSION['alerts'] = [["status" => "success", "message" => "Sponsor details added successfully"]];
-                        } catch (Throwable $th) {
-                            var_dump($th);
-                            $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to add sponsor details"]];
+                        $selected_package = $package->one(["id" => $form_data['package_id']], ["id", "amount"]);
+                        $sponsors_package_total = $sponsor->find(["package_id" => $form_data['package_id']], [
+                            "sum(amount) as total"
+                        ]);
+                        $sponsors_package_total = empty($sponsors_package_total[0]->total) ? 0 : $sponsors_package_total[0]->total;
+
+                        $sponsors_package_total = floatval($sponsors_package_total) + floatval($form_data['amount']);
+
+                        if (empty($selected_package)) {
+                            $data['errors'] = ["package_id" => "Package details not found"];
+                            $data['popups']["add-sponsor"] = true;
+                        } else if ($sponsors_package_total > floatval($selected_package->amount)) {
+                            $data['errors'] = ["amount" => "Total sponsors amount has exceeded the package amount"];
+                            $data['popups']["add-sponsor"] = true;
+                        } else {
+                            try {
+                                $sponsor->create($form_data);
+                                $_SESSION['alerts'] = [["status" => "success", "message" => "Sponsor details added successfully"]];
+                            } catch (Throwable $th) {
+                                $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to add sponsor details"]];
+                            }
                         }
                     } else {
                         $data['popups']["add-sponsor"] = true;
                     }
 
-                    $data['errors'] = $sponsor->errors;
+
+                    $data['errors'] = ["package_id" => "testing"];
                 }
             } else if ($_POST['submit'] == "edit-sponsor") {
                 $where['id'] = $form_data['id'];
 
                 if ($sponsor->validateEditSponsor($form_data)) {
                     try {
-                        $sponsor->update($where, $form_data);
+                        $selected_package = $package->one(["id" => $form_data['package_id']], ["id", "amount"]);
+                        $sponsors_package_total = $sponsor->find(["package_id" => $form_data['package_id']], [
+                            "sum(amount) as total"
+                        ]);
+                        $sponsors_package_total = empty($sponsors_package_total[0]->total) ? 0 : $sponsors_package_total[0]->total;
 
-                        $_SESSION['alerts'] = [["status" => "success", "message" => "Sponsor details updated successfully"]];
+                        $sponsors_package_total = floatval($sponsors_package_total) + floatval($form_data['amount']);
+
+                        if (empty($selected_package)) {
+                            $data['errors'] = ["package_id" => "Package details not found"];
+                            $data['popups']["edit-sponsor"] = true;
+                        } else if ($sponsors_package_total > floatval($selected_package->amount)) {
+                            $data['errors'] = ["amount" => "Total sponsors amount has exceeded the package amount"];
+                            $data['popups']["edit-sponsor"] = true;
+                        } else {
+                            $sponsor->update($where, $form_data);
+                            $_SESSION['alerts'] = [["status" => "success", "message" => "Sponsor details updated successfully"]];
+                        }
                     } catch (Throwable $th) {
                         $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to update sponsor details"]];
                     }
                 } else {
                     $data['popups']["edit-sponsor"] = $form_data;
                 }
-
-                $data['errors'] = $sponsor->errors;
             } else if ($_POST['submit'] == "delete-sponsor") {
                 try {
                     $sponsor->delete(["id" => $form_data['id']]);
@@ -851,11 +885,11 @@ class Events extends Controller
                     //var_dump($th);
                     $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to delete Sponsor details"]];
                 }
-
-                $data['errors'] = $sponsor->errors;
             } else if ($_POST['submit'] == "add-package" || $_POST['submit'] == "edit-package" || $_POST['submit'] == "delete-package") {
                 $this->packages($_POST);
             }
+
+            $data['errors'] = array_merge($data['errors'], $sponsor->errors);
 
             if (count($data['errors']) == 0) return redirect();
         }
@@ -881,10 +915,28 @@ class Events extends Controller
         ], ["count(*) as count"], [], [], isset($_GET['sponsors_search']) ? $_GET['sponsors_search'] : '');
         if (!empty($sponsors_total_count[0]->count)) $data['total_sponsors_count'] = $sponsors_total_count[0]->count;
         /* data */
-        $data["sponsors_data"] = $sponsor->find(["club_id" => $club_id, "club_event_id" => $club_event_id], [], [], [
+        $data["sponsors_data"] = $sponsor->find(["club_event_sponsors.club_id" => $club_id, "club_event_sponsors.club_event_id" => $club_event_id], [
+            "club_event_sponsors.id",
+            "club_event_sponsors.name",
+            "club_event_sponsors.amount",
+            "club_event_sponsors.contact_person",
+            "club_event_sponsors.contact_number",
+            "club_event_sponsors.email",
+            "club_event_sponsors.amount",
+            "package.name as package_name"
+        ], [
+            ["table" => "club_event_packages", "as" => "package", "on" => "package.id = club_event_sponsors.package_id"]
+        ], [
             "limit" => $data['sponsors_limit'],
             "offset" => ($data['sponsors_page'] - 1) * $data['sponsors_limit'],
         ], isset($_GET['sponsors_search']) ? $_GET['sponsors_search'] : '');
+
+        $data["select_packages"] = $package->find([
+            "club_id" => $club_id,
+            "club_event_id" => $club_event_id
+        ], [], [], [
+            "all" => true
+        ]);
 
         $this->view($path, $data);
     }
@@ -946,7 +998,7 @@ class Events extends Controller
 
                     $_SESSION['alerts'] = [["status" => "success", "message" => "Package details deleted successfully"]];
                 } catch (Throwable $th) {
-                    var_dump($th);
+                    // var_dump($th);
                     $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to delete package details"]];
                 }
 
@@ -1033,7 +1085,7 @@ class Events extends Controller
 
                         $_SESSION['alerts'] = [["status" => "success", "message" => "Income budget details deleted successfully"]];
                     } catch (Throwable $th) {
-                        var_dump($th);
+                        // var_dump($th);
                         throw new Error("Failed to delete budget details");
                     }
 
@@ -1369,7 +1421,7 @@ class Events extends Controller
 
                         $_SESSION['alerts'] = [["status" => "success", "message" => "Income budget details deleted successfully"]];
                     } catch (Throwable $th) {
-                        var_dump($th);
+                        // var_dump($th);
                         $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to delete budget details"]];
                     }
 

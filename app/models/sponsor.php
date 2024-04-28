@@ -10,7 +10,8 @@ class Sponsor extends Modal
         "contact_person",
         "contact_number",
         "email",
-        "amount"
+        "amount",
+        "package_id"
     ];
     protected $search_columns = [
         "name",
@@ -25,7 +26,8 @@ class Sponsor extends Modal
 
         if (empty($data['club_id'])) $this->errors['club_id'] = "Club ID is required";
         if (empty($data['club_event_id'])) $this->errors['club_event_id'] = "Event ID is required";
-        if (empty($data['name'])) $this->errors['name'] = "Package name is required";
+        if (empty($data['name'])) $this->errors['name'] = "Sponsor name is required";
+        if (empty($data['package_id'])) $this->errors['package_id'] = "Package is required";
         if (empty($data['contact_person'])) $this->errors['contact_person'] = "Person name is required";
         if (empty($data['contact_number'])) {
             $this->errors['contact_number'] = "Contact Number is required";
@@ -53,7 +55,8 @@ class Sponsor extends Modal
     {
         $this->errors = [];
 
-        if (empty($data['name'])) $this->errors['name'] = "Package name is required";
+        if (empty($data['name'])) $this->errors['name'] = "Sponsor name is required";
+        if (empty($data['package_id'])) $this->errors['package_id'] = "Package is required";
         if (empty($data['contact_person'])) $this->errors['contact_person'] = "Person name is required";
         if (empty($data['contact_number'])) {
             $this->errors['contact_number'] = "Contact Number is required";

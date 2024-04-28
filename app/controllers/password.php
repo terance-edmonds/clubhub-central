@@ -46,7 +46,7 @@ class Password extends Controller
                     $data['errors'] = $user_password_token->errors;
                 }
             } catch (Throwable $th) {
-                show($th);
+                // show($th);
                 $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to send password reset link, please try again later."]];
             }
         }

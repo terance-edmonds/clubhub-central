@@ -985,7 +985,7 @@ class Club extends Controller
                             };
                             $_SESSION['alerts'] = [["status" => "success", "message" => "Meeting details added successfully"]];
                         } catch (\Throwable $th) {
-                            show($th);
+                            // show($th);
                             throw new Error("Failed to add Meeting details");
                         }
                     }
@@ -1319,7 +1319,7 @@ class Club extends Controller
             $db->commit();
         } catch (\Throwable $th) {
             $db->rollback();
-            show($th);
+            // show($th);
             $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to process the action. Please try again later"]];
         }
 
@@ -1491,7 +1491,7 @@ class Club extends Controller
                 }
             }
         } catch (\Throwable $th) {
-            show($th);
+            // show($th);
             $db->rollback();
             $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to process the action, please try again later."]];
         }
@@ -2333,7 +2333,7 @@ class Club extends Controller
 
             if ($redirect_on_success && $_SERVER['REQUEST_METHOD'] == "POST" &&  count($data['errors']) == 0) return redirect($redirect_link);
         } catch (\Throwable $th) {
-            show($th);
+            // show($th);
             $db->rollback();
             $_SESSION['alerts'] = [["status" => "error", "message" => $th->getMessage() || "Failed to process the action, please try again later."]];
         }
