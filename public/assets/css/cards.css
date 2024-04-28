@@ -146,7 +146,7 @@
 }
 .cards .club-post .post-image {
   max-width: 560px;
-  height: 560px;
+  height: auto;
   -o-object-fit: cover;
      object-fit: cover;
   width: 100%;
