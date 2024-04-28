@@ -14,13 +14,13 @@ class UserPasswordToken extends Modal
     public function validateCreate($data)
     {
         $this->errors = [];
-        $pattern = '/^[a-zA-Z0-9._%+-]+@stu\.ucsc\.cmb\.ac\.lk$/';
+        $pattern = '/^[a-zA-Z0-9._%+-]+@(?:stu\.ucsc\.cmb\.ac\.lk|ucsc\.cmb\.ac\.lk)$/';
 
         /* check email format preg_match($pattern, $email) */
         if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $this->errors['email'] = "Email is not valid";
         } else if (!preg_match($pattern, $data['email'])) {
-            $this->errors['email'] = "Email is not allowed ( allowed only emails in '@stu.ucsc.cmb.ac.lk' format )";
+            $this->errors['email'] = "Email is not allowed ( allowed only emails in '@stu.ucsc.cmb.ac.lk' or '@ucsc.cmb.ac.lk' format )";
             /* check if the email is in valid format */
         }
 

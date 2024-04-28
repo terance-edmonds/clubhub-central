@@ -24,16 +24,16 @@ class User extends Modal
     public function validateLogin($data)
     {
         $this->errors = [];
-        $pattern = '/^[a-zA-Z0-9._%+-]+@stu\.ucsc\.cmb\.ac\.lk$/';
+        $pattern = '/^[a-zA-Z0-9._%+-]+@(?:stu\.ucsc\.cmb\.ac\.lk|ucsc\.cmb\.ac\.lk)$/';
 
         // TODO: update pattern validation
         /* check email format preg_match($pattern, $email) */
         if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $this->errors['email'] = "Email is not valid";
             /* check if the email is in valid format */
-        } /* else if (!preg_match($pattern, $data['email'])) {
-            $this->errors['email'] = "Email is not allowed ( allowed only emails in '@stu.ucsc.cmb.ac.lk' format )";
-        } */
+        } else if (!preg_match($pattern, $data['email'])) {
+            $this->errors['email'] = "Email is not allowed ( allowed only emails in '@stu.ucsc.cmb.ac.lk' or '@ucsc.cmb.ac.lk' format )";
+        }
 
         if (empty($data['password'])) $this->errors['password'] = "Password is required";
 
@@ -47,7 +47,7 @@ class User extends Modal
     public function validateRegister($data)
     {
         $this->errors = [];
-        $pattern = '/^[a-zA-Z0-9._%+-]+@stu\.ucsc\.cmb\.ac\.lk$/';
+        $pattern = '/^[a-zA-Z0-9._%+-]+@(?:stu\.ucsc\.cmb\.ac\.lk|ucsc\.cmb\.ac\.lk)$/';
 
         if (empty($data['first_name'])) $this->errors['first_name'] = "First name is required";
         if (empty($data['last_name'])) $this->errors['last_name'] = "Last name is required";
@@ -65,7 +65,7 @@ class User extends Modal
             $this->errors['email'] = "Email is not valid";
         } else if (!preg_match($pattern, $data['email'])) {
             /* check if the email is in valid format */
-            $this->errors['email'] = "Email is not allowed ( allowed only emails in '@stu.ucsc.cmb.ac.lk' format )";
+            $this->errors['email'] = "Email is not allowed ( allowed only emails in '@stu.ucsc.cmb.ac.lk' or '@ucsc.cmb.ac.lk' format )";
         } else if ($this->one(['email' => $data['email']])) {
             /* check if email exists */
             $this->errors['email'] = "Email already exists";
