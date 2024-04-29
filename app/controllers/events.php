@@ -850,7 +850,10 @@ class Events extends Controller
                 if ($sponsor->validateEditSponsor($form_data)) {
                     try {
                         $selected_package = $package->one(["id" => $form_data['package_id']], ["id", "amount"]);
-                        $sponsors_package_total = $sponsor->find(["package_id" => $form_data['package_id']], [
+                        $sponsors_package_total = $sponsor->find(["package_id" => $form_data['package_id'], "id" => [
+                            "operator" => "!=",
+                            "data" => $form_data['id']
+                        ]], [
                             "sum(amount) as total"
                         ]);
                         $sponsors_package_total = empty($sponsors_package_total[0]->total) ? 0 : $sponsors_package_total[0]->total;
@@ -868,6 +871,7 @@ class Events extends Controller
                             $_SESSION['alerts'] = [["status" => "success", "message" => "Sponsor details updated successfully"]];
                         }
                     } catch (Throwable $th) {
+                        // show($th);
                         $_SESSION['alerts'] = [["status" => "error", "message" => "Failed to update sponsor details"]];
                     }
                 } else {
@@ -920,7 +924,8 @@ class Events extends Controller
             "club_event_sponsors.contact_number",
             "club_event_sponsors.email",
             "club_event_sponsors.amount",
-            "package.name as package_name"
+            "club_event_sponsors.package_id",
+            "package.name as package_name",
         ], [
             ["table" => "club_event_packages", "as" => "package", "on" => "package.id = club_event_sponsors.package_id"]
         ], [
