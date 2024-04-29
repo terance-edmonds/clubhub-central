@@ -843,9 +843,6 @@ class Events extends Controller
                     } else {
                         $data['popups']["add-sponsor"] = true;
                     }
-
-
-                    $data['errors'] = ["package_id" => "testing"];
                 }
             } else if ($_POST['submit'] == "edit-sponsor") {
                 $where['id'] = $form_data['id'];
