@@ -175,7 +175,7 @@
 #event .center-section .content .description {
   color: #e7e7e7;
   word-wrap: break-word;
-  white-space: pre;
+  white-space: pre-wrap;
 }
 #event .center-section .content .complain-note {
   display: -webkit-box;
