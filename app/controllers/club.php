@@ -2037,7 +2037,7 @@ class Club extends Controller
                             $_SESSION['alerts'] = [["status" => "error", "message" => "You have already voted"]];
 
                             return redirect();
-                        } {
+                        } else {
                             /* updated election voter state */
                             $club_election_voters->update([
                                 "id" => $form_data['voter_id']
@@ -2045,7 +2045,7 @@ class Club extends Controller
                                 "did_vote" => 1
                             ]);
 
-                            /* add president vote */
+                            /* add role vote */
                             $club_election_vote->create([
                                 "role" => strtoupper($role),
                                 "club_id" => $form_data['club_id'],
