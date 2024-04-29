@@ -1,7 +1,10 @@
 <?php
 $side_bar_user = new User();
+$storage = new Storage();
+$club_role = $storage->get('club_role');
 $side_bar_auth_user_id = Auth::getId();
 $side_bar_user = $side_bar_user->one(["id" => $side_bar_auth_user_id]);
+
 ?>
 
 <section class="side-bar club-dashboard-side-bar left">
@@ -10,8 +13,16 @@ $side_bar_user = $side_bar_user->one(["id" => $side_bar_auth_user_id]);
 
         <div class="details">
             <span class="name"><?= $side_bar_user->first_name ?> <?= $side_bar_user->last_name ?></span>
-            <p class="desc"><?= $side_bar_user->description ?></p>
+            <?php if (!empty($club_role)) { ?>
+                <p class="desc"><?= displayValue($club_role, 'snake_title'); ?></p>
+            <?php } ?>
         </div>
+
+        <?php if (!empty($side_bar_user->description)) { ?>
+            <div class="details">
+                <p class="desc"><?= $side_bar_user->description ?></p>
+            </div>
+        <?php } ?>
     </div>
 
     <div class="inner-section menu-section no-border">

@@ -89,7 +89,7 @@
                                 </td>
                                 <td align="center">
                                     <a href="<?= ROOT ?>/club/dashboard/election/result?club_id=<?= $election->club_id ?>&election_id=<?= $election->id ?>">
-                                        <button <?php if ($election->state !== 'OPEN' && $election->state !== 'CLOSED') { ?> disabled <?php } ?> title="View results" class="icon-button">
+                                        <button <?php if ($election->state !== 'CLOSED') { ?> disabled <?php } ?> title="View results" class="icon-button">
                                             <span class="material-icons-outlined">
                                                 visibility
                                             </span>

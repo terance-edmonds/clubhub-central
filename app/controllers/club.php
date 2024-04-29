@@ -2305,7 +2305,7 @@ class Club extends Controller
                 $data['club_id'] = $_GET['club_id'];
                 $data['election_id'] = $_GET['election_id'];
 
-                $data['election'] = $club_election->one(['id' => $data['election_id']], ["title", "description"]);
+                $data['election'] = $club_election->one(['id' => $data['election_id'], "state" => "CLOSED"], ["title", "description"]);
                 if (empty($data['election'])) {
                     return redirect('club/dashboard/election');
                 }
