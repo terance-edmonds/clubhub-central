@@ -557,22 +557,14 @@ class Club extends Controller
             $data['select_users']['limit'] = 10;
             $data['select_users']['page'] = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
 
-            /* if the view requires only specific data view */
-            if (isset($_GET['data'])) {
-                if ($_GET['data'] == 'users_data') {
-                    $path = 'includes/modals/club/events/users/data';
-                }
-            }
-
             /* pagination */
             $total_count = $club_member->find(
-                ["club_id" => $club_id, "state" => "ACCEPTED"],
+                ["club_id" => $club_id, "club_members.is_deleted" => 0, "state" => "ACCEPTED"],
                 ["count(*) as count"],
                 [["table" => "users", "as" => "user", "on" => "club_members.user_id = user.id"]],
                 [
                     "search" => ["user.email", "user.first_name", "user.last_name"],
                     "limit" => $data['select_users']['limit'],
-                    "offset" => ($data['select_users']['page'] - 1) * $data['select_users']['limit'],
                 ],
                 isset($_GET['search']) ? $_GET['search'] : ''
             );
@@ -580,7 +572,7 @@ class Club extends Controller
 
             /* data */
             $data['select_users']['table_data'] =  $club_member->find(
-                ["club_id" => $club_id, "state" => "ACCEPTED"],
+                ["club_id" => $club_id, "club_members.is_deleted" => 0, "state" => "ACCEPTED"],
                 [
                     "club_members.id as id",
                     "user_id",
@@ -600,7 +592,15 @@ class Club extends Controller
                 ],
                 isset($_GET['search']) ? $_GET['search'] : ''
             );
+
+            /* if the view requires only specific data view */
+            if (isset($_GET['data'])) {
+                if ($_GET['data'] == 'users_data') {
+                    $path = 'includes/modals/club/events/users/data';
+                }
+            }
         }
+
         /* fetch event details */
         if ($path == 'club/dashboard/events/edit') {
             $storage = new Storage();
