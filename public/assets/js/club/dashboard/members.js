@@ -70,3 +70,10 @@ const onSelectUsersPopup = (state, current_role) => {
 
     $(`[popup-name='select-club-member-users']`).popup(state);
 };
+
+var addParamToUrl = (event) => {
+    const el = $(event.target);
+    page = el.attr('value');
+
+    onSearch({ target: $('#users_search') });
+};

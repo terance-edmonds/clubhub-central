@@ -176,6 +176,13 @@ const onSelectUsersPopup = (state, group_name) => {
     }
 };
 
+var addParamToUrl = (event) => {
+    const el = $(event.target);
+    page = el.attr('value');
+
+    onSearch({ target: $('#users_search') });
+};
+
 $(document).ready(() => {
     if ($('.group-form-section').length === 1) {
         onAddNewGroup();
