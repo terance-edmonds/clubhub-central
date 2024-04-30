@@ -68,7 +68,7 @@
                                 <select name="type" id="type_select">
                                     <option value="" selected disabled hidden>Choose Type</option>
                                     <option value="COMMITTEE" selected>Committee</option>
-                                    <option value="CLOSED">Closed</option>
+                                    <option value="CLOSED">General</option>
                                 </select>
                                 <?php if (!empty($errors['type_select'])) : ?>
                                     <small>
