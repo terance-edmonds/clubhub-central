@@ -571,10 +571,9 @@
 }
 
 .club-dashboard-side-bar .profile-details {
-  max-width: 200px;
   font-size: 0.875em;
   color: #e7e7e7;
-  padding: 15px;
+  padding: 5px 15px;
 }
 .club-dashboard-side-bar .profile-section {
   display: -webkit-box;
@@ -872,10 +871,9 @@
 }
 
 .event-dashboard-side-bar .profile-details {
-  max-width: 200px;
   font-size: 0.875em;
   color: #e7e7e7;
-  padding: 15px;
+  padding: 5px 15px;
 }
 .event-dashboard-side-bar .profile-section {
   display: -webkit-box;
