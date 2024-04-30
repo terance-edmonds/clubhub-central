@@ -570,6 +570,11 @@
   overflow: hidden;
 }
 
+.club-dashboard-side-bar .profile-details {
+  max-width: 200px;
+  font-size: 0.875em;
+  color: #e7e7e7;
+}
 .club-dashboard-side-bar .profile-section {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -865,6 +870,11 @@
   overflow: hidden;
 }
 
+.event-dashboard-side-bar .profile-details {
+  max-width: 200px;
+  font-size: 0.875em;
+  color: #e7e7e7;
+}
 .event-dashboard-side-bar .profile-section {
   display: -webkit-box;
   display: -ms-flexbox;

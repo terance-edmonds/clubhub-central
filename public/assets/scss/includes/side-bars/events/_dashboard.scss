@@ -1,4 +1,10 @@
 .event-dashboard-side-bar {
+    .profile-details {
+        max-width: 200px;
+        font-size: $px14;
+        color: $secondary_white;
+    }
+
     .profile-section {
         display: flex;
         flex-direction: row;

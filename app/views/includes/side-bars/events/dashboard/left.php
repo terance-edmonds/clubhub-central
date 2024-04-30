@@ -22,12 +22,12 @@ $side_bar_club = $side_bar_club->one(["id" => $side_bar_club_id]);
             <?php } ?>
         </div>
 
-        <?php if (!empty($side_bar_user->description)) { ?>
-            <div class="details">
-                <p class="desc"><?= $side_bar_user->description ?></p>
-            </div>
-        <?php } ?>
     </div>
+    <?php if (!empty($side_bar_user->description)) { ?>
+        <div class="profile-details">
+            <p class="desc"><?= $side_bar_user->description ?></p>
+        </div>
+    <?php } ?>
 
     <div class="inner-section menu-section no-border">
         <div class="title-card">

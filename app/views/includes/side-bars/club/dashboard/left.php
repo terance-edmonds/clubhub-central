@@ -18,12 +18,12 @@ $side_bar_user = $side_bar_user->one(["id" => $side_bar_auth_user_id]);
             <?php } ?>
         </div>
 
-        <?php if (!empty($side_bar_user->description)) { ?>
-            <div class="details">
-                <p class="desc"><?= $side_bar_user->description ?></p>
-            </div>
-        <?php } ?>
     </div>
+    <?php if (!empty($side_bar_user->description)) { ?>
+        <div class="profile-details">
+            <p class="desc"><?= $side_bar_user->description ?></p>
+        </div>
+    <?php } ?>
 
     <div class="inner-section menu-section no-border">
         <div class="title-card">
